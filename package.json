@@ -1,0 +1,11 @@
+{
+  "name": "starkid",
+  "version": "1.0.0",
+  "description": "a DID managing tool to communicate your public and private data with sovereignty",
+  "repository": "git@github.com:xunorus/starkid.git",
+  "author": "xunorus <xunorus@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "parcel": "2.9.3"
+  }
+}
