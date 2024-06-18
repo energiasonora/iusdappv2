@@ -17,3 +17,5 @@ packageold.json
 compress/
 test/
 old/
+.firebaserc
+.gitignore
