@@ -6,6 +6,7 @@
   "author": "xunorus <xunorus@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "parcel": "2.9.3"
+    "parcel": "2.9.3",
+    "starknet": "^5.24.3"
   }
 }
