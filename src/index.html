@@ -66,14 +66,26 @@
 			</header>
 
 			<!-- <div class="loaderDiv" id="loader"> <span class="loader"></span> </div> -->
+<!-- =================== -->
+<div id="qrtroqcontainer" class=" container swiperSlide">
+
+
+		<div class=" responsive-svg" id="canvas"></div>
+		
+	</div>
+	<pre id="yourAddress"> </pre>
+<!-- ======================= -->
+			<!-- <div class=" responsive-svg" id="canvas"></div>
+			<pre id="yourAddress"> </pre> -->
+
 <div id="qrresult"> </div>
 
 
 			<div class="bottom-nav">
 				<nav class="codrops-demos">
-					<span>v 0.1: </span>
-					<a class="current-demo" href="index.html">Load</a>
-					<a href="index.html">chat</a>
+					<span>v 0.1 </span>
+					<!-- <a class="current-demo" href="index.html">Load</a>
+					<a href="index.html">chat</a> -->
 				</nav>
 			</div>
 
@@ -85,7 +97,7 @@
 <div class="search">
 	<button id="btn-search-close" class="btn btn--search-close" aria-label="Close search form"><svg class="icon icon--cross"><use xlink:href="#icon-cross"></use></svg></button>
 	<form class="search__form" action="">
-		<input class="search__input" name="search" type="search" placeholder="drones" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+		<input class="search__input" name="search" type="search" placeholder="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 		<span class="search__info">Hit enter to search or ESC to close</span>
 	</form>
 	<div class="search__related">
@@ -105,8 +117,10 @@
 </div><!-- /search -->
 		<script type="module" src="js/demo1.js"></script>
 		<script type="module">
-			import { Account, constants, ec, json, stark, Provider, hash, CallData } from 'starknet';
-		
+
+import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData } from 'starknet';
+
+			window.Provider = Provider;
 			window.Account = Account;
 			window.constants = constants;
 			window.ec = ec;
@@ -148,7 +162,7 @@
 
 const ToastTop = Swal.mixin({
   toast: true,
-  position: "top-start",
+  position: "bottom-end",
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
@@ -179,7 +193,7 @@ function copy2clipboard(text) {
 				document.body.appendChild(textarea);
 				textarea.select();
 				try {
-					ToastTop.fire('Copied to Clipboard', textLink, "success");
+					ToastTop.fire('Copied to Clipboard!', textLink, "success");
 					return document.execCommand("copy");  // Security exception may be thrown by some browsers.
 				}
 				catch (ex) {
@@ -195,19 +209,8 @@ function copy2clipboard(text) {
 
 async function createAddress(){
             console.log('createAddress()')
-            // connect provider
             const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
-
-
-            // let privateKey =  localStorage.getItem('privKey')
-
-            // new Open Zeppelin account v0.5.1
-            // Generate public and private key pair.
-
-            // Attempt to retrieve the privateKey from localStorage
             let privateKey = localStorage.getItem('privKey');
-
-            // If privateKey does not exist in localStorage, generate a new one
             if (!privateKey) {
                 privateKey = stark.randomAddress();
                 console.log('New OZ account:\nprivateKey=', privateKey);
@@ -217,12 +220,6 @@ async function createAddress(){
             } else {
                 console.log('privKey already exists in localStorage:', privateKey);
             }
-
-            // const privateKey = stark.randomAddress();
-            // console.log('New OZ account:\nprivateKey=', privateKey);
-
-            // localStorage.setItem('privKey', privateKey)
-            // console.log(' privKey SAVED INTO LOCALSTORAGE')
 
 
             const starkKeyPub = ec.starkCurve.getStarkKey(privateKey);
@@ -237,39 +234,78 @@ async function createAddress(){
             
 			// 3- SHOW QR
 			// canvas.innerHTML = '';
-			// showqr(url);
+			showqr(OZcontractAddress);
 			let shortAddr = OZcontractAddress.substring(0, 6) + "..." + OZcontractAddress.substring(38, 42);
 
-			// var preElement = document.getElementById('qrresult');
-			// preElement.setAttribute('address', userAddress);
-
-			qrresult.innerHTML += `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${OZcontractAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg>`;
+			yourAddress.innerHTML += `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${OZcontractAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg>`;
 			console.log(`Your address: ${OZcontractAddress} `)
-
-            // .......
-            // localStorage.setItem('privKey', privateKey)
-            // console.log(' privKey SAVED INTO LOCALSTORAGE')
-
 
 
             ////////
             // 2
             const OZaccount = new Account(provider, OZcontractAddress, privateKey);
             console.log('now PUBLISH',OZaccount)
+return 
 
-const { transaction_hash, contract_address } = await OZaccount.deployAccount({
-  classHash: OZaccountClassHash,
-  constructorCalldata: OZaccountConstructorCallData,
-  addressSalt: starkKeyPub,
-});
+			console.log('DEPLOY ACCOUNT...')
+			const { transaction_hash, contract_address } = await OZaccount.deployAccount({
+			classHash: OZaccountClassHash,
+			constructorCalldata: OZaccountConstructorCallData,
+			addressSalt: starkKeyPub,
+			});
 
-await provider.waitForTransaction(transaction_hash);
-console.log('✅ New OpenZeppelin account created.\n   address =', contract_address);
+			await provider.waitForTransaction(transaction_hash);
+			console.log('✅ New OpenZeppelin account created.\n   address =', contract_address);
 
 
 
 }
 
+
+		/*********************************************************************************************
+		.)  QR
+		**********************************************************************************************/
+
+		async function showqr(addr) {
+			const qrColor = getComputedStyle(document.body).getPropertyValue('--qr');
+
+			var isMobile = window.matchMedia("only screen and (max-width: 768px)");
+
+			// let qrSize
+			if (isMobile.matches) {
+				console.log("Mobile screen detected");
+				
+				//get container width
+				// var containerWidth = document.getElementById('qrtroqcontainer').offsetWidth;
+				
+				// // Code for mobile screens
+				// qrSize = containerWidth - 50 ;
+				// console.log("Mobile'scontainerWidth: ",containerWidth);
+				qrSize = 310;
+				window.scrollTo(0, 0);
+
+
+			} else {
+				// Code for larger screens
+				console.log("Not a mobile screen");
+				qrSize = 370
+
+			}
+
+			//QR
+			const qrCode = new QRCodeStyling({
+				width: `${qrSize}`, height: `${qrSize}`, type: "png", data: addr, image: `./logo4.png`,
+				// dotsOptions: { color: "#1568B0", type: "extra-rounded" }, 
+				dotsOptions: { color: `${qrColor}`, type: "extra-rounded" },
+				backgroundOptions: { color: "var(--qrbackground)", },
+				imageOptions: { crossOrigin: "anonymous", margin: 0 }
+			});
+			qrCode.append(document.getElementById("canvas"));
+			console.log('qr code APPENDED')
+			document.querySelector('.main-wrap').style.backgroundImage = 'none';
+			loader.style.display= 'none'
+
+		}
 
 
 			async function init(){
@@ -279,9 +315,9 @@ console.log('✅ New OpenZeppelin account created.\n   address =', contract_addr
 				// displayQR('myDid') 
 				// loader.style.display= 'flex'
 
-				setTimeout(() => {
-					loader.style.display= 'none'
-				}, 3000);
+				// setTimeout(() => {
+				// 	loader.style.display= 'none'
+				// }, 3000);
 			
 			}
 			init()

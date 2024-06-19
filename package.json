@@ -7,6 +7,11 @@
   "license": "MIT",
   "dependencies": {
     "parcel": "2.9.3",
+    "parcel-reporter-static-files-copy": "^1.5.3",
     "starknet": "^5.24.3"
-  }
+  },
+  "staticFiles": {
+    "staticPath": "src/static"
+  },
+  "type": "module"
 }

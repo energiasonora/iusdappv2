@@ -19,12 +19,13 @@
 <div id="qrresult"> </div>
         
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.29/Tone.min.js"></script>
-<script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
+<!-- <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script> -->
 
 
 	<script type="module">
-    import { Account, constants, ec, json, stark, Provider, hash, CallData } from 'starknet';
+    import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData } from 'starknet';
 
+    window.Provider = Provider;
     window.Account = Account;
     window.constants = constants;
     window.ec = ec;
@@ -33,6 +34,8 @@
     window.Provider = Provider;
     window.hash = hash;
     window.CallData = CallData;
+    // import { Provider } from 'starknet';
+
 
 		// import EthCrypto from 'eth-crypto';
 		// window.EthCrypto = EthCrypto;
@@ -162,16 +165,20 @@ function copy2clipboard(text) {
 			}
 		}
 
+
+
 async function createAddress(){
             console.log('createAddress()')
             // connect provider
-            const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
+            // const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
+            // const provider = new Provider({ sequencer: { baseUrl: 'http://127.0.0.1:5050' } });
+            // const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } }); // for testnet
 
 
-            // let privateKey =  localStorage.getItem('privKey')
-
-            // new Open Zeppelin account v0.5.1
-            // Generate public and private key pair.
+            // Alchemy node rpc for Testnet:
+// const provider = new RpcProvider({
+//   nodeUrl: 'https://starknet-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I',
+// });
 
             // Attempt to retrieve the privateKey from localStorage
             let privateKey = localStorage.getItem('privKey');
@@ -187,17 +194,12 @@ async function createAddress(){
                 console.log('privKey already exists in localStorage:', privateKey);
             }
 
-            // const privateKey = stark.randomAddress();
-            // console.log('New OZ account:\nprivateKey=', privateKey);
-
-            // localStorage.setItem('privKey', privateKey)
-            // console.log(' privKey SAVED INTO LOCALSTORAGE')
-
 
             const starkKeyPub = ec.starkCurve.getStarkKey(privateKey);
             console.log('publicKey=', starkKeyPub);
 
             const OZaccountClassHash = '0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a';
+            
             // Calculate future address of the account
             const OZaccountConstructorCallData = CallData.compile({ publicKey: starkKeyPub });
             const OZcontractAddress = hash.calculateContractAddressFromHash( starkKeyPub, OZaccountClassHash, OZaccountConstructorCallData, 0 );
@@ -206,21 +208,25 @@ async function createAddress(){
             
 			// 3- SHOW QR
 			// canvas.innerHTML = '';
-			// showqr(url);
+			showqr(OZcontractAddress);
 			let shortAddr = OZcontractAddress.substring(0, 6) + "..." + OZcontractAddress.substring(38, 42);
 
-			// var preElement = document.getElementById('qrresult');
-			// preElement.setAttribute('address', userAddress);
-
+ 
 			qrresult.innerHTML += `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${OZcontractAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg>`;
 			console.log(`Your address: ${OZcontractAddress} `)
+ 
+// CONNECT
+// initialize provider
+// const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
 
-            // .......
-            // localStorage.setItem('privKey', privateKey)
-            // console.log(' privKey SAVED INTO LOCALSTORAGE')
+// initialize deployed contract
+const testAddress = '0x7667469b8e93faa642573078b6bf8c790d3a6184b2a1bb39c5c923a732862e1';
+const compiledTest = json.parse(fs.readFileSync('./compiledContracts/test.json').toString('ascii'));
 
+// connect the contract
+const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
 
-
+return
             ////////
             // 2
             const OZaccount = new Account(provider, OZcontractAddress, privateKey);
@@ -239,6 +245,48 @@ console.log('✅ New OpenZeppelin account created.\n   address =', contract_addr
 
 }
 
+
+		/*********************************************************************************************
+		.)  QR
+		**********************************************************************************************/
+
+		async function showqr(addr) {
+			const qrColor = getComputedStyle(document.body).getPropertyValue('--qr');
+
+			var isMobile = window.matchMedia("only screen and (max-width: 768px)");
+
+			// let qrSize
+			if (isMobile.matches) {
+				console.log("Mobile screen detected");
+				
+				//get container width
+				var containerWidth = document.getElementById('qrtroqcontainer').offsetWidth;
+				
+				// Code for mobile screens
+				qrSize = containerWidth - 50 ;
+				console.log("Mobile'scontainerWidth: ",containerWidth);
+				// qrSize = 310;
+				window.scrollTo(0, 0);
+
+
+			} else {
+				// Code for larger screens
+				console.log("Not a mobile screen");
+				qrSize = 370
+
+			}
+
+			//QR
+			const qrCode = new QRCodeStyling({
+				width: `${qrSize}`, height: `${qrSize}`, type: "png", data: addr, image: `./logochw.png`,
+				// dotsOptions: { color: "#1568B0", type: "extra-rounded" }, 
+				dotsOptions: { color: `${qrColor}`, type: "extra-rounded" },
+				backgroundOptions: { color: "var(--qrbackground)", },
+				imageOptions: { crossOrigin: "anonymous", margin: 0 }
+			});
+			qrCode.append(document.getElementById("canvas"));
+			console.log('qr code APPENDED')
+		}
 
 
 async function init(){

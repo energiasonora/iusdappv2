@@ -5,6 +5,10 @@
 	--c0: #262626;
 	--c1: #d17c78;
 	--c2: #fff;
+	/* --qrbackground:#ffc107; */
+	--qrbackground:none;
+	--qr: #d17c78;
+
 }
 *,
 *::after,
@@ -641,3 +645,21 @@ z-index: -1;
 
   /* placeholder */
   /* ::placeholder */
+
+  #copyAddress{
+	cursor: pointer;
+  }
+
+  
+
+  #qrtroqcontainer{
+	/* padding-top: 8em; */
+	height: 100vh!important;
+	width: auto;
+	/* background: red; */
+	display: flex;
+	align-items: center;
+	/* min-width: 200px; */
+	/* flex-direction: column; */
+
+  }

@@ -3,8 +3,11 @@
 a DID managing tool to communicate your public and private data with sovereignty
 
 
-# DEMO
-https://starkid.web.app
+# LINKS
+demo https://starkid.web.app
+
+git https://github.com/xunorus/starkid
+
 
 # INSTALL
 ```
@@ -14,7 +17,8 @@ yarn
 
 # RUN
 ```
-yarn parcel src/index.html  --port 4444
+yarn parcel src/index.html  --port 4444 --https
+<!-- yarn parcel src/index.html src/connect.html  --port 4444 --https -->
 ```
 
 
