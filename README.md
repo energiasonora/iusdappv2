@@ -30,3 +30,5 @@ yarn parcel src/index.html --dist-dir public  --public-url ./
 firebase deploy --only hosting:starkid
 ```
 
+# log
+v0.3 short address fix for starknet 64 character addresses

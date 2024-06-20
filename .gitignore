@@ -17,5 +17,6 @@ packageold.json
 compress/
 test/
 old/
+bkp/
 .firebaserc
 .gitignore

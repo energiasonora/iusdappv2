@@ -1,0 +1,187 @@
+:root {
+    --btn-font-family: 'Arial, sans-serif';
+    --btn-font-weight: 400;
+    --btn-line-height: 1.5;
+    --body-color: #000;
+    --link-decoration: none;
+    --btn-white-space: nowrap;
+    --enable-button-pointers: pointer; /* Set to `auto` if false */
+    --btn-border-width: 1px;
+    --btn-padding-y: 0.5rem;
+    --btn-padding-x: 1rem;
+    --btn-font-size: 1rem;
+    --btn-border-radius: 0.25rem;
+    --btn-transition: all 0.2s ease-in-out;
+    --link-hover-decoration: underline;
+    --btn-focus-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    --btn-active-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --btn-disabled-opacity: 0.65;
+    --btn-link-color: #007bff;
+    --btn-link-hover-color: #0056b3;
+    --btn-link-disabled-color: #6c757d;
+    --font-weight-normal: 400;
+    --btn-padding-y-lg: 0.75rem;
+    --btn-padding-x-lg: 1.5rem;
+    --btn-font-size-lg: 1.25rem;
+    --btn-border-radius-lg: 0.3rem;
+    --btn-padding-y-sm: 0.25rem;
+    --btn-padding-x-sm: 0.5rem;
+    --btn-font-size-sm: 0.875rem;
+    --btn-border-radius-sm: 0.2rem;
+  
+    /* Theme colors */
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --light: #f8f9fa;
+    --dark: #343a40;
+  }
+  
+  /* Button styles */
+  .btn {
+    display: inline-block;
+    font-family: var(--btn-font-family);
+    font-weight: var(--btn-font-weight);
+    line-height: var(--btn-line-height);
+    color: var(--c1);
+    text-align: center;
+    text-decoration: none;
+    white-space: var(--btn-white-space);
+    vertical-align: middle;
+    cursor: var(--enable-button-pointers);
+    user-select: none;
+    background-color: transparent;
+    border: var(--btn-border-width) solid transparent;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    font-size: var(--btn-font-size);
+    border-radius: var(--btn-border-radius);
+    transition: var(--btn-transition);
+  }
+  
+  .btn:hover {
+    color: var(--body-color);
+    text-decoration: none;
+  }
+  
+  .btn-check:focus + .btn,
+  .btn:focus {
+    outline: 0;
+    box-shadow: var(--btn-focus-box-shadow);
+  }
+  
+  .btn-check:checked + .btn,
+  .btn-check:active + .btn,
+  .btn:active,
+  .btn.active {
+    box-shadow: var(--btn-active-box-shadow);
+  }
+  
+  .btn-check:checked + .btn:focus,
+  .btn-check:active + .btn:focus,
+  .btn:active:focus,
+  .btn.active:focus {
+    box-shadow: var(--btn-focus-box-shadow), var(--btn-active-box-shadow);
+  }
+  
+  .btn:disabled,
+  .btn.disabled,
+  fieldset:disabled .btn {
+    pointer-events: none;
+    opacity: var(--btn-disabled-opacity);
+    box-shadow: none;
+  }
+  
+  /* Alternate buttons */
+  .btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+  }
+  
+  .btn-secondary {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: #fff;
+  }
+  .btn-danger{
+    background-color: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+  }
+
+  .btn-success{
+    background-color: var(--success);
+    border-color: var(--success);
+    color: #fff;
+  }
+  
+  /* ... Repeat for other colors ... */
+  
+  .btn-outline-primary {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: transparent;
+  }
+  
+  .btn-outline-secondary {
+    border-color: var(--secondary);
+    color: var(--secondary);
+    background-color: transparent;
+  }
+  
+  /* ... Repeat for other outline colors ... */
+  
+  /* Link buttons */
+  .btn-link {
+    font-weight: var(--font-weight-normal);
+    color: var(--btn-link-color);
+    text-decoration: var(--link-decoration);
+  }
+  
+  .btn-link:hover {
+    color: var(--btn-link-hover-color);
+    text-decoration: var(--link-hover-decoration);
+  }
+  
+  .btn-link:focus {
+    text-decoration: var(--link-hover-decoration);
+  }
+  
+  .btn-link:disabled,
+  .btn-link.disabled {
+    color: var(--btn-link-disabled-color);
+  }
+  
+  /* Button Sizes */
+  .btn-lg {
+    padding: var(--btn-padding-y-lg) var(--btn-padding-x-lg);
+    font-size: var(--btn-font-size-lg);
+    border-radius: var(--btn-border-radius-lg);
+  }
+  
+  .btn-sm {
+    padding: var(--btn-padding-y-sm) var(--btn-padding-x-sm);
+    font-size: var(--btn-font-size-sm);
+    border-radius: var(--btn-border-radius-sm);
+  }
+  
+
+  #configButtons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+
+  /* LACK OF BOOTSTRAP FIX */
+
+  pre{
+    overflow: visible;
+}
+span{
+    color: var(--c1)!important;
+
+}
