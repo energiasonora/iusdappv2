@@ -9,7 +9,10 @@
 	--qrbackground:none;
 	--qr: #d17c78;
 	--backChat: #121738;
-
+	--bckmodal: #121738;
+	--modalborder: #d9f;
+	--main: #4f4ee8;
+	--reversable: #000;
 }
 *,
 *::after,
@@ -354,7 +357,7 @@ a,
 }
 
 .search__form {
-	margin: 5em 0;
+	/* margin: 5em 0; */
 }
 
 .search__input {
@@ -650,7 +653,8 @@ z-index: -1;
 	background-color: var(--bckmodal);
   }
   #chatheader, #chatfooter {
-	padding: 10px;
+	/* padding: 10px; */
+	width: 100%;
   }
   
   #chatBox {
@@ -681,8 +685,8 @@ z-index: -1;
   
   #chatfooter {
 	/* position: sticky; */
-	bottom: 0;
-	position: absolute
+	/* bottom: 0;
+	position: absolute */
 
   }
 
@@ -1339,6 +1343,181 @@ z-index: -1;
 .search__input {
 	font-size: 16px; /* Adjust the font size as needed */
 	padding: 10px; /* Optional: add padding for better spacing */
-	width: 100vw; /* Optional: make input take full width */
+	/* width: 100vw; Optional: make input take full width */
 	box-sizing: border-box; /* Optional: include padding and border in the element's total width and height */
   }
+
+
+.modal-content{
+    background-color: var(--bckmodal);
+    box-shadow: 0 0 10px var(--c3);
+    border: 1px solid var(--c1);
+  
+  }
+
+     /* FIXES 2 */
+	 .alert{ margin-bottom: 0!important; }
+	 .modal-content{
+	   /* background-color: var(--bckmodal);
+	   box-shadow: 0 0 10px var(--modalborder);
+	   border: 1px solid var(--modalborder);
+	   background-image: radial-gradient(circle, var(--c5) 0%, var(--bckmodal) 100%);
+	    */
+	   background-color: var(--bckmodal)!important;
+	   box-shadow: 0 0 10px var(--c3);
+	   border: 1px solid var(--c1);
+ 
+	 }
+ 
+
+	 /* FIXIES */
+
+/* DOT */
+.dot {
+  background-color: #0f0;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  animation: 3s infinite blink;
+  position: relative;
+  left: 74%;
+  bottom: 17%;
+}
+
+@keyframes blink {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+
+  .right {
+    /* display: none; */
+    float: right; /* Align to the right */
+    margin-left: 10px; /* Add some spacing */
+    cursor: pointer;
+}
+
+li:hover .right {
+    /* display: inline-block;  */
+}
+
+ .right:hover  {
+  color:red;
+}
+
+
+/* #audioOp/tions */
+.options{
+  display: flex;
+    align-items: center;
+    flex-direction: row;
+
+}
+#muteCheckbox{
+  width: 30px;
+}
+
+
+#amountView h1, #txdetails{
+font-size: calc(1.375rem + 1.5vw);
+}
+.settingsBar{margin-bottom: 12px;}
+
+
+
+
+/* #modalForm {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.name {
+  flex-grow: 1;
+  flex-basis: 120px;
+}
+.avatar {
+  flex-grow: 3;
+  flex-basis: 170px;
+}
+button {
+  flex-grow: 1;
+  flex-basis: 70px;
+} */
+
+#actionButtons{
+  display: flex
+}
+
+address{
+  cursor: pointer;
+}
+
+
+#activeToken{
+  display: flex;
+  flex-direction: column;
+}
+#troqamount{
+  background: no-repeat;
+  border: none;
+  color: var(--c1);
+}
+/* dirty UI phone fix */
+/* Target devices with a similar aspect ratio to the Samsung Galaxy S9 */
+/* @media only screen and (device-aspect-ratio: 9/18.5) { */
+  @media only screen and (max-width: 767px) {
+.swiper-wrapper{
+  height: calc(100vh - 81px)!important;
+  top: 81px!important;
+  position: fixed!important;
+}
+#chatcontainer{
+  height: calc(100vh - 136px)!important;
+	margin-top: 0!important;
+  overflow-y: scroll!important;
+}
+
+#qrtroqcontainer {
+  margin-top: 2px!important;
+}
+body.swal2-height-auto {
+  height: 100vh !important
+ 
+}
+
+
+#chatfooter {
+}
+ #chatBox{
+
+ }
+}
+
+#cwContacts{
+  overflow-y: scroll;
+  height: 100%;
+  position: relative;
+  display: flex;
+  padding-bottom: 60px;
+  flex-direction: column;
+
+}
+
+
+/* ---------- */
+
+#closeChat{
+  display: inline;
+    border: 3px solid var(--bs-gray-300);
+    background: no-repeat;
+    fill: white;
+}
+.list-group-item{
+  cursor: pointer;
+  color: var(--bs-gray-200);
+  background-color: var(--bs-purple);
+}

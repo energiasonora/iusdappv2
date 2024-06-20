@@ -31,4 +31,6 @@ firebase deploy --only hosting:starkid
 ```
 
 # log
+v0.5 chat UI
+v0.4 qr scans
 v0.3 short address fix for starknet 64 character addresses

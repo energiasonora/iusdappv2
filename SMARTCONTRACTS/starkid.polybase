@@ -1,0 +1,62 @@
+// https://explorer.testnet.polybase.xyz/studio/pk%2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3%2FSTARKID
+
+@public
+
+collection STARKID {
+    id: string;
+    avatar: string;
+    alias: string;
+    privData: string;
+    cid: string; 
+    publicKey: PublicKey;
+
+  constructor (id: string, avatar: string ,alias: string , privData: string ,cid: string ) {
+      this.id = id;
+      this.avatar = avatar;
+      this.alias = alias;
+      this.privData = privData;
+      this.cid = cid;
+      this.publicKey = ctx.publicKey;
+  }
+
+    updateAvatar(avatar: string) {
+         if (ctx.publicKey != this.publicKey) {
+      error('You are not the creator of this record.');
+    }
+ 
+    this.avatar = avatar;
+  }
+  
+  updateAlias(alias: string) {
+    if (ctx.publicKey != this.publicKey) {
+ error('You are not the creator of this record.');
+}
+
+this.alias = alias;
+}
+
+updatePrivData(privData: string) {
+    if (ctx.publicKey != this.publicKey) {
+   error('You are not the creator of this record.');
+ }
+
+     this.privData = privData;
+}
+    updateCID(cid: string) {
+       if (ctx.publicKey != this.publicKey) {
+      error('You are not the creator of this record.');
+    }
+  
+        this.cid = cid;
+  }
+
+    deleteDID () {
+        if (ctx.publicKey != this.publicKey) {
+        throw error('You are not the creator of this record');
+     }
+    selfdestruct();
+  }
+
+ 
+  
+}
