@@ -11,7 +11,9 @@ git https://github.com/xunorus/starkid
 
 # INSTALL
 ```
-nvm use 18       
+nvm use 18    
+nvm use 20
+
 yarn                              
 ```
 
@@ -31,6 +33,7 @@ firebase deploy --only hosting:starkid
 ```
 
 # log
+v0.6 chat UI updates
 v0.5 chat UI
 v0.4 qr scans
 v0.3 short address fix for starknet 64 character addresses

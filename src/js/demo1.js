@@ -38,6 +38,7 @@
 		searchContainer.classList.add('search--open');
 		inputSearch.focus();
 	}
+	window.openSearch = openSearch;
 
 	function closeSearch() {
 		searchContainer.classList.remove('search--open');
@@ -47,6 +48,8 @@
 			lastFocusedElement.focus();
 		}
 	}
+	window.closeSearch = closeSearch;
+
 
 	init();
 
