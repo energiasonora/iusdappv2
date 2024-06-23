@@ -651,6 +651,10 @@ z-index: -1;
   #chatheader{
 	font: x-large;
 	background-color: var(--bckmodal);
+
+	position: absolute;
+    top: 1.3em;
+    width: 85%!important;
   }
   #chatheader, #chatfooter {
 	/* padding: 10px; */
@@ -1396,7 +1400,7 @@ z-index: -1;
   .right {
     /* display: none; */
     float: right; /* Align to the right */
-    margin-left: 10px; /* Add some spacing */
+    margin-left: 9px; /* Add some spacing */
     cursor: pointer;
 }
 

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLYBASE</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+
+    <style>
+        /* body {
+            background-color: rgb(7, 42, 60);
+            color: green;
+        } */
+
+        #result {
+            word-wrap: break-word;
+
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <h1>POLYBASE </h1>
+    <p>write did to ppolybase </p>
+
+    <button id="writeDIDtest" >WRITE DID</button>
+    <!-- <button id="writeDIDtest" onclick="event.stopPropagation();writeDIDtest()">WRITE DID</button> -->
+    
+    <div id="messagesResult"></div>
+    <p>
+    <div id="result"></div>
+
+    <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
+
+
+
+    <script type="module">
+
+
+        import EthCrypto from 'eth-crypto';
+        window.EthCrypto = EthCrypto;
+
+
+
+        import { stark, Account, ec, json, RpcProvider, hash, CallData } from 'starknet';
+
+
+        import { Polybase } from "@polybase/client";
+	window.Polybase = Polybase; //make global
+
+
+        async function init() {
+
+            console.log(`
+            
+███████╗████████╗ █████╗ ██████╗ ██╗  ██╗██╗██████╗ 
+██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║ ██╔╝██║██╔══██╗
+███████╗   ██║   ███████║██████╔╝█████╔╝ ██║██║  ██║
+╚════██║   ██║   ██╔══██║██╔══██╗██╔═██╗ ██║██║  ██║
+███████║   ██║   ██║  ██║██║  ██║██║  ██╗██║██████╔╝
+╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ 
+                                                    
+`);
+
+            //GENERATE ETHEREUM KEYPAIR WITH ETHERS
+            // const ethWallet = ethers.Wallet.createRandom();
+            // ethPrivateKey = ethWallet.privateKey;
+            // ethPubKey = ethWallet.publicKey;
+            // console.log('ethPrivateKey:', ethPrivateKey)
+            // result.innerHTML += '<br><strong> ETH PUBLIC KEY:</strong> <br>' + ethPubKey
+            
+            // localStorage.getItem('chatETHPrivKey');
+            let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
+            if (!chatWalletPrivKey) {
+                // https://www.starknetjs.com/docs/next/api/namespaces/stark/#randomaddress
+                // chatWalletPrivKey = stark.randomAddress();
+                const ethWallet = ethers.Wallet.createRandom();
+                chatWalletPrivKey = ethWallet.privateKey;
+                console.log('New chatwallet private key', chatWalletPrivKey);
+                localStorage.setItem('chatETHPrivKey', chatWalletPrivKey);
+                console.log('chatWalletPrivKey SAVED INTO LOCALSTORAGE');
+            } else {
+                console.log('chatWalletPrivKey already exists in localStorage:', chatWalletPrivKey);
+            }
+            
+            result.innerHTML += '<strong> CHAT PRIVATE KEY TO ENCRYPT:</strong> ' + chatWalletPrivKey;
+            
+            // ------------------------------------------
+            // GENERATE STARKNET KEYPAIR WITH STARKNETJS
+            result.innerHTML += '<br><br><strong> STARKNET  KEYPAIR V2 </strong>:'
+
+            let starknetPrivKey = localStorage.getItem('starknetPrivKey');
+            if (!starknetPrivKey) {
+                // https://www.starknetjs.com/docs/next/api/namespaces/stark/#randomaddress
+                starknetPrivKey = stark.randomAddress();
+                console.log('New AX_ACCOUNT:\nprivateKey=', starknetPrivKey);
+                localStorage.setItem('starknetPrivKey', starknetPrivKey);
+                console.log('starknetPrivKey SAVED INTO LOCALSTORAGE');
+            } else {
+                console.log('starknetPrivKey already exists in localStorage:', starknetPrivKey);
+            }
+
+
+            // const privateKeyAX = stark.randomAddress();
+            const privateKeyAX = starknetPrivKey
+            console.log('AX_ACCOUNT_PRIVATE_KEY=', privateKeyAX);
+            result.innerHTML += '<br><strong>PRIVATEv2</strong>:<br> ' + privateKeyAX
+
+
+            // ------------------------------------------
+
+            //  THIS WORKS✅!
+            // https://www.starknetjs.com/docs/next/API/namespaces/ec.starkCurve#getstarkkey
+            const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
+            console.log('AX_ACCOUNT_PUBLIC_KEY=', starkKeyPubAX);
+            result.innerHTML += '<br><strong>PUBLICv2</strong>:<br> ' + starkKeyPubAX
+            starkPublicKey = starkKeyPubAX
+
+
+
+            // Calculate future address of the ArgentX account FUNCIONA!
+            const AXConstructorCallData = CallData.compile({ owner: starkKeyPubAX, guardian: '0', });
+            const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
+            const AXcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, argentXaccountClassHash, AXConstructorCallData, 0);
+            console.log('Precalculated account address= ✅', AXcontractAddress);
+
+            // DIRTY FIX TO THE 0 PROBLEM IN STARKNET ADDRESS
+            let modifiedHexString = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
+            console.log('modified address:', modifiedHexString);
+
+
+            // result.innerHTML += '<br><br><strong>ACCOUNT ADDRESS</strong>:<br> ✅ ' + AXcontractAddress
+            result.innerHTML += '<br><br><strong>ACCOUNT ADDRESS</strong>:<br> ✅ ' + modifiedHexString
+            starkAddress = modifiedHexString
+
+            return
+             
+
+        }
+
+        init()
+ 
+   
+
+        // function writeDIDtest(){
+        // }
+        writeDIDtest.onclick = async function (e) {
+            console.log('writeDIDtest')
+
+			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+				// try { signer = await new ethers.Wallet(chatETHPrivKey) }
+				try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+				catch (error) { console.log(error.message);   }
+
+
+        let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
+        signer = wallet.connect(provider);
+
+            let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
+            // let avatar = localStorage.getItem('avatar');
+
+								let did = `did:starkid:${signer.address}`
+                                let avatar = '';
+                                let alias = '';
+                                let privData = '';
+                                let cid = '';
+
+                                console.log('DID:', did)
+            createDIDRecord(did, avatar, alias, privData, cid, signer);
+
+		};
+	// id: string;
+    // avatar: string;
+    // alias: string;
+    // privData: string;
+    // cid: string; 
+    // publicKey: PublicKey;
+		// async function createDIDRecord(did, avatar, cid, signer) {
+			async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
+
+			 
+				console.log('Now you have the signer, do whatever you need with it:', signer);
+				// const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
+				// const db = new Polybase({ defaultNamespace: "pk/2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID" });
+                const db = new Polybase({
+  defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+});
+				const data = [did, avatar, alias, privData, cid];
+				// const data = [did, avatar, cid];
+				db.signer(async (data) => {
+					const signature = await signer.signMessage(data);//FIXED!
+					return { h: 'eth-personal-sign', sig: signature, };
+				});
+
+				const collectionReference = db.collection("STARKID");
+				await collectionReference.create(data);
+			
+		}
+
+		async function readDIDRecord(id) {
+			// const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
+            // const db = new Polybase({ defaultNamespace: "pk/2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID" });
+            const db = new Polybase({
+  defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+});
+
+			const collectionReference = db.collection("STARKID");
+			const record = await collectionReference.record(id).get();
+			const { data } = record; // or const data = record.data
+			const resultRecord = record.get();
+			console.log('resultRecord:', resultRecord)
+			return resultRecord
+		}
+
+
+    </script>
+</body>
+
+</html>

@@ -10,18 +10,18 @@ git https://github.com/xunorus/starkid
 
 
 # INSTALL
+<!-- nvm use 18     -->
 ```
-nvm use 18    
 nvm use 20
-
 yarn                              
 ```
 
 # RUN
 ```
 yarn parcel src/index.html  --port 4444 --https
-<!-- yarn parcel src/index.html src/connect.html  --port 4444 --https -->
 ```
+<!-- yarn parcel src/index.html src/connect.html  --port 4444 --https -->
+<!-- yarn parcel src/index.html src/p2pencrypt.html  src/encryptv5.html  src/encryptv4b.html  src/argent.html src/encryptChat.html src/argentgen.html --port 4444 --https -->
 
 
 # deploy to firebase
