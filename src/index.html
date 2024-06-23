@@ -183,7 +183,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 0.8 </span>
+			<span>v 0.9 </span>
 		</nav>
 	</div>
 
@@ -391,6 +391,7 @@
 
 
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.29/Tone.min.js"></script>
 
 	<script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
  
@@ -444,22 +445,44 @@ globalThis.Buffer = Buffer;
 		**********************************************************************************************/
 
 		function playBeep() {
-  var AudioContext = window.AudioContext || window.webkitAudioContext;
-  var audioCtx = new AudioContext();
+		var AudioContext = window.AudioContext || window.webkitAudioContext;
+		var audioCtx = new AudioContext();
 
-  var oscillator = audioCtx.createOscillator();
-  oscillator.type = "sine"; // Set the waveform type
-  oscillator.frequency.value = 864; // Set the frequency (Hz)
+		var oscillator = audioCtx.createOscillator();
+		oscillator.type = "sine"; // Set the waveform type
+		oscillator.frequency.value = 864; // Set the frequency (Hz)
 
-  oscillator.connect(audioCtx.destination);
-  oscillator.start();
+		oscillator.connect(audioCtx.destination);
+		oscillator.start();
 
-  // Stop the oscillator after 100 milliseconds
-  setTimeout(function () {
-    oscillator.stop();
-  }, 100);
-}
+		// Stop the oscillator after 100 milliseconds
+		setTimeout(function () {
+			oscillator.stop();
+		}, 100);
+		}
 
+
+		// Initialize Tone.js
+		Tone.start();
+		console.log("tone started");
+		// Create a simple click sound with different parameters
+		const clickSynth = new Tone.Synth({
+		oscillator: {
+			type: "sine", // You can experiment with different oscillator types
+		},
+		envelope: {
+			attack: 0.01,
+			decay: 0.1,
+			sustain: 0.1,
+			release: 0.5,
+		},
+		}).toDestination();
+
+		function playButtonClickSound() {
+		// Trigger the synth to produce a short click sound
+		clickSynth.triggerAttackRelease("C4", "8n");
+		}
+		
 		/*********************************************************************************************
 		.) MANAGE MODALS
 		**********************************************************************************************/
@@ -735,6 +758,7 @@ return
 				await createXMPTchat()
 				await getChatAddresses()
 				loadContacts()
+				await listenAllNewAddresses()
 				// starkxmtp = await createXMPTchat()
 				// console.log('starkxmtp ACTIVE!')
 			
@@ -868,6 +892,9 @@ function displayQR(data) {
 
 		}
 
+
+		
+
 		async function updateBadge() {
 			// console.log('updateBadge()')
 			var ulElement = document.getElementById('cwContacts');
@@ -884,6 +911,7 @@ function displayQR(data) {
 			}
 
 		}
+
 
 		/*********************************************************************************************
 		.) NEWQRCHAT
@@ -959,28 +987,32 @@ function displayQR(data) {
 			return
 		}
 
+		
+		
+		
+		// return
+		// GOT TO CHAT TAB
+		console.log(' doing openSearch')
+		openSearch()
+		// const swiperEl = document.getElementById('troqContainer');
+		// swiperEl.swiper.slideNext();
+		// return
+		
+		
+		// save "TO" to localwallet
+		localStorage.setItem('toAddress', toAddr)
+		
+		// ---------
+		// ERROR AQUI!!!!!!!!(ponerlo en addAddress())
+		// checkear SI no esta ya en sus contactos
 
-					// return
-			// GOT TO CHAT TAB
-			console.log(' doing openSearch')
-			// openSearch()
-			// const swiperEl = document.getElementById('troqContainer');
-			// swiperEl.swiper.slideNext();
-			// return
-
-
-			// save "TO" to localwallet
-			localStorage.setItem('toAddress', toAddr)
-
-			// ---------
-			// ERROR AQUI
-			let contact = { address: toAddr, username: null, avatar: null, did: null }
-			SaveContactsToLocalStorage(contact)
+			// let contact = { address: toAddr, username: null, avatar: null, did: null }
+			// SaveContactsToLocalStorage(contact)
 			// ---------------
 			loadContacts()
 			updateBadge()
 
-			return
+			// return
 
 
 if (imgsrc != null){
@@ -1055,7 +1087,7 @@ actionButtons.innerHTML = `
 // ------------------------------------
 // AVOID REOPENING COMS WITH ADDRESESS
 // SACAR/ si lo saco falla...
-const allConversations = await chatWalletClient.conversations.list()
+const allConversations = await starkxmtp.conversations.list()
 console.log('available addresses:', allConversations.length)
 const customAddressToCheck = toAddr; // Replace this with the address you want to check
 let addressExists = false;
@@ -1105,7 +1137,7 @@ if (addressExists) {
 // ------------------------------------
 
 // CREATE CHAT (client was already created)
-conversation = await chatWalletClient.conversations.newConversation(toAddr)
+conversation = await starkxmtp.conversations.newConversation(toAddr)
 console.log('conversation:', conversation)
 console.warn('------- READY TO CHAT ----------');
 
@@ -1159,7 +1191,85 @@ for await (const message of await conversation.streamMessages()) {
 
 
 
-//  CONTACTS MANAGEMENT
+		/*********************************************************************************************
+		.) CONTACTS MANAGEMENT
+		**********************************************************************************************/
+
+
+		async function addUnknownContact(addr, msg) {
+			console.log('addUnknownContact()', addr, msg)
+
+			// add unknown contact to  localstorage and check each time against the list if we add it or not into the contacts tab
+			let shortAddr = addr.substring(0, 6) + "..." + addr.substring(38, 42);
+			let shortMsg = msg.substring(0, 16);
+
+
+			let unknownContacts = JSON.parse(localStorage.getItem('unknowncontacts')) || [];
+			a = addr
+			var index = unknownContacts.findIndex(existingUnknownContacts => existingUnknownContacts === addr);
+
+			if (index === -1) {
+				console.log('PUSH UnknownContact to localstorage')
+				unknownContacts.push(addr);
+
+				document.getElementById('cwContacts').innerHTML += `
+					<li data-address="${addr}"  id="${addr}" class='newmessage'> 
+						<a onclick="event.stopPropagation();selectChat((this.parentElement))" >  
+							<img src="./anonym.jpg" alt="Avatar" class="rounded-circle"> 
+								<span>${shortMsg} <span>
+							<i class="fa-solid fa-trash"></i>
+							
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"width="18" height="16" >
+  <path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z"/></svg>
+
+
+						</a> 
+					</li> `
+
+			} else {
+				console.log('OVERWRITE ALREADY EXISTENT  UnknownContact!.');
+
+				// Search for the element with the specified ID
+				var elementToModify = document.getElementById(addr);
+
+				// Check if the element exists
+				if (elementToModify) {
+					// Add a new class to the element
+					elementToModify.classList.add('newmessage');
+					elementToModify.querySelector("span").innerText = shortMsg
+
+				} else {
+					// If the element with the specified ID is not found, you may want to handle that case
+					console.warn("Element with ID '" + addr + "' not found");
+					document.getElementById('cwContacts').innerHTML += ` 
+					<li data-address="${addr}" id="${addr}"  class='newmessage'> 
+					<a onclick="event.stopPropagation();selectChat((this.parentElement))" >  
+						<img src="./anonym.jpg" alt="Avatar" class="rounded-circle"> 
+						<span>${shortMsg} <span>
+						<i class="fa-solid fa-trash"></i></a> </li> `
+				}
+
+
+			}
+
+			localStorage.setItem('unknowncontacts', JSON.stringify(unknownContacts));
+
+		}
+
+		async function addknownContact(addr, msg) {
+			console.log('addknownContact()', addr, msg)
+
+			let shortAddr = addr.substring(0, 6) + "..." + addr.substring(38, 42);
+			let shortMsg = msg.substring(0, 16);
+			var elementToModify = document.getElementById(addr);
+			if (elementToModify) {
+				elementToModify.classList.add('newmessage');
+				elementToModify.querySelector("span").innerText = shortMsg
+			}
+
+		}
+
+
 
 async function loadContacts() {
 			console.log('loadContacts()')
@@ -1429,7 +1539,6 @@ const { value: userName } = await Swal.fire({
 if (userName) {
 
 	let contact = { address: addr, username: userName, avatar: null, did: null }
-
 	SaveContactsToLocalStorage(contact)
 	loadContacts()
 	console.log('Contact Updated', userName)
@@ -1486,7 +1595,7 @@ else {
 
 async function chatHistory(addr) {
 
-let conversation = await chatWalletClient.conversations.newConversation(addr)
+let conversation = await starkxmtp.conversations.newConversation(addr)
 const messages = await conversation.messages()
 
 for (const message of messages) {
@@ -1682,7 +1791,7 @@ actionButtons.innerHTML = `
 // ------------------------------------
 // AVOID REOPENING COMS WITH ADDRESESS
 // SACAR/ si lo saco falla...
-const allConversations = await chatWalletClient.conversations.list()
+const allConversations = await starkxmtp.conversations.list()
 console.log('available addresses:', allConversations.length)
 const customAddressToCheck = toAddr; // Replace this with the address you want to check
 let addressExists = false;
@@ -1732,7 +1841,7 @@ if (addressExists) {
 // ------------------------------------
 
 // CREATE CHAT (client was already created)
-conversation = await chatWalletClient.conversations.newConversation(toAddr)
+conversation = await starkxmtp.conversations.newConversation(toAddr)
 console.log('conversation:', conversation)
 console.warn('------- READY TO CHAT ----------');
 
@@ -1809,15 +1918,15 @@ xmtp.registerCodec(new TransactionReferenceCodec());
 
 
 
-// const chatWalletClient = await Client.create(wallet)
-chatWalletClient = xmtp;//make global
-console.warn('chatWalletClient SET TO GLOBAL')
+// const starkxmtp = await Client.create(wallet)
+starkxmtp = xmtp;//make global
+console.warn('starkxmtp SET TO GLOBAL')
 // Listen for new conversations
-const stream = await chatWalletClient.conversations.stream()
+const stream = await starkxmtp.conversations.stream()
 console.log('STREAM:', stream)
 
 //  registerCodecs(xmtp)
-await listExistingConversations(chatWalletClient)
+await listExistingConversations(starkxmtp)
 return xmtp
 }
 
@@ -1827,8 +1936,8 @@ return xmtp
 async function listenAllNewAddresses() {
 console.log('listenAllNewAddresses() - *B')
 
-for await (const message of await chatWalletClient.conversations.streamAllMessages()) {
-	if (message.senderAddress === chatWalletClient.address) {// This message was sent from me
+for await (const message of await starkxmtp.conversations.streamAllMessages()) {
+	if (message.senderAddress === starkxmtp.address) {// This message was sent from me
 		continue
 	}
 
@@ -1855,7 +1964,7 @@ for await (const message of await chatWalletClient.conversations.streamAllMessag
 	// peerGasPaymentRequest
 	if (message.content.includes("peerGasPaymentReques0x20")) {
 		console.log("You received a peerGasPamentRequest from: ", message.senderAddress);
-		conversation = await chatWalletClient.conversations.newConversation(message.senderAddress)
+		conversation = await starkxmtp.conversations.newConversation(message.senderAddress)
 		Swal.fire({
 			title: "Do you have some gas?",
 			text: "your peer is asking you to pay for the gas",
@@ -1878,7 +1987,7 @@ for await (const message of await chatWalletClient.conversations.streamAllMessag
 		});
 	}
 	else { console.log("(DIRTYFIX)The message does not contain the text: 'can you pay for the gas?'"); }
-b
+
 	// CHECK IF ADDRESS IS ALREADY IN YOUR CONTACTS (LOCALSTORAGE)
 	var storedContacts = [];
 	let storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -1929,28 +2038,21 @@ console.log('paa DECLARED!')
 
 async function deleteChat() {
 console.log('DELETING CHAT')
-
 // clear URL
 removeParam('T2Addr');
-
 // remove body's ATTRIBUTE
 	document.body.removeAttribute('currentChat');
-
 
 // remove "TO" address from localStorage
 localStorage.removeItem('toAddress')
 
-
 // GOT TO CHAT TAB
 openSearch()
-//go to main qr page
-// const swiperEl = document.getElementById('troqContainer');
-// swiperEl.swiper.slidePrev();
 
 //clear UI
 chatAddress.innerHTML = ''
-// document.getElementById('chatBox').innerHTML = ''
 document.getElementById('chatBox').innerHTML=`<div class="container"> <div class="row justify-content-center"> <div class="col-10"> <div class="rounded-circle border border-primary p-3" style="width: 90%; height: auto;"> <div id="svg-container"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"> <image href="./nochats.svg" width="100%" height="100%"></image> </svg>  <button type="button" id="" class="btn btn-primary " style="display: inline;" onclick="event.stopPropagation(); openChat()"> CHAT </button>   </div> </div> </div> </div> </div> `
+
 // DEACTIVATE BUTTONS
 document.getElementById('chatTextInput').disabled = true;
 document.getElementById('send-button').disabled = true;
@@ -1979,7 +2081,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 // console.log('CREATE AN ALIAS FOR THIS ADDRESS',formattedAddress)
 
 // TEST
-// await chatWalletClient.registerCodec(new ContentTypeMultiplyNumberCodec());
+// await starkxmtp.registerCodec(new ContentTypeMultiplyNumberCodec());
 
 // const numbersToMultiply = { a: 3, b: 7 };
 
@@ -2048,15 +2150,15 @@ function validateAddressType(address) {
 }
 
 
-async function isValidAddress(address) {
-			// return ethers.utils.isAddress(address);
-			return ethers.isAddress(address);
-		}
+		async function isValidAddress(address) {
+					// return ethers.utils.isAddress(address);
+					return ethers.isAddress(address);
+				}
 
-		
+				
 
-		async function addAddress() {
-			console.log('addAddress()')
+	async function addAddress() {
+	console.log('addAddress()')
 
 			let addressToAdd = Swal.fire({
 				title: "add Address",
@@ -2088,6 +2190,14 @@ async function isValidAddress(address) {
 							title: 'CHAT WITH:', 
 							position: 'center',
 							text: value });
+
+
+							// ---------------
+							// / FIX
+							// functiona como resetar la address
+							let contact = { address: value, username: null, avatar: null, did: null }
+							SaveContactsToLocalStorage(contact)
+							// ---------------
 						await chatWith(value)
 						await deleteChat()
 

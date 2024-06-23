@@ -33,7 +33,8 @@ firebase deploy --only hosting:starkid
 ```
 
 # log
-v0.8 starkid console and xmtp server
+v0.9 working chat!
+v0.8 starkid console and xmtp server, agenda
 v0.7 fixed priv encypt/decrypt for storage
 v0.6 chat UI updates
 v0.5 chat UI
