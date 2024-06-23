@@ -28,6 +28,9 @@
     <p>write did to ppolybase </p>
 
     <button id="writeDIDtest" >WRITE DID</button>
+    <button id="readDIDtest" >READ DID</button>
+    <button id="updateDIDtest" >UPDATE DID</button>
+    
     <!-- <button id="writeDIDtest" onclick="event.stopPropagation();writeDIDtest()">WRITE DID</button> -->
     
     <div id="messagesResult"></div>
@@ -174,24 +177,16 @@
             createDIDRecord(did, avatar, alias, privData, cid, signer);
 
 		};
-	// id: string;
-    // avatar: string;
-    // alias: string;
-    // privData: string;
-    // cid: string; 
-    // publicKey: PublicKey;
+
+    
+
+
+	// id: string; // avatar: string; // alias: string; // privData: string; // cid: string; // publicKey: PublicKey;
 		// async function createDIDRecord(did, avatar, cid, signer) {
 			async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
-
-			 
 				console.log('Now you have the signer, do whatever you need with it:', signer);
-				// const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-				// const db = new Polybase({ defaultNamespace: "pk/2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID" });
-                const db = new Polybase({
-  defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
-});
+                const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
 				const data = [did, avatar, alias, privData, cid];
-				// const data = [did, avatar, cid];
 				db.signer(async (data) => {
 					const signature = await signer.signMessage(data);//FIXED!
 					return { h: 'eth-personal-sign', sig: signature, };
@@ -202,20 +197,87 @@
 			
 		}
 
-		async function readDIDRecord(id) {
-			// const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-            // const db = new Polybase({ defaultNamespace: "pk/2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID" });
-            const db = new Polybase({
-  defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
-});
 
-			const collectionReference = db.collection("STARKID");
-			const record = await collectionReference.record(id).get();
-			const { data } = record; // or const data = record.data
-			const resultRecord = record.get();
-			console.log('resultRecord:', resultRecord)
-			return resultRecord
-		}
+        
+        readDIDtest.onclick = async function (e) {
+            console.log('readDIDtest')
+            let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+				try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+				catch (error) { console.log(error.message);   }
+
+                            let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
+                            signer = wallet.connect(provider);
+                                let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
+
+                                let newavatar = 'new avatar fake contnet';
+								let did = `did:starkid:${signer.address}`
+                                console.log('DID:', did)
+            let x = await readDIDRecord(did)
+            console.log('DID read result: ',x )
+
+        }
+
+		async function readDIDRecord(id) {
+                        const db = new Polybase({
+            defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+            const collectionReference = db.collection("STARKID");
+            const record = await collectionReference.record(id).get();
+            const { data } = record; // or const data = record.data
+            const resultRecord = record.get();
+            console.log('resultRecord:', resultRecord)
+            return resultRecord
+            }
+            window.readDIDRecord = readDIDRecord;
+
+
+           updateDIDtest.onclick = async function (e) {
+            console.log('updateDIDtest')
+
+			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+				try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+				catch (error) { console.log(error.message);   }
+
+                            let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
+                            signer = wallet.connect(provider);
+                                let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
+
+                                let newdata = "pepito";
+								let did = `did:starkid:${signer.address}`
+                                console.log('DID:', did)
+                                updateDID(did, newdata,  signer);
+
+		};
+            async function updateDID( did, newdata,signer) {
+			console.log('updateDID()')
+            
+                                const db = new Polybase({
+            defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+				// const newdatab = [did, newdata];
+
+                                db.signer(async (newdata) => {
+									console.log('data:', newdata)
+									const signature = await signer.signMessage(newdata);
+									return { h: 'eth-personal-sign', sig: signature, };
+								});
+								try {
+									const recordData = await db
+										.collection("STARKID")
+										.record(did)
+										.call("updateAlias", [newdata]);
+									console.log("recordData:", recordData);
+								} catch (error) {
+									console.error("An error occurred:", error);
+								}
+								return true
+
+
+						}
 
 
     </script>

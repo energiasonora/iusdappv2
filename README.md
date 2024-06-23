@@ -26,13 +26,15 @@ yarn parcel src/index.html  --port 4444 --https
 
 # deploy to firebase
 
+<!-- nvm use 18        -->
 ```
-nvm use 18       
+nvm use 20
 yarn parcel src/index.html --dist-dir public  --public-url ./
 firebase deploy --only hosting:starkid
 ```
 
 # log
+v0.10 bug fixes
 v0.9 working chat!
 v0.8 starkid console and xmtp server, agenda
 v0.7 fixed priv encypt/decrypt for storage

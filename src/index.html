@@ -22,6 +22,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="css/starkid.css" />
 		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
 
 		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" /> -->
 
@@ -409,7 +410,7 @@ import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData
 
 
 		import { Buffer } from 'buffer';
-globalThis.Buffer = Buffer;
+		globalThis.Buffer = Buffer;
 
 
     // import { ethPersonalSign } from '@polybase/eth'
@@ -417,6 +418,14 @@ globalThis.Buffer = Buffer;
 
 	import { Polybase } from "@polybase/client";
 	window.Polybase = Polybase; //make global
+
+		// CROPPER		
+		import Cropper from 'cropperjs'
+		window.Cropper = Cropper; //make global
+		import { throttle } from '@github/mini-throttle'
+		window.throttle = throttle; //make global
+		import 'cropperjs/dist/cropper.css'
+		// window.throttle
 </script>
 
 		<script>
@@ -783,8 +792,10 @@ function displayQR(data) {
 			// var currentURL = window.location.href;
 			// var currentURL = 'https://starkid.web.app/';
 			// var baseUrl = window.location.protocol + '//' + window.location.host + '/';
+			
+			
 			var baseUrl = 'https://192.168.43.129:4444' + '/';
-			// var baseUrl = 'https://starkid.web.app/' + '/';
+			// var baseUrl = 'https://starkid.web.app' + '/';
 			const parameters = { T2Addr: userAddress, };
 			const urlParams = createURLParams(parameters);
 			const url = `${baseUrl}?${urlParams}`;
@@ -1351,7 +1362,7 @@ async function loadContacts() {
 								resolve(); // Resolve the promise once the operation is done
 							})
 							.catch(error => {
-								console.error('Error while processing DID record:', error);
+								console.warn('Warn on DID record:', error);
 								reject(error); // Reject the promise if an error occurs
 							});
 					})
@@ -2588,6 +2599,208 @@ function validateAddressType(address) {
 
 				}
 			})
+		}
+
+
+
+
+
+		/*********************************************************************************************
+		.)   UPDATE IMAGE AVATA
+		**********************************************************************************************/
+
+		// itemImgMINT=>avatarIMG
+// fileCreateItemFile => avatarIMGfile 
+
+		avatarIMG.onclick = function (e) {
+			console.log('avatarIMG clicked')
+			e.preventDefault()
+			loadCroppedImg()
+			// fileCreateItemFile.click();
+
+		};
+
+
+
+		async function compressImage(imageSrc, maxSizeKB) {
+			return new Promise((resolve, reject) => {
+				const img = new Image();
+				img.onload = function () {
+					const canvas = document.createElement('canvas');
+					const ctx = canvas.getContext('2d');
+
+					// Calculate new dimensions to maintain aspect ratio
+					const MAX_WIDTH = 800;
+					const MAX_HEIGHT = 600;
+					let width = img.width;
+					let height = img.height;
+					if (width > height) {
+						if (width > MAX_WIDTH) {
+							height *= MAX_WIDTH / width;
+							width = MAX_WIDTH;
+						}
+					} else {
+						if (height > MAX_HEIGHT) {
+							width *= MAX_HEIGHT / height;
+							height = MAX_HEIGHT;
+						}
+					}
+
+					// Set canvas dimensions
+					canvas.width = width;
+					canvas.height = height;
+
+					// Draw image on canvas
+					ctx.drawImage(img, 0, 0, width, height);
+
+					// Convert canvas to Blob and compress to target size
+					canvas.toBlob(function (blob) {
+						// Check if compressed image is within target size
+						if (blob.size / 1024 <= maxSizeKB) {
+							// Resolve with the compressed data URL
+							resolve(canvas.toDataURL());
+						} else {
+							// Reject if compressed image size exceeds target size
+							reject('Compressed image size exceeds the specified limit');
+						}
+					}, 'image/jpeg', 0.7); // Adjust the quality factor (0.7 here) to achieve desired compression level
+				};
+				img.src = imageSrc;
+			});
+		}
+
+
+
+		async function loadCroppedImg() {
+			console.log('loadCroppedImg()');
+
+			// openModalId('#createDIDModal')
+// fileCreateItemFile => avatarIMGfile 
+
+			await avatarIMGfile.click();
+			let previewsrc;
+
+			avatarIMGfile.onchange = async function () {
+				if (avatarIMGfile.files.length == 1) {
+					const data = this.files[0];
+					const name = data.name;
+
+					// Read the file and get its base64 data
+					let reader = new FileReader();
+					reader.readAsDataURL(data);
+
+					reader.onload = async function () {
+						previewsrc = reader.result;
+
+						// Compress the image
+						const compressedDataUrl = await compressImage(previewsrc, 100); // 100KB limit
+
+						// Display the image in a SweetAlert2 popup
+						Swal.fire({
+							// title: 'crop',
+							// title: dictionary[globalLang]["uploadsignature"],
+							html: `
+                        <img id="preview" src="${compressedDataUrl}" style="display:none">
+                        <div>
+                            <img id="cropperjs" src="${compressedDataUrl}">
+                        </div>
+                    `,
+							allowOutsideClick: () => {
+								const popup = Swal.getPopup();
+								popup.classList.remove('swal2-show');
+								setTimeout(() => {
+									popup.classList.add('animate__animated', 'animate__headShake');
+								});
+								setTimeout(() => {
+									popup.classList.remove('animate__animated', 'animate__headShake');
+								}, 500);
+								return false;
+							},
+							willOpen: () => {
+								const image = document.querySelector('#cropperjs');
+								const cropper = new Cropper(image, {
+									aspectRatio: '4:3',
+									viewMode: 1,
+									crop: throttle(function () {
+										const croppedCanvas = cropper.getCroppedCanvas();
+										console.log('croppedCanvas:', croppedCanvas);
+										const preview = document.querySelector('#preview');
+										preview.src = croppedCanvas.toDataURL();
+									}, 25),
+								});
+							},
+							preConfirm: () => {
+								const popup = Swal.getPopup();
+								if (popup) {
+									const previewElement = popup.querySelector('#preview'); // Assuming preview is the ID of the image element
+									if (previewElement instanceof HTMLImageElement) {
+										return previewElement.src;
+									}
+								}
+							},
+						}).then(async  function (result) {
+							avatarIMG.src = result.value;
+							let b64 = JSON.stringify(result.value);
+							console.log('b64 image:', b64);
+							localStorage.setItem('avatar', b64);
+							avatarIMG.style.display = 'block';
+							Toast.fire('Avatar added', '', "success");
+
+
+							// ...........................................................................................
+							// 3.RECORD TO ZKROLLUP
+							// ..........................................................................................
+
+							let avatar = localStorage.getItem('avatar');
+							let cid = '';
+
+							// 0- CHECK IF UNBACKED WALLET INLOCALSTORAGE
+							let unbw = localStorage.getItem('unbackedWallet')
+
+							if (!unbw) {
+								console.log('1- NO UNBACKED WALLET');
+								signer = await getLocalWalletSigner();
+								did = `did:ethr:${signer.address}`
+								console.log('DID: ', did)
+								return //falta testear
+							}
+							else {
+								console.log('YES THERE IS AN UNBACKED WALLET > DEDUCTING SIGNER NOW!')
+
+								const walletData = JSON.parse(unbw);
+								try { localWallet = ethers.Wallet.fromPhrase(walletData); }
+								catch (error) {
+									console.log(error.message, 'ERROR WALLET!');
+									// localStorage.removeItem('unbackedWallet');
+								}
+
+								// let provider = new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+								let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+								//  let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v6
+								signer = localWallet.connect(provider);
+								console.log('SIGNER!:', signer);
+								//  return signer;
+								did = `did:ethr:${signer.address}`
+								console.log('DID: ', did)
+							}
+							try {
+								console.log('creating did RECORD, signer', signer)
+								createDIDRecord(did, avatar, cid, signer);
+								//  https://explorer.testnet.polybase.xyz/studio/pk%2F0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9%2FIURISNATURALIS/collections/CHATWALLETDID
+							} catch (error) {
+								console.error('An error occurred while creating DID record:', error);
+								return
+							}
+
+							// REMOVE FROM LOCALSTORAGE
+							 localStorage.removeItem('avatar');
+
+
+
+						});
+					};
+				}
+			};
 		}
 
 
