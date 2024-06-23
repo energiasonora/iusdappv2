@@ -21,3 +21,8 @@ src/trash/
 bkp/
 .firebaserc
 .gitignore
+src/argentgen.html
+src/encryptChat.html
+src/encryptv4.html
+src/encryptv4b.html
+src/encryptv5.html

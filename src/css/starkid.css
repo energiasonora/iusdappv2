@@ -1521,3 +1521,14 @@ body.swal2-height-auto {
   color: var(--bs-gray-200);
   background-color: var(--bs-purple);
 }
+
+@media screen and (max-width: 456px) {
+    #send-attachment {
+        display: none;
+    }
+}
+
+.swal2-input {
+    display: flex;
+    color: var(--c1); /* Change 'red' to the desired color */
+}

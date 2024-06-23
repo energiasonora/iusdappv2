@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENCRYPT AND SIGN MESSAGE</title>
+    <title>ENCRYPT ETH PRIVATE KEY TO STORE IT </title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 
     <style>
-        body {
+        /* body {
             background-color: rgb(7, 42, 60);
             color: green;
-        }
+        } */
 
         #result {
             word-wrap: break-word;
@@ -25,17 +25,11 @@
 
 <body>
     <h1>ENCRYPTv3 </h1>
-    <p>Encrypt private key </p>
+    <p>Encrypt private key (with elliptic)</p>
     <div id="messagesResult"></div>
     <p>
-        <!-- <textarea id="inputText" rows="5" cols="50"></textarea><br> -->
-        <!-- <div id="hashResult">Hash:</div> -->
-        <!-- <button onclick="signHash()">SIGN</button> -->
     <div id="result"></div>
 
-    <br><br>
-    <!-- <button onclick="verify()">VERIFY</button> -->
-    <!-- <div id="resultAddress"></div> -->
     <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
  
 
@@ -141,12 +135,7 @@ const senderAddress = EthCrypto.recover(
     EthCrypto.hash.keccak256(decryptedPayload.message)
 );
 
-console.log(
-    'ETH Private key stored  by  ' +
-    senderAddress +
-    'is: ' +
-    decryptedPayload.message
-);
+console.log( 'ETH Private key stored  by  ' + senderAddress + 'is: ' + decryptedPayload.message );
 
 result.innerHTML +='<br><br>ETH Private key stored  by  ' + senderAddress + ' is: <br> ' + decryptedPayload.message
 

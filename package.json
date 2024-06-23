@@ -6,6 +6,7 @@
   "author": "xunorus <xunorus@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@polybase/client": "^0.6.6",
     "@xmtp/xmtp-js": "^11.3.2",
     "buffer": "^6.0.3",
     "elliptic": "^6.5.5",
