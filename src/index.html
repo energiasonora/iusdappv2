@@ -165,7 +165,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 0.10 </span>
+			<span>v 0.11 </span>
 		</nav>
 	</div>
 
@@ -262,7 +262,51 @@
 </div><!-- /search chat-->
 
 
+<!-- MODALS -->
 
+	<!-- Modal wallet RESTORE -->
+	<div class="modal fade" data-bs-backdrop="static" id="walletRestore" tabindex="-1" role="dialog" aria-labelledby=""
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" data-translate="walletrestore" id="">WALLET RESTORE</h5>
+				</div>
+				<div class="modal-body">
+					<!-- SEED -->
+					<div id="seedData">
+						<div class="mb-3">
+							<label for="seedTextarea" class="form-label">Paste your Starknet or ETH Private key</label>
+							<textarea class="form-control" id="seedTextarea" rows="3"></textarea>
+						</div>
+						<!-- PASSWORD -->
+						<div class="row g-3 align-items-center">
+							<div class="col-auto">
+								<label for="seedPassword" class="col-form-label">Password</label>
+							</div>
+							<div class="col-auto">
+								<input type="password" id="seedPassword" class="form-control"
+									aria-describedby="passwordHelpInline">
+								<div class="valid-feedback">Valid.</div>
+								<div class="invalid-feedback">Please set a password.</div>
+							</div>
+
+						</div>
+					</div>
+					<div id="displayRestoreProgress"></div>
+					<div id="success_message3" class="alert alert-success" role="alert" style="display: none;"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary closeWalletBkp" id="closeWalletRestore"
+						data-bs-dismiss="modal" data-translate="close">Cancel</button>
+					<button type="button" class="btn btn-outline-secondary closeWalletBkp" id="setWalletRestore"
+						data-translate="restore" onclick="event.stopPropagation(); restoreSeed()"
+						disabled>Restore</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- fin walelt RESTORE WALLET-->
 
 	<!-- SCAN MODAL -->
 	<div class="modal fade" data-bs-backdrop="static" id="scanModal" tabindex="-1" role="dialog" aria-labelledby=""
@@ -312,6 +356,7 @@
 							<path fill="currentColor"
 								d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0h32c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64H64c123.7 0 224 100.3 224 224v32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320C100.3 320 0 219.7 0 96z" />
 						</svg> Backup </button>
+
 					<button type="button" id="" class="btn btn-primary"
 						onclick="event.stopPropagation(); restoreWallet()"> <svg xmlns="http://www.w3.org/2000/svg"
 							height="16" width="16" viewBox="0 0 512 512">
@@ -616,10 +661,10 @@ function shortAddress(address) {
 }
 
 
-async function createAddress(){
-            console.log('createAddress()')
+async function createStarknetAddress(){
+            console.log('createStarknetAddress()')
 			
-			// CREATE PRIVATE KEY AND CALCULATE ADDRESS 
+			// CREATE STARKNET PRIVATE KEY AND CALCULATE ADDRESS 
 			let privateKey = localStorage.getItem('starknetPrivKey');
             if (!privateKey) {
 				privateKey = stark.randomAddress();
@@ -633,18 +678,9 @@ async function createAddress(){
 			
 			
             const starkKeyPub = ec.starkCurve.getStarkKey(privateKey);  
-        //   const starkKeyPubAX = ec.starkCurve.getStarkKey(privateKeyAX);
-
             console.log('publicKey=', starkKeyPub);
 			
             const OZaccountClassHash = '0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a';
-
-            // Calculate future address of the account OPENZEPPELIN
-            // const OZaccountConstructorCallData = CallData.compile({ publicKey: starkKeyPub });
-            // const OZcontractAddress = hash.calculateContractAddressFromHash( starkKeyPub, OZaccountClassHash, OZaccountConstructorCallData, 0 );
-            // console.log('Precalculated account address=', OZcontractAddress);
-            // qrresult.innerHTML = OZcontractAddress
-
 
 				// Calculate future address of the ArgentX account FUNCIONA!
 				const AXConstructorCallData = CallData.compile({ owner: starkKeyPub, guardian: '0', });
@@ -656,11 +692,9 @@ async function createAddress(){
 				let modifiedAXcontractAddress = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
 
 			// 3- SHOW QR
-			// canvas.innerHTML = '';
-			showqr(modifiedAXcontractAddress);
-			let shortAddr = shortAddress(modifiedAXcontractAddress)
-			yourAddress.innerHTML += `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${modifiedAXcontractAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg>`;
-			console.log(`Your address: ${modifiedAXcontractAddress} `)
+			setAddress(modifiedAXcontractAddress)
+			
+			// - CREATE ETH ADDRESS
 			
 			return 
 			
@@ -745,23 +779,39 @@ return
 				
 				`);
 				console.log('init()')
-				createAddress()
+
+
+				createStarknetAddress()
 				await createXMPTchat()
-				await getChatAddresses()
-				loadContacts()
-				await listenAllNewAddresses()
-				
-				
 			// -----------------------------------------
 			//  CHECK IF USER COMES FROM A LINK
 			const urlParams = new URLSearchParams(window.location.search);
 			const t2AddrValue = urlParams.get('T2Addr');
 			if (t2AddrValue !== null) {
-				console.log(`TRYING TO CHAT WITH: ${t2AddrValue}`);
+				console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
+
+
+				if(isValidStarkNetAddress(t2AddrValue)){
+					console.log('This is a STARKNET address ==> well get the ETH address from the did')
+				} else {
+					console.log('not a valid STARKNET address')
+					return
+				}
+
+
 				await chatWith(t2AddrValue)
+				// openSearch()
 			} else {
-				console.log('T2Addr parameter not found in the URL');
+				console.warn('T2Addr parameter not found in the URL');
 			}
+			// -----------------------------------------
+
+				await getChatAddresses()
+				loadContacts()
+				await listenAllNewAddresses()
+				
+				
+			 
 			
 			}
 			init()
@@ -808,9 +858,8 @@ function displayQR(data) {
 			var preElement = document.getElementById('yourAddress');
 			preElement.setAttribute('address', userAddress);
 
-			yourAddress.innerHTML = `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${userAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg>`;
+			yourAddress.innerHTML = `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${userAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> <svg id='shareAddress' onclick="event.stopPropagation();copy2clipboard('${url}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path fill='currentColor'  d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>`;
 			console.log(`Your address: ${userAddress} `)
-
 		}
 
 
@@ -959,6 +1008,7 @@ function displayQR(data) {
 		async function createXMPTchat(){
             console.log('createXMPTchat()')
 
+			// check if DID is needed or not
 
 			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
             if (!chatETHPrivKey) {
@@ -993,7 +1043,7 @@ function displayQR(data) {
 
 		async function  getChatAddresses(){
 			const allConversations = await starkxmtp.conversations.list()
-			console.log('connected/available addresses:', allConversations.length)
+			console.log('YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP")
 
 			const peerAddressesArray = [];
 
@@ -1344,7 +1394,8 @@ async function loadContacts() {
 					contactInfo = `<span>${shortAddr} <span>`;
 				}
 
-				let did = `did:ethr:${el.address}`;
+				// let did = `did:ethr:${el.address}`;
+				let did = `did:starknet:${el.address}`;
 
 				// Add each asynchronous operation to the promises array
 				promises.push(
@@ -1510,8 +1561,55 @@ if (ethers.isAddress(toaddr)) {
 
 
 }
+
+
+// function share(text) {
+// console.log('share()', text)
+
+
+// let textLink = `<a href="${text}">${text}</a>`;
+
+// if (window.clipboardData && window.clipboardData.setData) {
+// 	console.log('Copied to Clipboard', text, "success");
+
+// 	document.getElementById('innerAddress').innerHTML = '<path fill="currentColor"  d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/><p>Copied!</p>'
+
+// 	setTimeout(() => {
+// 		document.getElementById('innerAddress').innerHTML = ' <path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path>'
+// 	}, 1000);
+// 	return window.clipboardData.setData("Text", text);
+// }
+// else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+// 	var textarea = document.createElement("textarea");
+// 	textarea.textContent = text;
+// 	textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+// 	document.body.appendChild(textarea);
+// 	textarea.select();
+// 	try {
+// 		console.log('Copied to Clipboard', text, "success");
+// 		document.getElementById('innerAddress').innerHTML = '<path fill="currentColor"  d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/><p>Copied!</p>'
+
+// 		setTimeout(() => {
+// 			document.getElementById('innerAddress').innerHTML = ' <path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path>'
+// 		}, 1000);
+
+// 		return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+// 	}
+// 	catch (ex) {
+// 		console.warn("Copy to clipboard failed.", ex);
+// 		return prompt("Copy to clipboard: Ctrl+C, Enter", text);
+// 	}
+// 	finally {
+// 		document.body.removeChild(textarea);
+// 	}
+// }
+
+
+// }
+
 function customcopy2clipboard(text) {
 console.log('customcopy2clipboard()', text)
+
 let textLink = `<a href="${text}">${text}</a>`;
 
 if (window.clipboardData && window.clipboardData.setData) {
@@ -2167,25 +2265,13 @@ function validateAddressType(address) {
     }
     
 
-	// 
-	// if (stark.makeAddress(address)) {
-	// 	console.log('StarkNet Address')
-    //     return 'StarkNet Address';
-    // }
-    // Check if it is a valid StarkNet address
-    // try {
         const isValidStarkNetAddress = stark.makeAddress(address);
         if (isValidStarkNetAddress) {
 		console.log('StarkNet Address')
 
             return 'StarkNet Address';
         }
-    // } catch (e) {
-    //     // If validation fails, it's not a StarkNet address
-    // }
-
-    // If neither validation passes, it's not a valid address
-	
+  
 		console.log('Invalid Address')
     return 'Invalid Address';
 }

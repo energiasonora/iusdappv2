@@ -1,0 +1,8 @@
+
+
+itemImgMINT => avatarIMG
+
+fileCreateItemFile => avatarIMGfile 
+
+// starknet js v4 /v5
+ec.getStarkKey(keyPair); => ec.starkCurve.getStarkKey(privateKey); // only X part of full pubKey

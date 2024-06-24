@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENCRYPT STARK PRIVATE KEY TO STORE IT </title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+
+    <style>
+        /* body {
+            background-color: rgb(7, 42, 60);
+            color: green;
+        } */
+
+        #result {
+            word-wrap: break-word;
+
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <h1>ENCRYPT STARK v6 </h1>
+    <div id="messagesResult"></div>
+    <p>
+    <div id="result"></div>
+
+    <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
+ 
+
+
+    <script type="module">
+
+        import elliptic from 'elliptic';
+        window.elliptic = elliptic;
+
+
+        import EthCrypto from 'eth-crypto';
+        window.EthCrypto = EthCrypto;
+
+        // import { stark, Account, ec, json, RpcProvider, hash, CallData ,num,Contract,WeierstrassSignatureType,encode} from 'starknet';
+        import { ec,encode,CallData,hash } from 'starknet';
+
+
+        async function init() {
+    console.log(`
+    
+    ███████╗████████╗ █████╗ ██████╗ ██╗  ██╗██╗██████╗ 
+    ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║ ██╔╝██║██╔══██╗
+    ███████╗   ██║   ███████║██████╔╝█████╔╝ ██║██║  ██║
+    ╚════██║   ██║   ██╔══██║██╔══██╗██╔═██╗ ██║██║  ██║
+    ███████║   ██║   ██║  ██║██║  ██║██║  ██╗██║██████╔╝
+    ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ 
+                                                        
+    `);
+
+    // ------------------------------------------
+    //GENERATE ETHEREUM KEYPAIR WITH ETHERS
+    let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            if (!chatETHPrivKey) {
+                const ethWallet = ethers.Wallet.createRandom();
+                chatETHPrivKey = ethWallet.privateKey;
+                console.log('New chatwallet private key', chatETHPrivKey);
+                localStorage.setItem('chatETHPrivKey', chatETHPrivKey);
+                console.log('chatETHPrivKey SAVED INTO LOCALSTORAGE');
+            } else {
+                console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+            }
+            
+            result.innerHTML += '<strong> CURRENT ETH Private Key:</strong> ' + chatETHPrivKey;
+           
+            try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+            catch (error) { console.log(error.message);   }
+            
+            
+            result.innerHTML += '<br><strong>  ETH PRIVATE KEY:</strong> ' + wallet.signingKey.privateKey;
+            result.innerHTML += '<br><strong>  ETH PUBLIC KEY:</strong> ' + wallet.signingKey.publicKey;
+            result.innerHTML += '<br><strong> CURRENT ETH Address:</strong> ' + wallet.address;
+
+            ethPrivateKey = chatETHPrivKey
+             ethPublicKey = ethers.getBytes(wallet.signingKey.publicKey);
+
+ // ------------------------------------------
+// GENERATE STARKNET KEYPAIR WITH STARKNETJS
+            result.innerHTML += '<br><br><strong> ✅STARKNET  KEYPAIR V2  </strong>:'
+
+            let starknetPrivKey = localStorage.getItem('starknetPrivKey');
+            if (!starknetPrivKey) {
+                starknetPrivKey = stark.randomAddress();
+                console.log('New AX_ACCOUNT:\nprivateKey=', starknetPrivKey);
+                localStorage.setItem('starknetPrivKey', starknetPrivKey);
+                console.log('starknetPrivKey SAVED INTO LOCALSTORAGE');
+            } else {
+                console.log('starknetPrivKey already exists in localStorage:', starknetPrivKey);
+            }
+
+            result.innerHTML += '<br><strong> PRIVATE KEY TO SAVE:</strong> ' + starknetPrivKey;
+            const starkKeyPubAX = ec.starkCurve.getStarkKey(starknetPrivKey);
+            const AXConstructorCallData = CallData.compile({ owner: starkKeyPubAX, guardian: '0', });
+            const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
+            const AXcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, argentXaccountClassHash, AXConstructorCallData, 0);
+            console.log('Precalculated account address= ✅', AXcontractAddress);
+            modifiedHexString = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
+            console.log('modified address:', modifiedHexString);
+            result.innerHTML += '<br><br><strong>STARKNET ACCOUNT ADDRESS</strong>:<br>  ' + modifiedHexString + '✅'
+
+            // --------
+            // 0. coniverte en estring la eth priv key
+            //1. firma el hash del mensaje
+            //2. arma un payload con el mensaje + la firma 
+            //3. lo encrpta
+            //4. lo convierte en estring
+            // const bob = EthCrypto.createIdentity();
+
+// 0. coniverte en estring la eth priv key
+const secretMessage = EthCrypto.cipher.stringify(starknetPrivKey);
+console.log('ethPrivKeyString: ', secretMessage)
+
+// 1.
+const signature = EthCrypto.sign( ethPrivateKey, EthCrypto.hash.keccak256(secretMessage) );
+console.log('signature: ', signature)
+
+// 2.
+const payload = { message: secretMessage, signature };
+
+// 3.
+const encrypted = await EthCrypto.encryptWithPublicKey( ethPublicKey, JSON.stringify(payload) );
+
+console.log('Alice encrypted ETH private key to store in registry:', encrypted)
+
+// 4.
+// we convert the object into a smaller string-representation
+const encryptedString = EthCrypto.cipher.stringify(encrypted);
+console.log('Alice encrypted ETH private key to store in registry STRING: ', encryptedString)
+// return encryptedString
+ 
+// ---------------
+// DECRYPTING
+// we parse the string into the object again
+const encryptedObject = EthCrypto.cipher.parse(encryptedString);
+
+const decrypted = await EthCrypto.decryptWithPrivateKey( ethPrivateKey, encryptedObject );
+const decryptedPayload = JSON.parse(decrypted);
+console.log('DECRYPRED✅!!!', decryptedPayload)
+// check signature
+const senderAddress = EthCrypto.recover( decryptedPayload.signature, EthCrypto.hash.keccak256(decryptedPayload.message) );
+console.log( 'ETH Private key stored  by  ' + senderAddress + 'is: ' + decryptedPayload.message );
+result.innerHTML +='<br><br>✅✅✅ STARKNET Private key DECRYPTED  ✅✅✅  by  ' + senderAddress + ' is: <br> ' + decryptedPayload.message
+
+        }
+
+        init()
+
+    </script>
+</body>
+
+</html>
