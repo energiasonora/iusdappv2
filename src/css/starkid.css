@@ -489,6 +489,7 @@ a,
 .search--open .btn--search-close {
 	opacity: 1;
 	transform: scale3d(1, 1, 1);
+	z-index: 1;
 }
 
 /* Search form with input and description */

@@ -165,7 +165,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 0.12 </span>
+			<span>v 0.14 </span>
 		</nav>
 	</div>
 
@@ -471,6 +471,11 @@ import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData
 		window.throttle = throttle; //make global
 		import 'cropperjs/dist/cropper.css'
 		// window.throttle
+
+		import EthCrypto from 'eth-crypto';
+        window.EthCrypto = EthCrypto;
+
+
 </script>
 
 		<script>
@@ -664,25 +669,7 @@ function shortAddressSTARK(address) {
 async function createStarknetAddress(){
             console.log('createStarknetAddress()')
 			
-			// CREATE STARKNET PRIVATE KEY AND CALCULATE ADDRESS 
-			// let privateKey = localStorage.getItem('starknetPrivKey');
-            // if (!privateKey) {
-			// 	privateKey = stark.randomAddress();
-            //     console.log('New OZ account:\nprivateKey=', privateKey);
-            //     localStorage.setItem('starknetPrivKey', privateKey);
-            //     console.log('privKey SAVED INTO LOCALSTORAGE');
-            // } else {
-			// 	console.log('starknetPrivKey already exists in localStorage:', privateKey);
-            // }
-			
-            // const starkKeyPub = ec.starkCurve.getStarkKey(privateKey);  
-            // console.log('publicKey=', starkKeyPub);
-            // const OZaccountClassHash = '0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a';
-			// 	const AXConstructorCallData = CallData.compile({ owner: starkKeyPub, guardian: '0', });
-			// 	const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
-			// 	const AXcontractAddress = hash.calculateContractAddressFromHash( starkKeyPub, argentXaccountClassHash, AXConstructorCallData, 0 );
-			// 	let modifiedAXcontractAddress = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
-			// setAddress(modifiedAXcontractAddress)
+ 
 
 			let starknetPrivKey = localStorage.getItem('starknetPrivKey');
             if (!starknetPrivKey) {
@@ -703,30 +690,29 @@ async function createStarknetAddress(){
 
 			// 3- SHOW QR
 			setAddress(modifiedHexString)
-			
+			// - CREATE DID with eth address as alias
+			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+            try { signer = await new ethers.Wallet(chatETHPrivKey) }
+            catch (error) { console.log(error.message); }
+            modifiedHexString
+            let did = `did:starkid:${modifiedHexString}`
+			console.warn('ETH ADDRESS: ', signer.address)
+			// return 
+            // let did = `did:starkid:0x14c74ee7e2f33f94369c22587d65af3a4216e6627928b4c9cf1995623fdfb80`
+            let avatar = '';
+            let alias = signer.address;
+            let privData = '';
+            let cid = '';
+
+            console.log('DID:', did)
+            createDIDRecord(did, avatar, alias, privData, cid, signer);
+
 			// - CREATE ETH ADDRESS
 			
 			return 
 			
-            ////////
-            // 2
-			const provider = new Provider({ sequencer: { network: constants.NetworkName.SN_GOERLI } });
-            const OZaccount = new Account(provider, OZcontractAddress, privateKey);
-            console.log('now PUBLISH',OZaccount)
-return 
-
-			console.log('DEPLOY ACCOUNT...')
-			const { transaction_hash, contract_address } = await OZaccount.deployAccount({
-			classHash: OZaccountClassHash,
-			constructorCalldata: OZaccountConstructorCallData,
-			addressSalt: starkKeyPub,
-			});
-
-			await provider.waitForTransaction(transaction_hash);
-			console.log('✅ New OpenZeppelin account created.\n   address =', contract_address);
-
-
-
+         
 }
 
 
@@ -862,6 +848,7 @@ console.log(`
 									return didresult
 								} else {
 									console.log(did + ' DOESN\'T HAVE A RECORD :(');
+									return
 								}
 							} catch (error) {
 								console.error('An error occurred while fetching the DID record:', error);
@@ -1460,7 +1447,7 @@ async function loadContacts() {
 									let avatar = JSON.parse(avtr);
 									document.getElementById(did).src = avatar;
 								} else {
-									console.log(did + ' DOESN\'T HAVE A RECORD :(');
+									console.log(did + ' DOESN\'T HAVE A RECORD :(#1464)');
 								}
 								resolve(); // Resolve the promise once the operation is done
 							})
@@ -1764,8 +1751,9 @@ localStorage.setItem('contacts', JSON.stringify(contacts));
 
 // SAVE CONTACTS
 function SaveContactsToLocalStorage(contact) {
-var a = [];
-a = JSON.parse(localStorage.getItem('contacts')) || [];
+	console.log('SaveContactsToLocalStorage()')
+	var a = [];
+	a = JSON.parse(localStorage.getItem('contacts')) || [];
 
 // Check if the address already exists
 var isDuplicate = a.some(existingContact => existingContact.address === contact.address);
@@ -1865,223 +1853,6 @@ if (result.isConfirmed) {
 }
 
 
-// async function chatWith(toAddr ) {
-async function chatWithOld(toAddr ,imgsrc) {
-console.log('chatWith()', toAddr)
-
-console.log('ESTABLISHING NEW CHAT WITH', toAddr)
-
-document.getElementById("chatBox").innerHTML='';//clear chat window
-console.log('clear chatBox window')
-
-let preferedWallet = localStorage.getItem('preferedWallet');
-if (!preferedWallet) { console.log('NO PREFERED WALLET SET') }
-if (preferedWallet) {
-	const values = preferedWallet.split(',').map(item => item.trim());
-	walletChoice = values[0];
-	// userAddress = values[1];
-	// userAddress = ethers.utils.getAddress(values[1]);
-	userAddress = ethers.getAddress(values[1]);
-	console.log('USER ADDRESS IN CHAT WITH', userAddress)
-}
-
-console.log(toAddr, userAddress)
-if (toAddr == userAddress) {
-	console.log('CANCELING chatwith() because CANNOT WITH SELF ADDRESS')
-	localStorage.removeItem('toAddress')// detele "TO" address from localStorage
-	return
-}
-
-// GOT TO CHAT TAB
-openSearch()
-// const swiperEl = document.getElementById('troqContainer');
-// swiperEl.swiper.slideNext();
-
-
-// save "TO" to localwallet
-localStorage.setItem('toAddress', toAddr)
-
-// ---------
-// ERROR AQUI
-let contact = { address: toAddr, username: null, avatar: null, did: null }
-SaveContactsToLocalStorage(contact)
-// ---------------
-loadContacts()
-updateBadge()
-
-
-if (imgsrc != null){
-	console.log('YES IMAGE SOURCE', imgsrc)
-
-	 avatar = imgsrc;
-} else {
-	console.log('NO IMAGE SOURCE')
-	 avatar = "./anonym.jpg"
-}
-// add address in UI
-// let htmlData =  `<address>${toaddr}</address><br><p>no info available</p>`;
-let htmlData = `<address>${toAddr} <svg id="" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br><p>no info available</p>`;
-
-
-let shortAddr = toAddr.substring(0, 6) + "..." + toAddr.substring(38, 42);
-
-chatAddress.innerHTML = `<div class="">
-	<img src='${avatar}' alt="avatar" class="rounded rounded-circle img-thumbnail" width='40px' id='avatarImage'  onclick="event.stopPropagation();openCard('${toAddr}','${avatar}')">
-	<strong onclick="event.stopPropagation();openCard('${toAddr}','${avatar}')">${shortAddr}</strong>
-	  </div>`;
-
-
-
-
-// -------------------
-
-actionButtons.innerHTML = `
-<button type="button" id="" class="btn btn-approve" style="display: inline;"
-		onclick="event.stopPropagation(); openSend('${toAddr.toString()}')">
-		<svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
-			<path
-				d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z" />
-			</svg>
-		SEND</button>
-
-		<button type="button" id="" class="btn btn-reject" style="display: inline;"
-		onclick="event.stopPropagation(); openSend('${toAddr.toString()}')">
-		<svg height="16" width="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-			<path
-				d="m 506.43491,498.16358 c -7,10.1 -19.1,15.4 -31.2,13.5 l -416.000001,-64 c -9.7,-1.5 -18.2,-7.4 -23,-16 -4.8,-8.6 -5.4,-18.9 -1.6,-28 l 49.7,-119.6 -74.1,-68.5 c -9.70000029,-8.9 -12.9000003,-22.9 -8.1000003,-35.2 4.8,-12.3 16.7000003,-20.3 29.9000003,-20.3 h 83.600001 c 4,0 7.8,1.5 10.7,4.2 l 182.9,167.6 c 6.3,5.8 16,5.6 22,-0.4 6,-6 6.4,-15.7 0.7,-22 l -180.7,-203.4 44.2,-88.300001 c 5.3,-10.5999996 15.9,-17.39999965 27.7,-17.69999965 11.8,-0.3 22.8,5.90000005 28.7,16.09999965 l 256,448.000001 c 6.1,10.7 5.5,23.9 -1.4,34 z"
-				id="path992" />
-			</svg>
-		RECEIVE</button>
-	<button class="honorloanbutton btn btn-secondary" onclick="sendHonorloanRequest(${toAddr.toString()})"
-		style='display:none'>Loan
-		<svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 640 512" style=" fill: #7cfc00; ">
-			<path
-				d="M80 104c0-22.1-17.9-40-40-40S0 81.9 0 104v56 64V325.5c0 25.5 10.1 49.9 28.1 67.9L128 493.3c12 12 28.3 18.7 45.3 18.7H240c26.5 0 48-21.5 48-48V385.1c0-29.7-11.8-58.2-32.8-79.2l-25.3-25.3 0 0-15.2-15.2-32-32c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l32 32 15.2 15.2c11 11 9.2 29.2-3.7 37.8c-9.7 6.5-22.7 5.2-31-3.1L98.7 309.5c-12-12-18.7-28.3-18.7-45.3V224 144 104zm480 0v40 80 40.2c0 17-6.7 33.3-18.7 45.3l-51.1 51.1c-8.3 8.3-21.3 9.6-31 3.1c-12.9-8.6-14.7-26.9-3.7-37.8l15.2-15.2 32-32c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-32 32-15.2 15.2 0 0-25.3 25.3c-21 21-32.8 49.5-32.8 79.2V464c0 26.5 21.5 48 48 48h66.7c17 0 33.3-6.7 45.3-18.7l99.9-99.9c18-18 28.1-42.4 28.1-67.9V224 160 104c0-22.1-17.9-40-40-40s-40 17.9-40 40z">
-			</path>
-		</svg> 
-	</button>
-
-	`
-	// <button type="button" id="closeChat" class="btn btn-reject" style="display: inline;"
-	// 	onclick="event.stopPropagation();deleteChat((this.parentElement))">
-	// 	<svg class='uiicon' height="1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-	// 		<path
-	// 			d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-	// 		</svg>
-	// </button>
-
-
-	// FIX HERE. AWAIT TO CONVERSATION TO BE AVAILABLE
-// // ACTIVATE CHAT BUTTONS
-// document.getElementById('chatTextInput').disabled = false;
-// document.getElementById('send-button').disabled = false;
-
-// // FOCUS ON INPUT
-// document.getElementById('chatTextInput').focus();
-
-// ------------------------------------
-// AVOID REOPENING COMS WITH ADDRESESS
-// SACAR/ si lo saco falla...
-const allConversations = await starkxmtp.conversations.list()
-console.log('available addresses:', allConversations.length)
-const customAddressToCheck = toAddr; // Replace this with the address you want to check
-let addressExists = false;
-for (const conversation of allConversations) {
-	if (conversation.peerAddress === customAddressToCheck) {
-		addressExists = true;
-		cc = conversation
-		// let history = conversation.messages()
-		// console.log('history:', history)
-		// return conversation
-		break; // Exit the loop early if the address is found
-	}
-}
-
-if (addressExists) {
-	console.warn(`YOU DO HAVE A CHAT HISTORY WITH ${customAddressToCheck} `);
-	console.log('USER: ', userAddress)
-	let h = await cc.messages()
-
-	// CREATE THIS FUNCTON ==> loadChatHistory(h)
-	for (let i = 0; i < h.length; i++) {
-		// console.log('recipient address: ', h[i].recipientAddress)
-
-		if (h[i].senderAddress === userAddress) {
-			// console.log('YOU')
-			let timestamp = simplifyDate(h[i].sent)
-			document.getElementById('chatBox').innerHTML += `<div><strong class='who'>You:</strong> ${h[i].content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
-
-
-		} else {
-			// console.log('NOT YOU')
-			let timestamp = simplifyDate(h[i].sent)
-			let shortAddr = h[i].senderAddress.substring(38, 42);
-
-			document.getElementById('chatBox').innerHTML += `<div><strong class='who notyou'>${shortAddr}:</strong> ${h[i].content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
-		}
-
-	}
-
-
-	console.log('history:', history)
-} else {
-	console.warn(`YOU DONT HAVE A CHAT HISTORY WITH ${customAddressToCheck} `);
-
-}
-// FIN AVOID REOPENING COMS WITH ADDRESESS
-// ------------------------------------
-
-// CREATE CHAT (client was already created)
-conversation = await starkxmtp.conversations.newConversation(toAddr)
-console.log('conversation:', conversation)
-console.warn('------- READY TO CHAT ----------');
-
-// ADD ATTRIBUTE TO BODY(fix dup messg)
-document.body.setAttribute('currentChat', toAddr);
-
-	// ACTIVATE CHAT BUTTONS
-	document.getElementById('chatTextInput').disabled = false;
-document.getElementById('send-button').disabled = false;
-
-// FOCUS ON INPUT
-document.getElementById('chatTextInput').focus();
-	// -----------
-
-
-var chatBox = document.getElementById("chatBox");
-let shortTo = toAddr.substring(38, 42);
-
-// Listen for new messages in the conversation
-for await (const message of await conversation.streamMessages()) {
-	const now = new Date();
-	const hours = now.getHours().toString().padStart(2, '0'); // Ensure two-digit format
-	const minutes = now.getMinutes().toString().padStart(2, '0'); // Ensure two-digit format
-	const timestamp = `${hours}:${minutes}`;
-	console.log('logMSG:', message)
-	let preferedWallet = localStorage.getItem('preferedWallet');
-	if (!preferedWallet) { console.log('NO PREFERED WALLET SET') }
-	if (preferedWallet) { const values = preferedWallet.split(',').map(item => item.trim()); userAddress = values[1]; }
-	if (message.senderAddress === userAddress) {
-		console.log('YOU')
-		chatBox.innerHTML += `<div><strong class='who'>You:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
-	}
-	if (message.senderAddress == toAddr) {
-		console.log('OTHER', shortTo)
-		mm = message;
-		// let timestamp = message
-		// chatBox.innerHTML += `<div><strong class='who'>${shortTo}:</strong> ${message.content} </div>`;
-		document.getElementById('chatBox').innerHTML += `<div><strong class='who notyou'>${shortTo}:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
-
-
-	}
-	// if (message.contentType.sameAs(ContentTypeMultiplyNumber)) {
-	// 	return message.content; // 21
-	// }
-	console.log(`[${message.senderAddress}]: ${message.content}`)
-	chatBox.scrollTop = chatBox.scrollHeight;
-
-}
-}
 
 var cwContacts = document.getElementById('cwContacts');
 
@@ -2283,20 +2054,9 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 }
 
 
+// ----------------------------------
+// CHECK VALID ADDRESS
  
-function isValidHex(address) {
-    // Regular expression to check if a string is a valid hexadecimal
-    const hexRegex = /^[0-9a-fA-F]+$/;
-    return hexRegex.test(address);
-}
-
-function isValidStarkNetAddress(address) {
-    // Remove the '0x' prefix if it exists
-    const normalizedAddress = address.startsWith('0x') ? address.slice(2) : address;
-
-    // Check if the address is a valid hexadecimal string and has the correct length
-    return isValidHex(normalizedAddress) && normalizedAddress.length === 64;
-}
 
 
 // // Example usage
@@ -2309,32 +2069,78 @@ function isValidStarkNetAddress(address) {
 // console.log(isValidStarkNetAddress(address3)); // Should return true
 
 
-function validateAddressType(address) {
-    // Check if it is a valid Ethereum address
-    if (ethers.isAddress(address)) {
-		console.log('ETH Address')
-        return 'ETH Address';
+// function validateAddressType(address) {
+//     // Check if it is a valid Ethereum address
+//     if (ethers.isAddress(address)) {
+// 		console.log('ETH Address')
+//         return 'ETH Address';
+//     }
+
+//         const isValidStarkNetAddress = stark.makeAddress(address);
+//         if (isValidStarkNetAddress) {
+// 		console.log('StarkNet Address')
+
+//             return 'StarkNet Address';
+//         }
+  
+// 		console.log('Invalid Address')
+//     return 'Invalid Address';
+// }
+
+
+
+
+		// async function isValidAddress(address) {
+		// 			// return ethers.utils.isAddress(address);
+		// 			return ethers.isAddress(address);
+		// 		}
+
+		async function isValidETHAddress(address) {
+			// return ethers.utils.isAddress(address);
+			return ethers.isAddress(address);
+		}
+		
+		function isValidHex(address) {
+			// Regular expression to check if a string is a valid hexadecimal
+			const hexRegex = /^[0-9a-fA-F]+$/;
+			return hexRegex.test(address);
+		}
+
+		function isValidStarkNetAddress(address) {
+			// Remove the '0x' prefix if it exists
+			const normalizedAddress = address.startsWith('0x') ? address.slice(2) : address;
+
+			// Check if the address is a valid hexadecimal string and has the correct length
+			return isValidHex(normalizedAddress) && normalizedAddress.length === 64;
+		}
+
+		// async function isValidSTARKAddress(address) {
+		// 	if(isValidStarkNetAddress(t2AddrValue)){
+		// 	console.log('This is a STARKNET address ==> well get the ETH address from the did')
+		// } else {
+		// 	console.log('not a valid STARKNET address')
+		// 	return
+		// }
+
+
+		// }
+
+		async function getAddressType(address) {
+    // Check if it's a valid Ethereum address
+    const isValidETH = await isValidETHAddress(address);
+    if (isValidETH) {
+        return 'ETH';
     }
     
+    // Check if it's a valid StarkNet address
+    const isValidStarkNet = isValidStarkNetAddress(address);
+    if (isValidStarkNet) {
+        return 'StarkNet';
+    }
 
-        const isValidStarkNetAddress = stark.makeAddress(address);
-        if (isValidStarkNetAddress) {
-		console.log('StarkNet Address')
-
-            return 'StarkNet Address';
-        }
-  
-		console.log('Invalid Address')
-    return 'Invalid Address';
+    // If neither, it's invalid
+    return 'Invalid';
 }
-
-
-		async function isValidAddress(address) {
-					// return ethers.utils.isAddress(address);
-					return ethers.isAddress(address);
-				}
-
-				
 
 	async function addAddress() {
 	console.log('addAddress()')
@@ -2359,7 +2165,9 @@ function validateAddressType(address) {
 					// IF STARKNET
 					// const checkAdddressType = await validateAddressType(value);
 					// return
-					const isValid = await isValidAddress(value);
+					// const isValid = await isValidAddress(value);
+					// const isValid = await isValidStarkNetAddress(value);
+					const isValid = await getAddressType(value);
 
 					if (isValid) {
 						console.log(`Address ${value} is valid.`);
@@ -2370,15 +2178,67 @@ function validateAddressType(address) {
 							position: 'center',
 							text: value });
 
+							// ---------------------
+							// ANALIZE ADDRESS
+							// const addressType = await getAddressType(address);
+
+							if (isValid === 'ETH') {
+								console.log('Perform action for Ethereum address');
+								let contact = { address: value, username: null, avatar: null, did: null }
+								SaveContactsToLocalStorage(contact)
+								// ---------------
+								await chatWith(value)
+								await deleteChat()
+						
+							} else if (isValid === 'StarkNet') {
+								console.log('Perform action for StarkNet address');
+							// ---------------
+							//  CREATE AND RESOLVE DID
+							let did = `did:starkid:${value}`
+
+							let didData = await fetchDID(did)
+							console.log( 'didData', didData)
+						
+							if (didData.data.alias || null) {
+							console.log('alias is not null', didData.data.alias);
+
+// 	// ---------------
+							let contact = { address: didData.data.alias, username: null, avatar: null, did: did }
+							SaveContactsToLocalStorage(contact);
+							await chatWith(didData.data.alias)
+							await deleteChat()
+
+						} else {
+							console.log('alias is null');
+
+				}
+
+							// let ethAddress = didData.data.alias
+								// let avatar = didData.data.avatar
+							
+							
+							
+
+
+
+							} else {
+								console.log('Perform action for invalid address');
+								// Add your code to handle invalid addresses here
+							}
+							// return
+							// ---------------
+							//  RESOLVE DID
+							// let didData = await fetchDID(t2AddrValue)
+							// console.log( 'didData', didData)
 
 							// ---------------
 							// / FIX
 							// functiona como resetar la address
-							let contact = { address: value, username: null, avatar: null, did: null }
-							SaveContactsToLocalStorage(contact)
-							// ---------------
-						await chatWith(value)
-						await deleteChat()
+						// 	let contact = { address: value, username: null, avatar: null, did: null }
+						// 	SaveContactsToLocalStorage(contact)
+						// 	// ---------------
+						// await chatWith(value)
+						// await deleteChat()
 
 
 					} else {
@@ -2498,7 +2358,205 @@ function validateAddressType(address) {
 		/*********************************************************************************************
 		.)   MANAGE DID
 		**********************************************************************************************/
+		
+		// id: string; // avatar: string; // alias: string; // privData: string; // cid: string; // publicKey: PublicKey;
+        // async function createDIDRecord(did, avatar, cid, signer) {
+			async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
+            console.log('Now you have the signer, do whatever you need with it:', signer);
+            const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
+            const data = [did, avatar, alias, privData, cid];
+            db.signer(async (data) => {
+                const signature = await signer.signMessage(data);//FIXED!
+                return { h: 'eth-personal-sign', sig: signature, };
+            });
 
+            const collectionReference = db.collection("STARKID");
+            await collectionReference.create(data);
+
+        }
+
+
+		async function readDIDRecord(id) {
+            const db = new Polybase({
+                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+            const collectionReference = db.collection("STARKID");
+            const record = await collectionReference.record(id).get();
+            const { data } = record; // or const data = record.data
+            const resultRecord = record.get();
+            console.log('resultRecord:', resultRecord)
+            return resultRecord
+        }
+
+		async function deleteDID(did, signer) {
+            console.log('deleteDID()')
+
+            const db = new Polybase({
+                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+            db.signer(async (did) => {
+                console.log('data:', did)
+                const signature = await signer.signMessage(did);
+                return { h: 'eth-personal-sign', sig: signature, };
+            });
+            try {
+                const recordData = await db
+                    .collection("STARKID")
+                    .record(did)
+                    .call("deleteDID");
+            } catch (error) {
+                console.error("An error occurred:", error);
+            }
+            return true
+
+        }
+
+		async function updateAliasDID(did, newdata, signer) {
+            console.log('updateDID()')
+
+            const db = new Polybase({
+                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+            // const newdatab = [did, newdata];
+
+            db.signer(async (newdata) => {
+                console.log('data:', newdata)
+                const signature = await signer.signMessage(newdata);
+                return { h: 'eth-personal-sign', sig: signature, };
+            });
+            try {
+                const recordData = await db
+                    .collection("STARKID")
+                    .record(did)
+                    .call("updateAlias", [newdata]);
+                console.log("recordData:", recordData);
+            } catch (error) {
+                console.error("An error occurred:", error);
+            }
+            return true
+
+
+        }
+
+
+
+        async function updatePrivDataDID(did, newdata, signer) {
+            console.log('updateDID()')
+
+            const db = new Polybase({
+                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+            // const newdatab = [did, newdata];
+
+            db.signer(async (newdata) => {
+                console.log('data:', newdata)
+                const signature = await signer.signMessage(newdata);
+                return { h: 'eth-personal-sign', sig: signature, };
+            });
+            try {
+                const recordData = await db
+                    .collection("STARKID")
+                    .record(did)
+                    .call("updatePrivData", [newdata]);
+                console.log("recordData:", recordData);
+            } catch (error) {
+                console.error("An error occurred:", error);
+            }
+            return true
+
+
+        }
+
+
+
+
+        // --------------------------------------
+        //    ENCRYPT FUNCITON
+        async function encryptPrivkey(privkey, pubkey, toEncrypt) {
+            console.log('encryptPrivkey()', toEncrypt)
+            // 0. coniverte en estring la eth priv key
+            const secretMessage = EthCrypto.cipher.stringify(toEncrypt);
+            console.log('ethPrivKeyString: ', secretMessage)
+
+            // 1.
+            const signature = EthCrypto.sign(privkey, EthCrypto.hash.keccak256(secretMessage));
+            console.log('signature: ', signature)
+
+            // 2.
+            const payload = { message: secretMessage, signature };
+
+            // 3.
+            const encrypted = await EthCrypto.encryptWithPublicKey(pubkey, JSON.stringify(payload));
+
+            console.log('Alice encrypted ETH private key to store in registry:', encrypted)
+
+            // 4.
+            // we convert the object into a smaller string-representation
+            const encryptedString = EthCrypto.cipher.stringify(encrypted);
+            console.log('Alice encrypted ETH private key to store in registry STRING: ', encryptedString)
+            // return encryptedString
+            return encryptedString
+
+        }
+
+		  // -----------------------------------
+        // DECRYPT
+		async function decryptPrivData(privkey, pubkey, toDecrypt) {
+            console.log('encryptPrivkey()', toDecrypt)
+
+            // ---------------
+            // DECRYPTING
+            // we parse the string into the object again
+            const encryptedObject = EthCrypto.cipher.parse(toDecrypt);
+
+            const decrypted = await EthCrypto.decryptWithPrivateKey(privkey, encryptedObject);
+            const decryptedPayload = JSON.parse(decrypted);
+            console.log('DECRYPRED✅!!!', decryptedPayload)
+            // check signature
+            const senderAddress = EthCrypto.recover(decryptedPayload.signature, EthCrypto.hash.keccak256(decryptedPayload.message));
+            console.log('ETH Private key stored  by  ' + senderAddress + '<br>is: ' + decryptedPayload.message);
+            // result.innerHTML = '<br><br>✅✅✅ STARKNET Private key DECRYPTED  ✅✅✅  by  ' + senderAddress + ' is: <br> ' + decryptedPayload.message
+
+            return [decryptedPayload.message, senderAddress]
+             
+
+        }
+
+
+        // decryptPrivDatatest.onclick = async function (e) {
+        //     console.log('decryptPrivDatatest')
+        //     let did = `did:starkid:${modifiedHexString}`
+        //     result.innerHTML = 'Reading DID: ' + did;
+        //     let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+        //     console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+        //     try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+        //     catch (error) { console.log(error.message); }
+
+        //     let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
+        //     let signer = wallet.connect(provider);
+
+        //     let ethPrivKey = localStorage.getItem('chatETHPrivKey');
+        //     let ethPublicKey = ethers.getBytes(wallet.signingKey.publicKey);
+        //     let x = await readDIDRecord(did)
+        //     console.log('did read result: ', x.data.privData)
+        //     let privdataDIDresult = x.data.privData
+
+        //     let decryptedPrivkey = await decryptPrivData(ethPrivKey, ethPublicKey, privdataDIDresult)
+        //     // result.innerHTML += '<br><br>✅✅✅ STARKNET Private key DECRYPTED  ✅✅✅  by  ' + senderAddress + ' is: <br> ' + decryptedPayload.message
+        //     console.log('decryptedPrivkey:' , decryptedPrivkey)
+        //     result.innerHTML += '<br>✅ DECRYPTED  by  ' + decryptedPrivkey[1];
+        //     result.innerHTML += '<br>✅ STARKNET Private key DECRYPTED:  ' + decryptedPrivkey[0];
+        //     //  + ' is: <br> ' + decryptedPayload.message
+        // }
+
+
+
+
+    
 
     // ----------------------------
     // GET SIGNER
@@ -2585,160 +2643,149 @@ function validateAddressType(address) {
     // cid: string; 
     // publicKey: PublicKey;
 		// async function createDIDRecord(did, avatar, cid, signer) {
-			async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
-			if (!signer) {
-				console.log('there is no signer')
-				signer = await getLocalWalletSigner();
-				if (!signer) {
-					console.log('Handle case where signer is not obtained');
-					return; // Or throw an error, or handle the case in another way
-				}
-			} else {
-				console.log('Now you have the signer, do whatever you need with it:', signer);
-				// const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-				const db = new Polybase({ defaultNamespace: "pk/2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID" });
+		// 	async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
+		// 	if (!signer) {
+		// 		console.log('there is no signer')
+		// 		signer = await getLocalWalletSigner();
+		// 		if (!signer) {
+		// 			console.log('Handle case where signer is not obtained');
+		// 			return; // Or throw an error, or handle the case in another way
+		// 		}
+		// 	} else {
+		// 		console.log('Now you have the signer, do whatever you need with it:', signer);
+		// 		// const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
+		// 		const db = new Polybase({ defaultNamespace: "pk/2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID" });
 
-				const data = [did, avatar, cid];
-				db.signer(async (data) => {
-					const signature = await signer.signMessage(data);//FIXED!
-					return { h: 'eth-personal-sign', sig: signature, };
-				});
+		// 		const data = [did, avatar, cid];
+		// 		db.signer(async (data) => {
+		// 			const signature = await signer.signMessage(data);//FIXED!
+		// 			return { h: 'eth-personal-sign', sig: signature, };
+		// 		});
 
-				const collectionReference = db.collection("STARKID");
-				await collectionReference.create(data);
-			}
-		}
+		// 		const collectionReference = db.collection("STARKID");
+		// 		await collectionReference.create(data);
+		// 	}
+		// }
 
-		async function readDIDRecord(id) {
-            const db = new Polybase({
-                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
-            });
-
-            const collectionReference = db.collection("STARKID");
-            const record = await collectionReference.record(id).get();
-            const { data } = record; // or const data = record.data
-            const resultRecord = record.get();
-            console.log('resultRecord:', resultRecord)
-            return resultRecord
-        }
+	
 
 
 		// async function updateDIDavatar(id, newavatar, signer) {
 
 		// async function updateDIDavatar(id, newavatar) {
-		async function updateDIDavatar( newavatar) {
-			console.log('updateDIDavatar()')
+		// async function updateDIDavatar( newavatar) {
+		// 	console.log('updateDIDavatar()')
 
-				// 0- CHECK IF UNBACKED WALLET INLOCALSTORAGE
-				let unbw = localStorage.getItem('unbackedWallet')
+		// 		// 0- CHECK IF UNBACKED WALLET INLOCALSTORAGE
+		// 		let unbw = localStorage.getItem('unbackedWallet')
 
-							if (!unbw) {
-								console.log('1- NO UNBACKED WALLET');
-								signer = await getLocalWalletSigner();
-								did = `did:ethr:${signer.address}`
-								console.log('DID: ', did)
-								// return //falta testear
-							}
-							else {
-								console.log('YES THERE IS AN UNBACKED WALLET > DEDUCTING SIGNER NOW!')
+		// 					if (!unbw) {
+		// 						console.log('1- NO UNBACKED WALLET');
+		// 						signer = await getLocalWalletSigner();
+		// 						did = `did:starkid:${signer.address}`
+		// 						console.log('DID: ', did)
+		// 						// return //falta testear
+		// 					}
+		// 					else {
+		// 						console.log('YES THERE IS AN UNBACKED WALLET > DEDUCTING SIGNER NOW!')
 
-								const walletData = JSON.parse(unbw);
-								try { localWallet = ethers.Wallet.fromPhrase(walletData); }
-								catch (error) {
-									console.log(error.message, 'ERROR WALLET!');
-								}
-								let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
-								signer = localWallet.connect(provider);
-								console.log('SIGNER!:', signer);
-								//  return signer;
-								did = `did:ethr:${signer.address}`
-								console.log('DID: ', did)
+		// 						const walletData = JSON.parse(unbw);
+		// 						try { localWallet = ethers.Wallet.fromPhrase(walletData); }
+		// 						catch (error) {
+		// 							console.log(error.message, 'ERROR WALLET!');
+		// 						}
+		// 						let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+		// 						signer = localWallet.connect(provider);
+		// 						console.log('SIGNER!:', signer);
+		// 						//  return signer;
+		// 						did = `did:ethr:${signer.address}`
+		// 						console.log('DID: ', did)
 								
-							}
+		// 					}
 							
 
 
-					// .............
-								console.log('Now you have the signer, do whatever you need with it:', signer);
-								const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-								db.signer(async (newavatar) => {
-									console.log('data:', newavatar)
-									const signature = await signer.signMessage(newavatar);
-									return { h: 'eth-personal-sign', sig: signature, };
-								});
-								try {
-									const recordData = await db
-										.collection("STARKID")
-										.record(id)
-										.call("updateAvatar", [newavatar]);
-									console.log("recordData:", recordData);
-								} catch (error) {
-									console.error("An error occurred:", error);
-									fixedToast.fire('Error', error.message, "error");
-								}
-								return true
+		// 			// .............
+		// 						console.log('Now you have the signer, do whatever you need with it:', signer);
+		// 						const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
+		// 						db.signer(async (newavatar) => {
+		// 							console.log('data:', newavatar)
+		// 							const signature = await signer.signMessage(newavatar);
+		// 							return { h: 'eth-personal-sign', sig: signature, };
+		// 						});
+		// 						try {
+		// 							const recordData = await db
+		// 								.collection("STARKID")
+		// 								.record(id)
+		// 								.call("updateAvatar", [newavatar]);
+		// 							console.log("recordData:", recordData);
+		// 						} catch (error) {
+		// 							console.error("An error occurred:", error);
+		// 							fixedToast.fire('Error', error.message, "error");
+		// 						}
+		// 						return true
 
 
-							// }
-						}
-
-
-
-
-		async function deleteDID(id) {
-			console.log('deleteDID()')
-
-			Swal.fire({
-				title: dictionary[globalLang]["deletedidtitle"],
-				text: dictionary[globalLang]["deletediddescription"],
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: dictionary[globalLang]["delete"]
-
-			}).then(async (result) => {
-				if (result.isConfirmed) {
-
-
-
-					let signer = await getLocalWalletSigner();
-					if (!signer) {
-						console.log('Handle case where signer is not obtained');
-					}
-					else {
-						console.log('Now you have the signer, do whatever you need with it:', signer);
-						const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-						db.signer(async (id) => {
-							const signature = await signer.signMessage(id);
-							// const signature = await signer.signMessage(JSON.stringify(id));
-							console.log('signature:', signature)
-							return { h: 'eth-personal-sign', sig: signature, };
-						});
-						try {
-							const recordData = await db
-								.collection("DID")
-								.record(id)
-								.call("deleteDID");
-							console.log(" recordData:", recordData);
-						} catch (error) {
-							console.error("An error occurred:", error);
-							fixedToast.fire('Error', error.message, "error");
-						}
-						Swal.fire({
-							title: "DELETED!",
-							text: "Your DID was deleted",
-							icon: "success"
-						});
-						await walletDisconnect()
-					}
+		// 					// }
+		// 				}
 
 
 
 
-				}
-			})
-		}
+		// async function deleteDID(id) {
+		// 	console.log('deleteDID()')
+
+		// 	Swal.fire({
+		// 		title: dictionary[globalLang]["deletedidtitle"],
+		// 		text: dictionary[globalLang]["deletediddescription"],
+		// 		icon: 'warning',
+		// 		showCancelButton: true,
+		// 		confirmButtonColor: '#3085d6',
+		// 		cancelButtonColor: '#d33',
+		// 		confirmButtonText: dictionary[globalLang]["delete"]
+
+		// 	}).then(async (result) => {
+		// 		if (result.isConfirmed) {
+
+
+
+		// 			let signer = await getLocalWalletSigner();
+		// 			if (!signer) {
+		// 				console.log('Handle case where signer is not obtained');
+		// 			}
+		// 			else {
+		// 				console.log('Now you have the signer, do whatever you need with it:', signer);
+		// 				const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
+		// 				db.signer(async (id) => {
+		// 					const signature = await signer.signMessage(id);
+		// 					// const signature = await signer.signMessage(JSON.stringify(id));
+		// 					console.log('signature:', signature)
+		// 					return { h: 'eth-personal-sign', sig: signature, };
+		// 				});
+		// 				try {
+		// 					const recordData = await db
+		// 						.collection("DID")
+		// 						.record(id)
+		// 						.call("deleteDID");
+		// 					console.log(" recordData:", recordData);
+		// 				} catch (error) {
+		// 					console.error("An error occurred:", error);
+		// 					fixedToast.fire('Error', error.message, "error");
+		// 				}
+		// 				Swal.fire({
+		// 					title: "DELETED!",
+		// 					text: "Your DID was deleted",
+		// 					icon: "success"
+		// 				});
+		// 				await walletDisconnect()
+		// 			}
+
+
+
+
+		// 		}
+		// 	})
+		// }
 
 
 
