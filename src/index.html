@@ -165,7 +165,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 0.11 </span>
+			<span>v 0.12 </span>
 		</nav>
 	</div>
 
@@ -653,7 +653,7 @@ function copy2clipboard(text) {
     return address.substring(0, 6) + "..." + address.substring(38, 42);
 }
 
-function shortAddress(address) {
+function shortAddressSTARK(address) {
     if (typeof address !== 'string' || address.length < 64) {
         throw new Error('Invalid StarkNet address');
     }
@@ -665,34 +665,44 @@ async function createStarknetAddress(){
             console.log('createStarknetAddress()')
 			
 			// CREATE STARKNET PRIVATE KEY AND CALCULATE ADDRESS 
-			let privateKey = localStorage.getItem('starknetPrivKey');
-            if (!privateKey) {
-				privateKey = stark.randomAddress();
-                console.log('New OZ account:\nprivateKey=', privateKey);
-                // Store the new privateKey in localStorage
-                localStorage.setItem('starknetPrivKey', privateKey);
-                console.log('privKey SAVED INTO LOCALSTORAGE');
-            } else {
-				console.log('starknetPrivKey already exists in localStorage:', privateKey);
-            }
+			// let privateKey = localStorage.getItem('starknetPrivKey');
+            // if (!privateKey) {
+			// 	privateKey = stark.randomAddress();
+            //     console.log('New OZ account:\nprivateKey=', privateKey);
+            //     localStorage.setItem('starknetPrivKey', privateKey);
+            //     console.log('privKey SAVED INTO LOCALSTORAGE');
+            // } else {
+			// 	console.log('starknetPrivKey already exists in localStorage:', privateKey);
+            // }
 			
-			
-            const starkKeyPub = ec.starkCurve.getStarkKey(privateKey);  
-            console.log('publicKey=', starkKeyPub);
-			
-            const OZaccountClassHash = '0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a';
+            // const starkKeyPub = ec.starkCurve.getStarkKey(privateKey);  
+            // console.log('publicKey=', starkKeyPub);
+            // const OZaccountClassHash = '0x2794ce20e5f2ff0d40e632cb53845b9f4e526ebd8471983f7dbd355b721d5a';
+			// 	const AXConstructorCallData = CallData.compile({ owner: starkKeyPub, guardian: '0', });
+			// 	const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
+			// 	const AXcontractAddress = hash.calculateContractAddressFromHash( starkKeyPub, argentXaccountClassHash, AXConstructorCallData, 0 );
+			// 	let modifiedAXcontractAddress = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
+			// setAddress(modifiedAXcontractAddress)
 
-				// Calculate future address of the ArgentX account FUNCIONA!
-				const AXConstructorCallData = CallData.compile({ owner: starkKeyPub, guardian: '0', });
-				const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
-				const AXcontractAddress = hash.calculateContractAddressFromHash( starkKeyPub, argentXaccountClassHash, AXConstructorCallData, 0 );
-				console.log('Precalculated account address= ✅', AXcontractAddress);
-			
-            
-				let modifiedAXcontractAddress = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
+			let starknetPrivKey = localStorage.getItem('starknetPrivKey');
+            if (!starknetPrivKey) {
+                starknetPrivKey = stark.randomAddress();
+                console.log('New AX_ACCOUNT:\nprivateKey=', starknetPrivKey);
+                localStorage.setItem('starknetPrivKey', starknetPrivKey);
+                console.log('starknetPrivKey SAVED INTO LOCALSTORAGE');
+            } else {
+                console.log('starknetPrivKey already exists in localStorage:', starknetPrivKey);
+            }
+
+            const starkKeyPubAX = ec.starkCurve.getStarkKey(starknetPrivKey);
+            const AXConstructorCallData = CallData.compile({ owner: starkKeyPubAX, guardian: '0', });
+            const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
+            const AXcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, argentXaccountClassHash, AXConstructorCallData, 0);
+            console.warn('Precalculated account address= ✅', AXcontractAddress);
+            modifiedHexString = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
 
 			// 3- SHOW QR
-			setAddress(modifiedAXcontractAddress)
+			setAddress(modifiedHexString)
 			
 			// - CREATE ETH ADDRESS
 			
@@ -768,16 +778,16 @@ return
 
 			async function init(){
 				
-				console.log(`
-				
-				███████╗████████╗ █████╗ ██████╗ ██╗  ██╗██╗██████╗ 
-				██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║ ██╔╝██║██╔══██╗
-				███████╗   ██║   ███████║██████╔╝█████╔╝ ██║██║  ██║
-				╚════██║   ██║   ██╔══██║██╔══██╗██╔═██╗ ██║██║  ██║
-				███████║   ██║   ██║  ██║██║  ██║██║  ██╗██║██████╔╝
-				╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ 
-				
-				`);
+console.log(`
+
+███████╗████████╗ █████╗ ██████╗ ██╗  ██╗██╗██████╗ 
+██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║ ██╔╝██║██╔══██╗
+███████╗   ██║   ███████║██████╔╝█████╔╝ ██║██║  ██║
+╚════██║   ██║   ██╔══██║██╔══██╗██╔═██╗ ██║██║  ██║
+███████║   ██║   ██║  ██║██║  ██║██║  ██╗██║██████╔╝
+╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ 
+
+`);
 				console.log('init()')
 
 
@@ -790,16 +800,38 @@ return
 			if (t2AddrValue !== null) {
 				console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
 
+				// check did
 
-				if(isValidStarkNetAddress(t2AddrValue)){
-					console.log('This is a STARKNET address ==> well get the ETH address from the did')
-				} else {
-					console.log('not a valid STARKNET address')
-					return
-				}
+					// Regular expression to match the format did:starkid:address
+					const regex = /^did:starkid:0x[a-fA-F0-9]{64}$/;
+
+					if (regex.test(t2AddrValue)) {
+						console.log('t2AddrValue is in the correct format.');
+						
+						// RESOLVE DID
+						console.log('RESOLVIND DID: ',t2AddrValue)
+						let didData = await fetchDID(t2AddrValue)
+						console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
+						// Usage
+						// fetchAndSetAvatar('did:starkid:0x014c74ee7e2f33f94369c22587d65af3a4216e6627928b4c9cf1995623fdfb80');
+					await chatWith(didData.data.alias)
+					// return
+
+					} else {
+						console.log('t2AddrValue is NOT in the correct format.');
+					}
 
 
-				await chatWith(t2AddrValue)
+				// if(isValidStarkNetAddress(t2AddrValue)){
+				// 	console.log('This is a STARKNET address ==> well get the ETH address from the did')
+				// } else {
+				// 	console.log('not a valid STARKNET address')
+				// 	return
+				// }
+
+
+
+				// await chatWith(t2AddrValue)
 				// openSearch()
 			} else {
 				console.warn('T2Addr parameter not found in the URL');
@@ -817,7 +849,24 @@ return
 			init()
 			
 
- 
+			async function fetchDID(did) {
+							try {
+								const didresult = await readDIDRecord(did);
+
+								if (didresult.data != null) {
+									console.log(did + ' HAS A RECORD!!!');
+									// console.log( `<br><br>RESULT: <br>DID: ${didresult.data.id} <br>alias: ${didresult.data.alias} <br>avatar: ${didresult.data.avatar} <br>cid: ${didresult.data.cid} <br>privData: ${didresult.data.privData}`);
+									// let avtr = didresult.data.avatar;
+									// let avatar = JSON.parse(avtr);
+									// document.getElementById(did).src = avatar;
+									return didresult
+								} else {
+									console.log(did + ' DOESN\'T HAVE A RECORD :(');
+								}
+							} catch (error) {
+								console.error('An error occurred while fetching the DID record:', error);
+							}
+						}
  
 
 function displayQR(data) {
@@ -844,22 +893,25 @@ function displayQR(data) {
 			// var baseUrl = window.location.protocol + '//' + window.location.host + '/';
 			
 			
-			var baseUrl = 'https://192.168.43.129:4444' + '/';
-			// var baseUrl = 'https://starkid.web.app' + '/';
-			const parameters = { T2Addr: userAddress, };
+			// var baseUrl = 'https://192.168.43.129:4444' + '/';
+			var baseUrl = 'https://starkid.web.app' + '/';
+            let did = `did:starkid:${userAddress}`
+			const parameters = { T2Addr: did, };
+			// const parameters = { T2Addr: userAddress, };
 			const urlParams = createURLParams(parameters);
 			const url = `${baseUrl}?${urlParams}`;
 
 			// 3- SHOW QR
 			canvas.innerHTML = '';
 			showqr(url);
-			let shortAddr = userAddress.substring(0, 6) + "..." + userAddress.substring(38, 42);
-
+			// let shortAddr = userAddress.substring(0, 6) + "..." + userAddress.substring(38, 42);
+			let shortAddr = shortAddressSTARK(userAddress)
 			var preElement = document.getElementById('yourAddress');
 			preElement.setAttribute('address', userAddress);
 
 			yourAddress.innerHTML = `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${userAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> <svg id='shareAddress' onclick="event.stopPropagation();copy2clipboard('${url}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path fill='currentColor'  d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>`;
 			console.log(`Your address: ${userAddress} `)
+			console.log(`Your did: ${did} `)
 		}
 
 
@@ -2558,16 +2610,17 @@ function validateAddressType(address) {
 		}
 
 		async function readDIDRecord(id) {
-			const db = new Polybase({
-				defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS"
-			});
-			const collectionReference = db.collection("STARKID");
-			const record = await collectionReference.record(id).get();
-			const { data } = record; // or const data = record.data
-			const resultRecord = record.get();
-			console.log('resultRecord:', resultRecord)
-			return resultRecord
-		}
+            const db = new Polybase({
+                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+            const collectionReference = db.collection("STARKID");
+            const record = await collectionReference.record(id).get();
+            const { data } = record; // or const data = record.data
+            const resultRecord = record.get();
+            console.log('resultRecord:', resultRecord)
+            return resultRecord
+        }
 
 
 		// async function updateDIDavatar(id, newavatar, signer) {

@@ -612,7 +612,7 @@ z-index: -1;
   /* placeholder */
   /* ::placeholder */
 
-  #copyAddress{
+  #copyAddress, #shareAddress{
 	cursor: pointer;
   }
 

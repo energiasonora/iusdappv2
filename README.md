@@ -34,6 +34,7 @@ firebase deploy --only hosting:starkid
 ```
 
 # log
+v0.12 fix qr link and did calls
 v0.11 url fixes
 v0.10 bug fixes
 v0.9 working chat!
