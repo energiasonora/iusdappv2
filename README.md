@@ -34,7 +34,8 @@ firebase deploy --only hosting:starkid
 ```
 
 # log
-v0.14 gix storing contacts
+v0.15 fix crop img
+v0.14 fix storing contacts and send button
 v0.13 fix did record
 v0.12 fix qr link and did calls
 v0.11 url fixes
