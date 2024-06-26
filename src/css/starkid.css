@@ -1509,50 +1509,7 @@ body.swal2-height-auto {
 
 
 /* FIXES */
-/* #headerNotes{
-	display: flex!important;
-	top: 85px!important;
-	position: absolute!important;
-	z-index: 9;
-	width: 100%!important;
-  
-  }
-  .headerNotes{
-	width: 100%!important;
-  }
  
-  #cropperjs {
-	display: block;
-	max-width: 100%;
-  }
-  
-  .cropper-container{
-	max-height: 300px;
-	overflow: hidden;
-  }
-  #preview {
-	width: 200px;
-	height: 200px;
-	margin-bottom: 10px;
-	border-radius: 100%;
-	display: none;
-  }
-  .settingsModalItems{
-	list-style: none;
-  } */
-/*     
-  #cropperjs {
-	display: block;
-	max-width: 100%;
-  }
-
-  #preview {
-	width: 200px;
-	height: 200px;
-	margin-bottom: 10px;
-	border-radius: 100%;
-	display: none;
-  } */
 
 
 
@@ -1573,19 +1530,24 @@ body.swal2-height-auto {
 		display: block;
 		max-width: 100%;
 	  }
-	  
+
+	
 	  #preview {
 		width: 200px;
 		height: 200px;
 		margin-bottom: 10px;
 		border-radius: 100%;
-	  }
+		display: none!important;
+	  } 
+	
+	  
 	  .settingsModalItems{
 		list-style: none;
 	  }
 	  
 	  .cropper-container{
-		max-height: 300px;
+		/* max-height: 300px; */
+		max-height: 90vh;
 		overflow: hidden;
 	  }
 

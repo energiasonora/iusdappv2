@@ -20,10 +20,10 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 		
-		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
 		<link rel="stylesheet" type="text/css" href="css/cropper.css" />
-		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="css/style.css" /> -->
 		<link rel="stylesheet" type="text/css" href="css/starkid.css" />
+		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
  
 
 
@@ -236,11 +236,12 @@
 	</div>
 </div> -->
 <!-- fin chat -->
-	<form class="search__form" action="" id="chatfooter">
-		<!-- <input   id="chatTextInput" class="search__input" name="search" type="search" placeholder="Type a message..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" /> -->
+<!-- <form class="search__form" action="" id="chatfooter"> -->
+<form class="search__form" action="" id="chatfooter" onsubmit="sendMessage()">
+
 		<input   id="chatTextInput" class="search__input" name="search"   placeholder="Type a message..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 
-		<button class="btn btn-primary" id="send-button" onclick="sendMessage(event)" disabled>
+		<button class="btn btn-primary" id="send-button" onclick="sendMessage()" disabled>
 			<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
 				<path
 					d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z" />
@@ -248,10 +249,6 @@
 		</button>
 
 		<button class="btn btn-primary" id="send-attachment" onclick="sendAttachment()" disabled>
-			<!-- <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-				<path
-					d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z" />
-			</svg> -->
 
 			<svg xmlns="http://www.w3.org/2000/svg"  height="1em"viewBox="0 0 448 512">
 				<path d="M364.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"/></svg>
@@ -471,7 +468,7 @@ import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData
 		window.Cropper = Cropper; //make global
 		import { throttle } from '@github/mini-throttle'
 		window.throttle = throttle; //make global
-		import 'cropperjs/dist/cropper.css'
+		// import 'cropperjs/dist/cropper.css'
 
 		// window.throttle
 
@@ -559,38 +556,52 @@ function closeModalId(id, event) {
 // position: "top-right",
 **********************************************************************************************/
 
-const ToastTop = Swal.mixin({
-  toast: true,
-  position: "bottom-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-  iconColor: "white",
-  customClass: {
-    popup: "colored-toast",
-  },
-});
+			const ToastTop = Swal.mixin({
+			toast: true,
+			position: "bottom-end",
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener("mouseenter", Swal.stopTimer);
+				toast.addEventListener("mouseleave", Swal.resumeTimer);
+			},
+			iconColor: "white",
+			customClass: {
+				popup: "colored-toast",
+			},
+			});
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "bottom-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
-  iconColor: "white",
-  customClass: {
-    popup: "colored-toast",
-  },
-});
+			const Toast = Swal.mixin({
+			toast: true,
+			position: "bottom-end",
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener("mouseenter", Swal.stopTimer);
+				toast.addEventListener("mouseleave", Swal.resumeTimer);
+			},
+			iconColor: "white",
+			customClass: {
+				popup: "colored-toast",
+			},
+			});
 
+			const fixedToast = swal.mixin({
+			toast: true,
+			position: "bottom-end",
+			showConfirmButton: false,
+			showDenyButton: false,
+			showCancelButton: true,
+			cancelButtonText: "Now!",
+			confirmButtonText: "later ...",
+			denyButtonText: `Close`,
+			iconColor: "white",
+			customClass: {
+				popup: "colored-toast",
+			},
+			});
 
 
     /*********************************************************************************************
@@ -698,9 +709,9 @@ async function createStarknetAddress(){
             console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
             try { signer = await new ethers.Wallet(chatETHPrivKey) }
             catch (error) { console.log(error.message); }
-            modifiedHexString
+            // modifiedHexString
             let did = `did:starkid:${modifiedHexString}`
-			console.warn('ETH ADDRESS: ', signer.address)
+			console.warn('ETH ADDRESS (createStarknetAddress): ', signer.address)
 			// return 
             // let did = `did:starkid:0x14c74ee7e2f33f94369c22587d65af3a4216e6627928b4c9cf1995623fdfb80`
             let avatar = '';
@@ -781,6 +792,8 @@ console.log(`
 
 
 				createStarknetAddress()
+
+				// checkDID()
 				await createXMPTchat()
 			// -----------------------------------------
 			//  CHECK IF USER COMES FROM A LINK
@@ -790,44 +803,28 @@ console.log(`
 				console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
 
 				// check did
-
 					// Regular expression to match the format did:starkid:address
 					const regex = /^did:starkid:0x[a-fA-F0-9]{64}$/;
-
 					if (regex.test(t2AddrValue)) {
 						console.log('t2AddrValue is in the correct format.');
-						
 						// RESOLVE DID
-						console.log('RESOLVIND DID: ',t2AddrValue)
+						console.log('RESOLVING DID: ',t2AddrValue)
 						let didData = await fetchDID(t2AddrValue)
 						console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
-						// Usage
-						// fetchAndSetAvatar('did:starkid:0x014c74ee7e2f33f94369c22587d65af3a4216e6627928b4c9cf1995623fdfb80');
 					
-					
+						// ?????????????????????????????????????????
+						// HAcer aqui o en SaveContactsToLocalStorage la verificacion de si existe un did?
+						// ?????????????????????????????????????????
 						let contact = { address: didData.data.alias, username: null, avatar: null, did: t2AddrValue }
 						console.warn('CONTACTO POR URL!',contact)
 						
 						SaveContactsToLocalStorage(contact);
 						await chatWith(didData.data.alias)
-					// return
 
 					} else {
 						console.log('t2AddrValue is NOT in the correct format.');
 					}
-
-
-				// if(isValidStarkNetAddress(t2AddrValue)){
-				// 	console.log('This is a STARKNET address ==> well get the ETH address from the did')
-				// } else {
-				// 	console.log('not a valid STARKNET address')
-				// 	return
-				// }
-
-
-
-				// await chatWith(t2AddrValue)
-				// openSearch()
+				 
 			} else {
 				console.warn('T2Addr parameter not found in the URL');
 			}
@@ -1522,6 +1519,7 @@ Promise.all(promises)
 }
 
 document.getElementById("chatTextInput").addEventListener("keydown", function (event) {
+	console.log('Pressed ENTER')
 if (event.key === "Enter") {
 	var userInput = this.value.trim(); // Trim whitespace from input
 	if (userInput !== "") {
@@ -1550,9 +1548,9 @@ if (userInput !== "") {
 // sendMessage();
 });
 
-async function sendMessage(event) {
+async function sendMessage() {
 console.log('sendMessage()')
-event.preventDefault();
+// event.preventDefault();
 
 var userInput = document.getElementById("chatTextInput").value;
 var chatBox = document.getElementById("chatBox");
@@ -1584,6 +1582,9 @@ if(conversation){
 	
 }
 await conversation.send(`${userInput}`);// Send a message
+
+
+// event.preventDefault(); // Prevents the default behavior of the Enter key (submitting a form)
 
 }
 
@@ -2424,6 +2425,41 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
         }
 
+
+		async function updateAvatarDID(did, newdata, signer) {
+            console.log('updateDID()')
+
+            const db = new Polybase({
+                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
+
+            // const newdatab = [did, newdata];
+
+            db.signer(async (newdata) => {
+                console.log('data:', newdata)
+                const signature = await signer.signMessage(newdata);
+                return { h: 'eth-personal-sign', sig: signature, };
+            });
+            try {
+                const recordData = await db
+                    .collection("STARKID")
+                    .record(did)
+                    .call("updateAvatar", [newdata]);
+                console.log("recordData:", recordData);
+				
+				console.warn('suscesfully updated DID')
+
+            } catch (error) {
+                console.error("An error occurred:", error);
+				fixedToast.fire('Error', error.message, "error");
+
+            }
+            return true
+
+
+        }
+
+
 		async function updateAliasDID(did, newdata, signer) {
             console.log('updateDID()')
 
@@ -2646,39 +2682,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
       });
     }
 
-
-	// id: string;
-    // avatar: string;
-    // alias: string;
-    // privData: string;
-    // cid: string; 
-    // publicKey: PublicKey;
-		// async function createDIDRecord(did, avatar, cid, signer) {
-		// 	async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
-		// 	if (!signer) {
-		// 		console.log('there is no signer')
-		// 		signer = await getLocalWalletSigner();
-		// 		if (!signer) {
-		// 			console.log('Handle case where signer is not obtained');
-		// 			return; // Or throw an error, or handle the case in another way
-		// 		}
-		// 	} else {
-		// 		console.log('Now you have the signer, do whatever you need with it:', signer);
-		// 		// const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-		// 		const db = new Polybase({ defaultNamespace: "pk/2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID" });
-
-		// 		const data = [did, avatar, cid];
-		// 		db.signer(async (data) => {
-		// 			const signature = await signer.signMessage(data);//FIXED!
-		// 			return { h: 'eth-personal-sign', sig: signature, };
-		// 		});
-
-		// 		const collectionReference = db.collection("STARKID");
-		// 		await collectionReference.create(data);
-		// 	}
-		// }
-
-	
+ 
 
 
 		// async function updateDIDavatar(id, newavatar, signer) {
@@ -2713,94 +2717,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		// 						console.log('DID: ', did)
 								
 		// 					}
-							
-
-
-		// 			// .............
-		// 						console.log('Now you have the signer, do whatever you need with it:', signer);
-		// 						const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-		// 						db.signer(async (newavatar) => {
-		// 							console.log('data:', newavatar)
-		// 							const signature = await signer.signMessage(newavatar);
-		// 							return { h: 'eth-personal-sign', sig: signature, };
-		// 						});
-		// 						try {
-		// 							const recordData = await db
-		// 								.collection("STARKID")
-		// 								.record(id)
-		// 								.call("updateAvatar", [newavatar]);
-		// 							console.log("recordData:", recordData);
-		// 						} catch (error) {
-		// 							console.error("An error occurred:", error);
-		// 							fixedToast.fire('Error', error.message, "error");
-		// 						}
-		// 						return true
-
-
-		// 					// }
-		// 				}
-
-
-
-
-		// async function deleteDID(id) {
-		// 	console.log('deleteDID()')
-
-		// 	Swal.fire({
-		// 		title: dictionary[globalLang]["deletedidtitle"],
-		// 		text: dictionary[globalLang]["deletediddescription"],
-		// 		icon: 'warning',
-		// 		showCancelButton: true,
-		// 		confirmButtonColor: '#3085d6',
-		// 		cancelButtonColor: '#d33',
-		// 		confirmButtonText: dictionary[globalLang]["delete"]
-
-		// 	}).then(async (result) => {
-		// 		if (result.isConfirmed) {
-
-
-
-		// 			let signer = await getLocalWalletSigner();
-		// 			if (!signer) {
-		// 				console.log('Handle case where signer is not obtained');
-		// 			}
-		// 			else {
-		// 				console.log('Now you have the signer, do whatever you need with it:', signer);
-		// 				const db = new Polybase({ defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" });
-		// 				db.signer(async (id) => {
-		// 					const signature = await signer.signMessage(id);
-		// 					// const signature = await signer.signMessage(JSON.stringify(id));
-		// 					console.log('signature:', signature)
-		// 					return { h: 'eth-personal-sign', sig: signature, };
-		// 				});
-		// 				try {
-		// 					const recordData = await db
-		// 						.collection("DID")
-		// 						.record(id)
-		// 						.call("deleteDID");
-		// 					console.log(" recordData:", recordData);
-		// 				} catch (error) {
-		// 					console.error("An error occurred:", error);
-		// 					fixedToast.fire('Error', error.message, "error");
-		// 				}
-		// 				Swal.fire({
-		// 					title: "DELETED!",
-		// 					text: "Your DID was deleted",
-		// 					icon: "success"
-		// 				});
-		// 				await walletDisconnect()
-		// 			}
-
-
-
-
-		// 		}
-		// 	})
-		// }
-
-
-
-
+			 
 
 		/*********************************************************************************************
 		.)   UPDATE IMAGE AVATA
@@ -2915,15 +2832,20 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 							},
 							willOpen: () => {
 								const image = document.querySelector('#cropperjs');
-								const cropper = new Cropper(image, {
+								// const cropper = new Cropper(image, {
+									cropper = new Cropper(image, {
 									// aspectRatio: '4:3',
-									  aspectRatio: 1,
+									  aspectRatio: 1/1,
 									viewMode: 1,
 									crop: throttle(function () {
 										const croppedCanvas = cropper.getCroppedCanvas();
 										console.log('croppedCanvas:', croppedCanvas);
+										
 										const preview = document.querySelector('#preview');
 										preview.src = croppedCanvas.toDataURL();
+
+										let cropperinfo = cropper.getContainerData()
+										console.log("cropperinfo:",cropperinfo)
 									}, 25),
 								});
 							},
@@ -2942,11 +2864,11 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 							console.log('b64 image:', b64);
 							localStorage.setItem('avatar', b64);
 							avatarIMG.style.display = 'block';
-							Toast.fire('Avatar added', '', "success");
+							// Toast.fire('Avatar added', '', "success");
 
 
 							// ...........................................................................................
-							// 3.RECORD TO ZKROLLUP
+							// 3.RECORD TO ZKROLLUP DB
 							// ..........................................................................................
 
 							let avatar = localStorage.getItem('avatar');
@@ -2957,15 +2879,65 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
 							if (!unbw) {
 								console.log('1- NO UNBACKED WALLET');
-								signer = await getLocalWalletSigner();
-								did = `did:ethr:${signer.address}`
-								console.log('DID: ', did)
+								// signer = await getLocalWalletSigner();
+
+
+								// ------------------------------------
+								// GET SIGNER
+								// - CREATE DID with eth address as alias
+								let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+								console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+								try { signer = await new ethers.Wallet(chatETHPrivKey) }
+								catch (error) { console.log(error.message); }
+								// modifiedHexString
+								let did = `did:starkid:${modifiedHexString}`
+								console.warn('ETH ADDRESS: ', signer.address)
+								// return 
+
+
+								// ---------------------------------------------------
+								// IF AVATAR IN LOCALSTORAGE MEANS SOMETHING WENT WRONG WHEN CREATING THE DID> TRY AGAIN
+								
+								let avatar = localStorage.getItem('avatar')
+								if (avatar != null) {
+									
+									// ---------------------------------------------------
+									// UPDATE DID
+								// did = `did:ethr:${signer.address}`
+								console.log('UPLOAD AVATAR FOR DID:', did)
+								await updateAvatarDID(did, avatar, signer)
+
+							Toast.fire('Avatar added to DID', '', "success");
+
+								// createDIDRecord(did, avatar, alias, privData, cid, signer);
+								// ------------------------------------
+									
+									
+									// console.log('AVATAR IN LOCALSTORAGE')
+									
+									// itemImgMINT.src = JSON.parse(avatar);
+									// let updateDID = await updateDIDavatar(avatar)
+									// if(updateDID==true){
+										
+									// 	console.log('suscesfully updated DID')
+									// 	localStorage.removeItem('avatar')
+										
+									// }else{
+									// 	console.log('failed to update DID')
+									// }
+								}
+								
+								
 								return //falta testear
 							}
 							else {
 								console.log('YES THERE IS AN UNBACKED WALLET > DEDUCTING SIGNER NOW!')
 
 								const walletData = JSON.parse(unbw);
+
+								// *********************************************************************
+								// PUT HERE THE PASSWORD FROM LOCALSTORAGE, MAYBE ENCRYPTED BY US ASWELL
+								// *********************************************************************
 								try { localWallet = ethers.Wallet.fromPhrase(walletData); }
 								catch (error) {
 									console.log(error.message, 'ERROR WALLET!');

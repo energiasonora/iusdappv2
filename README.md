@@ -34,6 +34,7 @@ firebase deploy --only hosting:starkid
 ```
 
 # log
+v0.15 
 v0.15 fix crop img
 v0.14 fix storing contacts and send button
 v0.13 fix did record
