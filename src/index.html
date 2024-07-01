@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>STARK ID</title>
+		<title>METER CHAT</title>
 		<meta name="description" content="a DID managing tool to communicate your public and private data with sovereignty" />
 		<meta name="keywords" content="did, starknet " />
 		<meta name="author" content="Xunorus" />
@@ -15,18 +15,13 @@
         <script src="js/qr-code-styling.js"></script>
 		
 		
-		
-		<!-- <link rel="stylesheet" type="text/css" href="css/starkid.css" /> -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 		
 		<link rel="stylesheet" type="text/css" href="css/cropper.css" />
-		<!-- <link rel="stylesheet" type="text/css" href="css/style.css" /> -->
-		<link rel="stylesheet" type="text/css" href="css/starkid.css" />
+		<link rel="stylesheet" type="text/css" href="css/meterchat.css" />
 		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
  
-
-
 
 		<!--[if IE]>
   		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -58,7 +53,6 @@
                 d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
             </svg>
           </button>
-          <!-- <button type="button" id="" class="btn btn-reject" onclick="event.stopPropagation(); scanAddress()"> -->
           <button type="button" id="" class="btn btn-danger" onclick="event.stopPropagation(); scanAddress()">
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
               <path
@@ -74,8 +68,13 @@
         </div>
       </div>
     </div>
-    
-	<!-- <ul id="cwContacts" class='nav'> </ul> -->
+	<button class="btn btn-primary fullwidth" id="mintOrUpdate" onclick="event.stopPropagation(); mintOrUpdate()" disabled> Mint
+		<!-- <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+			<path
+				d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z" />
+		</svg> -->
+	</button>
+	
 	<ul id="cwContacts" class="nav">
 	<!--  
 	<li data-address="0x137a64f5F1C1C0595d4C9c12E68f99fA6f841407" id="0x137a64f5F1C1C0595d4C9c12E68f99fA6f841407" class=""> 
@@ -134,7 +133,7 @@
 		
 		<main class="main-wrap">
 			<header class="codrops-header">
-				<h1 class="codrops-header__title">STARKID</h1>
+				<h1 class="codrops-header__title" id="userData">METERCHAT</h1>
 				<div class="search-wrap">
 					<button id="btn-search" class="btn btn--search" style="display: none;"> <svg class="icon icon--search"><use xlink:href="#icon-search"></use></svg></button>
 
@@ -166,7 +165,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 0.15 </span>
+			<span>v 1.1 </span>
 		</nav>
 	</div>
 
@@ -196,47 +195,10 @@
 			<h3>Unapproved contacts</h3>
 			<p>#0x123456789123456789,#0x123456789123456788,#0x123456789123456787</p>
 		</div>
-		<!-- <div class="search__suggestion">
-			<h3>Unapproved contacts</h3>
-			<p>#0x123456789123456789,#0x123456789123456788,#0x123456789123456787</p>
-		</div>
-		<div class="search__suggestion">
-			<h3>Blocked</h3>
-			<p>#0x123456789123456786,#0x123456789123456785,#0x123456789123456784</p>
-		</div> -->
+	 
 	</div>
 
-	<!-- <div class="" id="chatBox">
-
-	</div> -->
-
-<!-- ---CHAT -->
-
-<!-- <div class="swiper-slide">
-	<div id="chatcontainer" class="">
-		<div id="chatheader" class="">
-			<span id="chatAddress"></span>
-			<span class="alignright " id="actionButtons"> </span>
-		</div>
-		<div class="" id="chatBox">
-
-		</div>
-		<div id="chatfooter" class="">
-			<div class="input-group">
-				<input type="text" class="form-control" id="chatTextInput" placeholder="Type a message..."
-					disabled>
-				<button class="btn btn-primary" id="send-button" onclick="sendMessage()" disabled>
-					<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-						<path
-							d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z" />
-					</svg>
-				</button>
-			</div>
-		</div>
-	</div>
-</div> -->
-<!-- fin chat -->
-<!-- <form class="search__form" action="" id="chatfooter"> -->
+ 
 <form class="search__form" action="" id="chatfooter" onsubmit="sendMessage()">
 
 		<input   id="chatTextInput" class="search__input" name="search"   placeholder="Type a message..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
@@ -427,38 +389,15 @@
 	  import { Client } from '@xmtp/xmtp-js'
 		window.Client = Client;
 
-import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData ,} from 'starknet';
-// import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData, validateAddress, encodeShortString } from 'starknet';
-
-			window.Provider = Provider;
-			window.Account = Account;
-			window.constants = constants;
-			window.ec = ec;
-			window.json = json;
-			window.stark = stark;
-			window.Provider = Provider;
-			window.hash = hash;
-			window.CallData = CallData;
-			// window.isHex = isHex;
-
-			// window.validateAddress = validateAddress;
-			// window.encodeShortString = encodeShortString;
-
 
 			import QrScanner from "qr-scanner/qr-scanner.min.js";
 		window.QrScanner = QrScanner; //make global
 		QrScanner.hasCamera(); // test
 
-
-	
-
-
-		import { Buffer } from 'buffer';
-		globalThis.Buffer = Buffer;
+		// import { Buffer } from 'buffer';
+		// globalThis.Buffer = Buffer;
 
 
-    // import { ethPersonalSign } from '@polybase/eth'
-    // window.ethPersonalSign = ethPersonalSign; //make global
 
 	import { Polybase } from "@polybase/client";
 	window.Polybase = Polybase; //make global
@@ -468,9 +407,6 @@ import { Provider, Account, constants, ec, json, stark, Provider, hash, CallData
 		window.Cropper = Cropper; //make global
 		import { throttle } from '@github/mini-throttle'
 		window.throttle = throttle; //make global
-		// import 'cropperjs/dist/cropper.css'
-
-		// window.throttle
 
 		import EthCrypto from 'eth-crypto';
         window.EthCrypto = EthCrypto;
@@ -680,47 +616,79 @@ function shortAddressSTARK(address) {
 }
 
 
-async function createStarknetAddress(){
-            console.log('createStarknetAddress()')
-			
- 
-
-			let starknetPrivKey = localStorage.getItem('starknetPrivKey');
-            if (!starknetPrivKey) {
-                starknetPrivKey = stark.randomAddress();
-                console.log('New AX_ACCOUNT:\nprivateKey=', starknetPrivKey);
-                localStorage.setItem('starknetPrivKey', starknetPrivKey);
-                console.log('starknetPrivKey SAVED INTO LOCALSTORAGE');
-            } else {
-                console.log('starknetPrivKey already exists in localStorage:', starknetPrivKey);
-            }
-
-            const starkKeyPubAX = ec.starkCurve.getStarkKey(starknetPrivKey);
-            const AXConstructorCallData = CallData.compile({ owner: starkKeyPubAX, guardian: '0', });
-            const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
-            const AXcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, argentXaccountClassHash, AXConstructorCallData, 0);
-            console.warn('Precalculated account address= ✅', AXcontractAddress);
-            modifiedHexString = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
-
-			// 3- SHOW QR
-			setAddress(modifiedHexString)
-			// - CREATE DID with eth address as alias
+async function createMeterAddress(){
+            console.log('createMeterAddress()')
+		
+				// 1- GET  PRIV KEY(IF not CREATE IT)
 			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-            try { signer = await new ethers.Wallet(chatETHPrivKey) }
-            catch (error) { console.log(error.message); }
-            // modifiedHexString
-            let did = `did:starkid:${modifiedHexString}`
-			console.warn('ETH ADDRESS (createStarknetAddress): ', signer.address)
-			// return 
-            // let did = `did:starkid:0x14c74ee7e2f33f94369c22587d65af3a4216e6627928b4c9cf1995623fdfb80`
-            let avatar = '';
-            let alias = signer.address;
-            let privData = '';
-            let cid = '';
+            if (!chatETHPrivKey) {
+				try { signer = await ethers.Wallet.createRandom() }
+				catch (error) { console.log(error.message);   }
 
-            console.log('DID:', did)
-            createDIDRecord(did, avatar, alias, privData, cid, signer);
+                console.log('New CHAT ACCOUNT :\nprivateKey=', signer.privateKey);
+                localStorage.setItem('chatETHPrivKey', signer.privateKey);
+                console.log('chatETHPrivKey SAVED INTO LOCALSTORAGE');
+            } else {
+				console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+				try { signer = await new ethers.Wallet(chatETHPrivKey) }
+				catch (error) { console.log(error.message);   }
+
+            }
+			// 2- SHOW QR WITH DID LINK
+			console.warn('ETH ADDRESS (createMeterAddress): ', signer.address)
+			setAddress(signer.address)
+			let balance= await checkGasBalance(signer.address) 
+			userData.innerHTML = 'balance:'+ balance;
+
+			// 4- CREATE DID IF IT EXISTS READ IT (1st TRY read then write)
+            let did = `did:meter:${signer.address}`
+
+			// IF. READ DID 
+			console.log('💬 READ YOUR DID:', did)
+			let rdid =  await readDIDRecord(did);
+			if(rdid.data==null){
+				console.warn('DID NULL, creatre ONE')
+				// IF DID == nullWRITE DID
+				
+				let avatar = '';
+				let alias = signer.address;
+				let privData = '';
+				let cid = '';
+				const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
+				if (result) {
+					console.log('The DID record was created successfully.');
+				} else {
+					console.warn('Failed to create the DID record.');
+				}
+				
+			} else {
+				console.warn(`DID PRESENT!:  ${rdid.data.id}`);
+				let avtr = rdid.data.avatar;
+				let avatar = JSON.parse(avtr);
+				document.getElementById('avatarIMG').src = avatar;
+
+				// ACTIVATE BUTTON TO MINT OR UPDATE
+				document.getElementById('mintOrUpdate').disabled = false;
+
+			}
+
+			// return 
+            // let avatar = '';
+            // let alias = signer.address;
+            // let privData = '';
+            // let cid = '';
+
+            // console.log('DID:', did)
+
+
+
+			// try {
+			// 	console.log('creating did RECORD, signer', signer)
+			// 	createDIDRecord(did, avatar, alias, privData, cid, signer);
+			// } catch (error) {
+			// 	console.error('An error occurred while creating DID record:', error);
+			// 	return
+			// }
 
 			// - CREATE ETH ADDRESS
 			
@@ -742,13 +710,6 @@ async function createStarknetAddress(){
 			// let qrSize
 			if (isMobile.matches) {
 				console.log("Mobile screen detected");
-				
-				//get container width
-				// var containerWidth = document.getElementById('qrtroqcontainer').offsetWidth;
-				
-				// // Code for mobile screens
-				// qrSize = containerWidth - 50 ;
-				// console.log("Mobile'scontainerWidth: ",containerWidth);
 				qrSize = 310;
 				window.scrollTo(0, 0);
 
@@ -763,7 +724,6 @@ async function createStarknetAddress(){
 			//QR
 			const qrCode = new QRCodeStyling({
 				width: `${qrSize}`, height: `${qrSize}`, type: "png", data: addr, image: `./logo4.png`,
-				// dotsOptions: { color: "#1568B0", type: "extra-rounded" }, 
 				dotsOptions: { color: `${qrColor}`, type: "extra-rounded" },
 				backgroundOptions: { color: "var(--qrbackground)", },
 				imageOptions: { crossOrigin: "anonymous", margin: 0 }
@@ -777,21 +737,23 @@ async function createStarknetAddress(){
 
 
 			async function init(){
-				
+	
+		
 console.log(`
 
-███████╗████████╗ █████╗ ██████╗ ██╗  ██╗██╗██████╗ 
-██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║ ██╔╝██║██╔══██╗
-███████╗   ██║   ███████║██████╔╝█████╔╝ ██║██║  ██║
-╚════██║   ██║   ██╔══██║██╔══██╗██╔═██╗ ██║██║  ██║
-███████║   ██║   ██║  ██║██║  ██║██║  ██╗██║██████╔╝
-╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ 
+███╗   ███╗███████╗████████╗███████╗██████╗  ██████╗██╗  ██╗ █████╗ ████████╗
+████╗ ████║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝██║  ██║██╔══██╗╚══██╔══╝
+██╔████╔██║█████╗     ██║   █████╗  ██████╔╝██║     ███████║███████║   ██║   
+██║╚██╔╝██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██║     ██╔══██║██╔══██║   ██║   
+██║ ╚═╝ ██║███████╗   ██║   ███████╗██║  ██║╚██████╗██║  ██║██║  ██║   ██║   
+╚═╝     ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
+                                                                             
 
 `);
 				console.log('init()')
 
 
-				createStarknetAddress()
+				createMeterAddress()
 
 				// checkDID()
 				await createXMPTchat()
@@ -803,12 +765,11 @@ console.log(`
 				console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
 
 				// check did
-					// Regular expression to match the format did:starkid:address
-					const regex = /^did:starkid:0x[a-fA-F0-9]{64}$/;
+					const regex = /^did:meter:0x[a-fA-F0-9]{64}$/;
 					if (regex.test(t2AddrValue)) {
 						console.log('t2AddrValue is in the correct format.');
 						// RESOLVE DID
-						console.log('RESOLVING DID: ',t2AddrValue)
+						console.warn('FETCHING DID: ',t2AddrValue)
 						let didData = await fetchDID(t2AddrValue)
 						console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
 					
@@ -880,17 +841,12 @@ function displayQR(data) {
 
 		function setAddress(userAddress) {
 			console.log('setAddress()',userAddress)
-			// https://192.168.43.129:4444/
-			// var currentURL = window.location.href;
-			// var currentURL = 'https://starkid.web.app/';
-			// var baseUrl = window.location.protocol + '//' + window.location.host + '/';
 			
-			
-			// var baseUrl = 'https://192.168.43.129:4444' + '/';
-			var baseUrl = 'https://starkid.web.app' + '/';
-            let did = `did:starkid:${userAddress}`
-			const parameters = { T2Addr: did, };
-			// const parameters = { T2Addr: userAddress, };
+			var baseUrl = 'https://192.168.43.129:4242' + '/';
+			// var baseUrl = 'https://meterchat.web.app' + '/';
+            let did = `did:meter:${userAddress}`
+			const parameters = { T2Addr: userAddress, };
+			// const parameters = { T2Addr: did, };
 			const urlParams = createURLParams(parameters);
 			const url = `${baseUrl}?${urlParams}`;
 
@@ -898,7 +854,7 @@ function displayQR(data) {
 			canvas.innerHTML = '';
 			showqr(url);
 			// let shortAddr = userAddress.substring(0, 6) + "..." + userAddress.substring(38, 42);
-			let shortAddr = shortAddressSTARK(userAddress)
+			let shortAddr = shortAddressETH(userAddress)
 			var preElement = document.getElementById('yourAddress');
 			preElement.setAttribute('address', userAddress);
 
@@ -964,13 +920,34 @@ function displayQR(data) {
 			if (t2AddrValue !== null) {
 				console.log(`Value of T2Addr parameter: ${t2AddrValue}`);
 
-				address2.value = t2AddrValue;
+				// address2.value = t2AddrValue;
 				Toast.fire({ icon: 'info', title: 'CHAT WITH:', text: t2AddrValue });
 
 				// close nav
 				plToggle()
 				// NOW SETUP THE CHAT AND OPEN IT
-				await chatWith(t2AddrValue)
+				// await chatWith(t2AddrValue)
+
+					//  CREATE AND RESOLVE DID
+					let did = `did:meter:${t2AddrValue}`
+
+let didData = await fetchDID(did)
+console.log( 'didData', didData)
+
+if (didData.data.alias || null) {
+console.log('alias is not null', didData.data.alias);
+} 
+else {
+	console.log('user Doesnt have a did')
+}
+
+
+
+				
+				let contact = { address: t2AddrValue, username: null, avatar: null, did: did }
+							SaveContactsToLocalStorage(contact);
+							await chatWith(t2AddrValue)
+
 
 				// const swiperEl = document.getElementById('troqContainer');
 				// swiperEl.swiper.slideNext();
@@ -1129,21 +1106,9 @@ function displayQR(data) {
 		// GOT TO CHAT TAB
 		console.log(' doing openSearch')
 		openSearch()
-		// const swiperEl = document.getElementById('troqContainer');
-		// swiperEl.swiper.slideNext();
-		// return
-		
-		
-		// save "TO" to localwallet
 		localStorage.setItem('toAddress', toAddr)
 		
 		// ---------
-		// ERROR AQUI!!!!!!!!(ponerlo en addAddress())
-		// checkear SI no esta ya en sus contactos
-
-			// let contact = { address: toAddr, username: null, avatar: null, did: null }
-			// SaveContactsToLocalStorage(contact)
-			// ---------------
 			loadContacts()
 			updateBadge()
 
@@ -1202,22 +1167,7 @@ actionButtons.innerHTML = `
 	</button>
 
 	`
-	
-	// <button type="button" id="closeChat" class="btn btn-reject" style="display: inline;"
-	// 	onclick="event.stopPropagation();deleteChat((this.parentElement))">
-	// 	<svg class='uiicon' height="1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-	// 		<path
-	// 			d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
-	// 		</svg>
-	// </button>
-
-	// FIX HERE. AWAIT TO CONVERSATION TO BE AVAILABLE
-// // ACTIVATE CHAT BUTTONS
-// document.getElementById('chatTextInput').disabled = false;
-// document.getElementById('send-button').disabled = false;
-
-// // FOCUS ON INPUT
-// document.getElementById('chatTextInput').focus();
+	 
 
 // ------------------------------------
 // AVOID REOPENING COMS WITH ADDRESESS
@@ -1230,9 +1180,6 @@ for (const conversation of allConversations) {
 	if (conversation.peerAddress === customAddressToCheck) {
 		addressExists = true;
 		cc = conversation
-		// let history = conversation.messages()
-		// console.log('history:', history)
-		// return conversation
 		break; // Exit the loop early if the address is found
 	}
 }
@@ -1440,7 +1387,7 @@ async function loadContacts() {
 				}
 
 				// let did = `did:ethr:${el.address}`;
-				let did = `did:starknet:${el.address}`;
+				let did = `did:meter:${el.address}`;
 
 				// Add each asynchronous operation to the promises array
 				promises.push(
@@ -1525,7 +1472,7 @@ if (event.key === "Enter") {
 	if (userInput !== "") {
 		console.log("User input:", userInput);
 		// Do something with the user input here
-		sendMessage();
+		sendMessage(event);
 	}
 	// var userInput = this.value;
 	// console.log("User input:", userInput);
@@ -1535,12 +1482,12 @@ if (event.key === "Enter") {
 }
 });
 
-document.getElementById("chatTextInput").addEventListener("blur", function () {
+document.getElementById("chatTextInput").addEventListener("blur", function (event) {
 var userInput = this.value.trim(); // Trim whitespace from input
 if (userInput !== "") {
 	console.log("User input:", userInput);
 	// Do something with the user input here
-	sendMessage();
+	sendMessage(event);
 }
 // var userInput = this.value;
 // console.log("User input:", userInput);
@@ -1550,7 +1497,7 @@ if (userInput !== "") {
 
 async function sendMessage() {
 console.log('sendMessage()')
-// event.preventDefault();
+event.preventDefault();
 
 var userInput = document.getElementById("chatTextInput").value;
 var chatBox = document.getElementById("chatBox");
@@ -1565,13 +1512,7 @@ if (userInput.trim() !== "") {
 	return
 }
 
-
-// direct message?
-// message.classList.add("message");
-// message.innerHTML = `<strong>You:</strong> ${userInput}`;
-// chatBox.appendChild(message);
-
-
+ 
 
 document.getElementById("chatTextInput").value = "";
 chatBox.scrollTop = chatBox.scrollHeight;
@@ -1613,50 +1554,7 @@ if (ethers.isAddress(toaddr)) {
 
 }
 
-
-// function share(text) {
-// console.log('share()', text)
-
-
-// let textLink = `<a href="${text}">${text}</a>`;
-
-// if (window.clipboardData && window.clipboardData.setData) {
-// 	console.log('Copied to Clipboard', text, "success");
-
-// 	document.getElementById('innerAddress').innerHTML = '<path fill="currentColor"  d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/><p>Copied!</p>'
-
-// 	setTimeout(() => {
-// 		document.getElementById('innerAddress').innerHTML = ' <path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path>'
-// 	}, 1000);
-// 	return window.clipboardData.setData("Text", text);
-// }
-// else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-// 	var textarea = document.createElement("textarea");
-// 	textarea.textContent = text;
-// 	textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
-// 	document.body.appendChild(textarea);
-// 	textarea.select();
-// 	try {
-// 		console.log('Copied to Clipboard', text, "success");
-// 		document.getElementById('innerAddress').innerHTML = '<path fill="currentColor"  d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/><p>Copied!</p>'
-
-// 		setTimeout(() => {
-// 			document.getElementById('innerAddress').innerHTML = ' <path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path>'
-// 		}, 1000);
-
-// 		return document.execCommand("copy");  // Security exception may be thrown by some browsers.
-// 	}
-// 	catch (ex) {
-// 		console.warn("Copy to clipboard failed.", ex);
-// 		return prompt("Copy to clipboard: Ctrl+C, Enter", text);
-// 	}
-// 	finally {
-// 		document.body.removeChild(textarea);
-// 	}
-// }
-
-
-// }
+ 
 
 function customcopy2clipboard(text) {
 console.log('customcopy2clipboard()', text)
@@ -1784,15 +1682,15 @@ else {
 
 
 
-async function chatHistory(addr) {
+// async function chatHistory(addr) {
 
-let conversation = await starkxmtp.conversations.newConversation(addr)
-const messages = await conversation.messages()
+// let conversation = await starkxmtp.conversations.newConversation(addr)
+// const messages = await conversation.messages()
 
-for (const message of messages) {
-	console.log(message.content);
-}
-}
+// for (const message of messages) {
+// 	console.log(message.content);
+// }
+// }
 
 
 
@@ -2068,44 +1966,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
 // ----------------------------------
 // CHECK VALID ADDRESS
- 
-
-
-// // Example usage
-// const address1 = '0x7a41ab1bc7b1b1d5d5b9b3b9b3b3b9b3b9b3b9b3b9b3b9b3b9b3b9b3b9b3b9b3';
-// const address2 = '0xinvalidaddress';
-// const address3 = '7a41ab1bc7b1b1d5d5b9b3b9b3b3b9b3b9b3b9b3b9b3b9b3b9b3b9b3b9b3b9b3b9b3';
-
-// console.log(isValidStarkNetAddress(address1)); // Should return true
-// console.log(isValidStarkNetAddress(address2)); // Should return false
-// console.log(isValidStarkNetAddress(address3)); // Should return true
-
-
-// function validateAddressType(address) {
-//     // Check if it is a valid Ethereum address
-//     if (ethers.isAddress(address)) {
-// 		console.log('ETH Address')
-//         return 'ETH Address';
-//     }
-
-//         const isValidStarkNetAddress = stark.makeAddress(address);
-//         if (isValidStarkNetAddress) {
-// 		console.log('StarkNet Address')
-
-//             return 'StarkNet Address';
-//         }
   
-// 		console.log('Invalid Address')
-//     return 'Invalid Address';
-// }
-
-
-
-
-		// async function isValidAddress(address) {
-		// 			// return ethers.utils.isAddress(address);
-		// 			return ethers.isAddress(address);
-		// 		}
 
 		async function isValidETHAddress(address) {
 			// return ethers.utils.isAddress(address);
@@ -2126,18 +1987,8 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 			return isValidHex(normalizedAddress) && normalizedAddress.length === 64;
 		}
 
-		// async function isValidSTARKAddress(address) {
-		// 	if(isValidStarkNetAddress(t2AddrValue)){
-		// 	console.log('This is a STARKNET address ==> well get the ETH address from the did')
-		// } else {
-		// 	console.log('not a valid STARKNET address')
-		// 	return
-		// }
-
-
-		// }
-
 		async function getAddressType(address) {
+			console.log('getAddressType()')
     // Check if it's a valid Ethereum address
     const isValidETH = await isValidETHAddress(address);
     if (isValidETH) {
@@ -2174,7 +2025,6 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
 					// COMPLETAR ADDR VERIFICATION
 					// IF ETH 
-					// IF STARKNET
 					// const checkAdddressType = await validateAddressType(value);
 					// return
 					// const isValid = await isValidAddress(value);
@@ -2224,12 +2074,6 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 							console.log('alias is null');
 
 				}
-
-							// let ethAddress = didData.data.alias
-								// let avatar = didData.data.avatar
-							
-							
-							
 
 
 
@@ -2372,7 +2216,6 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		**********************************************************************************************/
 		
 		// id: string; // avatar: string; // alias: string; // privData: string; // cid: string; // publicKey: PublicKey;
-        // async function createDIDRecord(did, avatar, cid, signer) {
 			async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
             console.log('Now you have the signer, do whatever you need with it:', signer);
             const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
@@ -2573,36 +2416,6 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
         }
 
-
-        // decryptPrivDatatest.onclick = async function (e) {
-        //     console.log('decryptPrivDatatest')
-        //     let did = `did:starkid:${modifiedHexString}`
-        //     result.innerHTML = 'Reading DID: ' + did;
-        //     let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-        //     console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-        //     try { wallet = await new ethers.Wallet(chatETHPrivKey) }
-        //     catch (error) { console.log(error.message); }
-
-        //     let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
-        //     let signer = wallet.connect(provider);
-
-        //     let ethPrivKey = localStorage.getItem('chatETHPrivKey');
-        //     let ethPublicKey = ethers.getBytes(wallet.signingKey.publicKey);
-        //     let x = await readDIDRecord(did)
-        //     console.log('did read result: ', x.data.privData)
-        //     let privdataDIDresult = x.data.privData
-
-        //     let decryptedPrivkey = await decryptPrivData(ethPrivKey, ethPublicKey, privdataDIDresult)
-        //     // result.innerHTML += '<br><br>✅✅✅ STARKNET Private key DECRYPTED  ✅✅✅  by  ' + senderAddress + ' is: <br> ' + decryptedPayload.message
-        //     console.log('decryptedPrivkey:' , decryptedPrivkey)
-        //     result.innerHTML += '<br>✅ DECRYPTED  by  ' + decryptedPrivkey[1];
-        //     result.innerHTML += '<br>✅ STARKNET Private key DECRYPTED:  ' + decryptedPrivkey[0];
-        //     //  + ' is: <br> ' + decryptedPayload.message
-        // }
-
-
-
-
     
 
     // ----------------------------
@@ -2684,47 +2497,11 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
  
 
-
-		// async function updateDIDavatar(id, newavatar, signer) {
-
-		// async function updateDIDavatar(id, newavatar) {
-		// async function updateDIDavatar( newavatar) {
-		// 	console.log('updateDIDavatar()')
-
-		// 		// 0- CHECK IF UNBACKED WALLET INLOCALSTORAGE
-		// 		let unbw = localStorage.getItem('unbackedWallet')
-
-		// 					if (!unbw) {
-		// 						console.log('1- NO UNBACKED WALLET');
-		// 						signer = await getLocalWalletSigner();
-		// 						did = `did:starkid:${signer.address}`
-		// 						console.log('DID: ', did)
-		// 						// return //falta testear
-		// 					}
-		// 					else {
-		// 						console.log('YES THERE IS AN UNBACKED WALLET > DEDUCTING SIGNER NOW!')
-
-		// 						const walletData = JSON.parse(unbw);
-		// 						try { localWallet = ethers.Wallet.fromPhrase(walletData); }
-		// 						catch (error) {
-		// 							console.log(error.message, 'ERROR WALLET!');
-		// 						}
-		// 						let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
-		// 						signer = localWallet.connect(provider);
-		// 						console.log('SIGNER!:', signer);
-		// 						//  return signer;
-		// 						did = `did:ethr:${signer.address}`
-		// 						console.log('DID: ', did)
-								
-		// 					}
-			 
+ 
 
 		/*********************************************************************************************
 		.)   UPDATE IMAGE AVATA
 		**********************************************************************************************/
-
-		// itemImgMINT=>avatarIMG
-// fileCreateItemFile => avatarIMGfile 
 
 		avatarIMG.onclick = function (e) {
 			console.log('avatarIMG clicked')
@@ -2890,7 +2667,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 								try { signer = await new ethers.Wallet(chatETHPrivKey) }
 								catch (error) { console.log(error.message); }
 								// modifiedHexString
-								let did = `did:starkid:${modifiedHexString}`
+								let did = `did:meter:${signer.address}`
 								console.warn('ETH ADDRESS: ', signer.address)
 								// return 
 
@@ -2913,18 +2690,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 								// ------------------------------------
 									
 									
-									// console.log('AVATAR IN LOCALSTORAGE')
-									
-									// itemImgMINT.src = JSON.parse(avatar);
-									// let updateDID = await updateDIDavatar(avatar)
-									// if(updateDID==true){
-										
-									// 	console.log('suscesfully updated DID')
-									// 	localStorage.removeItem('avatar')
-										
-									// }else{
-									// 	console.log('failed to update DID')
-									// }
+								 
 								}
 								
 								
@@ -2973,6 +2739,71 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 			};
 		}
 
+
+
+
+
+		/*********************************************************************************************
+		.)  MINT OR UPDATE
+		**********************************************************************************************/
+
+		async function mintOrUpdate() {
+			console.log('mintOrUpdate()')
+			// openModalId('#mintOrUpdate')
+			let txhash = '0x2460b70dd8785c01be3baefe3c6ef3c9d7b0348b1dcb423412ccda2a3f77ddcf'
+			setTimeout(() => {
+				Swal.fire({
+				icon: "success",
+				title: "Done",
+				text: "Tx succesfull!",
+				footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${txhash}">Tx link</a>`
+				});
+
+			}, 5000);
+
+		}
+
+		// <a href="http://" target="_blank" rel="noopener noreferrer"></a>
+
+
+
+		async function checkGasBalance(walletAddress) {
+			console.log('checkGasBalance() of ', walletAddress)
+
+			let provider = await new ethers.JsonRpcProvider(`${optionsList[0].API}`);
+			try {
+				const balance = await provider.getBalance(walletAddress);
+				const gasBalance = ethers.formatEther(balance);
+				console.log(`GAS Balance of ${optionsList[0].TOKEN_ADDRESS}: ${gasBalance} GAS`);
+
+				return gasBalance;
+			} catch (error) {
+				console.error('Error checking balance:', error.reason);
+				return null;
+			}
+		}
+
+
+		/*********************************************************************************************
+		.) VARIABLES
+		// https://sepolia.etherscan.io/address/0xc4bF5CbDaBE595361438F8c6a187bDc330539c60#code
+		**********************************************************************************************/
+		optionsList = [
+		{
+				"TOKEN_ADDRESS": "0x4cb6cef87d8cadf966b455e8bd58fff32aba49d1",//usdc sepolia
+				"TOKEN_CHAIN_NAME": 'USDC(sepolia)',
+				"TOKEN_NAME": "MTR",
+				"SYMBOL": "MTR",
+				"API": 'https://rpctest.meter.io',
+				"TOKEN_CHAINID": '83',
+				"EXPLORER": 'https://scan-warringstakes.meter.io',
+				"ERC20_CONTRACT_ADDRESS": "0x8a419ef4941355476cf04933e90bf3bbf2f73814"//MTRG token
+
+			},
+		]
+		// https://docs.meter.io/developer-documentation/introduction
+		// https://scan-warringstakes.meter.io/
+		// https://explorer-warringstakes.meter.io/tx/0x2460b70dd8785c01be3baefe3c6ef3c9d7b0348b1dcb423412ccda2a3f77ddcf
 
 			</script>
 	</body>

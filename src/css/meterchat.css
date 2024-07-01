@@ -1556,3 +1556,7 @@ body.swal2-height-auto {
 		  max-height: 700px;
 		  overflow-y: auto;
 		}
+
+        .fullwidth{
+            width: 100%;
+        }
