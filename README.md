@@ -30,5 +30,10 @@ yarn parcel src/index.html --dist-dir public  --public-url ./
 firebase deploy --only hosting:meterchat
 ```
 
+
+# CONTRACTS
+testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053
+<!-- testnet 0xF9aa7bDF7c225E17872DBbfed422409Dd605c08B -->
 # log
+v 1.3
 v1.0 

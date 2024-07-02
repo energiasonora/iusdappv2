@@ -692,6 +692,11 @@ z-index: -1;
 	/* position: sticky; */
 	/* bottom: 0;
 	position: absolute */
+   
+	/* for phone */
+	/* width: 100%;
+    bottom: 50px;
+    position: absolute; */
 
   }
 
@@ -1500,6 +1505,20 @@ body.swal2-height-auto {
     #send-attachment {
         display: none;
     }
+	#chatfooter {
+	   
+		/* fix for phone */
+		width: 100%;
+		bottom: 50px;
+		position: absolute;
+	
+	  }
+	  .main-wrap{
+		height: 100vh;
+		overflow: hidden;
+		display: flex;
+		padding: 1em 0;
+	}
 }
 
 .swal2-input {
@@ -1560,3 +1579,13 @@ body.swal2-height-auto {
         .fullwidth{
             width: 100%;
         }
+
+#chatContainer{
+    z-index: 3;
+}
+
+#mintOrUpdate{
+	position:absolute;
+	bottom:85px;	
+	z-index: 1;
+}

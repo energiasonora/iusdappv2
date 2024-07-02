@@ -165,7 +165,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 1.1 </span>
+			<span>v 1.4 </span>
 		</nav>
 	</div>
 
@@ -416,6 +416,118 @@
 
 		<script>
 
+async function init(){
+	
+		
+	console.log(`
+	
+	███╗   ███╗███████╗████████╗███████╗██████╗  ██████╗██╗  ██╗ █████╗ ████████╗
+	████╗ ████║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝██║  ██║██╔══██╗╚══██╔══╝
+	██╔████╔██║█████╗     ██║   █████╗  ██████╔╝██║     ███████║███████║   ██║   
+	██║╚██╔╝██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██║     ██╔══██║██╔══██║   ██║   
+	██║ ╚═╝ ██║███████╗   ██║   ███████╗██║  ██║╚██████╗██║  ██║██║  ██║   ██║   
+	╚═╝     ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
+																				 
+	
+	`);
+					console.log('init()')
+	
+	
+					createMeterAddress()
+	
+					// checkDID()
+					await createXMPTchat()
+				// -----------------------------------------
+				//  CHECK IF USER COMES FROM A LINK
+				const urlParams = new URLSearchParams(window.location.search);
+				const t2AddrValue = urlParams.get('T2Addr');
+				if (t2AddrValue !== null) {
+					console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
+					openSearch()
+	
+					// check did
+					// const regex = /^did:meter:0x[a-fA-F0-9]{64}$/;
+						const regexDID = /^did:meter:0x[a-fA-F0-9]{40}$/;
+						const regexAddress = /^0x[a-fA-F0-9]{40}$/;
+						if (regexDID.test(t2AddrValue)) {
+							console.warn('✅ t2AddrValue is in the correct format.');
+	
+							// RESOLVE DID
+							console.warn('FETCHING DID: ',t2AddrValue)
+							let didData = await fetchDID(t2AddrValue)
+							console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
+						
+							// ?????????????????????????????????????????
+							// HAcer aqui o en SaveContactsToLocalStorage la verificacion de si existe un did?
+							// ?????????????????????????????????????????
+							let contact = { address: didData.data.alias, username: null, avatar: null, did: t2AddrValue }
+							console.warn('CONTACTO POR URL!',contact)
+							
+							SaveContactsToLocalStorage(contact);
+	
+	
+							await chatWith(didData.data.alias)
+	
+						} 
+						else if (regexAddress.test(t2AddrValue)) {
+							console.warn('⭐ t2AddrValue is and ETH ADDress in the correct format.');
+							await chatWith(t2AddrValue)
+	
+						}
+	
+						else {
+							console.warn('❌ t2AddrValue is NOT in the correct format.');
+						}
+					 
+				} else {
+					console.warn('T2Addr parameter not found in the URL');
+				}
+				// -----------------------------------------
+	
+					await getChatAddresses()
+					 loadContacts()
+					await listenAllNewAddresses()
+					
+					
+				 
+				
+				}
+				init()
+				
+	
+		
+						// var isFullscreen = false;
+			var body = document.querySelector('body');
+		var lastTapTime = 0;
+		var isFullscreen = false;
+
+	function toggleFullscreen() {
+		if (!isFullscreen) {
+			if (document.documentElement.requestFullscreen) {
+				document.documentElement.requestFullscreen();
+			} else if (document.documentElement.msRequestFullscreen) {
+				document.documentElement.msRequestFullscreen();
+			} else if (document.documentElement.mozRequestFullScreen) {
+				document.documentElement.mozRequestFullScreen();
+			} else if (document.documentElement.webkitRequestFullscreen) {
+				document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+			}
+			isFullscreen = true;
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			}
+			isFullscreen = false;
+		}
+	}
+	
+	
     /*********************************************************************************************
 		.) SOUNDS
 		**********************************************************************************************/
@@ -646,6 +758,7 @@ async function createMeterAddress(){
 			// IF. READ DID 
 			console.log('💬 READ YOUR DID:', did)
 			let rdid =  await readDIDRecord(did);
+
 			if(rdid.data==null){
 				console.warn('DID NULL, creatre ONE')
 				// IF DID == nullWRITE DID
@@ -662,35 +775,25 @@ async function createMeterAddress(){
 				}
 				
 			} else {
-				console.warn(`DID PRESENT!:  ${rdid.data.id}`);
+				console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
+
+				// CHECK if avatar
 				let avtr = rdid.data.avatar;
-				let avatar = JSON.parse(avtr);
-				document.getElementById('avatarIMG').src = avatar;
+				if (avtr) {
+					let avatar = JSON.parse(avtr);
+					document.getElementById('avatarIMG').src = avatar;
+					// Now you can use the avatar object
+				} else {
+					// Handle the case where avtr is empty
+					console.log('Avatar data is empty');
+				}
 
 				// ACTIVATE BUTTON TO MINT OR UPDATE
 				document.getElementById('mintOrUpdate').disabled = false;
 
 			}
 
-			// return 
-            // let avatar = '';
-            // let alias = signer.address;
-            // let privData = '';
-            // let cid = '';
-
-            // console.log('DID:', did)
-
-
-
-			// try {
-			// 	console.log('creating did RECORD, signer', signer)
-			// 	createDIDRecord(did, avatar, alias, privData, cid, signer);
-			// } catch (error) {
-			// 	console.error('An error occurred while creating DID record:', error);
-			// 	return
-			// }
-
-			// - CREATE ETH ADDRESS
+		 
 			
 			return 
 			
@@ -736,72 +839,6 @@ async function createMeterAddress(){
 		}
 
 
-			async function init(){
-	
-		
-console.log(`
-
-███╗   ███╗███████╗████████╗███████╗██████╗  ██████╗██╗  ██╗ █████╗ ████████╗
-████╗ ████║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝██║  ██║██╔══██╗╚══██╔══╝
-██╔████╔██║█████╗     ██║   █████╗  ██████╔╝██║     ███████║███████║   ██║   
-██║╚██╔╝██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██║     ██╔══██║██╔══██║   ██║   
-██║ ╚═╝ ██║███████╗   ██║   ███████╗██║  ██║╚██████╗██║  ██║██║  ██║   ██║   
-╚═╝     ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
-                                                                             
-
-`);
-				console.log('init()')
-
-
-				createMeterAddress()
-
-				// checkDID()
-				await createXMPTchat()
-			// -----------------------------------------
-			//  CHECK IF USER COMES FROM A LINK
-			const urlParams = new URLSearchParams(window.location.search);
-			const t2AddrValue = urlParams.get('T2Addr');
-			if (t2AddrValue !== null) {
-				console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
-
-				// check did
-					const regex = /^did:meter:0x[a-fA-F0-9]{64}$/;
-					if (regex.test(t2AddrValue)) {
-						console.log('t2AddrValue is in the correct format.');
-						// RESOLVE DID
-						console.warn('FETCHING DID: ',t2AddrValue)
-						let didData = await fetchDID(t2AddrValue)
-						console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
-					
-						// ?????????????????????????????????????????
-						// HAcer aqui o en SaveContactsToLocalStorage la verificacion de si existe un did?
-						// ?????????????????????????????????????????
-						let contact = { address: didData.data.alias, username: null, avatar: null, did: t2AddrValue }
-						console.warn('CONTACTO POR URL!',contact)
-						
-						SaveContactsToLocalStorage(contact);
-						await chatWith(didData.data.alias)
-
-					} else {
-						console.log('t2AddrValue is NOT in the correct format.');
-					}
-				 
-			} else {
-				console.warn('T2Addr parameter not found in the URL');
-			}
-			// -----------------------------------------
-
-				await getChatAddresses()
-				loadContacts()
-				await listenAllNewAddresses()
-				
-				
-			 
-			
-			}
-			init()
-			
-
 			async function fetchDID(did) {
 							try {
 								const didresult = await readDIDRecord(did);
@@ -841,18 +878,38 @@ function displayQR(data) {
 
 		function setAddress(userAddress) {
 			console.log('setAddress()',userAddress)
-			
-			var baseUrl = 'https://192.168.43.129:4242' + '/';
+
+			// v1
+			// var currentURL = window.location.href;
+			var baseUrl = window.location.protocol + '//' + window.location.host + '/';
+
+			// var baseUrl = 'https://192.168.43.129:4242' + '/';
 			// var baseUrl = 'https://meterchat.web.app' + '/';
             let did = `did:meter:${userAddress}`
-			const parameters = { T2Addr: userAddress, };
-			// const parameters = { T2Addr: did, };
+			// const parameters = { T2Addr: userAddress, };
+			const parameters = { T2Addr: did };
 			const urlParams = createURLParams(parameters);
 			const url = `${baseUrl}?${urlParams}`;
 
 			// 3- SHOW QR
 			canvas.innerHTML = '';
 			showqr(url);
+			
+		// 	// var isFullscreen = false;
+		// 	var body = document.querySelector('body');
+		// var lastTapTime = 0;
+		// var isFullscreen = false;
+
+				canvas.onclick = function (e) {
+				console.log('CHATWALLET: clicked on QR')
+				var currentTime = new Date().getTime();
+				var tapLength = currentTime - lastTapTime;
+				if (tapLength < 500 && tapLength> 0) {
+					toggleFullscreen();
+					}
+					lastTapTime = currentTime;
+					}
+
 			// let shortAddr = userAddress.substring(0, 6) + "..." + userAddress.substring(38, 42);
 			let shortAddr = shortAddressETH(userAddress)
 			var preElement = document.getElementById('yourAddress');
@@ -1083,7 +1140,7 @@ else {
 		}
 		
 		async function chatWith(toAddr ,imgsrc) {
-			console.log('chatWith()', toAddr)
+			console.warn('chatWith()', toAddr)
 
 			console.log('ESTABLISHING NEW CHAT WITH', toAddr)
 
@@ -1094,7 +1151,8 @@ else {
 
 		console.log(toAddr, userAddress)
 		if (toAddr == userAddress) {
-			console.log('CANCELING chatwith() because CANNOT WITH SELF ADDRESS')
+			console.warn('CANCELING chatwith() because CANNOT WITH SELF ADDRESS')
+			Toast.fire('CANNOT CHAT WITH SELF ADDRESS', '', "warning");
 			localStorage.removeItem('toAddress')// detele "TO" address from localStorage
 			return
 		}
@@ -1109,7 +1167,7 @@ else {
 		localStorage.setItem('toAddress', toAddr)
 		
 		// ---------
-			loadContacts()
+			 loadContacts()
 			updateBadge()
 
 			// return
@@ -1183,6 +1241,19 @@ for (const conversation of allConversations) {
 		break; // Exit the loop early if the address is found
 	}
 }
+
+
+// -------
+// FIx paa?
+// const peerAddressesArray = [];
+
+// allConversations.forEach(async (conversation, index) => {
+// 	peerAddressesArray.push(conversation.peerAddress);
+// })
+// paa = peerAddressesArray;
+// console.warn('peerAddressesArray ADDED',peerAddressesArray )
+// -----------
+
 
 if (addressExists) {
 	console.warn(`YOU DO HAVE A CHAT HISTORY WITH ${customAddressToCheck} `);
@@ -1355,26 +1426,27 @@ for await (const message of await conversation.streamMessages()) {
 
 
 async function loadContacts() {
-			console.log('loadContacts()')
+			// console.log('loadContacts()')
 			let contct = document.getElementById('cwContacts')
 			contct.innerHTML = ''
 			let cwContacts = JSON.parse(window.localStorage.getItem('contacts'));
 			if (cwContacts) {
-				console.log('YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE')
+				console.log('YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContacts()')
 
 			// Create an array to store promises for asynchronous tasks
 			const promises = [];
 
 			cwContacts.forEach((el, index) => {
-				const isAddressInArray = paa.includes(el.address);// paa?
-				console.log('paa?:' ,paa)
+				// const isAddressInArray = paa.includes(el.address);// paa?
+				// const isAddressInArray = paa.includes(el.address);// paa?
+				// console.log('paa?:' ,paa)
 
-				// is in your contacts or not?
-				if (isAddressInArray) {
-					console.log(`Contact ${index} IS in your contacts \u2714 ${el.address}`);
-				} else {
-					console.log(`This address IS NOT in your contacts \u2718 ${el.address}`);
-				}
+				// if (isAddressInArray) {
+				// 	console.log(`Contact ${index} IS in your contacts ✅  ${el.address}`);
+				// } else {
+				// 	console.log(`This address IS NOT in your contacts ❌ ${el.address}`);
+				// }
+
 
 				// is username set?
 				if (el.username || null) {
@@ -1396,9 +1468,16 @@ async function loadContacts() {
 							.then(didresult => {
 								if (didresult.data != null) {
 									console.log(did + ' HAS A RECORD!!!');
+									d=didresult
 									let avtr = didresult.data.avatar;
-									let avatar = JSON.parse(avtr);
-									document.getElementById(did).src = avatar;
+									if (avtr) {
+										let avatar = JSON.parse(avtr);
+										document.getElementById(did).src = avatar;
+										// Now you can use the avatar object
+									} else {
+										// Handle the case where avtr is empty
+										console.log('Avatar data is empty');
+									}
 								} else {
 									console.log(did + ' DOESN\'T HAVE A RECORD :(#1464)');
 								}
@@ -1628,7 +1707,7 @@ if (userName) {
 
 	let contact = { address: addr, username: userName, avatar: null, did: null }
 	SaveContactsToLocalStorage(contact)
-	loadContacts()
+	await loadContacts()
 	console.log('Contact Updated', userName)
 	// Swal.fire(`Your IP address is ${userName}`);
 }
@@ -1777,7 +1856,11 @@ if (e.target.tagName === 'LI') {
 });
 
 async function initChatClient(wallet) {
-console.log('initChatClient()')
+console.warn(`
+******************
+initChatClient()
+******************
+`)
 // Create the client with your wallet. This will connect to the XMTP development network by default
 // const xmtp = await Client.create(wallet)
 const xmtp = await Client.create(wallet, { env: "dev", })
@@ -1888,7 +1971,7 @@ for await (const message of await starkxmtp.conversations.streamAllMessages()) {
 
 
 async function listExistingConversations(xmtp) {
-console.warn('listExistingConversations()')
+console.warn('listExistingConversations() NO USADO?????')
 // List existing conversations
 const allConversations = await xmtp.conversations.list()
 console.log('AVAILABLE CHATS:', allConversations.length)
@@ -1902,7 +1985,7 @@ allConversations.forEach(async (conversation, index) => {
 	// await listenNewChats(conversation.peerAddress)
 })
 paa = peerAddressesArray;
-console.log('paa DECLARED!')
+console.warn('!!!!! paa DECLARED !!!!!!!!!')
 
 }
 
@@ -2750,22 +2833,123 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		async function mintOrUpdate() {
 			console.log('mintOrUpdate()')
 			// openModalId('#mintOrUpdate')
-			let txhash = '0x2460b70dd8785c01be3baefe3c6ef3c9d7b0348b1dcb423412ccda2a3f77ddcf'
-			setTimeout(() => {
-				Swal.fire({
-				icon: "success",
-				title: "Done",
-				text: "Tx succesfull!",
-				footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${txhash}">Tx link</a>`
-				});
+		
+		// .......................
+		// FAKE
+		// let txhash = '0x2460b70dd8785c01be3baefe3c6ef3c9d7b0348b1dcb423412ccda2a3f77ddcf'
+		// setTimeout(() => {
+		// 	Swal.fire({
+		// 		icon: "success",
+		// 		title: "Done",
+		// 		text: "Tx succesfull!",
+		// 		footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${txhash}">Tx link</a>`
+		// 	});
+			
+		// }, 5000);
+		// .......................
 
-			}, 5000);
+// // Set up your Ethereum provider
+// const provider = new ethers.providers.InfuraProvider("homestead", "YOUR_INFURA_PROJECT_ID");
+
+// // Set up your wallet (use a private key)
+// const privateKey = "YOUR_PRIVATE_KEY";
+// const wallet = new ethers.Wallet(privateKey, provider);
+
+// // Set up your contract ABI and address
+// const contractABI = [
+//     // Only including the necessary parts of the ABI
+//     "function registerDID(string memory _cid) public",
+//     "event DIDRegistered(bytes32 indexed didHash, string cid)"
+// ];
+// const contractAddress = "YOUR_CONTRACT_ADDRESS";
+
+// // Create contract instance
+// const contract = new ethers.Contract(contractAddress, contractABI, wallet);
+
+
+// Example CID to register
+const cid = "QmYwAPJzv5CZsnAztbqiXLypCQzqJGdUJwHThYro4Mwdd2";
+
+// Call the function
+await registerDID(cid);
+
+
+
+			
 
 		}
 
-		// <a href="http://" target="_blank" rel="noopener noreferrer"></a>
+
+		async function registerDID(cid) {
+
+// Set up your Ethereum provider
+// let provider = await new ethers.JsonRpcProvider(`${optionsList[0].API}`);
+// const provider = new ethers.JsonRpcProvider(optionsList[0].API);
+
+// let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+// let signer;
+
+// if (!chatETHPrivKey) {
+// 	console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+// 	try { signer = await new ethers.Wallet(chatETHPrivKey) }
+// 	// try { signer = await new ethers.Wallet(chatETHPrivKey, provider) }
+// 	catch (error) { console.log(error.message);   }
+// }
+
+// const contractAddress = optionsList[0].REGISTRY_CONTRACT_ADDRESS
+ 
+// const contractABI = [
+//     "function registerDID(string memory _cid) public",
+//     "event DIDRegistered(bytes32 indexed didHash, string cid)"
+// ];
 
 
+
+const provider = new ethers.JsonRpcProvider(optionsList[0].API);
+
+let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+
+let signer = await new ethers.Wallet(chatETHPrivKey) 
+
+const contractAddress = optionsList[0].REGISTRY_CONTRACT_ADDRESS
+ 
+const contractABI = [
+    "function registerDID(string memory _cid) public",
+    "event DIDRegistered(bytes32 indexed didHash, string cid)"
+];
+
+
+const connectedSigner = await signer.connect(provider);
+
+// Create contract instance
+const contract = new ethers.Contract(contractAddress, contractABI, connectedSigner);
+
+
+    try {
+        // Call the registerDID function
+        const tx = await contract.registerDID(cid);
+
+        console.log("Transaction sent:", tx.hash);
+
+        // Wait for the transaction to be mined
+        const receipt = await tx.wait();
+        console.log("Transaction mined:", receipt);
+
+        // Optionally, you can parse the logs to get the event details
+        const event = receipt.events.find(event => event.event === "DIDRegistered");
+        console.log("DID Registered:", event.args.didHash, event.args.cid);
+		Swal.fire({
+				icon: "success",
+				title: "Done",
+				text: "Tx succesfull!",
+				footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${event.args.didHash}">Tx link</a>`
+			});
+
+
+    } catch (error) {
+        console.error("Error registering DID:", error);
+    }
+}
 
 		async function checkGasBalance(walletAddress) {
 			console.log('checkGasBalance() of ', walletAddress)
@@ -2797,8 +2981,8 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 				"API": 'https://rpctest.meter.io',
 				"TOKEN_CHAINID": '83',
 				"EXPLORER": 'https://scan-warringstakes.meter.io',
-				"ERC20_CONTRACT_ADDRESS": "0x8a419ef4941355476cf04933e90bf3bbf2f73814"//MTRG token
-
+				"ERC20_CONTRACT_ADDRESS": "0x8a419ef4941355476cf04933e90bf3bbf2f73814",//MTRG token
+				"REGISTRY_CONTRACT_ADDRESS":"0x70F0B5fa20C296703fe101f294913cd1B6cCE053"
 			},
 		]
 		// https://docs.meter.io/developer-documentation/introduction
