@@ -74,6 +74,9 @@
 				d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z" />
 		</svg> -->
 	</button>
+
+	<button class="btn btn-primary fullwidth" style="display: none;" id="updateOnchain" onclick="event.stopPropagation(); updateOnchainDID()" disabled> Update
+	</button>
 	
 	<ul id="cwContacts" class="nav">
 	<!--  
@@ -165,7 +168,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 1.4 </span>
+			<span>v 1.5 </span>
 		</nav>
 	</div>
 
@@ -419,17 +422,17 @@
 async function init(){
 	
 		
-	console.log(`
-	
-	███╗   ███╗███████╗████████╗███████╗██████╗  ██████╗██╗  ██╗ █████╗ ████████╗
-	████╗ ████║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝██║  ██║██╔══██╗╚══██╔══╝
-	██╔████╔██║█████╗     ██║   █████╗  ██████╔╝██║     ███████║███████║   ██║   
-	██║╚██╔╝██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██║     ██╔══██║██╔══██║   ██║   
-	██║ ╚═╝ ██║███████╗   ██║   ███████╗██║  ██║╚██████╗██║  ██║██║  ██║   ██║   
-	╚═╝     ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
-																				 
-	
-	`);
+console.log(`
+
+███╗   ███╗███████╗████████╗███████╗██████╗  ██████╗██╗  ██╗ █████╗ ████████╗
+████╗ ████║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝██║  ██║██╔══██╗╚══██╔══╝
+██╔████╔██║█████╗     ██║   █████╗  ██████╔╝██║     ███████║███████║   ██║   
+██║╚██╔╝██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██║     ██╔══██║██╔══██║   ██║   
+██║ ╚═╝ ██║███████╗   ██║   ███████╗██║  ██║╚██████╗██║  ██║██║  ██║   ██║   
+╚═╝     ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
+																		
+
+`);
 					console.log('init()')
 	
 	
@@ -727,6 +730,9 @@ function shortAddressSTARK(address) {
     return address.substring(0, 6) + "..." + address.substring(address.length - 4);
 }
 
+function reloadBalance(){
+	console.log('reloadBalance()')
+}
 
 async function createMeterAddress(){
             console.log('createMeterAddress()')
@@ -750,7 +756,11 @@ async function createMeterAddress(){
 			console.warn('ETH ADDRESS (createMeterAddress): ', signer.address)
 			setAddress(signer.address)
 			let balance= await checkGasBalance(signer.address) 
-			userData.innerHTML = 'balance:'+ balance;
+			userData.innerHTML = 'balance:'+ balance +`
+			  <svg xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()">
+                  <path fill="currentColor" 
+				 d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg>
+			`;
 
 			// 4- CREATE DID IF IT EXISTS READ IT (1st TRY read then write)
             let did = `did:meter:${signer.address}`
@@ -1164,6 +1174,8 @@ else {
 		// GOT TO CHAT TAB
 		console.log(' doing openSearch')
 		openSearch()
+console.warn('------- PREPARING CHAT ----------');
+
 		localStorage.setItem('toAddress', toAddr)
 		
 		// ---------
@@ -2699,13 +2711,13 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 									viewMode: 1,
 									crop: throttle(function () {
 										const croppedCanvas = cropper.getCroppedCanvas();
-										console.log('croppedCanvas:', croppedCanvas);
+										// console.log('croppedCanvas:', croppedCanvas);
 										
 										const preview = document.querySelector('#preview');
 										preview.src = croppedCanvas.toDataURL();
 
 										let cropperinfo = cropper.getContainerData()
-										console.log("cropperinfo:",cropperinfo)
+										// console.log("cropperinfo:",cropperinfo)
 									}, 25),
 								});
 							},
@@ -2832,124 +2844,125 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
 		async function mintOrUpdate() {
 			console.log('mintOrUpdate()')
-			// openModalId('#mintOrUpdate')
-		
-		// .......................
-		// FAKE
-		// let txhash = '0x2460b70dd8785c01be3baefe3c6ef3c9d7b0348b1dcb423412ccda2a3f77ddcf'
-		// setTimeout(() => {
-		// 	Swal.fire({
-		// 		icon: "success",
-		// 		title: "Done",
-		// 		text: "Tx succesfull!",
-		// 		footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${txhash}">Tx link</a>`
-		// 	});
-			
-		// }, 5000);
-		// .......................
 
-// // Set up your Ethereum provider
-// const provider = new ethers.providers.InfuraProvider("homestead", "YOUR_INFURA_PROJECT_ID");
+			// Example CID to register
+			const cid = "QmYwAPJzv5CZsnAztbqiXLypCQzqJGdUJwHThYro4Mwdd2";
 
-// // Set up your wallet (use a private key)
-// const privateKey = "YOUR_PRIVATE_KEY";
-// const wallet = new ethers.Wallet(privateKey, provider);
-
-// // Set up your contract ABI and address
-// const contractABI = [
-//     // Only including the necessary parts of the ABI
-//     "function registerDID(string memory _cid) public",
-//     "event DIDRegistered(bytes32 indexed didHash, string cid)"
-// ];
-// const contractAddress = "YOUR_CONTRACT_ADDRESS";
-
-// // Create contract instance
-// const contract = new ethers.Contract(contractAddress, contractABI, wallet);
-
-
-// Example CID to register
-const cid = "QmYwAPJzv5CZsnAztbqiXLypCQzqJGdUJwHThYro4Mwdd2";
-
-// Call the function
-await registerDID(cid);
-
-
-
-			
+			// Call the function
+			await registerOnchainDID(cid);		
 
 		}
 
 
-		async function registerDID(cid) {
+		async function registerOnchainDID(cid) {
 
-// Set up your Ethereum provider
-// let provider = await new ethers.JsonRpcProvider(`${optionsList[0].API}`);
-// const provider = new ethers.JsonRpcProvider(optionsList[0].API);
-
-// let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-// let signer;
-
-// if (!chatETHPrivKey) {
-// 	console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-// 	try { signer = await new ethers.Wallet(chatETHPrivKey) }
-// 	// try { signer = await new ethers.Wallet(chatETHPrivKey, provider) }
-// 	catch (error) { console.log(error.message);   }
-// }
-
-// const contractAddress = optionsList[0].REGISTRY_CONTRACT_ADDRESS
- 
-// const contractABI = [
-//     "function registerDID(string memory _cid) public",
-//     "event DIDRegistered(bytes32 indexed didHash, string cid)"
-// ];
+			const provider = new ethers.JsonRpcProvider(optionsList[0].API);
+			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+			let signer = await new ethers.Wallet(chatETHPrivKey) 
+			const contractAddress = optionsList[0].REGISTRY_CONTRACT_ADDRESS
+			const contractABI = [
+				"function registerDID(string memory _cid) public",
+				"event DIDRegistered(bytes32 indexed didHash, string cid)"
+			];
 
 
+			const connectedSigner = await signer.connect(provider);
 
-const provider = new ethers.JsonRpcProvider(optionsList[0].API);
-
-let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-
-let signer = await new ethers.Wallet(chatETHPrivKey) 
-
-const contractAddress = optionsList[0].REGISTRY_CONTRACT_ADDRESS
- 
-const contractABI = [
-    "function registerDID(string memory _cid) public",
-    "event DIDRegistered(bytes32 indexed didHash, string cid)"
-];
+			// Create contract instance
+			const contract = new ethers.Contract(contractAddress, contractABI, connectedSigner);
 
 
-const connectedSigner = await signer.connect(provider);
+				try {
+					// Call the registerDID function
+					const tx = await contract.registerDID(cid);
 
-// Create contract instance
-const contract = new ethers.Contract(contractAddress, contractABI, connectedSigner);
+					console.log("Transaction sent:", tx.hash);
 
+					// Wait for the transaction to be mined
+					const receipt = await tx.wait();
+					console.log("Transaction mined:", receipt);
 
-    try {
-        // Call the registerDID function
-        const tx = await contract.registerDID(cid);
-
-        console.log("Transaction sent:", tx.hash);
-
-        // Wait for the transaction to be mined
-        const receipt = await tx.wait();
-        console.log("Transaction mined:", receipt);
-
-        // Optionally, you can parse the logs to get the event details
-        const event = receipt.events.find(event => event.event === "DIDRegistered");
-        console.log("DID Registered:", event.args.didHash, event.args.cid);
-		Swal.fire({
-				icon: "success",
-				title: "Done",
-				text: "Tx succesfull!",
-				footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${event.args.didHash}">Tx link</a>`
-			});
+					Swal.fire({
+							icon: "success",
+							title: "Done",
+							text: "Tx succesfull!",
+							footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${receipt.hash}">Tx link</a>`
+						});
 
 
-    } catch (error) {
-        console.error("Error registering DID:", error);
-    }
-}
+				} catch (error) {
+					console.error("Error registering DID:", error);
+				}
+			}
+
+
+			async function updateOnchainDID(cid) {
+
+				const provider = new ethers.JsonRpcProvider(optionsList[0].API);
+				let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+				let signer = await new ethers.Wallet(chatETHPrivKey) 
+				const contractAddress = optionsList[0].REGISTRY_CONTRACT_ADDRESS
+				const contractABI = [
+					"function registerDID(string memory _cid) public",
+					"event DIDRegistered(bytes32 indexed didHash, string cid)"
+				];
+
+
+				const connectedSigner = await signer.connect(provider);
+
+				// Create contract instance
+				const contract = new ethers.Contract(contractAddress, contractABI, connectedSigner);
+
+
+					try {
+						// Call the registerDID function
+						const tx = await contract.registerDID(cid);
+
+						console.log("Transaction sent:", tx.hash);
+
+						// Wait for the transaction to be mined
+						const receipt = await tx.wait();
+						console.log("Transaction mined:", receipt);
+
+						Swal.fire({
+								icon: "success",
+								title: "Done",
+								text: "Tx succesfull!",
+								footer: `<a target="_blank" rel="noopener noreferrer" href="https://explorer-warringstakes.meter.io/tx/${receipt.hash}">Tx link</a>`
+							});
+
+
+					} catch (error) {
+						console.error("Error registering DID:", error);
+					}
+				}
+
+
+
+
+			async function getDID() {
+				const provider = new ethers.JsonRpcProvider(optionsList[0].API);
+				let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+				let signer = await new ethers.Wallet(chatETHPrivKey) 
+				const contractAddress = optionsList[0].REGISTRY_CONTRACT_ADDRESS
+				const contractABI = [ "function cids(address) view returns (string)" ];
+				
+				// Create contract instance
+				const contract = new ethers.Contract(contractAddress, contractABI, provider);
+				
+				// Address to query
+				let addressToQuery = signer.address;
+				try {
+					// Call the cids function
+					const cid = await contract.cids(addressToQuery);
+					console.log("CID:", cid);
+					
+				} catch (error) {
+					console.error("Error querying CID:", error);
+				}
+			}
+
+
 
 		async function checkGasBalance(walletAddress) {
 			console.log('checkGasBalance() of ', walletAddress)
@@ -2975,7 +2988,7 @@ const contract = new ethers.Contract(contractAddress, contractABI, connectedSign
 		optionsList = [
 		{
 				"TOKEN_ADDRESS": "0x4cb6cef87d8cadf966b455e8bd58fff32aba49d1",//usdc sepolia
-				"TOKEN_CHAIN_NAME": 'USDC(sepolia)',
+				"TOKEN_CHAIN_NAME": 'MTR',
 				"TOKEN_NAME": "MTR",
 				"SYMBOL": "MTR",
 				"API": 'https://rpctest.meter.io',

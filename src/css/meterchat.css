@@ -1584,8 +1584,20 @@ body.swal2-height-auto {
     z-index: 3;
 }
 
-#mintOrUpdate{
+#mintOrUpdate,#updateOnchain{
 	position:absolute;
 	bottom:85px;	
 	z-index: 1;
+}
+#reloadBalance{
+	cursor: pointer;
+}
+
+
+/* FIX ? */
+
+#chatContainer{
+	top: 5em;
+	height: calc(100vh - 5em);
+
 }
