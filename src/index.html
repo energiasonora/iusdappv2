@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>METER CHAT</title>
+		<title>IUS NATURALIS DAPP</title>
 		<meta name="description" content="a DID managing tool to communicate your public and private data with sovereignty" />
 		<meta name="keywords" content="did, starknet " />
 		<meta name="author" content="Xunorus" />
@@ -19,7 +19,8 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 		
 		<link rel="stylesheet" type="text/css" href="css/cropper.css" />
-		<link rel="stylesheet" type="text/css" href="css/meterchat.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="css/meterchat.css" /> -->
+		<link rel="stylesheet" type="text/css" href="css/iusdapp.css" />
 		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
  
 
@@ -28,16 +29,31 @@
 		<![endif]--><script>document.documentElement.className = 'js';</script>
 	</head>
 	<body class="demo-1">
+ 	
+	
+		<!-- /*********************************************************************************************
+  .) OVERLAY
+  **********************************************************************************************/ -->
 
 		<div class="overlay"></div>
 
+ 
+ 	<!-- /*********************************************************************************************
+  .) LOCK UNLOCK BANNER
+  **********************************************************************************************/ -->
+  <div id='lockscreen' class="cover-container" style="display: none;" >
+    <img src="img/logo.png" alt="Cover Image" class="cover-image"  >
+
+    <!-- <h1 class="cover-heading">Locked</h1> -->
+    <button id="unlockButton" class="btn btn-primary btn-unlock" onclick="event.stopPropagation();unlockLocalwallet()" >Unlock</button>
+  </div>
 
   <!-- /*********************************************************************************************
   .) SIDEBAR
   **********************************************************************************************/ -->
   <div id="sidebar" class='sidebar'>
     <a class='closeonclick' href="/">
-      <div class='title '> </div>
+      <div class='title'> </div>
     </a>
    
     <input name="avatarIMG" id="avatarIMGfile" type="file" style="display:none" accept="image/*" /> <!-- ex fileCreateItemFile -->
@@ -136,7 +152,7 @@
 		
 		<main class="main-wrap">
 			<header class="codrops-header">
-				<h1 class="codrops-header__title" id="userData">METERCHAT</h1>
+				<h1 class="codrops-header__title" id="userData">IUS NATURALIS</h1>
 				<div class="search-wrap">
 					<button id="btn-search" class="btn btn--search" style="display: none;"> <svg class="icon icon--search"><use xlink:href="#icon-search"></use></svg></button>
 
@@ -168,7 +184,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 1.5 </span>
+			<span>v 3.2 </span>
 		</nav>
 	</div>
 
@@ -204,7 +220,7 @@
  
 <form class="search__form" action="" id="chatfooter" onsubmit="sendMessage()">
 
-		<input   id="chatTextInput" class="search__input" name="search"   placeholder="Type a message..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+		<input   id="chatTextInput" class="search__input" name="search"   placeholder="Type a message..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" disabled/>
 
 		<button class="btn btn-primary" id="send-button" onclick="sendMessage()" disabled>
 			<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
@@ -227,6 +243,37 @@
 
 
 <!-- MODALS -->
+
+
+	<!-- Modal BACKUP WALLET -->
+	<div class="modal fade" data-bs-backdrop="static" id="walletBackp" tabindex="-1" role="dialog" aria-labelledby=""
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" data-translate="walletCreation" id="">WALLET CREATION</h5>
+				</div>
+				<div class="modal-body" id="walletHiddenContent">
+					<div id="displayPubKey"></div>
+					<div id="displayPK"></div>
+					<div id="displayMnemonic"></div>
+					<div id="displayDecrypt"></div>
+					<div id="success_message2" class="alert alert-success" role="alert" style="display: none;"></div>
+				</div>
+				<div class="modal-footer">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="mnemonicBackedup" disabled>
+						<label class="form-check-label" for="mnemonicBackedup">
+							I wrote down the mnemonic phrase
+						</label>
+					</div>
+					<button type="button" class="btn btn-outline-secondary closeWalletBkp" id="closeBackupmodal"
+						data-bs-dismiss="modal" data-translate="close" disabled>Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<!-- Modal wallet RESTORE -->
 	<div class="modal fade" data-bs-backdrop="static" id="walletRestore" tabindex="-1" role="dialog" aria-labelledby=""
@@ -387,6 +434,7 @@
 	<script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
  
 		<script type="module" src="js/demo1.js"></script>
+		<script src="js/dictionary.js"></script>
 		<script type="module">
 	  // XMTP
 	  import { Client } from '@xmtp/xmtp-js'
@@ -419,27 +467,72 @@
 
 		<script>
 
-async function init(){
+
+		/*********************************************************************************************
+		.) VARIABLES
+		// https://sepolia.etherscan.io/address/0xc4bF5CbDaBE595361438F8c6a187bDc330539c60#code
+		**********************************************************************************************/
+		window.optionsList = [
+		{
+				"TOKEN_ADDRESS": "0x4cb6cef87d8cadf966b455e8bd58fff32aba49d1",//usdc sepolia
+				"TOKEN_CHAIN_NAME": 'MTR',
+				"TOKEN_NAME": "MTR",
+				"SYMBOL": "MTR",
+				"API": 'https://rpctest.meter.io',
+				"TOKEN_CHAINID": '83',
+				"EXPLORER": 'https://scan-warringstakes.meter.io',
+				"ERC20_CONTRACT_ADDRESS": "0x8a419ef4941355476cf04933e90bf3bbf2f73814",//MTRG token
+				"REGISTRY_CONTRACT_ADDRESS":"0x70F0B5fa20C296703fe101f294913cd1B6cCE053"
+			},
+		]
+		// https://docs.meter.io/developer-documentation/introduction
+		// https://scan-warringstakes.meter.io/
+		// https://explorer-warringstakes.meter.io/tx/0x2460b70dd8785c01be3baefe3c6ef3c9d7b0348b1dcb423412ccda2a3f77ddcf
+
+async function init(signer){
 	
 		
 console.log(`
 
-███╗   ███╗███████╗████████╗███████╗██████╗  ██████╗██╗  ██╗ █████╗ ████████╗
-████╗ ████║██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝██║  ██║██╔══██╗╚══██╔══╝
-██╔████╔██║█████╗     ██║   █████╗  ██████╔╝██║     ███████║███████║   ██║   
-██║╚██╔╝██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██║     ██╔══██║██╔══██║   ██║   
-██║ ╚═╝ ██║███████╗   ██║   ███████╗██║  ██║╚██████╗██║  ██║██║  ██║   ██║   
-╚═╝     ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   
-																		
+██╗██╗   ██╗███████╗
+██║██║   ██║██╔════╝
+██║██║   ██║███████╗
+██║██║   ██║╚════██║
+██║╚██████╔╝███████║
+╚═╝ ╚═════╝ ╚══════╝
+                    
+██████╗  █████╗ ██████╗ ██████╗ 
+██╔══██╗██╔══██╗██╔══██╗██╔══██╗
+██║  ██║███████║██████╔╝██████╔╝
+██║  ██║██╔══██║██╔═══╝ ██╔═══╝ 
+██████╔╝██║  ██║██║     ██║     
+╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝     
+                                
+
+                               
+																				
 
 `);
 					console.log('init()')
 	
+					reloadTranslations()
 	
-					createMeterAddress()
+
+
+					if (typeof signer === 'undefined') {
+						console.warn('No signer passed at init()');
+						let signer = await getSigner()
+						if (signer === false) {
+							console.log("The function returned false.");
+							return
+						}
 	
-					// checkDID()
-					await createXMPTchat()
+						await createXMPTchat(signer)
+					} else {
+						console.log('Signer provided:', signer);
+						console.warn("SIGNER:",signer)
+						await createXMPTchat(signer)
+					}
 				// -----------------------------------------
 				//  CHECK IF USER COMES FROM A LINK
 				const urlParams = new URLSearchParams(window.location.search);
@@ -467,7 +560,6 @@ console.log(`
 							console.warn('CONTACTO POR URL!',contact)
 							
 							SaveContactsToLocalStorage(contact);
-	
 	
 							await chatWith(didData.data.alias)
 	
@@ -734,33 +826,188 @@ function reloadBalance(){
 	console.log('reloadBalance()')
 }
 
-async function createMeterAddress(){
-            console.log('createMeterAddress()')
+
+
+
+async function getLocalWalletSigner() {
+      console.log('getLocalWalletSigner()');
+      return Swal.fire({
+        // title: 'Unlock your LOCALWALLET',
+        title: dictionary[globalLang]["unlocklocalwallet"],
+        input: 'password',
+        inputAttributes: { autocapitalize: 'off' },
+        showCancelButton: true,
+        confirmButtonText: 'Enter',
+        showLoaderOnConfirm: true,
+        backdrop: true,
+        html:  `<label for="rememberPassword">Remember Password</label> <input type="checkbox" id="rememberPassword" name="rememberPassword"> `,
+        preConfirm: (login) => { },
+        allowOutsideClick: () => {
+          const popup = Swal.getPopup();
+          popup.classList.remove('swal2-show');
+          setTimeout(() => {
+            popup.classList.add('animate__animated', 'animate__headShake');
+          });
+          setTimeout(() => {
+            popup.classList.remove('animate__animated', 'animate__headShake');
+          }, 500);
+          return false;
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          console.log('password entered!');
+          if (result.value == '') {
+            console.log('IS EMPTY');
+            Toast.fire({ icon: 'error', title: 'Password cannot be empty' });
+            return null;
+          }
+
+          let encryptedjson = localStorage.getItem('jsonWallet');
+          let ew = JSON.parse(encryptedjson);
+          console.log('pub key of wallet in localstorage:', ew.address);
+
+          try {
+            return ethers.Wallet.fromEncryptedJson(encryptedjson, result.value).then(async (localWallet) => {
+              console.log('localWallet.publicKey:', localWallet.publicKey);
+              let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v6
+              const signer = localWallet.connect(provider);
+              console.log('SIGNER:', signer);
+              return signer;
+            });
+          } catch (error) {
+            console.error('Error during wallet decryption:', error);
+            Toast.fire('Error', error.message, "error");
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error.message,
+            });
+            return null;
+          }
+        }
+        return null;
+      }).catch(error => {
+        console.error('Error during Swal prompt:', error.reason);
+        Toast.fire('Error', error.message, "error");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.message,
+        });
+
+
+        return null;
+      });
+    }
+
+// ---------------------------------------------
+
+function toChecksumAddress(address) {
+    return ethers.getAddress(address);
+}
+
+
+// -----------------------
+// ------------------------------
+async  function unlockLocalwallet(){
+
+console.log('unlockLocalwallet()')
+  // LOAD CHAT
+	  let signer;
+  console.log('there is no signer')
+  signer = await getLocalWalletSigner();
+  lockscreen.style.display='none'
+  init(signer)
+
+  if (!signer) {
+	console.log('Handle case where signer is not obtained');
+	lockscreen.style.display='flex'
+	return; // Or throw an error, or handle the case in another way
+  }
+
+}
+
+// ---------------------------------------------
+
+async function getSigner(){
+            console.log('getSigner()')
 		
-				// 1- GET  PRIV KEY(IF not CREATE IT)
-			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            if (!chatETHPrivKey) {
-				try { signer = await ethers.Wallet.createRandom() }
-				catch (error) { console.log(error.message);   }
+// 1- GET  PRIV KEY(IF not CREATE IT)
+const chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+if (!chatETHPrivKey) {
+    console.warn('No chatETHPrivKey found. Checking for unbackedWallet.');
 
-                console.log('New CHAT ACCOUNT :\nprivateKey=', signer.privateKey);
-                localStorage.setItem('chatETHPrivKey', signer.privateKey);
-                console.log('chatETHPrivKey SAVED INTO LOCALSTORAGE');
+// 2- NO PRIV KEY, IS UNBACKEDWALLET?
+    const unbackedWallet = localStorage.getItem('unbackedWallet');
+    if (!unbackedWallet) {
+        console.warn('No unbackedWallet found. Checking for jsonWallet.');
+
+// 3-  NO UNBACKED WALLET, is JSONWALLET?
+        const jsonWallet = localStorage.getItem('jsonWallet');
+        if (!jsonWallet) {
+            console.warn('No jsonWallet found.');
+			// CREATE UNBACKED WALLET
+			try { signer = await ethers.Wallet.createRandom() }
+			catch (error) { console.log(error.message); 
+			fixedToast.fire('Error', error.message, "error"); }
+			console.warn('RANDOM WALLET CREATED!:', signer.address, 'mnemonic:', signer.mnemonic.phrase, 'privkey:', signer.privateKey)
+			localStorage.setItem('unbackedWallet', JSON.stringify(signer.mnemonic.phrase))
+					
+        } else {
+            // Handle jsonWallet
+			// console.warn('3- YES JSON WALLET')
+			console.warn('3- jsonWallet found. Checking for jsonWalletPassword.');
+            const jsonWalletPassword = localStorage.getItem('jsonWalletPassword');
+            if (!jsonWalletPassword) {
+                console.warn('No jsonWalletPassword found.');
+					// now: 
+				// 1. get and form address from json wallet
+				let addr =JSON.parse(jsonWallet).address;
+				// const hash = 'd02dae99e59378bdd35ffb6e4a704c0be77b582a';
+				const checksumAddress = toChecksumAddress(`0x${addr}`);
+
+
+				// 2. shot it into qr
+				setAddress(checksumAddress)
+				// 3. display UI in lock mode
+				document.getElementById("loader").style.display = "none";//flex
+				lockscreen.style.display='flex'
+
+				return false
+
+				// 4.ask user to open?
+
             } else {
-				console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-				try { signer = await new ethers.Wallet(chatETHPrivKey) }
-				catch (error) { console.log(error.message);   }
-
+                // Handle jsonWallet and jsonWalletPassword
+                console.log('jsonWallet and jsonWalletPassword found.');
+			
             }
+
+        }
+    } else {
+        // Handle unbackedWallet
+	console.warn('2- YES unbackedWallet', unbackedWallet)
+	const walletData = JSON.parse(unbackedWallet);
+	try{ signer = ethers.Wallet.fromPhrase(walletData);}
+	catch (error) { console.warn(error.message, 'ERROR WALLET!'); localStorage.removeItem('unbackedWallet'); }
+
+
+    }
+} else {
+    // Handle chatETHPrivKey
+	console.warn('1- YES chatETHPrivKey', chatETHPrivKey)
+		try { signer = await new ethers.Wallet(chatETHPrivKey) }
+		catch (error) { console.log(error.message);   }
+}
+ 
+
+			/////////////////////////////
 			// 2- SHOW QR WITH DID LINK
-			console.warn('ETH ADDRESS (createMeterAddress): ', signer.address)
+			/////////////////////////////
+			console.warn('EVM ADDRESS (getSigner): ', signer.address)
 			setAddress(signer.address)
 			let balance= await checkGasBalance(signer.address) 
-			userData.innerHTML = 'balance:'+ balance +`
-			  <svg xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()">
-                  <path fill="currentColor" 
-				 d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg>
-			`;
+			userData.innerHTML = 'balance:'+ balance +` <svg xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> `;
 
 			// 4- CREATE DID IF IT EXISTS READ IT (1st TRY read then write)
             let did = `did:meter:${signer.address}`
@@ -805,16 +1052,146 @@ async function createMeterAddress(){
 
 		 
 			
-			return 
+			return signer
 			
          
 }
 
 
 		/*********************************************************************************************
+		.)  BAKCUP
+		**********************************************************************************************/
+		function backupWallet(mnemonic) {
+			console.log('now, backupWallet()', mnemonic)
+			//////////////////////
+			// CREATE WALLET
+			Swal.fire({
+				title: dictionary[globalLang]["createpasswordtoencryptwallet"],
+				input: 'password',
+				inputAttributes: {
+					autocapitalize: 'off'
+				},
+				showCancelButton: true,
+				confirmButtonText: 'create',
+				showLoaderOnConfirm: true,
+				// preConfirm: (login) => { },
+				backdrop: true,
+
+				inputValidator: (value) => {
+					if (!value) {
+						return 'You need to set a password to create your wallet!'
+					}
+				},
+
+				allowOutsideClick: () => {
+					const popup = Swal.getPopup()
+					popup.classList.remove('swal2-show')
+					setTimeout(() => { popup.classList.add('animate__animated', 'animate__headShake') })
+					setTimeout(() => { popup.classList.remove('animate__animated', 'animate__headShake') }, 500)
+					return false
+				},
+
+			})
+				.then(async (result) => {
+					if (result.isConfirmed) {
+						// console.log('PASSWORD RESULT:',result.value)
+
+						await makeBackup(result.value, mnemonic)
+						return result.value
+					}
+				})
+
+
+		}
+		async function makeBackup(pwd, mnemonic) {
+
+// console.log('MAKE BACKUP address:', signer.address)
+console.log('MAKE BACKUP mnemonic:', mnemonic)
+
+
+// WRITE YOUR MNEMONIC PHRASE
+displayMnemonic.innerHTML = ` <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor"> <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>Write down your mnemonic phrase to access your wallet in the future! :</h3> <div class="alert alert-warning alert-dismissible fade show"> <strong>${mnemonic}</strong> </div> `
+
+
+// CREATING ENCRYPTED LOCAL WALLET
+displayMnemonic.innerHTML += ` <div  id="loaderCW"  > <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> creating encrypted wallet ... </div> `
+
+// SAVE TO LOCALSTORAGE (encrypted?)
+console.log('password: ', pwd)
+try {
+	// wallet = ethers.HDNodeWallet.fromMnemonic(mnemonic);
+	wallet = ethers.Wallet.fromPhrase(mnemonic)
+}
+catch{
+	console.warn(error)
+}
+const promisseJSON = wallet.encrypt(pwd);
+promisseJSON.then((jsonWallet) => {
+	console.log(jsonWallet)
+	console.log('WALLET ENCRYPTED')
+
+	// loaderCW
+	document.getElementById('loaderCW').innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+<symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+</symbol>
+<symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+</symbol>
+<symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+</symbol>
+</svg>
+
+<div class="alert alert-success d-flex align-items-center" role="alert">
+<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+<div>
+Wallet encrypted and saved into localstorage
+</div>
+</div>
+`
+
+
+	localStorage.setItem('jsonWallet', jsonWallet)
+	console.log(' ENCRYPTED JSONWALLET SAVED INTO LOCALSTORAGE')
+	//   localStorage.setItem('encryptedAddress', wallet.address)
+	console.log(' ENCRYPTED ADDRESS SAVED INTO LOCALSTORAGE')
+
+	setTimeout(() => {
+		const checkbox = document.getElementById('mnemonicBackedup');
+		// const button = document.getElementById('closeWalletBkp');
+		const button = document.getElementById('closeBackupmodal');
+
+		mnemonicBackedup.disabled = false;
+		// closeBackupmodal
+		// Add an event listener to the checkbox to track its state
+		checkbox.addEventListener('change', function () {
+			// If the checkbox is checked, enable the button; otherwise, disable it
+			button.disabled = !this.checked;
+			mnemonicBackedup.disabled = true;
+			console.log('close mnemonic activated')
+
+			// NOW DELETE unbackedWallet
+			localStorage.removeItem('unbackedWallet')
+
+		});
+		// init();
+	}, 1000);
+
+
+});
+
+
+setTimeout(() => {
+	openModalId('#walletBackp')
+
+}, 50);
+
+}
+	/*********************************************************************************************
 		.)  QR
 		**********************************************************************************************/
-
 		async function showqr(addr) {
 			const qrColor = getComputedStyle(document.body).getPropertyValue('--qr');
 
@@ -835,8 +1212,9 @@ async function createMeterAddress(){
 			}
 
 			//QR
+			// width: `${qrSize}`, height: `${qrSize}`, type: "png", data: addr, image: `./logo4.png`,
 			const qrCode = new QRCodeStyling({
-				width: `${qrSize}`, height: `${qrSize}`, type: "png", data: addr, image: `./logo4.png`,
+				width: `${qrSize}`, height: `${qrSize}`, type: "png", data: addr, image: `./logowhite.png`,
 				dotsOptions: { color: `${qrColor}`, type: "extra-rounded" },
 				backgroundOptions: { color: "var(--qrbackground)", },
 				imageOptions: { crossOrigin: "anonymous", margin: 0 }
@@ -1094,44 +1472,46 @@ else {
 		/*********************************************************************************************
 		.) NEWQRCHAT
 		**********************************************************************************************/
-		async function createXMPTchat(){
+		async function createXMPTchat(signer){
             console.log('createXMPTchat()')
 
 			// check if DID is needed or not
 
-			let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            if (!chatETHPrivKey) {
-				// starknetPrivKey = stark.randomAddress();
-				try { wallet = await ethers.Wallet.createRandom() }
-				catch (error) { console.log(error.message);   }
+			// let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            // if (!chatETHPrivKey) {
+			// 	// starknetPrivKey = stark.randomAddress();
+			// 	try { wallet = await ethers.Wallet.createRandom() }
+			// 	catch (error) { console.log(error.message);   }
 
-                console.log('New CHAT ACCOUNT :\nprivateKey=', wallet.privateKey);
-                localStorage.setItem('chatETHPrivKey', wallet.privateKey);
-                console.log('chatETHPrivKey SAVED INTO LOCALSTORAGE');
-            } else {
-				console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-				try { wallet = await new ethers.Wallet(chatETHPrivKey) }
-				catch (error) { console.log(error.message);   }
+            //     console.log('New CHAT ACCOUNT :\nprivateKey=', wallet.privateKey);
+            //     localStorage.setItem('chatETHPrivKey', wallet.privateKey);
+            //     console.log('chatETHPrivKey SAVED INTO LOCALSTORAGE');
+            // } else {
+			// 	console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+			// 	try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+			// 	catch (error) { console.log(error.message);   }
 
-            }
-            console.log('<br>ETH private key:'+wallet.chatETHPrivKey)
+            // }
+
+            // console.log('<br>ETH private key:'+wallet.chatETHPrivKey)
 			// window.wal =wallet;
-            const starkxmtp = await Client.create(wallet)
-            const conversations = starkxmtp.conversations
+
+            const iusnaturalisxmtp = await Client.create(signer)
+            const conversations = iusnaturalisxmtp.conversations
     
 			// get eth address for chat
-			 userAddress = wallet.address;
+			 userAddress = signer.address;
 			console.log('Your chat Address (eth) : ',userAddress)
 
-			window.starkxmtp = starkxmtp;// make GLOBAL
-			window.chats= starkxmtp.conversations
+			window.iusnaturalisxmtp = iusnaturalisxmtp;// make GLOBAL
+			window.chats= iusnaturalisxmtp.conversations
 			window.userAddress= userAddress
 
-            return starkxmtp
+            return iusnaturalisxmtp
         }
 
 		async function  getChatAddresses(){
-			const allConversations = await starkxmtp.conversations.list()
+			const allConversations = await iusnaturalisxmtp.conversations.list()
 			console.log('YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP")
 
 			const peerAddressesArray = [];
@@ -1242,7 +1622,7 @@ actionButtons.innerHTML = `
 // ------------------------------------
 // AVOID REOPENING COMS WITH ADDRESESS
 // SACAR/ si lo saco falla...
-const allConversations = await starkxmtp.conversations.list()
+const allConversations = await iusnaturalisxmtp.conversations.list()
 console.log('available addresses:', allConversations.length)
 const customAddressToCheck = toAddr; // Replace this with the address you want to check
 let addressExists = false;
@@ -1302,9 +1682,9 @@ if (addressExists) {
 // ------------------------------------
 
 // CREATE CHAT (client was already created)
-conversation = await starkxmtp.conversations.newConversation(toAddr)
+conversation = await iusnaturalisxmtp.conversations.newConversation(toAddr)
 console.log('conversation:', conversation)
-console.warn('------- READY TO CHAT ----------');
+console.warn('------- READY TO CHAT 💬 ----------');
 
 // ADD ATTRIBUTE TO BODY(fix dup messg)
 document.body.setAttribute('currentChat', toAddr);
@@ -1775,7 +2155,7 @@ else {
 
 // async function chatHistory(addr) {
 
-// let conversation = await starkxmtp.conversations.newConversation(addr)
+// let conversation = await iusnaturalisxmtp.conversations.newConversation(addr)
 // const messages = await conversation.messages()
 
 // for (const message of messages) {
@@ -1885,15 +2265,15 @@ xmtp.registerCodec(new TransactionReferenceCodec());
 
 
 
-// const starkxmtp = await Client.create(wallet)
-starkxmtp = xmtp;//make global
-console.warn('starkxmtp SET TO GLOBAL')
+// const iusnaturalisxmtp = await Client.create(wallet)
+iusnaturalisxmtp = xmtp;//make global
+console.warn('iusnaturalisxmtp SET TO GLOBAL')
 // Listen for new conversations
-const stream = await starkxmtp.conversations.stream()
+const stream = await iusnaturalisxmtp.conversations.stream()
 console.log('STREAM:', stream)
 
 //  registerCodecs(xmtp)
-await listExistingConversations(starkxmtp)
+await listExistingConversations(iusnaturalisxmtp)
 return xmtp
 }
 
@@ -1903,8 +2283,8 @@ return xmtp
 async function listenAllNewAddresses() {
 console.log('listenAllNewAddresses() - *B')
 
-for await (const message of await starkxmtp.conversations.streamAllMessages()) {
-	if (message.senderAddress === starkxmtp.address) {// This message was sent from me
+for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
+	if (message.senderAddress === iusnaturalisxmtp.address) {// This message was sent from me
 		continue
 	}
 
@@ -1931,7 +2311,7 @@ for await (const message of await starkxmtp.conversations.streamAllMessages()) {
 	// peerGasPaymentRequest
 	if (message.content.includes("peerGasPaymentReques0x20")) {
 		console.log("You received a peerGasPamentRequest from: ", message.senderAddress);
-		conversation = await starkxmtp.conversations.newConversation(message.senderAddress)
+		conversation = await iusnaturalisxmtp.conversations.newConversation(message.senderAddress)
 		Swal.fire({
 			title: "Do you have some gas?",
 			text: "your peer is asking you to pay for the gas",
@@ -2048,7 +2428,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 // console.log('CREATE AN ALIAS FOR THIS ADDRESS',formattedAddress)
 
 // TEST
-// await starkxmtp.registerCodec(new ContentTypeMultiplyNumberCodec());
+// await iusnaturalisxmtp.registerCodec(new ContentTypeMultiplyNumberCodec());
 
 // const numbersToMultiply = { a: 3, b: 7 };
 
@@ -2661,7 +3041,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 			console.log('loadCroppedImg()');
 
 			// openModalId('#createDIDModal')
-// fileCreateItemFile => avatarIMGfile 
+			// fileCreateItemFile => avatarIMGfile 
 
 			await avatarIMGfile.click();
 			let previewsrc;
@@ -2746,77 +3126,27 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 							let avatar = localStorage.getItem('avatar');
 							let cid = '';
 
-							// 0- CHECK IF UNBACKED WALLET INLOCALSTORAGE
-							let unbw = localStorage.getItem('unbackedWallet')
-
-							if (!unbw) {
-								console.log('1- NO UNBACKED WALLET');
-								// signer = await getLocalWalletSigner();
-
-
 								// ------------------------------------
 								// GET SIGNER
-								// - CREATE DID with eth address as alias
-								let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-								console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-								try { signer = await new ethers.Wallet(chatETHPrivKey) }
-								catch (error) { console.log(error.message); }
-								// modifiedHexString
-								let did = `did:meter:${signer.address}`
-								console.warn('ETH ADDRESS: ', signer.address)
-								// return 
+							let presigner = await getSigner()
 
-
-								// ---------------------------------------------------
-								// IF AVATAR IN LOCALSTORAGE MEANS SOMETHING WENT WRONG WHEN CREATING THE DID> TRY AGAIN
-								
-								let avatar = localStorage.getItem('avatar')
-								if (avatar != null) {
-									
-									// ---------------------------------------------------
-									// UPDATE DID
-								// did = `did:ethr:${signer.address}`
-								console.log('UPLOAD AVATAR FOR DID:', did)
-								await updateAvatarDID(did, avatar, signer)
-
-							Toast.fire('Avatar added to DID', '', "success");
-
-								// createDIDRecord(did, avatar, alias, privData, cid, signer);
-								// ------------------------------------
-									
-									
-								 
-								}
-								
-								
-								return //falta testear
-							}
-							else {
-								console.log('YES THERE IS AN UNBACKED WALLET > DEDUCTING SIGNER NOW!')
-
-								const walletData = JSON.parse(unbw);
-
-								// *********************************************************************
-								// PUT HERE THE PASSWORD FROM LOCALSTORAGE, MAYBE ENCRYPTED BY US ASWELL
-								// *********************************************************************
-								try { localWallet = ethers.Wallet.fromPhrase(walletData); }
-								catch (error) {
-									console.log(error.message, 'ERROR WALLET!');
-									// localStorage.removeItem('unbackedWallet');
-								}
-
-								// let provider = new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`); //v5
-								let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
-								//  let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v6
-								signer = localWallet.connect(provider);
+							let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+								let signer = presigner.connect(provider);
 								console.log('SIGNER!:', signer);
-								//  return signer;
-								did = `did:ethr:${signer.address}`
+								// did = `did:ethr:${signer.address}`
+								let did = `did:meter:${signer.address}`
+
 								console.log('DID: ', did)
-							}
+
+
+
+							// ---------------
+
 							try {
 								console.log('creating did RECORD, signer', signer)
-								createDIDRecord(did, avatar, cid, signer);
+								// await updateAvatarDIDRecord(did, avatar, cid, signer);
+								await updateAvatarDID(did, avatar, signer) 
+								// await createDIDRecord(did, avatar, cid, signer);
 								//  https://explorer.testnet.polybase.xyz/studio/pk%2F0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9%2FIURISNATURALIS/collections/CHATWALLETDID
 							} catch (error) {
 								console.error('An error occurred while creating DID record:', error);
@@ -2825,7 +3155,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
 							// REMOVE FROM LOCALSTORAGE
 							 localStorage.removeItem('avatar');
-
+							console.warn('AVATAR REMOVED FROM LOCALSTORAGE!🚫')
 
 
 						});
@@ -2892,6 +3222,8 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 
 				} catch (error) {
 					console.error("Error registering DID:", error);
+					console.error("Error message:", error.error.message);
+					e= error;
 				}
 			}
 
@@ -2979,28 +3311,6 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 				return null;
 			}
 		}
-
-
-		/*********************************************************************************************
-		.) VARIABLES
-		// https://sepolia.etherscan.io/address/0xc4bF5CbDaBE595361438F8c6a187bDc330539c60#code
-		**********************************************************************************************/
-		optionsList = [
-		{
-				"TOKEN_ADDRESS": "0x4cb6cef87d8cadf966b455e8bd58fff32aba49d1",//usdc sepolia
-				"TOKEN_CHAIN_NAME": 'MTR',
-				"TOKEN_NAME": "MTR",
-				"SYMBOL": "MTR",
-				"API": 'https://rpctest.meter.io',
-				"TOKEN_CHAINID": '83',
-				"EXPLORER": 'https://scan-warringstakes.meter.io',
-				"ERC20_CONTRACT_ADDRESS": "0x8a419ef4941355476cf04933e90bf3bbf2f73814",//MTRG token
-				"REGISTRY_CONTRACT_ADDRESS":"0x70F0B5fa20C296703fe101f294913cd1B6cCE053"
-			},
-		]
-		// https://docs.meter.io/developer-documentation/introduction
-		// https://scan-warringstakes.meter.io/
-		// https://explorer-warringstakes.meter.io/tx/0x2460b70dd8785c01be3baefe3c6ef3c9d7b0348b1dcb423412ccda2a3f77ddcf
 
 			</script>
 	</body>

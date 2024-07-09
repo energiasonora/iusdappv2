@@ -1,15 +1,13 @@
-# METERCHAT
+# IUS DAPP
 
-a souveraing DID managing tool to communicate your public and private data with sovereignty
-
+a sovereign decentralized platform (SDP) for peer to peer  public and private communication.
 
 # LINKS
-demo https://meterchat.web.app
-git https://github.com/energiasonora/meterdid
+demo https://iusdapp.web.app
+git https://github.com/energiasonora/iusdappv2
 
 
 # INSTALL
-<!-- nvm use 18     -->
 ```
 nvm use 20
 yarn                              
@@ -17,13 +15,12 @@ yarn
 
 # RUN
 ```
-yarn parcel src/index.html  --port 4242 --https
+yarn parcel src/index.html  --port 4343 --https
 ```
  
 
 # deploy to firebase
 
-<!-- nvm use 18        -->
 ```
 nvm use 20
 yarn parcel src/index.html --dist-dir public  --public-url ./
@@ -32,9 +29,9 @@ firebase deploy --only hosting:meterchat
 
 
 # CONTRACTS
-testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053
-<!-- testnet 0xF9aa7bDF7c225E17872DBbfed422409Dd605c08B -->
+<!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
+
 # log
-v 1.4 mint fixed
+<!-- v 1.4 mint fixed
 v 1.3
-v1.0 
+v1.0  -->
