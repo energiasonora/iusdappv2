@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENCRYPT AND SIGN MESSAGE</title>
+
+    <style>
+        body {
+            background-color: rgb(7, 42, 60);
+            color: green;
+        }
+
+        #result {
+            word-wrap: break-word;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1>ENCRYPT AND SIGN MESSAGE v1</h1>
+    <div id="messagesResult"></div>
+    <p>
+        <textarea id="inputText" rows="5" cols="50"></textarea><br>
+    <div id="hashResult">Hash:</div>
+    <button onclick="signHash()">SIGN</button>
+    <div id="result"></div>
+
+    <br><br>
+    <button onclick="verify()">VERIFY</button>
+    <div id="resultAddress"></div>
+    <script src="js/ethers.6.12.0.umd.min.js" type="application/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+
+
+        // AUTOHASH
+        inputText.addEventListener("input", function () {
+            console.log('text changed', inputText.value)
+            const text = inputText.value;
+            // const hash = ethers.keccak256(ethers.toUtf8Bytes(text));
+            const hash = ethers.sha256(ethers.toUtf8Bytes(text));
+            hashResult.innerText = "Hash: " + hash;
+            hashResult.setAttribute("data-hash", hash);
+            console.log('sha-256', hash);
+
+
+        });
+
+
+        // SIGN
+        async function signHash() {
+            const privateKey = '0xc1f2c5c2b4267c92c71fbb092cc241a64c7a9c3a599907eb69ed5e7038175ad4';//address:
+            const wallet = new ethers.Wallet(privateKey);
+            w = wallet;
+            console.log('wallet:', wallet);
+            let h = hashResult.getAttribute("data-hash");
+            console.log('signing: ', h)
+            const signedMessage = await wallet.signMessage(h);
+            console.log('signedMessage()', signedMessage);
+            document.getElementById('result').innerHTML = signedMessage;
+            document.getElementById('result').setAttribute("data-signature", signedMessage);
+        };
+
+
+        //  VERIFY
+        async function verify() {
+            console.log('verify()')
+            let hash = document.getElementById("hashResult").getAttribute("data-hash");
+            let signature = document.getElementById("result").getAttribute("data-signature");
+            let verif = await ethers.verifyMessage(hash, signature);
+            console.log('verification:', verif)
+            document.getElementById('resultAddress').innerHTML = verif;
+
+        }
+
+
+
+        //// ------------------------ ///
+        //// Hybrid encryption 
+        //// ------------------------ ///
+        // 1.Generate a symmetric key.
+        // 2.Encrypt the data with the symmetric key.
+        // 3.Encrypt the symmetric key with the recipient's public key.
+        // 4.Store the encrypted data and encrypted symmetric key in the database.
+        // 5.Retrieve the encrypted data and encrypted symmetric key from the database.
+        // 6.Decrypt the symmetric key with the recipient's private key.
+        // Use the decrypted symmetric key to decrypt the data.
+        // Sample data to encrypt
+        // Sample data to encrypt
+        // Sample data to encrypt
+        const dataToEncrypt = "Hello, world!";
+        let recipientAddress = "0xEce6CDC307a55B2c4fE5745208Cea58AB1ec1111";
+        let recipientPublicKey = '0x0418444c554d28ed39b12afe6d15b0fcd0a028f23444d060d4bdfd1ad8ab3efcb49a0c07fcc1baeb01e94f1566be15de5ed3a6cfa6e7172fbcfb38aecd5b3bcb00'
+
+  
+
+    </script>
+
+
+<script type="module" >
+
+
+        import EthCrypto from 'eth-crypto';
+		window.EthCrypto = EthCrypto;
+
+
+        async function encryptDecryptMessage(){
+            console.log('encryptDecryptMessage()')
+        const alice = EthCrypto.createIdentity();
+const bob = EthCrypto.createIdentity();
+const secretMessage = 'My name is Satoshi Buterin';
+
+
+const signature = EthCrypto.sign(
+    alice.privateKey,
+    EthCrypto.hash.keccak256(secretMessage)
+);
+const payload = {
+    message: secretMessage,
+    signature
+};
+const encrypted = await EthCrypto.encryptWithPublicKey(
+    bob.publicKey, // by encrypting with bobs publicKey, only bob can decrypt the payload with his privateKey
+    JSON.stringify(payload) // we have to stringify the payload before we can encrypt it
+);
+
+console.log('Alice encrypted message to Bob:', encrypted)
+// messagesResult.innerHTML +='Alice encrypted message to Bob:', encrypted;
+/*  { iv: 'c66fbc24cc7ef520a7...',
+  ephemPublicKey: '048e34ce5cca0b69d4e1f5...',
+  ciphertext: '27b91fe986e3ab030...',
+  mac: 'dd7b78c16e462c42876745c7...'
+    }
+*/
+
+// we convert the object into a smaller string-representation
+const encryptedString = EthCrypto.cipher.stringify(encrypted);
+// > '812ee676cf06ba72316862fd3dabe7e403c7395bda62243b7b0eea5eb..'
+
+// now we send the encrypted string to bob over the internet.. *bieb, bieb, blob*
+
+// we parse the string into the object again
+const encryptedObject = EthCrypto.cipher.parse(encryptedString);
+
+const decrypted = await EthCrypto.decryptWithPrivateKey(
+    bob.privateKey,
+    encryptedObject
+);
+const decryptedPayload = JSON.parse(decrypted);
+
+// check signature
+const senderAddress = EthCrypto.recover(
+    decryptedPayload.signature,
+    EthCrypto.hash.keccak256(decryptedPayload.message)
+);
+
+console.log(
+    'Got message from ' +
+    senderAddress +
+    ': ' +
+    decryptedPayload.message
+);
+messagesResult.innerHTML +='Got message from ' + senderAddress + ': ' + decryptedPayload.message
+
+// > 'Got message from 0x19C24B2d99FB91C5...: "My name is Satoshi Buterin" Buterin'
+
+
+
+// ----------------------
+// Creating an answer
+// ----------------------
+const answerMessage = 'And I am Bob Kelso';
+const answerSignature = EthCrypto.sign(
+    bob.privateKey,
+    EthCrypto.hash.keccak256(answerMessage)
+);
+const answerPayload = {
+    message: answerMessage,
+    signature: answerSignature
+};
+
+const alicePublicKey = EthCrypto.recoverPublicKey(
+    decryptedPayload.signature,
+    EthCrypto.hash.keccak256(payload.message)
+);
+
+const encryptedAnswer = await EthCrypto.encryptWithPublicKey(
+    alicePublicKey,
+    JSON.stringify(answerPayload)
+);
+console.log('encryptedAnswer:', encryptedAnswer)
+// now we send the encryptedAnswer to alice over the internet.. *bieb, bieb, blob*
+
+
+// --------------------------------
+// DECRYPT BOB ANSWER -REDUNDAT
+// --------------------------------
+// we convert the object into a smaller string-representation
+const encryptedStringb = EthCrypto.cipher.stringify(encryptedAnswer);
+
+const encryptedObjectb = EthCrypto.cipher.parse(encryptedStringb);
+
+const decryptedb = await EthCrypto.decryptWithPrivateKey(
+    alice.privateKey,
+    encryptedObjectb
+);
+const decryptedPayloadb = JSON.parse(decryptedb);
+
+const senderAddressb = EthCrypto.recover(
+    decryptedPayloadb.signature,
+    EthCrypto.hash.keccak256(decryptedPayloadb.message)
+);
+
+console.log(
+    'Got message from ' +
+    senderAddressb +
+    ': ' +
+    decryptedPayloadb.message
+);
+
+messagesResult.innerHTML +=  '<br>Got message from ' + senderAddressb + ': ' + decryptedPayloadb.message
+
+
+}
+encryptDecryptMessage()
+
+async function decryptMessage(){
+
+
+}
+</script>
+</body>
+
+</html>

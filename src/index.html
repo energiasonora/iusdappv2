@@ -287,7 +287,7 @@
 					<!-- SEED -->
 					<div id="seedData">
 						<div class="mb-3">
-							<label for="seedTextarea" class="form-label">Paste your Starknet or ETH Private key</label>
+							<label for="seedTextarea" class="form-label">Paste your seed, mnemonic or ETH Private key</label>
 							<textarea class="form-control" id="seedTextarea" rows="3"></textarea>
 						</div>
 						<!-- PASSWORD -->
@@ -501,14 +501,14 @@ console.log(`
 ██║╚██████╔╝███████║
 ╚═╝ ╚═════╝ ╚══════╝
                     
-██████╗  █████╗ ██████╗ ██████╗ 
-██╔══██╗██╔══██╗██╔══██╗██╔══██╗
-██║  ██║███████║██████╔╝██████╔╝
-██║  ██║██╔══██║██╔═══╝ ██╔═══╝ 
-██████╔╝██║  ██║██║     ██║     
-╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝     
-                                
 
+███╗   ██╗ █████╗ ████████╗██╗   ██╗██████╗  █████╗ ██╗     ██╗███████╗
+████╗  ██║██╔══██╗╚══██╔══╝██║   ██║██╔══██╗██╔══██╗██║     ██║██╔════╝
+██╔██╗ ██║███████║   ██║   ██║   ██║██████╔╝███████║██║     ██║███████╗
+██║╚██╗██║██╔══██║   ██║   ██║   ██║██╔══██╗██╔══██║██║     ██║╚════██║
+██║ ╚████║██║  ██║   ██║   ╚██████╔╝██║  ██║██║  ██║███████╗██║███████║
+╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝
+                                                                       
                                
 																				
 
@@ -529,7 +529,7 @@ console.log(`
 	
 						await createXMPTchat(signer)
 					} else {
-						console.log('Signer provided:', signer);
+						// console.log('Signer provided:', signer);
 						console.warn("SIGNER:",signer)
 						await createXMPTchat(signer)
 					}
@@ -960,15 +960,20 @@ if (!chatETHPrivKey) {
             const jsonWalletPassword = localStorage.getItem('jsonWalletPassword');
             if (!jsonWalletPassword) {
                 console.warn('No jsonWalletPassword found.');
-					// now: 
+					// now GET password , decript the wallet
+					// what we can do is automatically try to decrypt with ''
+				//  signer = await ethers.Wallet.fromEncryptedJson(jsonWallet, '')
+
+
 				// 1. get and form address from json wallet
 				let addr =JSON.parse(jsonWallet).address;
-				// const hash = 'd02dae99e59378bdd35ffb6e4a704c0be77b582a';
 				const checksumAddress = toChecksumAddress(`0x${addr}`);
 
 
 				// 2. shot it into qr
 				setAddress(checksumAddress)
+
+				
 				// 3. display UI in lock mode
 				document.getElementById("loader").style.display = "none";//flex
 				lockscreen.style.display='flex'
@@ -979,8 +984,11 @@ if (!chatETHPrivKey) {
 
             } else {
                 // Handle jsonWallet and jsonWalletPassword
-                console.log('jsonWallet and jsonWalletPassword found.');
-			
+                console.log('jsonWallet and jsonWalletPassword found.',jsonWalletPassword);
+				//  signer = await ethers.Wallet.fromEncryptedJson(jsonWallet, '')
+				 signer = await ethers.Wallet.fromEncryptedJson(jsonWallet, JSON.parse(jsonWalletPassword))
+
+				
             }
 
         }
@@ -997,7 +1005,11 @@ if (!chatETHPrivKey) {
     // Handle chatETHPrivKey
 	console.warn('1- YES chatETHPrivKey', chatETHPrivKey)
 		try { signer = await new ethers.Wallet(chatETHPrivKey) }
-		catch (error) { console.log(error.message);   }
+		catch (error) { 
+			console.log(error.message);  
+				document.getElementById("loader").style.display = "none";//flex
+				lockscreen.style.display='flex';
+		 }
 }
  
 
@@ -2291,6 +2303,8 @@ for await (const message of await iusnaturalisxmtp.conversations.streamAllMessag
 	document.getElementById('chatBadge').style.display = 'inline'
 	document.getElementById('chatBadge').innerText = '!'
 	console.log(`New message from ${message.senderAddress}: ${message.content}`)
+	Toast.fire({ icon: 'info', title: `New message from ${message.senderAddress}`, text: message.content});
+
 	
 	try{
 		await playButtonClickSound()
@@ -2616,12 +2630,52 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		}
 
 
-		async function backup() {
+		async function backup(mnemonicPhrase) {
 			console.log('backup()')
 			openModalId('#walletBackp')
 			closeModalId('#settingsModal')
 
-			displayMnemonic.innerHTML = ` <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor"> <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>Write down your mnemonic phrase to access your wallet in the future! :</h3> <div class="alert alert-warning alert-dismissible fade show"> <strong>${wallet.mnemonic.phrase}</strong> </div> `
+			// -----------------
+			// get mnemonicphrase
+			// -----------------
+
+			//  IS UNBACKEDWALLET?
+			const unbackedWallet = localStorage.getItem('unbackedWallet');
+			if (!unbackedWallet) {
+				console.warn('No unbackedWallet found. Checking for jsonWallet.');
+
+			// 3-  NO UNBACKED WALLET, is JSONWALLET?
+				const jsonWallet = localStorage.getItem('jsonWallet');
+				if (!jsonWallet) {
+					console.warn('No jsonWallet found.');
+							
+				} else {
+					// console.warn('3- YES JSON WALLET')
+					console.warn('3- jsonWallet found. Checking for jsonWalletPassword.');
+					const jsonWalletPassword = localStorage.getItem('jsonWalletPassword');
+					if (!jsonWalletPassword) {
+						console.warn('No jsonWalletPassword found.');
+						console.error('No jsonWalletPassword found.');
+
+						return
+
+					} else {
+						console.warn('jsonWallet and jsonWalletPassword found.');
+						// GET password , decript the wallet
+
+					
+					}
+
+				}
+			} else {
+				// Handle unbackedWallet
+			console.warn('2- YES unbackedWallet', unbackedWallet)
+
+			}
+
+			// -----------------
+
+			displayMnemonic.innerHTML = ` <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor"> <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>Write down your mnemonic phrase to access your wallet in the future! :</h3> <div class="alert alert-warning alert-dismissible fade show"> <strong>${JSON.parse(unbackedWallet)}</strong> </div> `
 			setTimeout(() => {
 				const checkbox = document.getElementById('mnemonicBackedup');
 				const button = document.getElementById('closeBackupmodal');
@@ -2642,19 +2696,67 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		}
 
 		async function restoreWallet() {
-			console.log('restoreWallet()')
+			console.warn('restoreWallet()')
 			openModalId('#walletRestore')
 			closeModalId('#settingsModal')
+
+
+
+				// DETECT IF ARE WORDS OR PRIVATE KEYS
+				const input = document.getElementById("seedTextarea").value.trim();
+				const privateKeyRegex = /^0x[a-fA-F0-9]{64}$/;
+				const seedPhraseRegex = /^(\b[A-Za-z]+\b\s){11}(\b[A-Za-z]+\b)$/;
+
+				
+
 
 			seedTextarea.addEventListener('input', function (evt) {
 				console.log(this.value);
 
-				let cntwrds = countWords(this.value)
-				if (cntwrds >= 12) {
-					setWalletRestore.disabled = false;
-				} else {
-					setWalletRestore.disabled = true;
+				// IF PRIVATE KEY
+				if (privateKeyRegex.test(this.value)) {
+					console.warn("Private Key Detected");
+					seedTextarea.classList.add("is-valid");
 				}
+
+				// IF SEEDPHRASE
+				else if (seedPhraseRegex.test(this.value)) {
+					// else if (seedPhraseRegex.test(this.value.trim())) {
+
+						let cntwrds = countWords(this.value)
+
+				// 		if (cntwrds >= 12) {
+				// 	setWalletRestore.disabled = false;
+				// } else {
+				// 	setWalletRestore.disabled = true;
+
+
+					if (cntwrds >= 12) {
+						console.warn("Seed Phrase complete!");
+						setWalletRestore.disabled = true;
+						seedTextarea.classList.add("is-valid");
+						// HERE
+					setWalletRestore.disabled = false;
+
+
+					} else {
+						console.warn("less than 12 words");
+						setWalletRestore.disabled = false;
+						setWalletRestore.disabled = true;
+
+					}
+				}
+
+				else{
+					console.warn("not valid");
+					seedTextarea.classList.remove("is-valid");
+					// seedTextarea.classList.add("is-valid");
+
+				}
+
+			
+
+
 
 			});
 		}
@@ -2666,15 +2768,50 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		}
 
 		async function restoreSeed() {
-			console.log('restoreSeed()')
+			console.warn('restoreSeed()')
 
-			let seed = seedTextarea.value
-			console.log('seed:', seed)
+				// // IF PRIVATE KEY
+				// if (privateKeyRegex.test(input)) {
+				// 	console.warn("Private Key Detected");
+					
+				// }
+
+				// // IF SEEDPHRASE
+				// else if (seedPhraseRegex.test(input)) {
+				// 	console.warn("Seed Phrase Detected");
+
+				// }
+
+			// NUEVO METODO V2
+			// gets the first private key and stores a json encrypted wallet with just one priv key and remembers the password instead
+				let seed = seedTextarea.value.trimStart().trimEnd();
+				let w = ethers.Wallet.fromPhrase(seed);
+				let pk = w.privateKey
+
+				let signer = await new ethers.Wallet(pk) 
+				let password= ''
+				localStorage.setItem('jsonWalletPassword', password);// save password in localstorage
+				await localStorage.removeItem('unbackedWallet')
+
+				// await localStorage.removeItem('jsonWallet')
+				console.log('signer:', signer)
+				await init(signer)
+
+				// now encrypt the json wallet and save it lo localstorage
+				let encSigner = await signer.encrypt(password)
+				localStorage.setItem('jsonWallet',encSigner )
+				let decryptedWallet = ethers.Wallet.fromEncryptedJson()
+				
+
+				// ...
+			// let seed = seedTextarea.value
+			// console.log('seed:', seed)
 
 			// localStorage.setItem('unbackedWallet', seed)
-			await localStorage.setItem('unbackedWallet', JSON.stringify(seed))
+			// await localStorage.setItem('unbackedWallet', JSON.stringify(seed))
 
-			await localStorage.removeItem('jsonWallet')
+
+
 
 			closeModalId('#walletRestore')
 
@@ -2766,6 +2903,8 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
                 console.log("recordData:", recordData);
 				
 				console.warn('suscesfully updated DID')
+				Toast.fire({ icon: 'success', title: 'suscesfully updated DID' });
+				
 
             } catch (error) {
                 console.error("An error occurred:", error);

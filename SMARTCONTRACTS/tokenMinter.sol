@@ -1,3 +1,4 @@
+// deployed to sepolia https://sepolia.etherscan.io/address/0xAB94891852f2358145738f11D118CbD8af994f1e
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -25,7 +26,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 
 
 
-contract trokToken is ERC20, AccessControl, ERC20Permit {
+contract trokTokenMinter is ERC20, AccessControl, ERC20Permit {
     using ECDSA for bytes32;
     using Counters for Counters.Counter;
 

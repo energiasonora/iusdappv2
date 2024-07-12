@@ -167,7 +167,6 @@ a,
 	flex-wrap: wrap;
 	align-items: center;
 	width: 100%;
-	/* padding: 2.5em 2.75em 2.5em 1.5em; */
 	padding: 1.5em 0.75em 2.5em 1.5em;
 	text-align: left;
 
@@ -308,6 +307,8 @@ a,
 
 @media screen and (max-width: 40em) {
 	.codrops-header {
+		/* background: red; */
+		padding: 0.5em 0 0 0;
 		/* display: block; */
 		/* padding: 4em 1em 0; */
 		/* text-align: center; */

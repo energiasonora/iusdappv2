@@ -3,7 +3,7 @@
 a sovereign decentralized platform (SDP) for peer to peer  public and private communication.
 
 # LINKS
-demo https://iusdapp.web.app
+demo https://iusnaturalis.web.app
 git https://github.com/energiasonora/iusdappv2
 
 
@@ -24,7 +24,7 @@ yarn parcel src/index.html  --port 4343 --https
 ```
 nvm use 20
 yarn parcel src/index.html --dist-dir public  --public-url ./
-firebase deploy --only hosting:meterchat
+firebase deploy --only hosting:iusnaturalis
 ```
 
 

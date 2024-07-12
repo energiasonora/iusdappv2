@@ -54,8 +54,8 @@
 
 
         // import { stark, Account, ec, json, RpcProvider, hash, CallData } from 'starknet';
-        import { stark, Account, ec, json, RpcProvider, hash, CallData, num, Contract, WeierstrassSignatureType, encode } from 'starknet';
-        window.hash = hash;
+        // import { stark, Account, ec, json, RpcProvider, hash, CallData, num, Contract, WeierstrassSignatureType, encode } from 'starknet';
+        // window.hash = hash;
 
 
         import { Polybase } from "@polybase/client";
@@ -65,13 +65,31 @@
         async function init() {
 
             console.log(`
-            
-███████╗████████╗ █████╗ ██████╗ ██╗  ██╗██╗██████╗ 
-██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║ ██╔╝██║██╔══██╗
-███████╗   ██║   ███████║██████╔╝█████╔╝ ██║██║  ██║
-╚════██║   ██║   ██╔══██║██╔══██╗██╔═██╗ ██║██║  ██║
-███████║   ██║   ██║  ██║██║  ██║██║  ██╗██║██████╔╝
-╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ 
+
+██╗██╗   ██╗███████╗
+██║██║   ██║██╔════╝
+██║██║   ██║███████╗
+██║██║   ██║╚════██║
+██║╚██████╔╝███████║
+╚═╝ ╚═════╝ ╚══════╝
+                    
+
+███╗   ██╗ █████╗ ████████╗██╗   ██╗██████╗  █████╗ ██╗     ██╗███████╗
+████╗  ██║██╔══██╗╚══██╔══╝██║   ██║██╔══██╗██╔══██╗██║     ██║██╔════╝
+██╔██╗ ██║███████║   ██║   ██║   ██║██████╔╝███████║██║     ██║███████╗
+██║╚██╗██║██╔══██║   ██║   ██║   ██║██╔══██╗██╔══██║██║     ██║╚════██║
+██║ ╚████║██║  ██║   ██║   ╚██████╔╝██║  ██║██║  ██║███████╗██║███████║
+╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝
+                                                                       
+
+██████╗  █████╗ ██████╗ ██████╗ 
+██╔══██╗██╔══██╗██╔══██╗██╔══██╗
+██║  ██║███████║██████╔╝██████╔╝
+██║  ██║██╔══██║██╔═══╝ ██╔═══╝ 
+██████╔╝██║  ██║██║     ██║     
+╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝     
+                                                                              
+
                                                     
 `);
             // ------------------------------------------
@@ -97,27 +115,27 @@
 
             // ------------------------------------------
             // GENERATE STARKNET KEYPAIR WITH STARKNETJS
-            result.innerHTML += '<br><br><strong> ✅STARKNET  KEYPAIR V2  </strong>:'
+            // result.innerHTML += '<br><br><strong> ✅STARKNET  KEYPAIR V2  </strong>:'
 
-            let starknetPrivKey = localStorage.getItem('starknetPrivKey');
-            if (!starknetPrivKey) {
-                starknetPrivKey = stark.randomAddress();
-                console.log('New AX_ACCOUNT:\nprivateKey=', starknetPrivKey);
-                localStorage.setItem('starknetPrivKey', starknetPrivKey);
-                console.log('starknetPrivKey SAVED INTO LOCALSTORAGE');
-            } else {
-                console.log('starknetPrivKey already exists in localStorage:', starknetPrivKey);
-            }
+            // let starknetPrivKey = localStorage.getItem('starknetPrivKey');
+            // if (!starknetPrivKey) {
+            //     starknetPrivKey = stark.randomAddress();
+            //     console.log('New AX_ACCOUNT:\nprivateKey=', starknetPrivKey);
+            //     localStorage.setItem('starknetPrivKey', starknetPrivKey);
+            //     console.log('starknetPrivKey SAVED INTO LOCALSTORAGE');
+            // } else {
+            //     console.log('starknetPrivKey already exists in localStorage:', starknetPrivKey);
+            // }
 
-            result.innerHTML += '<br><strong> PRIVATE KEY TO SAVE:</strong> ' + starknetPrivKey;
-            const starkKeyPubAX = ec.starkCurve.getStarkKey(starknetPrivKey);
-            const AXConstructorCallData = CallData.compile({ owner: starkKeyPubAX, guardian: '0', });
-            const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
-            const AXcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, argentXaccountClassHash, AXConstructorCallData, 0);
-            console.log('Precalculated account address= ✅', AXcontractAddress);
-            modifiedHexString = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
-            console.log('modified address:', modifiedHexString);
-            result.innerHTML += '<br><br><strong>STARKNET ACCOUNT ADDRESS</strong>:<br>  ' + modifiedHexString + '✅'
+            // result.innerHTML += '<br><strong> PRIVATE KEY TO SAVE:</strong> ' + starknetPrivKey;
+            // const starkKeyPubAX = ec.starkCurve.getStarkKey(starknetPrivKey);
+            // const AXConstructorCallData = CallData.compile({ owner: starkKeyPubAX, guardian: '0', });
+            // const argentXaccountClassHash = '0x029927c8af6bccf3f6fda035981e765a7bdbf18a2dc0d630494f8758aa908e2b';
+            // const AXcontractAddress = hash.calculateContractAddressFromHash(starkKeyPubAX, argentXaccountClassHash, AXConstructorCallData, 0);
+            // console.log('Precalculated account address= ✅', AXcontractAddress);
+            // modifiedHexString = AXcontractAddress.slice(0, 2) + '0' + AXcontractAddress.slice(2);
+            // console.log('modified address:', modifiedHexString);
+            // result.innerHTML += '<br><br><strong>STARKNET ACCOUNT ADDRESS</strong>:<br>  ' + modifiedHexString + '✅'
 
             // return
 
