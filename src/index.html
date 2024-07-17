@@ -184,7 +184,7 @@
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v 3.2 </span>
+			<span>v3.4 </span>
 		</nav>
 	</div>
 
@@ -194,7 +194,7 @@
 
 
 <div class="search" id="chatContainer">
-	<button id="btn-search-close" class="btn btn--search-close" aria-label="Close search form"><svg class="icon icon--cross"><use xlink:href="#icon-cross"></use></svg></button>
+	<button id="btn-search-close" class="btn btn--search-close" aria-label="Close search form" onclick="event.stopPropagation();deleteChat((this.parentElement))"><svg class="icon icon--cross"><use xlink:href="#icon-cross"></use></svg></button>
 
 	<div id="chatheader" class="">
 		<span id="chatAddress"></span>
@@ -377,8 +377,8 @@
 
 					<br>
 					<br>
-						<input type="checkbox" id="muteCheckbox" name="muteCheckbox">
-						<label for="muteCheckbox">Make Insecure(doenst require a password unlock the wallet)</label>
+						<!-- <input type="checkbox" id="muteCheckbox" name="muteCheckbox">
+						<label for="muteCheckbox">Make Insecure(doenst require a password unlock the wallet)</label> -->
 					<hr>
 
 					<h4>Language</h4>
@@ -395,14 +395,31 @@
 
 					<hr>
 
-					<h4>Audio</h4>
+					<h4>Signatures to broadcast</h4>
+
+					<ul class="options" id="sig2Broadcast">
+					<li>lkasdmfklnsfdlkgnsdfpgioenpwnglkfdsxnclkdsnklfdnsalkfnldksanflksndfl</li>
+					<li>nrew,nernpnvopxcoivopcxiovidopixcopvioxcpvocxipvoickxpvoicxopviocpx</li>
+					
+					
+					<button  class="btn btn-primary">publish</button>
+					<span>
+						<input type="checkbox" id="muteCheckbox" name="muteCheckbox">
+							<label for="muteCheckbox">AutoPublish(when its connected to the internet)</label>
+					</span>
+
+
+					</ul>
+
+					<hr>
+					<!-- <h4>Audio</h4>
 
 					<div class="options" id="audioOptions">
 						<input type="checkbox" id="muteCheckbox" name="muteCheckbox">
 						<label for="muteCheckbox">Mute</label>
 					</div>
 
-					<hr>
+					<hr> -->
 
 					<h4>Chats</h4>
 
@@ -471,6 +488,7 @@
 		/*********************************************************************************************
 		.) VARIABLES
 		// https://sepolia.etherscan.io/address/0xc4bF5CbDaBE595361438F8c6a187bDc330539c60#code
+
 		**********************************************************************************************/
 		window.optionsList = [
 		{
@@ -482,7 +500,9 @@
 				"TOKEN_CHAINID": '83',
 				"EXPLORER": 'https://scan-warringstakes.meter.io',
 				"ERC20_CONTRACT_ADDRESS": "0x8a419ef4941355476cf04933e90bf3bbf2f73814",//MTRG token
-				"REGISTRY_CONTRACT_ADDRESS":"0x70F0B5fa20C296703fe101f294913cd1B6cCE053"
+				"REGISTRY_CONTRACT_ADDRESS":"0x70F0B5fa20C296703fe101f294913cd1B6cCE053",
+				"POLYBASE_DB" :"https://explorer.testnet.polybase.xyz/studio/pk%2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3%2FSTARKID/collections/STARKID",
+				"ZK_PUBKEY" :"2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3"
 			},
 		]
 		// https://docs.meter.io/developer-documentation/introduction
@@ -516,6 +536,7 @@ console.log(`
 					console.log('init()')
 	
 					reloadTranslations()
+					// await loadContacts()
 	
 
 
@@ -539,29 +560,35 @@ console.log(`
 				const t2AddrValue = urlParams.get('T2Addr');
 				if (t2AddrValue !== null) {
 					console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
-					openSearch()
-	
-					// check did
+					openChat()
+					
+					
+					// const ethAddress = t2AddrValue.match(/0x[a-fA-F0-9]{40}/)[0];
+					// console.log('chatwith:',ethAddress);  // Output: 0x28316586D8AE43BCa91Bb0D14D1EB9241Aa2C873
+					// await chatWith(ethAddress)//mal addre3ss
+					
+					// check if has did
 					// const regex = /^did:meter:0x[a-fA-F0-9]{64}$/;
-						const regexDID = /^did:meter:0x[a-fA-F0-9]{40}$/;
+						const regexDID = /^did:ius:0x[a-fA-F0-9]{40}$/;
 						const regexAddress = /^0x[a-fA-F0-9]{40}$/;
 						if (regexDID.test(t2AddrValue)) {
-							console.warn('✅ t2AddrValue is in the correct format.');
-	
 							// RESOLVE DID
-							console.warn('FETCHING DID: ',t2AddrValue)
+							console.warn('✅ t2AddrValue is in the correct format, FETCHING DID: ',t2AddrValue)
 							let didData = await fetchDID(t2AddrValue)
-							console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
-						
+							// d=didData;
+							// console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
+							await chatWith(didData.data.alias,JSON.parse(didData.data.avatar))
+							console.warn( ` alias: ${didData.data.alias}`);
+							document.getElementById('avatarImage').src =JSON.parse(didData.data.avatar)
 							// ?????????????????????????????????????????
 							// HAcer aqui o en SaveContactsToLocalStorage la verificacion de si existe un did?
 							// ?????????????????????????????????????????
-							let contact = { address: didData.data.alias, username: null, avatar: null, did: t2AddrValue }
+							let contact = { address: didData.data.alias, username: null, avatar: didData.data.avatar, did: t2AddrValue }
 							console.warn('CONTACTO POR URL!',contact)
 							
 							SaveContactsToLocalStorage(contact);
 	
-							await chatWith(didData.data.alias)
+							// await chatWith(didData.data.alias,JSON.parse(didData.data.avatar))
 	
 						} 
 						else if (regexAddress.test(t2AddrValue)) {
@@ -580,7 +607,7 @@ console.log(`
 				// -----------------------------------------
 	
 					await getChatAddresses()
-					 loadContacts()
+					 await loadContacts()
 					await listenAllNewAddresses()
 					
 					
@@ -1022,7 +1049,9 @@ if (!chatETHPrivKey) {
 			userData.innerHTML = 'balance:'+ balance +` <svg xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> `;
 
 			// 4- CREATE DID IF IT EXISTS READ IT (1st TRY read then write)
-            let did = `did:meter:${signer.address}`
+            // let did = `${signer.address}`; //JUST THE  ADDRESS
+            // let did = `did:meter:${signer.address}`
+            let did = `did:ius:${signer.address}`
 
 			// IF. READ DID 
 			console.log('💬 READ YOUR DID:', did)
@@ -1036,12 +1065,23 @@ if (!chatETHPrivKey) {
 				let alias = signer.address;
 				let privData = '';
 				let cid = '';
-				const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
-				if (result) {
-					console.log('The DID record was created successfully.');
-				} else {
-					console.warn('Failed to create the DID record.');
+				try {
+					const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
+					if (result) {
+						console.log('The DID record was created successfully.');
+					} else {
+						console.warn('Failed to create the DID record.');
+					}
+				} catch (error) {
+					console.error('An error occurred while creating the DID record:', error);
 				}
+
+				// const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
+				// if (result) {
+				// 	console.log('The DID record was created successfully.');
+				// } else {
+				// 	console.warn('Failed to create the DID record.');
+				// }
 				
 			} else {
 				console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
@@ -1285,7 +1325,7 @@ function displayQR(data) {
 
 			// var baseUrl = 'https://192.168.43.129:4242' + '/';
 			// var baseUrl = 'https://meterchat.web.app' + '/';
-            let did = `did:meter:${userAddress}`
+            let did = `did:ius:${userAddress}`
 			// const parameters = { T2Addr: userAddress, };
 			const parameters = { T2Addr: did };
 			const urlParams = createURLParams(parameters);
@@ -1386,7 +1426,7 @@ function displayQR(data) {
 				// await chatWith(t2AddrValue)
 
 					//  CREATE AND RESOLVE DID
-					let did = `did:meter:${t2AddrValue}`
+					let did = `did:ius:${t2AddrValue}`
 
 let didData = await fetchDID(did)
 console.log( 'didData', didData)
@@ -1420,6 +1460,7 @@ else {
 
 
 		async function selectChat(el) {
+			console.warn('selectChat()')
 			const address = el.dataset.address;
 			console.log('CLICKED CONTACT (selectChat()):', address);
 			var imgElement = el.querySelector("img");
@@ -1429,7 +1470,6 @@ else {
 			plToggle()
 
 			// 2- chat with address funciton 
-			
 			let currentChat = document.body.getAttribute('currentChat');
 			console.warn('CURRENTCHAT', currentChat)
 			
@@ -1440,7 +1480,7 @@ else {
 			if (alreadyChatting) {
 				// Do something if alreadyChatting is true
 				console.log('already chatting with this contact')
-				openSearch()
+				openChat()
 			} else {
 				// Do something else if alreadyChatting is false
 				console.log('start chatting with new contact')
@@ -1524,13 +1564,13 @@ else {
 
 		async function  getChatAddresses(){
 			const allConversations = await iusnaturalisxmtp.conversations.list()
-			console.log('YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP")
+			console.warn('YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP at getChatAddresses()")
 
 			const peerAddressesArray = [];
 
 			allConversations.forEach(async (conversation, index) => {
 				peerAddressesArray.push(conversation.peerAddress);
-				console.warn('allConversations foerEach')
+				console.log('allConversations foerEach')
 				// ADD ADDRESS TO AGENDA IN UI
 						// Here
 
@@ -1564,10 +1604,9 @@ else {
 		
 		// return
 		// GOT TO CHAT TAB
-		console.log(' doing openSearch')
-		openSearch()
+		console.log(' doing openChat')
+		openChat()
 console.warn('------- PREPARING CHAT ----------');
-
 		localStorage.setItem('toAddress', toAddr)
 		
 		// ---------
@@ -1586,10 +1625,7 @@ if (imgsrc != null){
 	 avatar = "./anonym.jpg"
 }
 // add address in UI
-// let htmlData =  `<address>${toaddr}</address><br><p>no info available</p>`;
 let htmlData = `<address>${toAddr} <svg id="" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br><p>no info available</p>`;
-
-
 let shortAddr = toAddr.substring(0, 6) + "..." + toAddr.substring(38, 42);
 
 chatAddress.innerHTML = `<div class="">
@@ -1810,7 +1846,9 @@ for await (const message of await conversation.streamMessages()) {
 
 			}
 
+			// CAMBIAR POR SaveContactsToLocalStorage??
 			localStorage.setItem('unknowncontacts', JSON.stringify(unknownContacts));
+
 
 		}
 
@@ -1834,36 +1872,25 @@ async function loadContacts() {
 			let contct = document.getElementById('cwContacts')
 			contct.innerHTML = ''
 			let cwContacts = JSON.parse(window.localStorage.getItem('contacts'));
-			if (cwContacts) {
-				console.log('YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContacts()')
+			if (!cwContacts) {
+				console.warn('YOU HAVE', 0, 'CONTACTS in LOCALSTORAGE at loadContacts()')
 
-			// Create an array to store promises for asynchronous tasks
+			}
+				if (cwContacts) {
+				console.warn('YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContacts()')
 			const promises = [];
-
 			cwContacts.forEach((el, index) => {
-				// const isAddressInArray = paa.includes(el.address);// paa?
-				// const isAddressInArray = paa.includes(el.address);// paa?
-				// console.log('paa?:' ,paa)
-
-				// if (isAddressInArray) {
-				// 	console.log(`Contact ${index} IS in your contacts ✅  ${el.address}`);
-				// } else {
-				// 	console.log(`This address IS NOT in your contacts ❌ ${el.address}`);
-				// }
-
-
 				// is username set?
 				if (el.username || null) {
-					console.log('username is not null');
+					console.log('✅ username is not null');
 					contactInfo = `<span>${el.username} <span>`;
 				} else {
-					console.log('username is null');
+					console.log('❌ username is null');
 					let shortAddr = el.address.substring(0, 6) + "..." + el.address.substring(38, 42);
 					contactInfo = `<span>${shortAddr} <span>`;
 				}
 
-				// let did = `did:ethr:${el.address}`;
-				let did = `did:meter:${el.address}`;
+				let did = `did:ius:${el.address}`;
 
 				// Add each asynchronous operation to the promises array
 				promises.push(
@@ -2144,7 +2171,7 @@ localStorage.setItem('contacts', JSON.stringify(contacts));
 
 // SAVE CONTACTS
 function SaveContactsToLocalStorage(contact) {
-	console.log('SaveContactsToLocalStorage()')
+	console.warn('SaveContactsToLocalStorage()',contact)
 	var a = [];
 	a = JSON.parse(localStorage.getItem('contacts')) || [];
 
@@ -2238,6 +2265,7 @@ let shortAddr = toAddr.substring(0, 6) + "..." + toAddr.substring(38, 42);
 }).then((result) => {
 if (result.isConfirmed) {
 	Swal.fire('Saved into your trusted contacts!', '', 'success')
+
 } else if (result.isDenied) {
 	Swal.fire('Address blocked', '', 'info')
 }
@@ -2408,7 +2436,7 @@ removeParam('T2Addr');
 localStorage.removeItem('toAddress')
 
 // GOT TO CHAT TAB
-openSearch()
+openChat()
 
 //clear UI
 chatAddress.innerHTML = ''
@@ -2512,27 +2540,16 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 					}
 
 
-					// COMPLETAR ADDR VERIFICATION
-					// IF ETH 
-					// const checkAdddressType = await validateAddressType(value);
-					// return
-					// const isValid = await isValidAddress(value);
-					// const isValid = await isValidStarkNetAddress(value);
+					//  ADDR VERIFICATION
 					const isValid = await getAddressType(value);
 
 					if (isValid) {
 						console.log(`Address ${value} is valid.`);
 
-						Toast.fire({ 
-							icon: 'success', 
-							title: 'CHAT WITH:', 
-							position: 'center',
-							text: value });
+						Toast.fire({ icon: 'success', title: 'CHAT WITH:', position: 'center', text: value });
 
 							// ---------------------
 							// ANALIZE ADDRESS
-							// const addressType = await getAddressType(address);
-
 							if (isValid === 'ETH') {
 								console.log('Perform action for Ethereum address');
 								let contact = { address: value, username: null, avatar: null, did: null }
@@ -2541,19 +2558,17 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 								await chatWith(value)
 								await deleteChat()
 						
-							} else if (isValid === 'StarkNet') {
+							} 
+							else if (isValid === 'StarkNet') {
 								console.log('Perform action for StarkNet address');
 							// ---------------
 							//  CREATE AND RESOLVE DID
 							let did = `did:starkid:${value}`
-
 							let didData = await fetchDID(did)
 							console.log( 'didData', didData)
-						
 							if (didData.data.alias || null) {
 							console.log('alias is not null', didData.data.alias);
-
-// 	// ---------------
+							// ---------------
 							let contact = { address: didData.data.alias, username: null, avatar: null, did: did }
 							SaveContactsToLocalStorage(contact);
 							await chatWith(didData.data.alias)
@@ -2570,20 +2585,6 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 								console.log('Perform action for invalid address');
 								// Add your code to handle invalid addresses here
 							}
-							// return
-							// ---------------
-							//  RESOLVE DID
-							// let didData = await fetchDID(t2AddrValue)
-							// console.log( 'didData', didData)
-
-							// ---------------
-							// / FIX
-							// functiona como resetar la address
-						// 	let contact = { address: value, username: null, avatar: null, did: null }
-						// 	SaveContactsToLocalStorage(contact)
-						// 	// ---------------
-						// await chatWith(value)
-						// await deleteChat()
 
 
 					} else {
@@ -2901,7 +2902,6 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
                     .record(did)
                     .call("updateAvatar", [newdata]);
                 console.log("recordData:", recordData);
-				
 				console.warn('suscesfully updated DID')
 				Toast.fire({ icon: 'success', title: 'suscesfully updated DID' });
 				
@@ -3273,7 +3273,7 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 								let signer = presigner.connect(provider);
 								console.log('SIGNER!:', signer);
 								// did = `did:ethr:${signer.address}`
-								let did = `did:meter:${signer.address}`
+								let did = `did:ius:${signer.address}`
 
 								console.log('DID: ', did)
 

@@ -1220,7 +1220,7 @@ z-index: -1;
 	  opacity:1;
 	  transition:opacity 1000ms;
 	  visibility: visible;
-	  z-index: 3;
+	  z-index: 4;
   
   }
   
@@ -1630,8 +1630,20 @@ body.swal2-height-auto {
 
 #mintOrUpdate,#updateOnchain{
 	position:absolute;
-	bottom:85px;	
+	bottom:82px;	
 	z-index: 1;
+	background-color: #384b5e;
+	border-radius: initial;
+	border-color: transparent;
+
+}
+
+#mintOrUpdate:hover{
+	background-color: white;
+	color: #384b5e;
+	border-radius: initial;
+	border-color: transparent;
+
 }
 #reloadBalance{
 	cursor: pointer;
@@ -1663,4 +1675,18 @@ body.swal2-height-auto {
 	color: white;
   
 	
+  }
+
+
+  #sig2Broadcast{
+	display: flex;
+	flex-direction: column;
+	word-break: break-all;
+  }
+  #sig2Broadcast li{
+	font-size: x-small;
+  }
+
+  .swal2-confirm{
+	background-color: #2ca72c!important;
   }

@@ -23,7 +23,7 @@
 	}
 
 	function initEvents() {
-		openCtrl.addEventListener('click', openSearch);
+		openCtrl.addEventListener('click', openChat);
 		closeCtrl.addEventListener('click', closeSearch);
 		document.addEventListener('keyup', function(ev) {
 			// escape key.
@@ -33,12 +33,12 @@
 		});
 	}
 
-	function openSearch() {
+	function openChat() {
 		lastFocusedElement = document.activeElement;
 		searchContainer.classList.add('search--open');
 		inputSearch.focus();
 	}
-	window.openSearch = openSearch;
+	window.openChat = openChat;
 
 	function closeSearch() {
 		searchContainer.classList.remove('search--open');

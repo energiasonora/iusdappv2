@@ -231,7 +231,7 @@
         let bob = '0x7A21525Ff49F2E99Cb9dBe74a976862989fD4511'
         let bobPrivkey = '0xa4192a49a98a1adf02fae0878eccb09b57546d9abab1ce3abd63e4f324bae1e9';//0x7A21525Ff49F2E99Cb9dBe74a976862989fD4511
 
-        async function AliceWallet() {
+        async function AliceWallet(provider) {
     // 1- GET PRIV KEY (IF not CREATE IT)
     let AlicePrivKey = localStorage.getItem('AlicePrivKey');
     let alicesigner;
@@ -247,7 +247,7 @@
     } else {
         console.log('AlicePrivKey in localStorage:', AlicePrivKey);
         try { 
-            alicesigner = new ethers.Wallet(AlicePrivKey); 
+            alicesigner = new ethers.Wallet(AlicePrivKey,provider); 
         } catch (error) { 
             console.log(error.message);   
             return null;
@@ -281,7 +281,8 @@
             // aliceAddress.innerHTML = alice;
             bobAddress.innerHTML = bob;
 
-            permitToken.value = '0x2d4C40Ef4f8bd35ae4AEFD260C9fa961B65C51AB';
+            // permitToken.value = '0x2d4C40Ef4f8bd35ae4AEFD260C9fa961B65C51AB';
+            permitToken.value = '0xAB94891852f2358145738f11D118CbD8af994f1e';
             permitChainId.value = '11155111';
             permitAmount.value = 1000000000000000000;
             bobAmount.value = permitAmount.value;
@@ -444,15 +445,6 @@
         // async function send(providerUrl, privateKey, tokenAddress, owner,  recipient, value ) {
         async function send( ) {
             console.log('send()')
-
-            // let providerUrl, privateKey, tokenAddress, owner,  recipient, value;
-            // let providerUrl = 
-            // let  privateKey  = 
-            // let tokenAddress = 
-            // let  owner =
-            // let  recipient = 
-            // let value =
-
 
             const provider = new ethers.JsonRpcProvider(providerUrl);
             const wallet = new ethers.Wallet(privateKey, provider);
@@ -677,6 +669,60 @@ try {
 			});
 
         // ----------
+
+
+// ----------------------------------------
+// INTERACT WITH CONTRACT
+// ----------------------------------------
+ 
+    async function interactWithContract() {
+        console.warn('interactWithContract() ')
+ 
+        const providerUrl = "https://ethereum-sepolia.publicnode.com";
+        let provider = await new ethers.JsonRpcProvider(providerUrl);
+        let aliceWallet = await AliceWallet(provider);
+        let contractAddress= "0xAB94891852f2358145738f11D118CbD8af994f1e"
+        const contract = new ethers.Contract(contractAddress, ABIs.tokenminter, aliceWallet);
+
+        const name = await contract.name();
+        console.log(`Nombre del token: ${name}`);
+
+        const totalSupply = await contract.totalSupply();
+        console.log(`Suministro total: ${ethers.formatUnits(totalSupply, 18)}`);
+        // console.log(`Suministro total: ${ethers.utils.formatUnits(totalSupply, 18)}`);
+
+        // Mint tokens (ejemplo)
+        const amountToMint = ethers.parseUnits('100', 18); // 100 tokens
+        const signature = 'firma_generada_por_un_validador'; // Reemplaza con la firma correcta (de bob?)
+
+// ------------
+ // Example: Call the mint function
+ //  const to = 'ADDRESS_TO_MINT_TO';
+ const to = 'ADDRESS_TO_MINT_TO';
+  const amount = ethers.parseUnits('100', 18); // Adjust the amount as needed
+  const nonce = await contract.getMintNonce(to);
+  const messageHash = ethers.solidityKeccak256(['address', 'uint256', 'uint256'], [to, amount, nonce]);
+  const messageHashBytes = ethers.arrayify(messageHash);
+  
+//   array = ethers.getBytes(value)
+
+  const signature = await wallet.signMessage(messageHashBytes);
+
+  const tx = await contract.mint(to, amount, signature);
+  await tx.wait();
+// ----------
+    try {
+        const tx = await contract.mint(aliceWallet, amountToMint, signature);
+        await tx.wait();
+        console.log(`Tokens minteados: ${amountToMint.toString()}`);
+    } catch (error) {
+        console.error(`Error al mintear tokens: ${error}`);
+    }
+};
+
+
+// interactWithContract().catch(console.error);
+
     </script>
 </body>
 

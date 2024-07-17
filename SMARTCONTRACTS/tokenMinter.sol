@@ -1,7 +1,8 @@
-// deployed to sepolia https://sepolia.etherscan.io/address/0xAB94891852f2358145738f11D118CbD8af994f1e
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
-
+// ____________________________________________________________
+// deployed on sepolia 0xAB94891852f2358145738f11D118CbD8af994f1e
+// ____________________________________________________________
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -10,21 +11,13 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 
 
-// import "@openzeppelin/contracts@4.5.0/utils/Counters.sol";
-
-
-
 // 0jbjetivo: crear un smart contract erc 20 compatible en solidity que sea transmitible con permit(o sea con firmas offchain), y en el cual cada usuario pueda mintear hasta 1480 tokens por dia, y estos tokens solo pueden crearse si estan validados por otro usuario de la red que tenga el rol "validated" 
-
 // PROP
 // pasos:
-
 // Implementar el estándar ERC-20.
 // Implementar el mecanismo permit.
 // Agregar una función de minteo con límites diarios.
 // Asegurar que los tokens se pueden mintear solo si son validados por un usuario con el rol "validated".
-
-
 
 contract trokTokenMinter is ERC20, AccessControl, ERC20Permit {
     using ECDSA for bytes32;
