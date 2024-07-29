@@ -16,7 +16,7 @@ contract DIDRegistryV5 {
         address ethAddress = msg.sender;
         
         // Construct DID string
-        string memory did = string(abi.encodePacked("did:meter:", toHex(ethAddress)));
+        string memory did = string(abi.encodePacked("did:ius:", toHex(ethAddress)));
 
         // Calculate DID hash
         bytes32 didHash = keccak256(bytes(did));
@@ -44,7 +44,7 @@ contract DIDRegistryV5 {
         address ethAddress = msg.sender;
         
         // Construct DID string
-        string memory did = string(abi.encodePacked("did:meter:", toHex(ethAddress)));
+        string memory did = string(abi.encodePacked("did:ius:", toHex(ethAddress)));
 
         // Calculate DID hash
         bytes32 didHash = keccak256(bytes(did));
@@ -64,7 +64,7 @@ contract DIDRegistryV5 {
     // Function to convert address to hex string
     function toHex(address _addr) internal pure returns (string memory) {
         bytes32 value = bytes32(uint256(uint160(_addr)));
-        bytes memory alphabet = "0123456789abcdef";
+        bytes memory alphabet = "0123456789aAbBcCdDeEfF";
         bytes memory str = new bytes(42);
         str[0] = '0';
         str[1] = 'x';
@@ -79,9 +79,9 @@ contract DIDRegistryV5 {
  
    function validateDIDFormat(string memory _did) internal pure returns (bool) {
         bytes memory didBytes = bytes(_did);
-        bytes memory prefix = bytes("did:meter:");
+        bytes memory prefix = bytes("did:ius:");
 
-        // Check for exact prefix "did:meter:"
+        // Check for exact prefix "did:ius:"
         if (didBytes.length != prefix.length + 42) {
             return false;
         }
