@@ -1636,6 +1636,8 @@ body.swal2-height-auto {
 	border-radius: initial;
 	border-color: transparent;
 
+	position: sticky
+
 }
 
 #mintOrUpdate:hover{

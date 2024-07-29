@@ -34,6 +34,7 @@
     <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="https://bundle.run/buffer@6.0.3"></script>
 
     <script>
 
@@ -98,6 +99,41 @@
         let recipientPublicKey = '0x0418444c554d28ed39b12afe6d15b0fcd0a028f23444d060d4bdfd1ad8ab3efcb49a0c07fcc1baeb01e94f1566be15de5ed3a6cfa6e7172fbcfb38aecd5b3bcb00'
 
   
+        window.Buffer = buffer.Buffer // getting this from buffer module for frontend.
+
+
+
+
+
+        // AGREGADO PAR DIVIDIR FIRMAS/
+        async function split(signature){
+ 
+             sig =await splitSig(signature)
+            let v = sig.v
+            let r = sig.r
+            let s = sig.s
+            console.warn('r:', r);
+            console.warn('s:', s);
+            console.warn('v:',v);
+       
+
+}
+
+
+window.Buffer = buffer.Buffer // getting this from buffer module for frontend.
+        const splitSig = (sig) => {
+            const pureSig = sig.replace("0x", "")
+            const r = new Buffer(pureSig.substring(0, 64), 'hex')
+            const s = new Buffer(pureSig.substring(64, 128), 'hex')
+            const v = new Buffer((parseInt(pureSig.substring(128, 130), 16)).toString());
+            return {
+                r,
+                s,
+                v
+            }
+        }
+
+
 
     </script>
 
@@ -233,6 +269,10 @@ async function decryptMessage(){
 
 
 }
+
+
+ 
+
 </script>
 </body>
 

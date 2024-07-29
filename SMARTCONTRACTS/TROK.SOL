@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+// ____________________________________________________________
+// deployed on arbitrum sepolia  0x4874d782022507E9a4F82C6D6Df32e332A8D30fB
+// ____________________________________________________________
+
+import "@openzeppelin/contracts@5.0.1/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts@5.0.1/token/ERC20/extensions/ERC20Permit.sol";
+import "@openzeppelin/contracts@5.0.1/access/AccessControl.sol";
+
+contract MyToken is ERC20, ERC20Permit, AccessControl {
+    constructor() ERC20("TrokToken", "TROK") ERC20Permit("TrokToken") {
+        _grantRole(VALIDATOR_ROLE, msg.sender);
+    }
+
+    bytes32 public constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
+    uint256 public constant MAX_MINT_AMOUNT = 1440 * (10 ** 18); // Adjusted to 1440 tokens per day
+
+    mapping(address => uint256) public lastMintTimestamp;
+
+        function mint(address to, uint256 amount) external {
+            require(hasRole(VALIDATOR_ROLE, msg.sender), "Caller is not a validator");
+            require(amount <= MAX_MINT_AMOUNT, "Mint amount exceeds daily limit");
+            require(block.timestamp - lastMintTimestamp[to] >= 1 days, "Minting too soon");
+            _mint(to,amount);
+
+        }
+      
+
+}
+

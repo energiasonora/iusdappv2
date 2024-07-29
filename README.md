@@ -32,7 +32,8 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
-v3.4
--fixed ui bugs. when clicking oiutside navbar should close the navbar when comming fron t2addr (external) link 
+v4.0 improved DID management
+v3.4 https://youtu.be/p4xMzkIS5wQ
+- fixed ui bugs. when clicking oiutside navbar should close the navbar when comming fron t2addr (external) link 
 - preparing UI to broadcast signatures functionality
 - contacts: add functionality for states(trust:green, block:red, none:white)

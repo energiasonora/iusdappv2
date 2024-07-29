@@ -84,12 +84,12 @@
         </div>
       </div>
     </div>
-	<button class="btn btn-primary fullwidth" id="mintOrUpdate" onclick="event.stopPropagation(); mintOrUpdate()" disabled> Mint
+	<!-- <button class="btn btn-primary fullwidth" id="mintOrUpdate" onclick="event.stopPropagation(); mintOrUpdate()" disabled> Mint -->
 		<!-- <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
 			<path
 				d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z" />
 		</svg> -->
-	</button>
+	<!-- </button> -->
 
 	<button class="btn btn-primary fullwidth" style="display: none;" id="updateOnchain" onclick="event.stopPropagation(); updateOnchainDID()" disabled> Update
 	</button>
@@ -109,7 +109,9 @@
 	
 </ul>
 
+<button class="btn btn-primary fullwidth" id="mintOrUpdate" onclick="event.stopPropagation(); mintOrUpdate()" disabled> Mint
 
+</button>
 
   </div>
 
@@ -182,9 +184,16 @@
 <div id="qrresult"> </div>
 
 
+<!-- boton -->
+ <!-- ADD PUBLIC DOCUMENTS -->
+<button class="btn btn-primary btn-lg " id="createIPFSDelivery"
+onclick="event.stopPropagation();publishInDID((this.parentElement))" disabled data-translate="publicipfs">
+<i class="fa-solid fa-envelope-circle-check"></i> Preparer comme Envoi
+IPFS</button>
+
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v3.4 </span>
+			<span>v4.0 </span>
 		</nav>
 	</div>
 
@@ -243,7 +252,49 @@
 
 
 <!-- MODALS -->
+	<!-- Modal DID SAVE -->
+	
+  <!-- Modal -->
+  <div class="modal fade" id="didManagerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="didManagerModalLabel">User Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- First row: Picture and Change Avatar button -->
+          <div class="row mb-3">
+            <div class="col-12 text-center">
+              <img src="https://via.placeholder.com/150" id="aliasAvatar"  alt="Avatar" class="img-thumbnail" >
+              <div class="mt-2">
+                <button class="btn btn-secondary btn-sm" id="changeAvatar">Change Avatar</button>
+              </div>
+            </div>
+          </div>
+          <!-- Second row: Text input field and additional form -->
+          <div class="row mb-3">
+            <div class="col-12">
+              <label for="aliasName" class="form-label">Alias Name</label>
+              <input type="text" class="form-control" id="aliasName" placeholder="Enter alias name">
+              <form class="mt-3">
+                <div id="additionalFields"></div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="addField()">Add More Fields</button>
+              </form>
+            </div>
+          </div>
+          <!-- Third row: Save DID button -->
+          <div class="row">
+            <div class="col-12 text-center">
+              <button type="button" class="btn btn-primary">SAVE DID</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
+	<!-- fin Modal DID SAVE -->
 
 	<!-- Modal BACKUP WALLET -->
 	<div class="modal fade" data-bs-backdrop="static" id="walletBackp" tabindex="-1" role="dialog" aria-labelledby=""
@@ -557,6 +608,11 @@ console.log(`
 				// -----------------------------------------
 				//  CHECK IF USER COMES FROM A LINK
 				const urlParams = new URLSearchParams(window.location.search);
+				const arroba = urlParams.get('@');
+				if (arroba !== null) {
+					console.warn('there is @ in url!',arroba)
+				}
+
 				const t2AddrValue = urlParams.get('T2Addr');
 				if (t2AddrValue !== null) {
 					console.warn(`T2Addr FOUND! TRYING TO CHAT WITH: ${t2AddrValue}`);
@@ -3120,12 +3176,19 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		avatarIMG.onclick = function (e) {
 			console.log('avatarIMG clicked')
 			e.preventDefault()
-			loadCroppedImg()
-			// fileCreateItemFile.click();
+
+			openModalId('#didManagerModal')
+			// loadCroppedImg()
 
 		};
 
+		changeAvatar.onclick = function (e) {
+			console.log('aliasAvatar clicked')
+			e.preventDefault()
 
+			loadCroppedImg()
+
+		};
 
 		async function compressImage(imageSrc, maxSizeKB) {
 			return new Promise((resolve, reject) => {
@@ -3451,6 +3514,14 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 			}
 		}
 
+
+		function addField() {
+      const fieldContainer = document.getElementById('additionalFields');
+      const newField = document.createElement('div');
+      newField.classList.add('mb-2');
+      newField.innerHTML = '<input type="text" class="form-control" placeholder="Enter text">';
+      fieldContainer.appendChild(newField);
+    }
 			</script>
 	</body>
 </html>

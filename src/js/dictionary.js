@@ -53,7 +53,7 @@
         config: "Config",
         burntoken: "Burn UP token",
         filloutfield: "Please fill out this field",
-        publicipfs: "Publish in your DID",
+        publicipfs: "+ Add public document",
         decryptingwallet: "Decrypting wallet ...",
         restore: "Restore",
         walletrestore: "Restore wallet",
