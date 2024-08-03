@@ -2,6 +2,10 @@
 
 :root {
 	--background:#41307c;
+	--mainBk: #41307c;
+	--bckmodal:#262626;
+
+	--background:radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%);
 	--c0: #262626;
 	--c1: #fff;
 	/* --c1: #d17c78; */
@@ -37,6 +41,8 @@ body {
 	background: #282b2f;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	background-image: radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%);
 }
 
 .main-wrap {
@@ -167,7 +173,8 @@ a,
 	flex-wrap: wrap;
 	align-items: center;
 	width: 100%;
-	padding: 1.5em 0.75em 2.5em 1.5em;
+	padding: 0.5em 0.75em 2.5em 1.5em;
+	/* padding: 1.5em 0.75em 2.5em 1.5em; */
 	text-align: left;
 
 }
@@ -192,7 +199,7 @@ a,
 	position: relative;
 	width: 100%;
 	margin: auto 0 0 0;
-	padding: 2.5em 2.75em 2.5em 2em;
+	/* padding: 2.5em 2.75em 2.5em 2em; */
 }
 
 
@@ -910,15 +917,7 @@ z-index: -1;
   
   
   /* QUICI FIXES */
-  
-	  #miniversion{
-	  font-family: 'Major Mono Display', monospace!important;
-  
-		/* font-size: 0.35em; */
-		font-size: 0.75em;
-		position: absolute;
-		bottom: 3px;
-	  }
+ 
   
   
 	  #qrScanVideo{
@@ -1692,3 +1691,15 @@ body.swal2-height-auto {
   .swal2-confirm{
 	background-color: #2ca72c!important;
   }
+
+  #miniversion{
+    font-family:  monospace!important;
+      font-size: x-small;
+      position: absolute;
+
+      /* bottom: 3px; */
+    }
+.hoverIcon{}
+.hoverIcon:hover{
+	color: #0f0;
+}

@@ -18,7 +18,7 @@
 <body>
     <main class="container">
 
-        <h1>PERMIT DEMO</h1>
+        <h1>PERMIT DEMO with ethers v6</h1>
 
 <p id="tokenInfo"></p>
         <!-- Segunda fila con dos columnas -->
@@ -100,10 +100,9 @@
 
     </main>
 
-    <!-- <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script> -->
-
+    
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js"></script> -->
-    <script src="js/ethers-6.13.1.umd.min.js"></script>
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
 
     <!-- <script src="https://bundle.run/buffer@6.0.3"></script> -->
 
@@ -118,7 +117,17 @@
         // let provider = await new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com');
         **********************************************************************************************/
         optionsList = [
+        {
+                "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
+                "TOKEN_CHAINID": '421614',
+                "ERC20_TOKEN_CONTRACT": "0xFb1cb5a6dADDcE008d86f72057265A3afC82d539",
+                "ERC20_TOKEN_NAME": "PDTROK",
+                "ERC20_TOKEN_ABI": 'PermitDeadlineTokenv2',
+                "EXPLORER": 'https://sepolia.arbiscan.io/',
+                "API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+                "ABI": ' [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AccessControlBadConfirmation", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" } ], "name": "AccessControlUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" } ], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [ { "internalType": "string", "name": "str", "type": "string" } ], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" } ], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleRevoked", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_MINT_AMOUNT", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "VALIDATOR_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "nonce", "type": "uint256" } ], "name": "getPermitDeadline", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" } ], "name": "getRoleAdmin", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "hasRole", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "lastMintTimestamp", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "nonces", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "callerConfirmation", "type": "address" } ], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ] '
 
+            },
         {
                 "TOKEN_CHAIN_NAME": 'Sepolia',
                 "TOKEN_CHAINID": '11155111',
@@ -223,12 +232,12 @@
 
         function prefill() {
             console.log("Window has finished loading!");
-            tokenInfo.innerHTML = `<span style="font-size: xx-small;">Token Address ${optionsList[0].ERC20_TOKEN_CONTRACT}</span>`
-            tokenInfo.innerHTML += `<br><span style="font-size: xx-small;">Token chain${optionsList[0].TOKEN_CHAINID}</span>`
+            tokenInfo.innerHTML = `<span style="font-size: xx-small;">Token Address: ${optionsList[0].ERC20_TOKEN_CONTRACT}</span>`
+            tokenInfo.innerHTML += `<br><span style="font-size: xx-small;">Token chain: ${optionsList[0].TOKEN_CHAINID}</span>`
            
             permitToken.value = optionsList[0].ERC20_TOKEN_CONTRACT;
             permitChainId.value = optionsList[0].TOKEN_CHAINID;
-            permitAmount.value = 1000000000000000000;
+            permitAmount.value = 13;
             bobAmount.value = permitAmount.value;
             init()
 
@@ -251,7 +260,7 @@
             document.getElementById('aliceBalance').innerHTML = aliceBalance
             let aliceGasBalance = await checkGasBalance(alice) //troq
             console.log('Alice GAS Balance:', aliceGasBalance)
-            document.getElementById('aliceGas').innerHTML = `<br>gas` + aliceGasBalance
+            document.getElementById('aliceGas').innerHTML = `<br>gas: ` + aliceGasBalance
 
             let bobBalance = await checkERC20Balance(bob) //troq
             console.log('Bob Balance:', bobBalance)
@@ -268,7 +277,7 @@
             // const tokenContract = new ethers.Contract(permitToken.value, ABIs.mytoken, provider);
             // new ethers.Contract( address , abi , signerOrProvider )
             let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
-            const tokenContract = new ethers.Contract(permitToken.value,  JSON.parse(optionsList[0].ABI), provider);
+            const tokenContract = new ethers.Contract(optionsList[0].ERC20_TOKEN_CONTRACT,  JSON.parse(optionsList[0].ABI), provider);
             t = tokenContract
 
         }
@@ -440,15 +449,12 @@
             let alice = aliceWallet.address;
             let alicePrivkey = aliceWallet.privateKey;
             let aliceSigner = await aliceWallet.connect(provider);
-            a=alice; 
+
 
             let bobWallet = await BobWallet();
-            bw=bobWallet;
             let bob = bobWallet.address;
-            b=bob;
             let bobPrivkey = bobWallet.privateKey;
             let bobSigner = await bobWallet.connect(provider);
-            bs = bobSigner;
             // return
 
             let spender = permitAddress.value;
@@ -466,17 +472,18 @@
 
             // contract token
             // let myToken = new ethers.Contract(permitToken.value, JSON.parse(optionsList[0].ABI), provider);
-            let myToken = new ethers.Contract(permitToken.value, JSON.parse(optionsList[0].ABI), provider);
+            let myToken = new ethers.Contract(optionsList[0].ERC20_TOKEN_CONTRACT, JSON.parse(optionsList[0].ABI), provider);
             mt = myToken;
            
             //  get tokenREceiver
-            let tokenOwner =aliceWallet;
-            let tokenReceiver = bobWallet;
+            // let tokenOwner =aliceWallet;
+            // let tokenReceiver = bobWallet;
 
             // nonces
             const v2nonces = await myToken.nonces(alice);
             console.warn("alice's v2nonces:", v2nonces);
-
+            n= v2nonces
+            
             // set the domain parameters
             const domain = {
                 name: await myToken.name(),
@@ -498,9 +505,9 @@
             // set the Permit type values
             const values = {
                 owner: alice,
-                spender: spender,
+                spender: bob,
                 value: amount,
-                nonce: v2nonces,
+                nonce: Number(v2nonces),
                 deadline: deadline,
             };
 
@@ -511,6 +518,7 @@ SIGN
 *********************`)
             // sign the Permit type data with the deployer's private key
             const signature = await aliceSigner.signTypedData(domain, types, values);
+            console.warn('SIGNATURE:', signature)
 
             // split the signature into its components
             const sig = ethers.Signature.from(signature);
@@ -539,35 +547,38 @@ SIGN
 *********************
 PUBLISH PERMIT
 *********************`)
+let tokenWithBobSigner = await myToken.connect(bobSigner);
+
+console.log('DATA TO PERMIT: ',  alice, bob, amount, deadline, sig.v, sig.r, sig.s)
+        //  ESTIMATE GAS FOR PERMIT
+        try {
+        const gasEstimate = await tokenWithBobSigner.permit.estimateGas(
+                    alice,
+                    bob,
+                    amount,
+                    deadline,
+                    sig.v,
+                    sig.r,
+                    sig.s, 
+                );
+
+        console.warn(`Estimated Gas for PERMIT: ${gasEstimate.toString()}`);
+
+        // Set the gas limit to the estimate
+        gasLimit = gasEstimate;
+
+    } catch (error) {
+        console.error(`Error: ${error.message}`);
+    }
+
+
+return
+
             // permit the tokenReceiver address to spend tokens on behalf of the tokenOwner
-           let tokenConnectedToBob = await myToken.connect(bobSigner);
-        //    let tokenConnectedToBob = await myToken.connect(provider);
-            
-           //    const unsignedTrx = await tokenConnectedToBob.permit(
-            const tokenReceiverWithProvider = bobWallet.connect(provider);//signer connected to provider
-            
-            // const unsignedTrx = await tokenConnectedToBob.permit(
-                // const unsignedTrx = await myToken.connect(tokenReceiverWithProvider).populateTransaction.permit(
-                    // const unsignedTrx = await tokenConnectedToBob.permit.populateTransaction(
-                    //     const unsignedTrx = await myToken.connect(tokenReceiverWithProvider).permit(
-                
-                    // tokenOwner.address,
-                    // tokenReceiver.address,
-                    // amount,
-                    // deadline,
-                    // sig.v,
-                    // sig.r,
-                    // sig.s , {
-                    //         gasPrice: gasPrice,
-                    //         gasLimit: 80000 // hardcoded gas limit; change if needed
-                    //     }
-                    // );
 
-//   console.log('unsignedTrx created',unsignedTrx);
-
-let tx;
+        let tx;
             try {
-                tx = await myToken.connect(tokenReceiverWithProvider).permit(
+                tx = await tokenWithBobSigner.permit(
                     tokenOwner.address,
                     tokenReceiver.address,
                     amount,
@@ -589,22 +600,9 @@ let tx;
 // return
 ut = tx;
   console.log(' permit TX created',tx);
-// 
+
 console.warn(`Check allowance of tokenReceiver: ${await myToken.allowance(tokenOwner.address, tokenReceiver.address)}`);
-
-
-// REPUBLISH (when using populateTransaction)
-// let x;
-// try {
-//      x= await bs.sendTransaction(ut)
-//   console.log('tx ',x);
-
-// } catch (error) {
-//                 console.error('error:', error);
-//             Toast.fire({ icon: 'error', title: error.reason });
-//         }
-
-
+ 
 
 return
 
