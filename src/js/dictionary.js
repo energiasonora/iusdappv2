@@ -99,7 +99,9 @@
         checkingnetwork:"checking network...",
         checkingnft:"checking NFT (token Id)...",
         newtitle:"New title",
-    scanqr: "Scan QR"
+        scanqr: "Scan QR",
+        unlockWallet: "Unlock your wallet",
+        rememberPassword:"Remember password"
 
       },
       fr: {
@@ -191,7 +193,9 @@
         checkingnetwork:"vérification du réseau...",
         checkingnft:"vérification de NFT (ID de jeton)...",
         newtitle:"Nouveau titre",
-    scanqr: "scanner le code QR"
+        scanqr: "scanner le code QR",
+        unlockWallet: "Débloquez votre portefeuille",
+        rememberPassword:"Se souvenir du mot de passe"
 
 
       },
@@ -284,7 +288,9 @@
         checkingnetwork:"comprobando la red...",
         checkingnft:"comprobando NFT (ID de token)...",
         newtitle:"Nuevo nombre de archivo",
-    scanqr: "Escanear QR"
+        scanqr: "Escanear QR",
+        unlockWallet: "Desbloquear billetera",
+        rememberPassword:"Recordar password"
 
 
       }

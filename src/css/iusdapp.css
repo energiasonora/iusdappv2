@@ -1578,7 +1578,8 @@ body.swal2-height-auto {
 	  /* FIXES */
 	  #headerNotes{
 		display: flex!important;
-		top: 85px!important;
+		bottom: 0!important;
+		/* top: 85px!important; */
 		position: absolute!important;
 		z-index: 9;
 		width: 100%!important;
@@ -1702,4 +1703,19 @@ body.swal2-height-auto {
 .hoverIcon{}
 .hoverIcon:hover{
 	color: #0f0;
+}
+
+/* .swal2-input {
+	margin-bottom: 20px;
+}
+.custom-checkbox {
+	text-align: left;
+}
+.custom-checkbox input {
+	margin-right: 5px;
+} */
+
+	input[type="text"] ,input[type="password"] {
+		background-color: transparent!important;
+		color:var(--c1)!important
 }
