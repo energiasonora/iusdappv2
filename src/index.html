@@ -205,7 +205,7 @@ IPFS</button> -->
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v4.05 </span>
+			<span>v4.06 </span>
 		</nav>
 	</div>
 
@@ -781,44 +781,43 @@ console.log(`
 						const regexDID = /^did:ius:0x[a-fA-F0-9]{40}$/;
 						const regexAddress = /^0x[a-fA-F0-9]{40}$/;
 						if (regexDID.test(t2AddrValue)) {
-							// RESOLVE DID
+
+										// Split the DID string by ':'
+										const parts = t2AddrValue.split(':');
+
+										// The Ethereum address is the last part
+										const ethAddress = parts[parts.length - 1];
+
+										// Optionally, validate the Ethereum address using ethers.js
+										if (ethers.isAddress(ethAddress)) {
+										console.log("Valid Ethereum Address:", ethAddress);
+										
+										try { await chatWith(ethAddress ) } 
+										catch (error) { Toast.fire('Error', error.message, "error"); }
+										
+									} else {
+										console.log("Invalid Ethereum Address:", ethAddress);
+									}
+									
+									// headerNotes.innerHTML = ``
+
+
+
+
+							// RESOLVE DID https://192.168.43.129:4343/?T2Addr=did:ius:0xD5Dc42A1A5BEC5E86599791460b844b379211c3f
 							console.warn('✅ t2AddrValue is in the correct format, FETCHING DID: ',t2AddrValue)
+							
 							let didData = await fetchDID(t2AddrValue)
-							// d=didData;
-							// console.log( `<br><br>RESULT: <br>DID: ${didData.data.id} <br>alias: ${didData.data.alias} <br>avatar: ${didData.data.avatar} <br>cid: ${didData.data.cid} <br>privData: ${didData.data.privData}`);
-							if (didData.data.avatar != null) {
+							dd=didData
+								if (didData.data.avatar != '') {
 									console.log( ' HAS AAVATAR!',didData.data.avatar);
 									return didresult
 								} else {
-									console.log(did + ' DOESN\'T HAVE A AVATAR ');
+									console.log( ' DOESN\'T HAVE A AVATAR ');
 								}
-							// @@@@@@@@@@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@
-							// try {
-							// 	const didresult = await readDIDRecord(did);
-
-							// 	if (didresult.data != null) {
-							// 		console.log(did + ' HAS A RECORD!!!');
-							// 		return didresult
-							// 	} else {
-							// 		console.log(did + ' DOESN\'T HAVE A RECORD :(');
-							// 		return
-							// 	}
-							// } catch (error) {
-								// 	console.error('An error occurred while fetching the DID record:', error);
-								// }
-								// @@@@@@@@@@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@
-							// check avatar first
-							try {
-								
-								// FIX THIS: maybe just use the address. keep it simply s
-								await chatWith(t2AddrValue )
-								// await chatWith(t2AddrValue , JSON.parse(didData.data.avatar))
-								// await chatWith(didData.data.alias,JSON.parse(didData.data.avatar))
-
-								
-							} catch (error) {
-								Toast.fire('Error', error.message, "error");
-							}
+							
+							// try { await chatWith(t2AddrValue ) } 
+							// catch (error) { Toast.fire('Error', error.message, "error"); }
 							console.warn( ` alias: ${didData.data.alias}`);
 							document.getElementById('avatarImage').src =JSON.parse(didData.data.avatar)
 
@@ -848,6 +847,10 @@ console.log(`
 				} else {
 					console.warn('T2Addr parameter not found in the URL');
 				}
+				// ----------------------------------------------------------------------------------
+				//  FIN CHECK IF USER COMES FROM A LINK
+				// ----------------------------------------------------------------------------------
+
 				// -----------------------------------------
 				//  fin CHECK IF USER COMES FROM A LINK
 				// -----------------------------------------
@@ -1190,6 +1193,7 @@ async function getLocalWalletSigner() {
               let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v6
               const signer = localWallet.connect(provider);
               console.log('SIGNER:', signer);
+			// await loadDID( signer)
               return signer;
             });
           } catch (error) {
@@ -1241,7 +1245,11 @@ console.log('unlockLocalwallet()')
 	
   }
   lockscreen.style.display='none'
-  init(signer)
+
+
+  await loadDID( signer)
+  syncBalance()
+  await init(signer)
 
   if (!signer) {
 	console.log('Handle case where signer is not obtained');
@@ -1916,6 +1924,8 @@ function displayQR(data) {
 
 			console.log('ESTABLISHING NEW CHAT WITH', toAddr)
 			headerNotes.innerHTML = ``
+			// document.getElementById('headerNotes').innerHTML = ``
+			console.warn('CLEANING HEARDERNOTES #############################')
 
 			document.getElementById("chatBox").innerHTML='';//clear chat window
 			console.log('clear chatBox window')
