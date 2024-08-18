@@ -32,6 +32,7 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+v4.06 
 v4.05 fix restore seed
 v4.04 improved mnemonic backup process
 v4.03 check contract and address balance in explorer
