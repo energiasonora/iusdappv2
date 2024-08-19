@@ -1,0 +1,29 @@
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 50px;
+    aspect-ratio: 1.154;
+    clip-path: polygon(50% 0,100% 100%,0 100%);
+    display: grid;
+    background: #3A89C9;
+  }
+  .loader::before,
+  .loader::after {
+    content: "";
+    grid-area: 1/1;
+    background: inherit;
+    clip-path: inherit;
+    transform-origin: 50% 66%;
+    animation: l7-1 2s infinite; 
+  }
+  .loader::before {
+    background: #9CC4E4;
+    animation: l7-2 2s infinite 1s; 
+  }
+  @keyframes l7-1 {
+    0% ,99.9% {transform:scale(1)}
+    50%,99%   {transform:scale(0)}
+  }
+  @keyframes l7-2 {
+    0%,51%{transform:scale(1)}
+    50%   {transform:scale(0)}
+  }

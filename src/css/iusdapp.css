@@ -720,7 +720,16 @@ z-index: -1;
 	  /* height: calc(100% - 90px)!important; */
 	  overflow: hidden;
 	  overflow-y: scroll;
-	  touch-action: pan-y!important;
+	  /* touch-action: pan-y!important; */
+
+
+
+	  /* overflow-y: scroll;
+	  height: 71% !important;
+	  position: absolute; */
+
+
+
 	  
   }
   .swiper-slide {
@@ -1517,6 +1526,7 @@ body.swal2-height-auto {
 #chatfooter {
 }
  #chatBox{
+
 
  }
 }
