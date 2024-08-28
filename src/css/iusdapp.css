@@ -20,13 +20,22 @@
 	--main: #6f42c1;
 	--reversable: #000;
     
-    /* --c1: #212529;
-    --c0: #222;
-    --c3: #2196f3;
-    --c4: #eee;
-    --font1: #fff;
-    --font1: #6f42c1; */
-}
+	--transition-1: all 0.3s ease-in-out;
+	--transition-2: all 0.2s ease-in-out;
+  }
+
+
+
+  #selection {
+	word-break: break-all;
+  }
+
+  .autoComplete_wrapper {
+	width: 90% !important;
+  }
+
+
+
 *,
 *::after,
 *::before {

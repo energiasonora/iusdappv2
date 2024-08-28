@@ -10,20 +10,19 @@
 		<meta name="author" content="Xunorus" />
 		<link rel="shortcut icon" href="favicon.ico">
 		<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
-		
         <script src="js/sweetalert2.all.min.js"></script>
         <script src="js/qr-code-styling.js"></script>
+
+		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.01.min.css"> -->
 		
-		
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-		
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/cropper.css" />
 		<link rel="stylesheet" type="text/css" href="css/iusdapp.css" />
 		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.02.min.css"> -->
 		
-		<!-- <link rel="stylesheet" type="text/css" href="css/loader.css" /> -->
 		<!--[if IE]>
   		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]--><script>document.documentElement.className = 'js';</script>
@@ -44,8 +43,6 @@
   **********************************************************************************************/ -->
   <div id='lockscreen' class="cover-container" style="display: none;" >
     <img src="img/logo.png" alt="Cover Image" class="cover-image"  >
-
-    <!-- <h1 class="cover-heading">Locked</h1> -->
     <button id="unlockButton" class="btn btn-primary btn-unlock" onclick="event.stopPropagation();unlockLocalwallet()" >Unlock</button>
   </div>
 
@@ -85,34 +82,11 @@
         </div>
       </div>
     </div>
-	<!-- <button class="btn btn-primary fullwidth" id="mintOrUpdate" onclick="event.stopPropagation(); mintOrUpdate()" disabled> Mint -->
-		<!-- <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-			<path
-				d="M440 6.5L24 246.4c-34.4 19.9-31.1 70.8 5.7 85.9L144 379.6V464c0 46.4 59.2 65.5 86.6 28.6l43.8-59.1 111.9 46.2c5.9 2.4 12.1 3.6 18.3 3.6 8.2 0 16.3-2.1 23.6-6.2 12.8-7.2 21.6-20 23.9-34.5l59.4-387.2c6.1-40.1-36.9-68.8-71.5-48.9zM192 464v-64.6l36.6 15.1L192 464zm212.6-28.7l-153.8-63.5L391 169.5c10.7-15.5-9.5-33.5-23.7-21.2L155.8 332.6 48 288 464 48l-59.4 387.3z" />
-		</svg> -->
-	<!-- </button> -->
 
 	<button class="btn btn-primary fullwidth" style="display: none;" id="updateOnchain" onclick="event.stopPropagation(); updateOnchainDID()" disabled> Update
 	</button>
 	
-	<ul id="cwContacts" class="nav">
-	<!--  
-	<li data-address="0x137a64f5F1C1C0595d4C9c12E68f99fA6f841407" id="0x137a64f5F1C1C0595d4C9c12E68f99fA6f841407" class=""> 
-		<a onclick="event.stopPropagation();selectChat((this.parentElement))">  
-			<img id="did:ethr:0x137a64f5F1C1C0595d4C9c12E68f99fA6f841407" src="img/avatar.png" alt="Avatar" class="rounded-circle"> 
-				<span>0x137a...1407 <span> 
-			<i class="fa-solid fa-trash"></i>
-			<svg onclick="event.stopPropagation();editContact('0x137a64f5F1C1C0595d4C9c12E68f99fA6f841407')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="20" height="25" class="right">
-				<path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z"></path>
-			</svg>
-		</span></span></a> 
-	</li> -->
-	
-</ul>
-
-
-<!-- <button class="btn btn-primary fullwidth" id="addDocument" onclick="event.stopPropagation(); addDocument()" disabled> add Document +
-</button> -->
+	<ul id="cwContacts" class="nav"> </ul>
 
 <button class="btn btn-primary btn-lg fullwidth "
 id="createIPFSDelivery"
@@ -166,6 +140,8 @@ IPFS</button>
 			<header class="codrops-header">
 				<h1 class="codrops-header__title" id="userData">IUS NATURALIS</h1>
 				<!-- <span id="miniversion"> gas</span> -->
+				<div id="address"></div>
+				<div id="data"></div>
 
 				<div class="search-wrap">
 					<button id="btn-search" class="btn btn--search" style="display: none;"> <svg class="icon icon--search"><use xlink:href="#icon-search"></use></svg></button>
@@ -357,32 +333,7 @@ aria-hidden="true">
 
 			<!-- ====== -->
 
-			<!-- <form id="passwordModal" class="needs-validation" novalidate>
-				<label for="password" class="form-label">Enter your Password</label>
-				<div class="input-group">
-					<input type="password" id="wpassword" class="form-control rounded" required>
-					<button id="wtoggle-password" type="button" class="d-none"
-						aria-label="Show password as plain text. Warning: this will display your password on the screen.">
-					</button>
-					<div class="invalid-feedback">
-						Please enter your password.
-					</div>
-				</div>
-				<br>
-				<div class="mb-3 form-check">
-					<input type="checkbox" class="form-check-input" id="wrememberPassword" ">
-					<label class="form-check-label" for="rememberPassword">Remember me</label>
-				</div>
-					<div class="mb-3 form-check">
-					<input type="checkbox" class="form-check-input" id="wrememberWithBiometry" >
-					<label class="form-check-label" for="rememberWithBiometry">Use your device biometrics to store password</label>
-				</div>
-
-				<button class="btn btn-primary" type="button" onclick="validatePassword()">Validate</button>
-
-			</form> -->
-
-
+		 
 			<!-- ==== -->
 
 
@@ -581,8 +532,7 @@ aria-hidden="true">
 								<input type="checkbox" id="muteCheckbox" name="muteCheckbox">
 								<label for="muteCheckbox">AutoPublish(when its connected to the internet)</label>
 							</span>
-							
-							
+
 						</ul>
 					</div>
 
@@ -615,9 +565,332 @@ aria-hidden="true">
 
 
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.29/Tone.min.js"></script>
+	<!-- <div class="modal fade" id="sendTransactionModal" tabindex="-1" aria-labelledby="sendTransactionModalLabel" aria-hidden="true"> -->
+	<!-- Modal WALLET SEND/-->
+	<div class="modal fade" id="walletSend" tabindex="-1" aria-labelledby="walletSendLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="walletSendLabel">Send ETH/ERC-20 Transaction</h5>
+			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+			  <!-- Navigation for Screens -->
+			  <ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation">
+				  <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form" type="button" role="tab" aria-controls="form" aria-selected="true">Form</button>
+				</li>
+				<li class="nav-item" role="presentation">
+				  <button class="nav-link" id="confirmation-tab" data-bs-toggle="tab" data-bs-target="#confirmation" type="button" role="tab" aria-controls="confirmation" aria-selected="false">Confirmation</button>
+				</li>
+				<li class="nav-item" role="presentation">
+				  <button class="nav-link" id="result-tab" data-bs-toggle="tab" data-bs-target="#result" type="button" role="tab" aria-controls="result" aria-selected="false">Result</button>
+				</li>
+			  </ul>
+			  <div class="tab-content" id="myTabContent">
+				<!-- Form Screen -->
+				<div class="tab-pane fade show active" id="form" role="tabpanel" aria-labelledby="form-tab">
+				  <form id="transactionForm">
+					<div class="mb-3">
+					  <label for="recipientAddress" class="form-label">Recipient Address</label>
+					  <input type="text" class="form-control" id="recipientAddress" placeholder="0x..." required>
+					</div>
+					<div class="mb-3">
+					  <label for="amount" class="form-label">Amount</label>
+					  <input type="number" class="form-control" id="amount" placeholder="Amount to send" step="0.01" required>
+					</div>
+					<div class="mb-3">
+					  <label for="tokenType" class="form-label">Token</label>
+					  <select class="form-select" id="tokenType">
+						<!-- <option value="eth" selected>ETH</option> -->
+						<!-- <option value="erc20">ERC-20</option> -->
+					  </select>
+					</div>
+					<div id="erc20Details" class="mb-3 d-none">
+					  <label for="erc20ContractAddress" class="form-label">ERC-20 Contract Address</label>
+					  <input type="text" class="form-control" id="erc20ContractAddress" placeholder="0x...">
+					</div>
+					<button type="button" class="btn btn-primary" id="sendTransactionBtn">Send</button>
+				  </form>
+				</div>
+	
+				<!-- Confirmation Screen -->
+				<div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation-tab">
+				  <h5>Confirm Transaction</h5>
+				  <p id="transactionDetails"></p>
+				  <button type="button" class="btn btn-secondary" id="cancelTransactionBtn">Cancel</button>
+				  <button type="button" class="btn btn-primary" id="confirmTransactionBtn">Confirm</button>
+				</div>
+	
+				<!-- Result Screen -->
+				<div class="tab-pane fade" id="result" role="tabpanel" aria-labelledby="result-tab">
+				  <h5>Transaction Result</h5>
+				  <p id="resultMessage"></p>
+				  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	  </div>
 
-	<script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
+
+
+	<!-- <div class="modal fade" data-bs-backdrop="static" id="walletSend" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+		<div class="modal-dialog">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="sendTransactionModalLabel">Send ETH/ERC-20 Transaction</h5>
+			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+			  <form id="transactionForm">
+				<div class="mb-3">
+				  <label for="recipientAddress" class="form-label">Recipient Address</label>
+				  <input type="text" class="form-control" id="recipientAddress" placeholder="0x..." required disabled>
+				</div>
+				<div class="mb-3">
+				  <label for="amount" class="form-label">Amount</label>
+				  <input type="number" class="form-control" id="amount" placeholder="Amount to send" step="0.01" required>
+				</div>
+				<div class="mb-3">
+				  <label for="tokenType" class="form-label">Token </label>
+				  <select class="form-select" id="tokenType">
+					<option value="eth" selected>ETH</option>
+					<option value="erc20">ERC-20</option>
+				  </select>
+				</div>
+				<div id="erc20Details" class="mb-3 d-none">
+				  <label for="erc20ContractAddress" class="form-label">ERC-20 Contract Address</label>
+				  <input type="text" class="form-control" id="erc20ContractAddress" placeholder="0x...">
+				</div>
+			  </form>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			  <button type="button" class="btn btn-primary" id="sendTransactionBtn">Send</button>
+			</div>
+		  </div>
+		</div>
+	  </div> -->
+	
+
+
+	<!-- <div class="modal fade" data-bs-backdrop="static" id="walletSend" tabindex="-1" role="dialog" aria-labelledby=""
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" data-translate="walletCreation" id="">WALLET CREATION</h5>
+
+					<button type="button" class="btn  btn-reject " id="closeWalletSend">
+						<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+							<path
+								d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+						</svg>
+					</button>
+
+				</div>
+				<div class="modal-body" id="walletHiddenContent">
+					<div class="">
+						<div class="responsive-svg" id="canvas2"></div>
+						<div id="qrforsend"></div>
+						<pre id="cidResult"></pre>
+
+						<div id="txbuilder">
+							<p id="txdetails" class="container">
+								to( Address):
+
+
+								<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
+									onclick="event.stopPropagation(); scanAddress()"
+									style="fill:#00ff00; cursor: pointer;">
+									<path
+										d="M0 80C0 53.5 21.5 32 48 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V80zM64 96v64h64V96H64zM0 336c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V336zm64 16v64h64V352H64zM304 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48zm80 64H320v64h64V96zM256 304c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16v96c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16v64c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V304zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z" />
+								</svg>
+
+								<input type="text" id="address2"
+									style="width: 100%!important; word-wrap: break-word;font-size: 1.4em;"
+									maxlength="64" />
+							</p>
+							<div class="container mt-5" id="amountView">
+								<h1>Amount</h1>
+								<div class="custom-input-group">
+									<div class="input-group">
+										<span class="input-group-text currencySelector" id="currencyToSend">GHO$</span>
+										<input type="number" class="form-control" id="amount2" step="0.01" required>
+									</div>
+								</div>
+							</div>
+							<br />
+							<div class="container mt-5">
+
+								<input type="text" id="message2" size="64" maxlength="64" style="display: none;" />
+								<br />
+								<input type="number" id="nonce2" size="4" maxlength="4" style="display: none;" />
+								<button type="button" id="" class="btn btn-approve"
+									onclick="event.stopPropagation(); sendTx()" style="display:none">OFFLINE</button>
+								<button type="button" id="SendERC20Payment" class="btn btn-approve"
+									onclick="event.stopPropagation(); senderc20TxOnline()">SEND</button>
+							</div>
+
+
+							<br />
+						</div>
+						<pre id="result2"></pre>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div id="txlink"></div>
+
+
+					<button type="button" class="btn btn-outline-secondary closeWalletBkp" id="buygas"
+						data-translate="buygas" onclick="event.stopPropagation(); buyGas()" disabled>Buy gas</button>
+
+					<button type="button" class="btn btn-outline-secondary closeWalletBkp" id="askPeer"
+						data-translate="askpeer" onclick="event.stopPropagation(); askPeerToPayForGas()" disabled>ask
+						peer</button>
+
+
+				</div>
+			</div>
+		</div>
+	</div> -->
+	<!-- fin SEND WALLET-->
+
+
+	
+  <!-- ---------------------------------------------- -->
+  <!--  Modal addNewToken -->
+  <!-- ---------------------------------------------- -->
+  <div class="modal fade" id="addNewTokenModal" tabindex="-1" aria-labelledby="addNewTokenModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addNewTokenModalLabel">Add Token</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+
+          <div class="mb-3">
+            <label for="autoComplete" class="form-label">Select EVM chain</label>
+            <div class="input-group">
+              <span class="input-group-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#d17c78" class="bi bi-search"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                </svg>
+              </span>
+              <input type="search" class="form-control" id="autoComplete" placeholder="Enter search term" tabindex="1">
+            </div>
+          </div>
+
+
+
+          <div class="selection"></div>
+
+            <div class="alert alert-warning alert-dismissible fade show" id="selectionResult" style="display: none;"> </div>
+
+          <!-- ERC-20 Options -->
+          <div id="erc20SetContract" class="mt-3" style="display: none;">
+
+            <!-- Contract Address Selector -->
+            <div class="mb-3">
+              <label for="contractAddress" class="form-label">Smart Contract Address</label>
+              <input type="text" class="form-control" id="contractAddress" placeholder="0x..." required
+                pattern="^0x[a-fA-F0-9]{40}$">
+              <div class="invalid-feedback">
+                Please provide a valid Ethereum smart contract address (0x followed by 40 hex characters).
+              </div>
+              <div class="valid-feedback">
+                Looks good!
+                <span id="validLink"></span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="addERC20contract" onclick="addConctract()"
+              style="display: none;">Add ERC-20</button>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- ---------------------------------------------- -->
+  <!--  Modal defaultToken -->
+  <!-- ---------------------------------------------- -->
+  <div class="modal fade" id="defaultTokenModal" tabindex="-1" aria-labelledby="defaultTokenModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="defaultTokenModalLabel">Default Token</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Radio Buttons -->
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tokenType" id="erc20Option" value="erc20">
+            <label class="form-check-label" for="erc20Option">ERC-20</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tokenType" id="ethOption" value="eth">
+            <label class="form-check-label" for="ethOption">ETH</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="tokenType" id="btcOption" value="btc" disabled>
+            <label class="form-check-label" for="btcOption">BTC</label>
+          </div>
+
+          <!-- ERC-20 Options -->
+          <div id="erc20Options" class="mt-3" style="display: none;">
+
+            <!-- Contract Address Selector -->
+            <label for="erc20Selector" class="form-label">Select ERC-20 Contract</label>
+
+            <select class="form-select mb-3" id="erc20Selector">
+              <!-- <option value="eth-0x123...">Ethereum - 0x123...</option>
+              <option value="bsc-0x456...">Binance Smart Chain - 0x456...</option>
+              <option value="polygon-0x789...">Polygon - 0x789...</option>
+              <option value="avalanche-0xabc...">Avalanche - 0xabc...</option> -->
+            </select>
+
+            <!-- Add, Remove, Info Buttons -->
+
+            <button type="button" class="btn btn-primary mt-2" id="" onclick="addToken()">+ Add</button>
+            <button type="button" class="btn btn-danger mt-2" id="removeErc20Address">Remove</button>
+            <button type="button" class="btn btn-info mt-2" id="infoErc20Address">Info</button>
+
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- /*********************************************************************************************
+  .) FIN MODALS
+  **********************************************************************************************/ -->
+
+
+	<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.29/Tone.min.js"></script>
+	<!-- <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script> -->
+	<script src="js/ethers-6.13.2.umd.min.js"></script>
  
 		<script type="module" src="js/demo1.js"></script>
 		<script src="js/dictionary.js"></script>
@@ -662,6 +935,7 @@ aria-hidden="true">
 		window.optionsList = [
 		{
 				"ERC20_TOKEN_ADDRESS": "0x3723A0d04ABDFA902d47426973E0cb49C2fC3B86",//trok arb sepolia
+                "ERC20_TOKEN_ABI": 'troktoken',
 				"REGISTRY_CONTRACT_ADDRESS":"0xEeF51be62Cc32e2f7c0Bf490a7ED355A2e7a0a3A",
 				"TOKEN_CHAIN_NAME": 'ARBITRUM(SEPOLIA)',
 				"TOKEN_NAME": "TROK",
@@ -669,7 +943,6 @@ aria-hidden="true">
                 "API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
 				"TOKEN_CHAINID": '421614',
 				"EXPLORER": 'https://sepolia.arbiscan.io/',
-                "ERC20_TOKEN_ABI": 'troktoken',
 				"POLYBASE_DB" :"https://explorer.testnet.polybase.xyz/studio/pk%2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3%2FSTARKID/collections/STARKID",
 				"ZK_PUBKEY" :"2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3"
 			},
@@ -706,13 +979,21 @@ aria-hidden="true">
         ABIs = {
 			troktoken: [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AccessControlBadConfirmation", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" } ], "name": "AccessControlUnauthorizedAccount", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" } ], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [ { "internalType": "string", "name": "str", "type": "string" } ], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "callerConfirmation", "type": "address" } ], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" } ], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleRevoked", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" } ], "name": "getRoleAdmin", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "hasRole", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_MINT_AMOUNT", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "mintingInfo", "outputs": [ { "internalType": "uint256", "name": "lastMintTimestamp", "type": "uint256" }, { "internalType": "uint256", "name": "amountMinted", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "nonces", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "VALIDATOR_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" } ],
             usdctoken: [{ "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "authorizer", "type": "address" }, { "indexed": true, "internalType": "bytes32", "name": "nonce", "type": "bytes32" }], "name": "AuthorizationCanceled", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "authorizer", "type": "address" }, { "indexed": true, "internalType": "bytes32", "name": "nonce", "type": "bytes32" }], "name": "AuthorizationUsed", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "_account", "type": "address" }], "name": "Blacklisted", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "newBlacklister", "type": "address" }], "name": "BlacklisterChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "burner", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "Burn", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "newMasterMinter", "type": "address" }], "name": "MasterMinterChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "minter", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "Mint", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "minter", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "minterAllowedAmount", "type": "uint256" }], "name": "MinterConfigured", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "oldMinter", "type": "address" }], "name": "MinterRemoved", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": false, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [], "name": "Pause", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "newAddress", "type": "address" }], "name": "PauserChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "newRescuer", "type": "address" }], "name": "RescuerChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "_account", "type": "address" }], "name": "UnBlacklisted", "type": "event" }, { "anonymous": false, "inputs": [], "name": "Unpause", "type": "event" }, { "inputs": [], "name": "CANCEL_AUTHORIZATION_TYPEHASH", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "PERMIT_TYPEHASH", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "RECEIVE_WITH_AUTHORIZATION_TYPEHASH", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "TRANSFER_WITH_AUTHORIZATION_TYPEHASH", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "authorizer", "type": "address" }, { "internalType": "bytes32", "name": "nonce", "type": "bytes32" }], "name": "authorizationState", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_account", "type": "address" }], "name": "blacklist", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "blacklister", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }], "name": "burn", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "authorizer", "type": "address" }, { "internalType": "bytes32", "name": "nonce", "type": "bytes32" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "cancelAuthorization", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "authorizer", "type": "address" }, { "internalType": "bytes32", "name": "nonce", "type": "bytes32" }, { "internalType": "bytes", "name": "signature", "type": "bytes" }], "name": "cancelAuthorization", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "minter", "type": "address" }, { "internalType": "uint256", "name": "minterAllowedAmount", "type": "uint256" }], "name": "configureMinter", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "currency", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "decrement", "type": "uint256" }], "name": "decreaseAllowance", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "increment", "type": "uint256" }], "name": "increaseAllowance", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "tokenName", "type": "string" }, { "internalType": "string", "name": "tokenSymbol", "type": "string" }, { "internalType": "string", "name": "tokenCurrency", "type": "string" }, { "internalType": "uint8", "name": "tokenDecimals", "type": "uint8" }, { "internalType": "address", "name": "newMasterMinter", "type": "address" }, { "internalType": "address", "name": "newPauser", "type": "address" }, { "internalType": "address", "name": "newBlacklister", "type": "address" }, { "internalType": "address", "name": "newOwner", "type": "address" }], "name": "initialize", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "newName", "type": "string" }], "name": "initializeV2", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "lostAndFound", "type": "address" }], "name": "initializeV2_1", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address[]", "name": "accountsToBlacklist", "type": "address[]" }, { "internalType": "string", "name": "newSymbol", "type": "string" }], "name": "initializeV2_2", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_account", "type": "address" }], "name": "isBlacklisted", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "isMinter", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "masterMinter", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_to", "type": "address" }, { "internalType": "uint256", "name": "_amount", "type": "uint256" }], "name": "mint", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "minter", "type": "address" }], "name": "minterAllowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "nonces", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "pause", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "paused", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "pauser", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "bytes", "name": "signature", "type": "bytes" }], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "validAfter", "type": "uint256" }, { "internalType": "uint256", "name": "validBefore", "type": "uint256" }, { "internalType": "bytes32", "name": "nonce", "type": "bytes32" }, { "internalType": "bytes", "name": "signature", "type": "bytes" }], "name": "receiveWithAuthorization", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "validAfter", "type": "uint256" }, { "internalType": "uint256", "name": "validBefore", "type": "uint256" }, { "internalType": "bytes32", "name": "nonce", "type": "bytes32" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "receiveWithAuthorization", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "minter", "type": "address" }], "name": "removeMinter", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "contract IERC20", "name": "tokenContract", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "rescueERC20", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "rescuer", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "validAfter", "type": "uint256" }, { "internalType": "uint256", "name": "validBefore", "type": "uint256" }, { "internalType": "bytes32", "name": "nonce", "type": "bytes32" }, { "internalType": "bytes", "name": "signature", "type": "bytes" }], "name": "transferWithAuthorization", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "validAfter", "type": "uint256" }, { "internalType": "uint256", "name": "validBefore", "type": "uint256" }, { "internalType": "bytes32", "name": "nonce", "type": "bytes32" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "transferWithAuthorization", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_account", "type": "address" }], "name": "unBlacklist", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "unpause", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_newBlacklister", "type": "address" }], "name": "updateBlacklister", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_newMasterMinter", "type": "address" }], "name": "updateMasterMinter", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_newPauser", "type": "address" }], "name": "updatePauser", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newRescuer", "type": "address" }], "name": "updateRescuer", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "version", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "pure", "type": "function" }],
-            // troktoken: [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AccessControlBadConfirmation", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" } ], "name": "AccessControlUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" } ], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [ { "internalType": "string", "name": "str", "type": "string" } ], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" } ], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleRevoked", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_MINT_AMOUNT", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "VALIDATOR_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" } ], "name": "getRoleAdmin", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "hasRole", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "lastMintTimestamp", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "nonces", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "callerConfirmation", "type": "address" } ], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ],
-            // troktokenold: [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AccessControlBadConfirmation", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }, { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" }], "name": "AccessControlUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [{ "internalType": "uint256", "name": "length", "type": "uint256" }], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [{ "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" }], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" }], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "approver", "type": "address" }], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "receiver", "type": "address" }], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [{ "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" }], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" }], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [{ "internalType": "string", "name": "str", "type": "string" }], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" }], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }], "name": "RoleRevoked", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_MINT_AMOUNT", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "VALIDATOR_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [{ "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }], "name": "getRoleAdmin", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "hasRole", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "lastMintTimestamp", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "nonces", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "callerConfirmation", "type": "address" }], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }], "name": "supportsInterface", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }],
-            // tokenminter: [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AccessControlBadConfirmation", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }, { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" }], "name": "AccessControlUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [{ "internalType": "uint256", "name": "length", "type": "uint256" }], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [{ "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" }], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" }], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "approver", "type": "address" }], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "receiver", "type": "address" }], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [{ "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" }], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" }], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [{ "internalType": "string", "name": "str", "type": "string" }], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" }], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }], "name": "RoleRevoked", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_MINT_AMOUNT", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "VALIDATOR_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [{ "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "getMintNonce", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }], "name": "getRoleAdmin", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "hasRole", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "lastMintTimestamp", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }, { "internalType": "bytes", "name": "signature", "type": "bytes" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "nonces", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "callerConfirmation", "type": "address" }], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }], "name": "supportsInterface", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }],
-            // mytoken: [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [{ "internalType": "uint256", "name": "length", "type": "uint256" }], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [{ "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" }], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" }], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "approver", "type": "address" }], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "receiver", "type": "address" }], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [{ "internalType": "uint256", "name": "deadline", "type": "uint256" }], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" }], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" }], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [{ "internalType": "string", "name": "str", "type": "string" }], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }], "name": "INFINITEallowanceLOCAL", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [{ "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "nonces", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }],
-            // depositv1: [{ "inputs": [{ "internalType": "address", "name": "customAddress", "type": "address" }], "name": "depositToCustomAddress", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "tokenAddress", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "withdraw", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "stateMutability": "payable", "type": "receive" }, { "inputs": [{ "internalType": "uint256", "name": "ethAmount", "type": "uint256" }], "name": "convertEthToGHO", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getLatestGHOPrice", "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getLatestPrice", "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "token", "outputs": [{ "internalType": "contract TokenInterface", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "tokenPrice", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }],
-            // ghotoken: [{ "inputs": [{ "internalType": "address", "name": "admin", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "facilitatorAddress", "type": "address" }, { "indexed": true, "internalType": "bytes32", "name": "label", "type": "bytes32" }, { "indexed": false, "internalType": "uint256", "name": "bucketCapacity", "type": "uint256" }], "name": "FacilitatorAdded", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "facilitatorAddress", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "oldCapacity", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newCapacity", "type": "uint256" }], "name": "FacilitatorBucketCapacityUpdated", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "facilitatorAddress", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "oldLevel", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newLevel", "type": "uint256" }], "name": "FacilitatorBucketLevelUpdated", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "facilitatorAddress", "type": "address" }], "name": "FacilitatorRemoved", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" }], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }], "name": "RoleRevoked", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "BUCKET_MANAGER_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "FACILITATOR_MANAGER_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "PERMIT_TYPEHASH", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "facilitatorAddress", "type": "address" }, { "internalType": "string", "name": "facilitatorLabel", "type": "string" }, { "internalType": "uint128", "name": "bucketCapacity", "type": "uint128" }], "name": "addFacilitator", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }, { "internalType": "address", "name": "", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "burn", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "facilitator", "type": "address" }], "name": "getFacilitator", "outputs": [{ "components": [{ "internalType": "uint128", "name": "bucketCapacity", "type": "uint128" }, { "internalType": "uint128", "name": "bucketLevel", "type": "uint128" }, { "internalType": "string", "name": "label", "type": "string" }], "internalType": "struct IGhoToken.Facilitator", "name": "", "type": "tuple" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "facilitator", "type": "address" }], "name": "getFacilitatorBucket", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }, { "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getFacilitatorsList", "outputs": [{ "internalType": "address[]", "name": "", "type": "address[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }], "name": "getRoleAdmin", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "hasRole", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "nonces", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" }], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "facilitatorAddress", "type": "address" }], "name": "removeFacilitator", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "facilitator", "type": "address" }, { "internalType": "uint128", "name": "newCapacity", "type": "uint128" }], "name": "setFacilitatorBucketCapacity", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }], "name": "supportsInterface", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }],
         }
+		
+		erc20Abi = [
+  "function totalSupply() view returns (uint256)",
+  "function balanceOf(address account) view returns (uint256)",
+  "function transfer(address recipient, uint256 amount) returns (bool)",
+  "function transferFrom(address sender, address recipient, uint256 amount) returns (bool)",
+  "function approve(address spender, uint256 amount) returns (bool)",
+  "function allowance(address owner, address spender) view returns (uint256)",
+  "function symbol() view returns (string)",  
+  "function decimals() view returns (uint8)"  // Added the decimals function
+];
+
+
+
 
 async function init(signer){
 	
@@ -753,21 +1034,41 @@ console.log(`
 						}
 
 
+				 
+
 					if (typeof signer === 'undefined') {
 						console.warn('No signer passed at init()');
-
-						let signer = await getSigner()
+						
+						signer = await getSigner();
 						if (signer === false) {
 							console.log("The function returned false.");
-							return
+							return;
 						}
-	
-						await createXMPTchat(signer)
 					} else {
-						// console.log('Signer provided:', signer);
-						console.warn("SIGNER:",signer)
-						await createXMPTchat(signer)
+						console.warn("SIGNER:", signer);
 					}
+
+					// LOAD BALANCES
+				
+					console.warn('EVM ADDRESS (getSigner): ', signer.address)
+						setAddress(signer.address)
+						// let balance= await checkERC20Balance(signer.address) 
+						// let gasBalance= await checkGasBalance(signer.address) 
+						// userData.innerHTML = ` <svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg> <a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS }">Balance: ${balance} </a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${signer.address}">gas: ${gasBalance} </a> </div> `;
+					
+
+						// LOAD DID
+						await loadDID( signer)
+
+
+					// CREATE CHAT
+					await createXMPTchat(signer);
+
+
+
+					populateSelectInput()
+					let currentTokenContract = await loadToken(signer.address)
+					console.log("currentTokenContract()",currentTokenContract)
 
 				// -----------------------------------------
 				//  CHECK IF USER COMES FROM A LINK
@@ -788,25 +1089,21 @@ console.log(`
 						const regexAddress = /^0x[a-fA-F0-9]{40}$/;
 						if (regexDID.test(chatValue)) {
 
-										// Split the DID string by ':'
-										const parts = chatValue.split(':');
+							// Split the DID string by ':'
+							const parts = chatValue.split(':');
 
-										// The Ethereum address is the last part
-										const ethAddress = parts[parts.length - 1];
+							// The Ethereum address is the last part
+							const ethAddress = parts[parts.length - 1];
 
-										// Optionally, validate the Ethereum address using ethers.js
-										if (ethers.isAddress(ethAddress)) {
-										console.log("Valid Ethereum Address:", ethAddress);
-										evmAddr= ethAddress;
-										
-									} else {
-										console.log("Invalid Ethereum Address:", ethAddress);
-									}
+							// Optionally, validate the Ethereum address using ethers.js
+							if (ethers.isAddress(ethAddress)) {
+							console.log("Valid Ethereum Address:", ethAddress);
+							evmAddr= ethAddress;
+							
+						} else {
+							console.log("Invalid Ethereum Address:", ethAddress);
+						}
 									
-									// headerNotes.innerHTML = ``
-
-
-
 
 							// RESOLVE DID https://192.168.43.129:4343/?chat=did:ius:0xD5Dc42A1A5BEC5E86599791460b844b379211c3f
 							console.warn('✅ chatValue is in the correct format, FETCHING DID: ',chatValue)
@@ -825,13 +1122,7 @@ console.log(`
 
 								}
 							
-							// try { await chatWith(chatValue ) } 
-							// catch (error) { Toast.fire('Error', error.message, "error"); }
 							console.warn( ` alias: ${didData.data.alias}`);
-
-							// para reloadAvatar
-							// document.getElementById('avatarImage').src =JSON.parse(didData.data.avatar)
-
 
 
 							// ?????????????????????????????????????????
@@ -844,7 +1135,6 @@ console.log(`
 									try { await chatWith(evmAddr, JSON.parse(avatar) ) } 
 										catch (error) { Toast.fire('Error', error.message, "error"); }
 
-							// await chatWith(didData.data.alias,JSON.parse(didData.data.avatar))
 	
 						} 
 						else if (regexAddress.test(chatValue)) {
@@ -863,15 +1153,23 @@ console.log(`
 				// ----------------------------------------------------------------------------------
 				//  FIN CHECK IF USER COMES FROM A LINK
 				// ----------------------------------------------------------------------------------
+					
+					GLOBALCHAIN = localStorage.getItem("GLOBALCHAIN");
+					if (GLOBALCHAIN === null) {
+						console.log('GLOBALCHAIN is null');
+						localStorage.setItem("GLOBALCHAIN", 0);
+						GLOBALCHAIN = 0;
 
+					} else {
+						console.log('GLOBALCHAIN :', GLOBALCHAIN);
+					}
 				// -----------------------------------------
 				//  fin CHECK IF USER COMES FROM A LINK
 				// -----------------------------------------
 					await getChatAddresses()
 					 await loadContacts()
 					await listenAllNewAddresses()
-					
-					
+
 				 
 				
 				}
@@ -1030,9 +1328,6 @@ function closeModalId(id, event) {
 			showConfirmButton: false,
 			showDenyButton: false,
 			showCancelButton: false,
-			// cancelButtonText: "Now!",
-			// confirmButtonText: "later ...",
-			// denyButtonText: `Close`,
 			iconColor: "white",
 			customClass: {
 				popup: "colored-toast",
@@ -1138,7 +1433,7 @@ async function reloadBalance(){
 			<a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS }">Balance: ${balance}</a>
 			<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
 			<br>
-signer.			<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
+		<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
 			
 			`;
 }
@@ -1399,25 +1694,35 @@ else {
 }
  
 
+/////////////////////////////
+// ESTO VA EN OTRO LADO
+
 			/////////////////////////////
 			// 2- SHOW QR WITH DID LINK
 			/////////////////////////////
 
-			console.warn('EVM ADDRESS (getSigner): ', signer.address)
-			setAddress(signer.address)
-			let balance= await checkERC20Balance(signer.address) 
-			let gasBalance= await checkGasBalance(signer.address) 
-			userData.innerHTML = `			
-			<a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS }">Balance: ${balance}</a>
-			<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
-			<br>
-			<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${signer.address}">gas: ${gasBalance}</a>
-			
-			`;
-
+			// console.warn('EVM ADDRESS (getSigner): ', signer.address)
+			// setAddress(signer.address)
+			// let balance= await checkERC20Balance(signer.address) 
+			// let gasBalance= await checkGasBalance(signer.address) 
+			// userData.innerHTML = `		
+			// 	<svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg>
+		
+			// <a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS }">Balance: ${balance}
+			// 	</a>
+			// 	<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
+			// <br>
+			// <div id="miniversion">
+			// <a  target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${signer.address}">gas: ${gasBalance}
+			// 	</a>
+			// </div>
+			// `;
 		 
-			await loadDID( signer)
-			
+			// await loadDID( signer)
+
+// FIN ESTO VA EN OTRO LADO
+/////////////////////////////
+
 			return signer
 			
          
@@ -1990,7 +2295,7 @@ if (imgsrc != null){
 let htmlData = `<address>${toAddr} <svg id="" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br><p>no info available</p>`;
 let shortAddr = toAddr.substring(0, 6) + "..." + toAddr.substring(38, 42);
 
-chatAddress.innerHTML = `<div class="">
+chatAddress.innerHTML = `<div class="" id="peerAddr" data-address="${toAddr}" >
 	<img src='${avatar}' alt="avatar" class="rounded rounded-circle img-thumbnail" width='40px' id='avatarImage'  onclick="event.stopPropagation();openCard('${toAddr}','${avatar}')">
 	<strong onclick="event.stopPropagation();openCard('${toAddr}','${avatar}')">${shortAddr}</strong>
 	  </div>`;
@@ -2001,7 +2306,7 @@ chatAddress.innerHTML = `<div class="">
 // -------------------
 
 actionButtons.innerHTML = `
-<button type="button" id="" class="btn btn-approve" style="display: none;"
+<button type="button" id="peerSend" class="btn btn-approve" style="display: none;"
 		onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" disabled>
 		<svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
 			<path fill="currentColor"
@@ -2009,7 +2314,7 @@ actionButtons.innerHTML = `
 			</svg>
 		SEND</button>
 
-		<button type="button" id="" class="btn btn-reject" style="display: none;"
+		<button type="button" id="peerReceive" class="btn btn-reject" style="display: none;"
 		onclick="event.stopPropagation(); openSend('${toAddr.toString()}')"  disabled>
 		<svg height="16" width="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
 			<path fill="currentColor"
@@ -2028,6 +2333,11 @@ actionButtons.innerHTML = `
 
 	`
 	 
+	// activate buttons
+	peerSend.style.display = 'inline';
+peerReceive.style.display = 'inline'
+	peerSend.disabled = false;
+peerReceive.disabled = false;
 
 // ------------------------------------
 // AVOID REOPENING COMS WITH ADDRESESS
@@ -2043,18 +2353,7 @@ for (const conversation of allConversations) {
 		break; // Exit the loop early if the address is found
 	}
 }
-
-
-// -------
-// FIx paa?
-// const peerAddressesArray = [];
-
-// allConversations.forEach(async (conversation, index) => {
-// 	peerAddressesArray.push(conversation.peerAddress);
-// })
-// paa = peerAddressesArray;
-// console.warn('peerAddressesArray ADDED',peerAddressesArray )
-// -----------
+ 
 
 
 if (addressExists) {
@@ -2143,8 +2442,134 @@ for await (const message of await conversation.streamMessages()) {
 }
 }
 
+	/*********************************************************************************************
+		.)  SEND / RECEIVE TOKENS ERC20
+		**********************************************************************************************/
 
 
+
+		async function openSend(addr) {
+			console.warn('openSend', addr)
+
+			if (addr) {
+				console.log('there is address', addr)
+			}
+			else {
+				console.log('there is not addr')
+			}
+
+
+			// // open modal
+			openModalId('#walletSend')
+			
+			// get recipient address
+			document.getElementById("recipientAddress").value = addr;
+			
+			// fill token selector (tokenType)
+			populateSelectInput('tokenType');
+
+
+		}
+
+
+
+		document.getElementById('tokenType').addEventListener('change', function() {
+    const erc20Details = document.getElementById('erc20Details');
+    if (this.value === 'erc20') {
+        erc20Details.classList.remove('d-none');
+    } else {
+        erc20Details.classList.add('d-none');
+    }
+});
+
+document.getElementById('sendTransactionBtn').addEventListener('click', function() {
+    const recipientAddress = document.getElementById('recipientAddress').value;
+    const amount = document.getElementById('amount').value;
+    const tokenType = document.getElementById('tokenType').value;
+
+    let transactionDetails = `Recipient: ${recipientAddress}\nAmount: ${amount} ${tokenType === 'eth' ? 'ETH' : 'Tokens'}`;
+    if (tokenType === 'erc20') {
+        const contractAddress = document.getElementById('erc20ContractAddress').value;
+        transactionDetails += `\nERC-20 Contract: ${contractAddress}`;
+    }
+
+    document.getElementById('transactionDetails').innerText = transactionDetails;
+
+    // Switch to confirmation tab
+    const tab = new bootstrap.Tab(document.getElementById('confirmation-tab'));
+    tab.show();
+});
+
+document.getElementById('confirmTransactionBtn').addEventListener('click', async function() {
+    const recipientAddress = document.getElementById('recipientAddress').value;
+    const amount = document.getElementById('amount').value;
+    const tokenType = document.getElementById('tokenType').value;
+
+    if (!window.ethereum) {
+        alert('MetaMask is not installed!');
+        return;
+    }
+
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+
+    try {
+        let tx;
+        if (tokenType === 'eth') {
+            tx = await signer.sendTransaction({
+                to: recipientAddress,
+                value: ethers.parseEther(amount)
+            });
+        } else if (tokenType === 'erc20') {
+            const contractAddress = document.getElementById('erc20ContractAddress').value;
+            const erc20Abi = [
+                "function transfer(address to, uint256 amount) returns (bool)"
+            ];
+            const erc20Contract = new ethers.Contract(contractAddress, erc20Abi, signer);
+            tx = await erc20Contract.transfer(recipientAddress, ethers.parseUnits(amount, 18)); // Assuming 18 decimals
+        }
+
+        // Show result tab
+        document.getElementById('resultMessage').innerText = `Transaction sent! TxHash: ${tx.hash}`;
+        const resultTab = new bootstrap.Tab(document.getElementById('result-tab'));
+        resultTab.show();
+
+    } catch (error) {
+        // Show error in result tab
+        document.getElementById('resultMessage').innerText = `Error: ${error.message}`;
+        const resultTab = new bootstrap.Tab(document.getElementById('result-tab'));
+        resultTab.show();
+    }
+});
+
+document.getElementById('cancelTransactionBtn').addEventListener('click', function() {
+    // Switch back to form tab if cancelled
+    const formTab = new bootstrap.Tab(document.getElementById('form-tab'));
+    formTab.show();
+});
+
+
+
+
+
+// Function to get ETH to USD conversion rate from CoinGecko
+async function getEthUsdPrice() {
+    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+    const data = await response.json();
+    return data.ethereum.usd;
+}
+
+
+		// document.querySelector('#closeWalletSend').addEventListener('click', function (event) {
+		// 	console.log('closing #closeWalletSend');
+
+		// 	closeModalId('#walletSend')
+		// 	txbuilder.style.display = 'block';
+		// 	document.getElementById('result2').innerHTML = ''
+
+		// 	SendERC20Payment.innerHTML = ` SEND`
+		// 	SendERC20Payment.disabled = false;
+		// });
 
 		/*********************************************************************************************
 		.) CONTACTS MANAGEMENT
@@ -4576,33 +5001,7 @@ function verifyMnemonic() {
 	<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
 			
 			`;
-			// let preferedWallet = localStorage.getItem('preferedWallet');
-
-			// if (!preferedWallet) { console.log('NO PREFERED WALLET SET') }
-			// if (preferedWallet) {
-			// 	const values = preferedWallet.split(',').map(item => item.trim());
-			// 	walletChoice = values[0];
-			// 	userAddress = values[1];
-			// }
-
-			// let network = await checkNetwork();
-			// console.log('network:', network)
-
-			// if (network == false) {
-			// 	console.log('network FALSE:', network)
-			// 	headerNotes.innerHTML = `  <div class="alert alert-danger alert-dismissible fade show headerNotes"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button> <strong>Danger!</strong> Error de red. </div>`
-
-			// 	return
-			// }
-			// else if (network == true) {
-			// 	console.log('network TRUE:', network)
-			// }
-
-			// let balanceerc20 = await checkERC20Balance(userAddress)//troq
-			// let balancegas = await checkGasBalance(userAddress)//main eth
-
-			// troqamount.innerHTML = `${optionsList[GLOBALCHAIN].SYMBOL}: ${Number(balanceerc20).toFixed(3)}`
-			// miniversion.innerHTML = `GAS: ${Number(balancegas).toFixed(5)}`
+		 
 		}
 
 
@@ -4627,33 +5026,74 @@ function verifyMnemonic() {
 
 
 		async function checkERC20Balance(userAddress) {
-
 			console.log('checkERC20Balance() of ', userAddress)
 
-			try {
 
-				const abi = ABIs[optionsList[0].ERC20_TOKEN_ABI]
-				const contractAddress = optionsList[0].ERC20_TOKEN_ADDRESS //'YOUR_ERC20_CONTRACT_ADDRESS';
-				let provider = await new ethers.JsonRpcProvider(`${optionsList[0].API}`);
-				const tokenContract = new ethers.Contract(contractAddress, abi, provider);
-				const formattedAddress = ethers.getAddress(userAddress);
+			// NEW METHOD
+			// let preferredToken = await recallStoredToken();
+			// if (preferredToken) {
+			// 	console.log('Preferred Token*:', preferredToken);
+			// } else {
+			// 	console.log('No preferred token stored or index out of range.');
+			// }
 
-				const balance = await tokenContract.balanceOf(formattedAddress);
-				// b = balance;
+			let preferredIndex = localStorage.getItem('preferredTokenIndex');
+				// Set the default index to 0 if no preferred index is stored
+				if (preferredIndex === null) {
+				preferredIndex = 0;
+				} else {
+				preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
+				}
 
-				// ------------------
-				const decimals = await tokenContract.decimals();
+				 // Retrieve the stored data from localStorage
+				 let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+
+				// If the preferred index is within the range of stored tokens, return the corresponding token details
+				if (storedData[preferredIndex]) {
+					 preferredToken = storedData[preferredIndex];
+					 pref= preferredToken
+				} else {
+					console.log('some problem in checkERC20Balance')
+				// Handle the case where the index is out of range
+				// storedData[0];
+				return
+			}
+
+			const length = preferredToken.rpcs.length;
+			const randomnumber = Math.floor(Math.random() * length);
+			const selectedProvider = preferredToken.rpcs[randomnumber];
+			console.log('selectedProvider:', selectedProvider);
+			let provider = await new ethers.JsonRpcProvider(selectedProvider);
+			console.log('provider:', provider);
+			p=provider
+			let contractAddr = preferredToken.contractAddr
+			const tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
+			t=tokenContract;
+			const formattedAddress = ethers.getAddress(userAddress);
+			const balance = await tokenContract.balanceOf(formattedAddress);
+			b=balance
+
+			const decimals = await tokenContract.decimals();
 				console.log('decimals:',decimals)
-
 				let formatedBalance = ethers.formatUnits(balance, decimals);
-				// console.log(`Balance of ERC-20 ${optionsList[GLOBALCHAIN].ERC20_CONTRACT_ADDRESS}: ${formatedBalance} ${optionsList[GLOBALCHAIN].TOKEN_NAME}`);
-				console.warn(`ERC-20 Balance of ${optionsList[0].ERC20_TOKEN_ADDRESS}: ${formatedBalance} `);
+				console.warn(`ERC-20 Balance of ${preferredToken.tokenName}: ${formatedBalance} `);
+				// console.warn(`ERC-20 Balance of ${optionsList[0].ERC20_TOKEN_ADDRESS}: ${formatedBalance} `);
+
+				return formatedBalance
+
+			try {
+			// const decimals = await tokenContract.decimals();
+			// 	console.log('decimals:',decimals)
+			// 	let formatedBalance = ethers.formatUnits(balance, decimals);
+				// console.warn(`ERC-20 Balance of ${optionsList[0].ERC20_TOKEN_ADDRESS}: ${formatedBalance} `);
 				
 				return formatedBalance
 			} catch (error) {
+
 				console.error('Error checking balance:', error);
 				return null;
 			}
+			 
 	}
 
 
@@ -4694,6 +5134,671 @@ function verifyMnemonic() {
 				document.querySelector(".overlay").classList.remove("overlayisOpen");	
 				sessionStorage.removeItem('password')	
 	}
+
+
+
+	// DEFAULT TOKEN
+	
+    /*********************************************************************************************
+  .) TOKEN
+  **********************************************************************************************/
+
+  function addToken() {
+      closeModalId('#defaultTokenModal')
+      openModalId('#addNewTokenModal')
+    }
+
+    // "https://chainid.network/chains_mini.json"
+      // "https://chainid.network/chains.json"
+
+    const autoCompleteJS = new autoComplete({
+      data: {
+        src: async () => {
+          try {
+            document
+              .getElementById("autoComplete")
+              .setAttribute("placeholder", "Loading...");
+            const source = await fetch( "https://chainid.network/chains.json" );
+            // const source = await fetch( "js/chainsv1.json" );
+            const data = await source.json();
+            document
+              .getElementById("autoComplete")
+              .setAttribute("placeholder", autoCompleteJS.placeHolder);
+            return data;
+          } catch (error) {
+            return error;
+          }
+        },
+        keys: ["name", "chainId"],
+        cache: true,
+        filter: (list) => {
+          const filteredResults = Array.from(
+            new Set(list.map((value) => value.match))
+          ).map((token) => {
+            return list.find((value) => value.match === token);
+          });
+
+          return filteredResults;
+        }
+      },
+      placeHolder: "Search for name or chainID!",
+      resultsList: {
+        element: (list, data) => {
+          const info = document.createElement("p");
+          if (data.results.length > 0) {
+            info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
+          } else {
+            info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
+          }
+          list.prepend(info);
+        },
+        noResults: true,
+        maxResults: 65,
+        tabSelect: true,
+        // searchEngine: "loose"
+        searchEngine: "strict"
+      },
+      resultItem: {
+        element: (item, data) => {
+          item.style = "display: flex; justify-content: space-between;";
+          item.innerHTML = `
+                      <span class="hoverable" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: pointer;">
+                            ${data.match}
+                        </span>
+                        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase; color: rgba(0,0,0,.2);">
+                            ${data.key}
+                        </span>`;
+        },
+        highlight: true,
+      },
+      events: {
+        input: {
+          focus: () => {
+            if (autoCompleteJS.input.value.length) {
+            console.log('autoCompleteJS value', autoCompleteJS.input.value)
+              autoCompleteJS.start();
+            }
+          }
+        }
+      }
+    });
+
+    
+
+    autoCompleteJS.input.addEventListener("selection", function (event) {
+      console.warn('SELECT: ', event.detail.selection)
+	  selectionResult.style.display='block'
+      const feedback = event.detail;
+      let resultado = event.detail.selection.value;
+      r=resultado;
+      // localStorage.setItem('chainFeedback', JSON.stringify(feedback))
+      localStorage.setItem('chainResult', JSON.stringify(event.detail.selection))
+      f = feedback
+      autoCompleteJS.input.blur();
+      const selection = feedback.selection.value[feedback.selection.key];
+
+      // ----
+      // const httpsRpcAddresses = feedback.results[0].value.rpc.filter((address) =>
+      const httpsRpcAddresses = resultado.rpc.filter((address) =>
+        address.startsWith("https://") && !address.includes("${INFURA_API_KEY}")
+      );
+      const rpclength = httpsRpcAddresses.length;
+      const randomnumber = Math.floor(Math.random() * rpclength);
+      const selectedProvider = httpsRpcAddresses[randomnumber];
+      console.log('selectedProvider:', selectedProvider);
+
+            document.getElementById("selectionResult").innerHTML = `
+           <strong>Chain:</strong> ${resultado.chain}
+           <br><strong>Name:</strong> ${resultado.name}
+            <br><strong>chainId:</strong> ${resultado.chainId}
+            <br><strong>Short:</strong> ${resultado.shortName}
+            <br><strong>Explorers[${resultado.explorers.length}]:</strong> ${resultado.explorers[0].url}
+            <br><strong>Gas token:</strong> ${resultado.nativeCurrency.name}
+            <br> <strong>RPC [${rpclength}]:</strong> ${httpsRpcAddresses[randomnumber]}
+            <br><strong>Native Currency:</strong> ${resultado.nativeCurrency.symbol}`;
+
+      autoCompleteJS.input.value = selection;
+      console.warn('selection REDULT: ', selection)
+      console.log("feedback: ",feedback);
+      console.warn("resultado: ", resultado);
+	  
+
+      erc20SetContract.style.display = 'inline'
+
+
+    });
+
+
+
+    const action = (action) => {
+      console.log('action()')
+      const title = document.querySelector("h5");
+      const selection = document.querySelector(".selection");
+
+      if (action === "dim") {
+        title.style.opacity = 1;
+        // mode.style.opacity = 1;
+        selection.style.opacity = 1;
+      } else {
+        title.style.opacity = 0.3;
+        // mode.style.opacity = 0.2;
+        selection.style.opacity = 0.1;
+      }
+    };
+
+    ["focus", "blur"].forEach((eventType) => {
+      autoCompleteJS.input.addEventListener(eventType, () => {
+        if (eventType === "blur") {
+          action("dim");
+        } else if (eventType === "focus") {
+          action("light");
+        }
+      });
+    });
+
+
+
+	      
+
+    /*********************************************************************************************
+  .) DEFAULT TOKEN
+  **********************************************************************************************/
+
+    // DEFAULT TOKEN
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const erc20Option = document.getElementById('erc20Option');
+      const erc20Options = document.getElementById('erc20Options');
+      const addErc20Address = document.getElementById('addErc20Address');
+      const erc20Selector = document.getElementById('erc20Selector');
+      const removeErc20Address = document.getElementById('removeErc20Address');
+      const infoErc20Address = document.getElementById('infoErc20Address');
+
+
+    // Retrieve the stored token type from localStorage
+    const storedTokenType = localStorage.getItem('selectedTokenType');
+
+      // If a token type was previously selected, set it accordingly
+    if (storedTokenType) {
+        document.querySelector(`input[name="tokenType"][value="${storedTokenType}"]`).checked = true;
+        if (storedTokenType === 'erc20') {
+          console.warn('ERC20 selected')
+          erc20Options.style.display = 'block';
+
+        }
+
+        // ETHEREUM
+       else if (storedTokenType === 'eth') {
+            // erc20Options.style.display = 'block';
+            console.warn('ETHEREUM selected')
+            // - hide gas balance
+
+        }
+
+
+
+    }
+
+      // Show or hide ERC-20 options based on the selected radio button
+      document.querySelectorAll('input[name="tokenType"]').forEach( function (input) {
+        input.addEventListener('change', async function () {
+          console.log('tokenType CHANGED!')
+          localStorage.setItem('selectedTokenType', input.value);
+
+          if (erc20Option.checked) {
+            erc20Options.style.display = 'block';
+
+          } else {
+            erc20Options.style.display = 'none';
+          }
+          try {
+            await loadToken()
+          } catch (error) {
+            console.warn(error)
+          }
+          Toast.fire({ title: "Token loaded!", text: "The Token has been loaded.", icon: "success" });
+
+        });
+      });
+
+
+
+      
+
+    /*********************************************************************************************
+  .) REMOVE TOKEN
+  **********************************************************************************************/
+
+      removeErc20Address.addEventListener('click',  function () {
+
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+
+            
+            const selectedOption = erc20Selector.options[erc20Selector.selectedIndex];
+                if (selectedOption) {
+                  // Retrieve the stored data from localStorage
+                  let index = selectedOption.value
+                  let i = Number(index)
+                  let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+                  console.log(storedData[i].contractAddr)
+                  
+                  // remove token from localStorage
+                  removeToken(storedData[i].contractAddr)
+                  
+                  // Remove from select
+                  selectedOption.remove();
+
+
+
+                }else {
+                console.log('DOES NOT EXSITS')
+            }
+
+                closeModalId('#defaultTokenModal')
+                Toast.fire({ title: "Deleted!", text: "Token has been deleted.", icon: "success" });
+                localStorage.setItem('preferredTokenIndex', 0);
+                 loadToken()
+          }
+        });
+
+
+     
+      });
+
+  /*********************************************************************************************
+  .) INFO TOKEN
+  **********************************************************************************************/
+      // Show information about the selected ERC-20 contract
+      infoErc20Address.addEventListener('click', function () {
+       
+        const selectedOption = erc20Selector.options[erc20Selector.selectedIndex];
+        let index = selectedOption.value
+        let i = Number(index)
+        
+        if (selectedOption) {
+                // Retrieve the stored data from localStorage
+          let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+          console.log(storedData[i])
+          alert(`Info: ${JSON.stringify(storedData[i])}`);
+
+        }
+      });
+      
+    });
+
+
+
+
+
+	
+
+
+    async function createProv() {
+		console.log('createProv()')
+      // let feedback = JSON.parse(localStorage.getItem('chainFeedback'))
+      let result = JSON.parse(localStorage.getItem('chainResult'))
+      const httpsRpcAddresses = result.value.rpc.filter((address) => address.startsWith("https://") && !address.includes("${INFURA_API_KEY}"));
+      // const httpsRpcAddresses = feedback.results[0].value.rpc.filter((address) => address.startsWith("https://") && !address.includes("${INFURA_API_KEY}"));
+      const length = httpsRpcAddresses.length;
+      const randomnumber = Math.floor(Math.random() * length);
+      const selectedProvider = httpsRpcAddresses[randomnumber];
+      console.log('selectedProvider:', selectedProvider);
+      let provider = await new ethers.JsonRpcProvider(selectedProvider);
+      console.log('provider:', provider);
+      return provider
+    }
+
+
+
+    async function checkContract(addr) {
+      console.log('checkContract()')
+      let provider;
+      try {
+        provider = await createProv();
+        const network = await provider.getNetwork();
+        console.log('network:', network);
+        // return
+      } catch (error) {
+        console.error('Could not create provider:', error);
+        document.getElementById('validLink').innerHTML = `<br>❌ Could not create provider`
+      }
+
+      const tokenContract = await new ethers.Contract(addr, erc20Abi, provider);
+      console.log('tokenContract:', tokenContract)
+
+      let result = await JSON.parse(localStorage.getItem('chainResult'))
+      let explorerLink = `<a target="_blank" rel="noopener noreferrer" href="${result.value.explorers[0].url}/address/${addr}">${addr}</a>`;
+      document.getElementById('validLink').innerHTML = `<br>${explorerLink}`
+
+      const symbol = await tokenContract.symbol();
+      console.log("Token Symbol:", symbol);
+      document.getElementById('validLink').innerHTML += `<br>Token Symbol: ${symbol}`
+      document.getElementById('validLink').setAttribute('symbol', symbol);
+      document.getElementById('validLink').setAttribute('address', addr);
+
+      let ts = await tokenContract.totalSupply()
+      console.log('TOTAL SUPPLY: ', ts)
+      document.getElementById('validLink').innerHTML += `<br>Total Supply: ${ts}`
+
+      return
+
+    }
+
+
+
+
+
+
+    // Function to validate Ethereum address
+    function isValidEthAddress(address) {
+      const pattern = /^0x[a-fA-F0-9]{40}$/;
+      return pattern.test(address);
+    }
+
+
+    const { isAddress } = ethers;
+
+    // Event listener for the input field
+    document.getElementById('contractAddress').addEventListener('input', function () {
+      const address = this.value;
+
+      // Check if the address is valid
+      if (isAddress(address)) {
+
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+        addERC20contract.style.display = 'inline'
+
+        // Call your function here when the address is valid
+        checkContract(address)
+      } else {
+        this.classList.remove('is-valid');
+        this.classList.add('is-invalid');
+        addERC20contract.style.display = 'none'
+
+      }
+    });
+
+    
+    function addConctract() {
+      console.log('addConctract() ')
+      // Retrieve and parse existing chain data from localStorage
+      let storedResult = JSON.parse(localStorage.getItem('chainResult')) || { results: [] };
+
+      // Get the relevant elements and their values
+      const tokenName = document.getElementById('validLink').getAttribute('symbol');
+      const chainName = storedResult.value.name;
+      const chainId = storedResult.value.chainId;
+      const contractAddr = document.getElementById('contractAddress').value;
+      const rpcs = storedResult.value.rpc.filter((address) => address.startsWith("https://") && !address.includes("${INFURA_API_KEY}"));
+      const explorers = storedResult.value.explorers;
+
+      // Create a new chain entry
+      const newToken = {
+        tokenName,
+        chainName,
+        chainId,
+        contractAddr,
+        rpcs,
+        explorers
+      };
+
+      storeToken(newToken)
+
+      // repopupulate select
+     populateSelectInput()
+
+
+    }
+
+
+    // STORE TOKEN 
+    function storeToken(token) {
+      console.log('storeToken()')
+      var tkn = [];
+      tkn = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+
+      // Check if the address already exists
+      var isDuplicate = tkn.some(existingToken => existingToken.contractAddr === token.contractAddr);
+
+      if (!isDuplicate) {
+        console.warn('NEW TOKEN!')
+        tkn.push(token);
+        localStorage.setItem('ERC20_TOKENS', JSON.stringify(tkn));
+      }
+      else {
+        console.warn('Token already exists , skipping save.');
+        return
+      }
+
+      // REMOVE chainFeedback and clear UI
+      localStorage.removeItem('chainResult');
+	  console.warn('chainResult removed from localStorage')
+
+		// set prefered token index to this token
+      const length = document.getElementById('erc20Selector').length;
+	  let newindex = length -1;
+		localStorage.setItem('preferredTokenIndex', newindex);
+
+		// CLEAR UI
+		document.getElementById("autoComplete").value = "";
+		document.getElementById("contractAddress").value = "";
+		document.getElementById("selectionResult").innerHTML = "";
+		document.getElementById("validLink").innerHTML = "";
+		document.getElementById("selectionResult").style.display = "none";
+		document.getElementById("contractAddress").classList.remove('is-valid');
+		
+		closeModalId('#addNewTokenModal')
+
+          Toast.fire({ title: "Token added!", text: "A new Token has been added.", icon: "success" });
+
+    }
+
+    function removeToken(contractAddr) {
+        console.log('removeToken()');
+        var tkn = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+
+        // Filter out the token with the matching contractAddr
+        var newTkn = tkn.filter(existingToken => existingToken.contractAddr !== contractAddr);
+
+        if (newTkn.length === tkn.length) {
+          console.warn('Token not found , skipping removal.');
+          return;
+        }
+
+        localStorage.setItem('ERC20_TOKENS', JSON.stringify(newTkn));
+
+        // REMOVE chainFeedback and clear UI
+        localStorage.removeItem('chainResult');
+
+		// // set prefered token index to this token
+
+		// // CLEAR UI
+		// document.getElementById("autoComplete").value = "";
+		// document.getElementById("contractAddress").value = "";
+		// document.getElementById("selectionResult").innerHTML = "";
+		// document.getElementById("validLink").innerHTML = "";
+
+		// closeModalId('#')
+
+		
+    }
+
+
+ 
+
+
+    function populateSelectInput(selectId) {
+      console.log('populateSelectInput()')
+      // Retrieve the stored data from localStorage
+      let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+
+      // DEFAULT TOKEN
+      // Check if no tokens are stored, and add a default token if necessary
+      if (storedData.length === 0) {
+        const defaultToken = {
+          tokenName: "TROK",
+          chainName: "Arbitrum Sepolia",
+          chainId: 421614,
+          contractAddr: "0x3723A0d04ABDFA902d47426973E0cb49C2fC3B86",  // Example contract address
+          rpcs: ["https://sepolia-rollup.arbitrum.io/rpc"],   // Example RPC endpoint
+          explorers: [{ "name": "Arbitrum Sepolia Rollup Testnet Explorer", "url": "https://sepolia-explorer.arbitrum.io", "standard": "EIP3091" }] // Example explorer
+        };
+        storedData.push(defaultToken);
+        localStorage.setItem('ERC20_TOKENS', JSON.stringify(storedData));
+      }
+
+      // Retrieve the preferred selection from localStorage or default to 0
+      let preferredIndex = localStorage.getItem('preferredTokenIndex');
+      preferredIndex = preferredIndex !== null ? parseInt(preferredIndex, 10) : 0;
+
+      // Find the select element
+	//   function populateSelectInput(selectId) {
+  // Set default value if no argument is passed
+  selectId = selectId || 'erc20Selector';
+
+  const selectElement = document.getElementById(selectId);
+
+    //   const selectElement = document.getElementById('erc20Selector');
+      // const selectElement = document.getElementById('erc20MainSelector');
+
+      // Clear the existing options
+      selectElement.innerHTML = '';
+
+      // Populate the select input with the stored data
+      storedData.forEach((token, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${token.tokenName} ${token.chainName} (${token.chainId})`;
+        if (preferredIndex === index) {
+          option.selected = true; // Set the preferred item as selected
+        }
+        selectElement.appendChild(option);
+      });
+    }
+
+
+
+
+
+    // Event listener to store the selected option
+      document.getElementById('erc20Selector').addEventListener('change', async function () {
+      console.warn('erc20MainSelector() changed!')
+      let selectedIndex = this.value;
+      localStorage.setItem('preferredTokenIndex', selectedIndex);
+
+      // borrar contenedor
+      data.innerHTML = ''
+
+      await loadToken()
+       
+
+    });
+
+    async function loadToken(addr){
+      console.warn('loadToken()')
+   
+ 
+      const storedTokenType = localStorage.getItem('selectedTokenType');
+      data.innerHTML = ''
+ 
+      
+      // if eth
+      // ETHEREUM
+       if (storedTokenType === 'eth') {
+         console.warn('LOADING ETHEREUM ')
+            // erc20Options.style.display = 'block';
+            // - hide gas balance
+
+        }
+        // else if erc-20
+        else if (storedTokenType === 'erc20') {
+        console.warn('LOADING ERC20 ')
+        
+      
+      // ..............................
+      // Carga el token
+      // ..............................
+
+      let preferredToken = await recallStoredToken();
+      if (preferredToken) {
+        console.log('Preferred Token*:', preferredToken);
+        // You can now use preferredToken.tokenName, preferredToken.chainName, etc.
+      } else {
+        console.log('No preferred token stored or index out of range.');
+      }
+
+
+	  if (!addr) {
+        console.error('No address provided to loadToken function');
+			  addr  =document.getElementById('yourAddress').getAttribute('address');
+			// addr = 
+        // return; // or throw an error, or provide a default value
+    }
+
+    // Continue with the rest of your function if addr is provided
+    console.log(`Loading token for address: ${addr}`);
+    
+	  let balance= await checkERC20Balance(addr) 
+	  console.warn('erc20Balance:',balance);
+
+		let gasBalance= await checkGasBalance(addr) 
+        console.warn('gasBalance:',gasBalance);
+
+		let explorer =preferredToken.explorers[0].url
+		let tokenAddress =preferredToken.contractAddr
+		let userAddress= addr
+
+
+		userData.innerHTML = ` <svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg> <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress }">Balance: ${balance} </a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">gas: ${gasBalance} </a> </div> `;
+	
+ 
+ 
+      // ..............................
+      // FIN Carga el token
+      // ..............................
+    }
+
+
+    }
+
+
+    function recallStoredToken() {
+      // Retrieve the preferred token index from localStorage
+      let preferredIndex = localStorage.getItem('preferredTokenIndex');
+
+      // Set the default index to 0 if no preferred index is stored
+      if (preferredIndex === null) {
+        preferredIndex = 0;
+      } else {
+        preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
+      }
+
+      // Retrieve the stored data from localStorage
+      let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+
+      // If the preferred index is within the range of stored tokens, return the corresponding token details
+      if (storedData[preferredIndex]) {
+        return storedData[preferredIndex];
+      } else {
+        // Handle the case where the index is out of range
+        return null;
+      }
+    }
+
+
+
+	
 			</script>
 	</body>
 </html>

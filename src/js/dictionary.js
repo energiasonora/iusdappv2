@@ -101,7 +101,9 @@
         newtitle:"New title",
         scanqr: "Scan QR",
         unlockWallet: "Unlock your wallet",
-        rememberPassword:"Remember password"
+        rememberPassword:"Remember password",
+        buygas: "Buy gas",
+        askpeer: "ask your peer to pay for the gas",
 
       },
       fr: {
@@ -195,7 +197,9 @@
         newtitle:"Nouveau titre",
         scanqr: "scanner le code QR",
         unlockWallet: "Débloquez votre portefeuille",
-        rememberPassword:"Se souvenir du mot de passe"
+        rememberPassword:"Se souvenir du mot de passe",
+        buygas: "Acheter du gas",
+        askpeer: "Demander le paiement du gaz à votre peer",
 
 
       },
@@ -290,7 +294,9 @@
         newtitle:"Nuevo nombre de archivo",
         scanqr: "Escanear QR",
         unlockWallet: "Desbloquear billetera",
-        rememberPassword:"Recordar password"
+        rememberPassword:"Recordar password",
+        buygas: "Comprar gas",
+        askpeer: "demandar pago de gas",
 
 
       }

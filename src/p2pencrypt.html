@@ -17,25 +17,105 @@
 
         }
     </style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+<script src="js/sweetalert2.all.min.js"></script>
+
+<style>
+    body { background-color: black; color: green; } input { font-size: x-small; } body { font-family: Arial, sans-serif; margin: 20px; } .container { width: 100%; } .row { display: flex; flex-wrap: wrap; margin-bottom: 20px; } .col { flex: 1; min-width: 300px; padding: 10px; } .form-group { margin-bottom: 15px; } .form-group label { display: block; margin-bottom: 5px; } .form-group input { width: 100%; padding: 8px; box-sizing: border-box; } .addresses { width: 350px !important; } button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; } button:hover { background-color: #0056b3; } .half-width { width: 50%; } .addr { font-size: x-small; } #result { font-size: xx-small; } /* COLORED TOAST */ .colored-toast.swal2-icon-success { background-color: #45bb00 !important; } .colored-toast.swal2-icon-error { background-color: #f27474 !important; } .colored-toast.swal2-icon-warning { background-color: #f8bb86 !important; } .colored-toast.swal2-icon-info { background-color: #3fc3ee !important; } .colored-toast.swal2-icon-question { background-color: #87adbd !important; } .colored-toast .swal2-title { color: white; } .colored-toast .swal2-close { color: white; } .colored-toast .swal2-html-container { color: white; }
+</style>
 </head>
 
 <body>
     <h1>P2P ENCRYPT</h1>
     <p>Encrypt and sign message</p>
+
+
+       <!-- Segunda fila con dos columnas -->
+       <div class="row">
+        <!-- Columna A - ALICE -->
+        <div class="col">
+            <h3>ALICE</h3>
+            <span id="aliceAddress" class="addr"></span>
+
+            <div id="aliceMessageForm">
+                <div class="mb-3">
+                    <label for="alicemessageInput" class="form-label">Message</label>
+                    <input type="text" class="form-control" id="alicemessageInput" placeholder="Type your message here">
+                </div>
+    <div id="aliceHash">Hash:</div>
+
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+
+       
+        </div>
+
+        <!-- Columna B - BOB -->
+        <div class="col">
+            <h3>BOB</h3>
+            <span id="bobAddress" class="addr"></span>
+
+     
+            <div id="aliceMessageForm">
+                <div class="mb-3">
+                    <label for="bobmessageInput" class="form-label">Message</label>
+                    <input type="text" class="form-control" id="bobmessageInput" placeholder="Type your message here">
+                </div>
+    <div id="bobHash">Hash:</div>
+
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+    <!-- ------------ -->
+
     <div id="messagesResult"></div>
     <p>
     <div id="result"></div>
 
     <br><br>
     <div id="resultAddress"></div>
-    <!-- <script src="js/ethers.6.12.0.umd.min.js" type="application/javascript"></script> -->
-    <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
+	<!-- <script src="js/ethers-6.13.2.umd.min.js"></script> -->
+    <script src="js/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 
  
 
 <script type="module" >
+
+ // AUTOHASH ALICE
+ alicemessageInput.addEventListener("input", function () {
+            console.log('text changed', alicemessageInput.value)
+            const text = alicemessageInput.value;
+            // const hash = ethers.keccak256(ethers.toUtf8Bytes(text));
+            const hash = ethers.sha256(ethers.toUtf8Bytes(text));
+            alicehHash.innerText = "Hash: " + hash;
+            aliceHash.setAttribute("data-hash", hash);
+            console.log('sha-256', hash);
+
+        });
+
+
+        // / AUTOHASH BOB
+        bobmessageInput.addEventListener("input", function () {
+            console.log('text changed', bobmessageInput.value)
+            const text = bobmessageInput.value;
+            // const hash = ethers.keccak256(ethers.toUtf8Bytes(text));
+            const hash = ethers.sha256(ethers.toUtf8Bytes(text));
+            bobHash.innerText = "Hash: " + hash;
+            bobHash.setAttribute("data-hash", hash);
+            console.log('sha-256', hash);
+
+        });
 
 
         import EthCrypto from 'eth-crypto';
