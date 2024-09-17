@@ -1414,26 +1414,6 @@ z-index: -1;
 
 	 /* FIXIES */
 
-/* DOT */
-.dot {
-  background-color: #0f0;
-  border-radius: 50%;
-  width: 17px;
-  height: 17px;
-  animation: 3s infinite blink;
-  position: relative;
-  left: 74%;
-  bottom: 17%;
-}
-
-@keyframes blink {
-  0%, 50%, 100% {
-    opacity: 1;
-  }
-  25%, 75% {
-    opacity: 0;
-  }
-}
 
   .right {
     /* display: none; */
@@ -1602,7 +1582,8 @@ body.swal2-height-auto {
 		bottom: 0!important;
 		/* top: 85px!important; */
 		position: absolute!important;
-		z-index: 9;
+		/* z-index: 9; */
+		z-index: 3;
 		width: 100%!important;
 	  
 	  }
@@ -1676,9 +1657,11 @@ body.swal2-height-auto {
 /* FIX ? */
 
 #chatContainer{
-	top: 5em;
-	height: calc(100vh - 5em);
+	/* top: 5em;
+	height: calc(100vh - 5em); */
 
+	height: 100vh;
+    top: 0;
 }
 
 
@@ -1740,3 +1723,141 @@ body.swal2-height-auto {
 		background-color: transparent!important;
 		color:var(--c1)!important
 }
+
+
+.btn:hover {
+    color: var(--c2)!important;
+}
+
+
+/* PULSE ANIMATION */
+/* .dot-pulse {
+	position: relative;
+	left: -9999px;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #9880ff;
+	box-shadow: 9999px 0 0 -5px #9880ff;
+	animation: dotPulse 1.5s infinite linear;
+	animation-delay: .25s;
+  }
+  
+  @keyframes dotPulse {
+	0% {
+	  transform: scale(1, 1);
+	}
+	75% {
+	  transform: scale(1, 1.5);
+	}
+	100% {
+	  transform: scale(1, 1);
+	}
+  } */
+
+/**
+ * ==============================================
+ * Dot Windmill
+ * ==============================================
+ */
+/* .dot-windmill {
+	position: relative;
+	top: -10px;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #9880ff;
+	color: #9880ff;
+	transform-origin: 5px 15px;
+	animation: dot-windmill 2s infinite linear;
+  }
+  .dot-windmill::before, .dot-windmill::after {
+	content: "";
+	display: inline-block;
+	position: absolute;
+  }
+  .dot-windmill::before {
+	left: -8.66254px;
+	top: 15px;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #9880ff;
+	color: #9880ff;
+  }
+  .dot-windmill::after {
+	left: 8.66254px;
+	top: 15px;
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #9880ff;
+	color: #9880ff;
+  }
+  
+  @keyframes dot-windmill {
+	0% {
+	  transform: rotateZ(0deg) translate3d(0, 0, 0);
+	}
+	100% {
+	  transform: rotateZ(720deg) translate3d(0, 0, 0);
+	}
+  } */
+  .dots-container {
+	display: inline-block;
+	font-size: 24px;
+  }
+
+  .dot {
+	animation: blink 1.4s infinite both;
+	margin-right: 4px;
+  }
+
+  .dot:nth-child(1) {
+	animation-delay: 0s;
+  }
+
+  .dot:nth-child(2) {
+	animation-delay: 0.2s;
+  }
+
+  .dot:nth-child(3) {
+	animation-delay: 0.4s;
+  }
+
+  @keyframes blink {
+	0%, 20%, 100% {
+	  opacity: 1;
+	}
+	50% {
+	  opacity: 0.3;
+	}
+  }
+
+/* DOT */
+/* .dot {
+	background-color: #0f0;
+	border-radius: 50%;
+	width: 17px;
+	height: 17px;
+	animation: 3s infinite blink;
+	position: relative;
+	left: 74%;
+	bottom: 17%;
+  }
+   */
+  /* @keyframes blink {
+	0%, 50%, 100% {
+	  opacity: 1;
+	}
+	25%, 75% {
+	  opacity: 0;
+	}
+  } */
+   .tx{
+	word-break: break-all;
+   }
+
+   img#logoLockscreen{
+	max-width: 300px!important;
+   }

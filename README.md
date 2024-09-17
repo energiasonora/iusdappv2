@@ -32,7 +32,11 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
-v4.08 wallet 
+v4.12 fix unlock screen
+v4.11 avatar img fix
+v4.10 qr scan fix
+v4.09 chatUI fix. step with 0 decimal tokens. wiki links
+v4.08 wallet. add tokens. send/receibe
 v4.07 fixing agenda management. fixed newmessage stucked class. fixing bug deletes username
 v4.06 fixed scan and chat did bug
 v4.05 fix restore seed

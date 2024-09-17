@@ -1,8 +1,8 @@
 {
-  "name": "starkid",
+  "name": "iusNaturalis",
   "version": "1.0.0",
   "description": "a DID managing tool to communicate your public and private data with sovereignty",
-  "repository": "git@github.com:energiasonora/meterdid.git",
+  "repository": "git@github.com:energiasonora/iusdappv2.git",
   "author": "xunorus <xunorus@gmail.com>",
   "license": "MIT",
   "dependencies": {

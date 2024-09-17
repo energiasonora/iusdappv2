@@ -1,7 +1,7 @@
  #  CRIPTO PARA PRINCIPIANTES
  by xunorus
 
-chatWallet - IusNaturalis
+IusNaturalis
 
 ## QUÉ SON LAS CRIPTO?
 
@@ -66,7 +66,7 @@ La wallet es el software que se encarga de generar nuestra address y luego de ha
 Para tener tu primera wallet accede a este link o escanea el código QR
 
 
-https://chatwallet-x.web.app
+https://iusnaturalis.web.app
 
 
 ## LA AUTO CUSTODIA
