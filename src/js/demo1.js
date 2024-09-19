@@ -12,9 +12,9 @@
 
 	'use strict';
 
-	var openCtrl = document.getElementById('btn-search'),
-		closeCtrl = document.getElementById('btn-search-close'),
-		searchContainer = document.querySelector('.search'),
+	// var openCtrl = document.getElementById('btn-search'),
+	// 	closeCtrl = document.getElementById('btn-search-close'),
+	var	searchContainer = document.querySelector('.search'),
 		inputSearch = searchContainer.querySelector('.search__input'),
 		lastFocusedElement;
 
@@ -23,13 +23,17 @@
 	}
 
 	function initEvents() {
-		openCtrl.addEventListener('click', openChat);
-		closeCtrl.addEventListener('click', closeSearch);
+		// openCtrl.addEventListener('click', openChat);
+		// closeCtrl.addEventListener('click', closeSearch);
 		document.addEventListener('keyup', function(ev) {
 			// escape key.
-			if( ev.keyCode == 27 ) {
-				closeSearch();
-			}
+			// if( ev.keyCode == 27 ) {
+			// 	closeSearch();
+			// }
+
+			if (ev.key === 'Escape') {
+					closeSearch();
+				}
 		});
 	}
 

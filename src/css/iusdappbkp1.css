@@ -473,11 +473,11 @@ a,
 }
 
 .search__related {
-	/* display: flex;
+	display: flex;
 	width: 75%;
 	pointer-events: none;
 
-	flex-direction: column; */
+	flex-direction: column;
 }
 
 .search__suggestion {
@@ -587,7 +587,7 @@ a,
 
 @media screen and (max-width:40em) {
 	.search__form {
-		/* margin: 5em 0 1em; */
+		margin: 5em 0 1em;
 	}
 	.btn--search-close {
 		font-size: 1.25em;
@@ -605,9 +605,6 @@ a,
 	.search__suggestion:nth-child(3) {
 		display: none;
 	}
-	/* #chatFooter{
-		padding-bottom: 50px;
-	} */
 }
 
 
@@ -704,16 +701,10 @@ z-index: -1;
 
 /* CHAT */
 #chatcontainer {
-	/* display: flex;
+	display: flex;
 	flex-direction: column;
 	 height: calc(100vh - 81px);
 	margin-top: 81px;
-	 */
-
-	display: grid;
-	grid-template-rows: auto 1fr auto;
-	height: 100vh;
-
   }
   #qrtroqcontainer{
 	  height: calc(100vh - 81px);
@@ -724,15 +715,9 @@ z-index: -1;
 	font: x-large;
 	background-color: var(--bckmodal);
 
-	/* position: absolute; */
-    /* top: 1.3em; */
-    /* width: 85%!important; */
-	
-	/* position: initial !important; */
-    padding-top: 1.3em;
-    width: 95%!important;
-    /* width: 100% !important; */
-
+	position: absolute;
+    top: 1.3em;
+    width: 85%!important;
   }
   #chatheader, #chatfooter {
 	/* padding: 10px; */
@@ -741,16 +726,20 @@ z-index: -1;
   
   #chatBox {
 	flex-grow: 1; 
-	overflow: hidden;
-	overflow-y: scroll;
-	width: 100vw;
-	/* height: calc(100% - 90px)!important; */
+	  /* height: calc(100% - 90px)!important; */
+	  overflow: hidden;
+	  overflow-y: scroll;
 	  /* touch-action: pan-y!important; */
+
+
 
 	  /* overflow-y: scroll;
 	  height: 71% !important;
 	  position: absolute; */
 
+
+
+	  
   }
   .swiper-slide {
 	touch-action: pan-y!important;
@@ -1568,12 +1557,8 @@ body.swal2-height-auto {
 	   
 		/* fix for phone */
 		width: 100%;
-
-		/* fix para cuando celular no esta en pantalla completa */
-		padding-bottom: 60px;
-
-		/* bottom: 50px;
-		position: absolute; */
+		bottom: 50px;
+		position: absolute;
 	
 	  }
 	  .main-wrap{
@@ -1903,26 +1888,4 @@ body.swal2-height-auto {
 	word-wrap: break-word;
    }
 
-
-   /* test */
-   #chatContainer {
-	/* display: grid;
-	grid-template-rows: auto 1fr auto;
-	height: 100vh; */
-  }
-  
-  /* #chatHeader { */
-	/* position: initial !important;
-    padding-top: 1.3em;
-    width: 100% !important; */
-  /* } */
-  /* 
-  
-  #chatBox {
-	padding: 10px;
-	overflow-y: auto;
-  }
-  
-  #chatFooter {
-	padding: 10px;
-  } */
+   

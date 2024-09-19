@@ -32,6 +32,8 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+v5.01 lighthouse as ipfs provider
+v4.13 fix autopopulate erc20
 v4.12 fix unlock screen
 v4.11 avatar img fix
 v4.10 qr scan fix

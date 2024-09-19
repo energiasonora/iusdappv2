@@ -82,8 +82,8 @@
 
     <br><br>
     <div id="resultAddress"></div>
-	<!-- <script src="js/ethers-6.13.2.umd.min.js"></script> -->
-    <script src="js/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+	<script src="js/ethers-6.13.2.umd.min.js"></script>
+    <!-- <script src="js/ethers-5.7.2.umd.min.js" type="application/javascript"></script> -->
 
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
@@ -92,6 +92,7 @@
 
 <script type="module" >
 
+let alicehHash = document.getElementById('aliceHash')
  // AUTOHASH ALICE
  alicemessageInput.addEventListener("input", function () {
             console.log('text changed', alicemessageInput.value)
