@@ -22,6 +22,9 @@
     
 	--transition-1: all 0.3s ease-in-out;
 	--transition-2: all 0.2s ease-in-out;
+
+	--card: #212529;
+
   }
 
 
@@ -1926,3 +1929,7 @@ body.swal2-height-auto {
   #chatFooter {
 	padding: 10px;
   } */
+
+
+
+  .card { background-color: var(--card); }
