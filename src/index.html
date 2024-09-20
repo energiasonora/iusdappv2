@@ -182,7 +182,7 @@ IPFS</button> -->
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v5.01 </span>
+			<span>v5.02 </span>
 		</nav>
 	</div>
 
@@ -297,18 +297,29 @@ IPFS</button> -->
             </div>
           </div>
           <!-- Second row: Text input field and additional form -->
-          <div class="row mb-3">
+         
+ 
+<div class="row mb-3">
+  <div class="col-12">
+    <label for="aliasName" class="form-label">Alias Name</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="aliasName" placeholder="Enter alias name" readonly>
+      <button type="button" id="editAlias" class="btn btn-secondary">Edit</button>
+    </div>
+  </div>
+</div>
+		  <!-- <div class="row mb-3">
             <div class="col-12">
               <label for="aliasName" class="form-label">Alias Name</label>
               <input type="text" class="form-control" id="aliasName" placeholder="Enter alias name">
             
-			  <!-- <form class="mt-3">
-                <div id="additionalFields"></div>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="addDoc()">Add Public Document +</button>
-              </form> -->
-
+			  
             </div>
-          </div>
+		</div> -->
+		<!-- <form class="mt-3">
+		  <div id="additionalFields"></div>
+		  <button type="button" class="btn btn-secondary btn-sm" onclick="addDoc()">Add Public Document +</button>
+		</form> -->
           <!-- Third row: Save DID button -->
 <!-- PUBLIC DOCS INSERTION -->
 
@@ -2146,65 +2157,6 @@ setTimeout(() => {
 
 		}
 
-
-			async function loadDID( signer){
-				let did = `did:ius:${signer.address}`
-
-					// IF. READ DID 
-					console.log('💬 READ YOUR DID:', did)
-					let rdid =  await readDIDRecord(did);
-					if(rdid.data==null){
-						console.warn('DID NULL, creatre ONE')
-						let avatar = '';
-						let alias = signer.address;
-						let privData = '';
-						let cid = '';
-						try {
-							const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
-							if (result) {
-								console.log('The DID record was created successfully.');
-							} else {
-								console.warn('Failed to create the DID record.');
-							}
-						} catch (error) {
-							console.error('An error occurred while creating the DID record:', error);
-						}
-
-					} else {
-						console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
-
-						// CHECK if avatar
-						let avtr = rdid.data.avatar;
-						if (avtr) {
-							let avatar = JSON.parse(avtr);
-							document.getElementById('avatarIMG').src = avatar;
-							document.getElementById('aliasAvatar').src = avatar;
-						} else {
-							console.log('Avatar data is empty');
-						}
-
-						// ACTIVATE BUTTON TO MINT OR UPDATE
-						document.getElementById('mintOrUpdate').disabled = false;
-
-					}
-			}
-
-			async function fetchDID(did) {
-							try {
-								const didresult = await readDIDRecord(did);
-
-								if (didresult.data != null) {
-									console.log(did + ' HAS A RECORD!!!');
-									return didresult
-								} else {
-									console.log(did + ' DOESN\'T HAVE A RECORD :(');
-									return
-								}
-							} catch (error) {
-								console.error('An error occurred while fetching the DID record:', error);
-							}
-						}
- 
 
 function displayQR(data) {
     console.log('displayQR(data)')
@@ -4783,8 +4735,6 @@ function verifyMnemonic() {
 			});
 		}
 
-
-
 		function successAnim(){
 
 			function PathLoader(el) {
@@ -4832,14 +4782,11 @@ function verifyMnemonic() {
 			});
 		}
 
-
 		function countWords(str) {
 			let lngth = str.trim().split(/\s+/).length;
 			console.log('countWords:', lngth)
 			return lngth;
 		}
-
-
 
 		// not usded?
 		async function restoreSeed() {
@@ -4918,11 +4865,6 @@ function verifyMnemonic() {
 					}
 				}
 				await init(wallet)
-				// return
-				// return
-
-				// ...
-
 
 		}
 
@@ -4932,6 +4874,72 @@ function verifyMnemonic() {
 		/*********************************************************************************************
 		.)   MANAGE DID
 		**********************************************************************************************/
+		// id: string; 
+		// avatar: string; 
+		// alias: string; 
+		// privData: string; 
+		// cid: string; 
+		// publicKey: PublicKey;
+
+
+		async function loadDID( signer){
+				let did = `did:ius:${signer.address}`
+
+					// IF. READ DID 
+					console.log('💬 READ YOUR DID:', did)
+					let rdid =  await readDIDRecord(did);
+					if(rdid.data==null){
+						console.warn('DID NULL, creatre ONE')
+						let avatar = '';
+						let alias = signer.address;
+						let privData = '';
+						let cid = '';
+						try {
+							const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
+							if (result) {
+								console.log('The DID record was created successfully.');
+							} else {
+								console.warn('Failed to create the DID record.');
+							}
+						} catch (error) {
+							console.error('An error occurred while creating the DID record:', error);
+						}
+
+					} else {
+						console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
+
+						// CHECK if avatar
+						let avtr = rdid.data.avatar;
+						if (avtr) {
+							let avatar = JSON.parse(avtr);
+							document.getElementById('avatarIMG').src = avatar;
+							document.getElementById('aliasAvatar').src = avatar;
+						} else {
+							console.log('Avatar data is empty');
+						}
+
+						// ACTIVATE BUTTON TO MINT OR UPDATE
+						document.getElementById('mintOrUpdate').disabled = false;
+
+					}
+			}
+
+		async function fetchDID(did) {
+							try {
+								const didresult = await readDIDRecord(did);
+
+								if (didresult.data != null) {
+									console.log(did + ' HAS A RECORD!!!');
+									return didresult
+								} else {
+									console.log(did + ' DOESN\'T HAVE A RECORD :(');
+									return
+								}
+							} catch (error) {
+								console.error('An error occurred while fetching the DID record:', error);
+							}
+						}
+ 
 		async function fetchDIDRecord(did) {
 								try {
 								  const didresult = await readDIDRecord(did);
@@ -4956,8 +4964,8 @@ function verifyMnemonic() {
 								  throw error;
 								}
 							  }
-		// id: string; // avatar: string; // alias: string; // privData: string; // cid: string; // publicKey: PublicKey;
-			async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
+
+		async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
             console.log('Now you have the signer, do whatever you need with it:', signer);
             const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
             const data = [did, avatar, alias, privData, cid];
@@ -4970,7 +4978,6 @@ function verifyMnemonic() {
             await collectionReference.create(data);
 
         }
-
 
 		async function readDIDRecord(id) {
             const db = new Polybase({
@@ -5009,7 +5016,6 @@ function verifyMnemonic() {
 
         }
 
-
 		async function updateAvatarDID(did, newdata, signer) {
             console.log('updateDID()')
 
@@ -5041,9 +5047,7 @@ function verifyMnemonic() {
             }
             return true
 
-
         }
-
 
 		async function updateAliasDID(did, newdata, signer) {
             console.log('updateDID()')
@@ -5069,11 +5073,7 @@ function verifyMnemonic() {
                 console.error("An error occurred:", error);
             }
             return true
-
-
         }
-
-
 
         async function updatePrivDataDID(did, newdata, signer) {
             console.log('updateDID()')
@@ -5106,8 +5106,10 @@ function verifyMnemonic() {
 
 
 
-        // --------------------------------------
-        //    ENCRYPT FUNCITON
+		/*********************************************************************************************
+		.)   ENCRYPT FUNCITONS
+		**********************************************************************************************/
+ 
         async function encryptPrivkey(privkey, pubkey, toEncrypt) {
             console.log('encryptPrivkey()', toEncrypt)
             // 0. coniverte en estring la eth priv key
@@ -5134,9 +5136,7 @@ function verifyMnemonic() {
             return encryptedString
 
         }
-
-		  // -----------------------------------
-        // DECRYPT
+		
 		async function decryptPrivData(privkey, pubkey, toDecrypt) {
             console.log('encryptPrivkey()', toDecrypt)
 
@@ -5144,7 +5144,6 @@ function verifyMnemonic() {
             // DECRYPTING
             // we parse the string into the object again
             const encryptedObject = EthCrypto.cipher.parse(toDecrypt);
-
             const decrypted = await EthCrypto.decryptWithPrivateKey(privkey, encryptedObject);
             const decryptedPayload = JSON.parse(decrypted);
             console.log('DECRYPRED✅!!!', decryptedPayload)
@@ -5159,10 +5158,10 @@ function verifyMnemonic() {
         }
  
 
- 
+
 
 		/*********************************************************************************************
-		.)   UPDATE IMAGE AVATA
+		.)   UPDATE IMAGE AVATAR
 		**********************************************************************************************/
 
 		avatarIMG.onclick = function (e) {
@@ -5229,8 +5228,6 @@ function verifyMnemonic() {
 				img.src = imageSrc;
 			});
 		}
-
-
 
 		async function loadCroppedImg() {
 			console.log('loadCroppedImg()');
@@ -5355,7 +5352,7 @@ function verifyMnemonic() {
 
 
 		/*********************************************************************************************
-		.)  MINT OR UPDATE
+		.)  MINT OR UPDATE ONCHAIN DID
 		**********************************************************************************************/
 
 		async function mintOrUpdate() {
@@ -5417,7 +5414,7 @@ function verifyMnemonic() {
 			}
 
 
-			async function updateOnchainDID(cid) {
+		async function updateOnchainDID(cid) {
 
 				const provider = new ethers.JsonRpcProvider(optionsList[0].API);
 				let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
@@ -5459,9 +5456,7 @@ function verifyMnemonic() {
 				}
 
 
-
-
-			async function getDID() {
+		async function getDID() {
 				const provider = new ethers.JsonRpcProvider(optionsList[0].API);
 				let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
 				let signer = await new ethers.Wallet(chatETHPrivKey) 
@@ -5502,8 +5497,6 @@ function verifyMnemonic() {
 			<br>
 			<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
 			`;
-			
-
 		 
 		}
 
@@ -5865,13 +5858,12 @@ function verifyMnemonic() {
 
 
     }
-  function addToken() {
+ 
+	function addToken() {
       closeModalId('#defaultTokenModal')
       openModalId('#addNewTokenModal')
     }
 
-    // "https://chainid.network/chains_mini.json"
-      // "https://chainid.network/chains.json"
 
     const autoCompleteJS = new autoComplete({
       data: {
@@ -6008,6 +6000,8 @@ function verifyMnemonic() {
       }
     };
 
+
+
     ["focus", "blur"].forEach((eventType) => {
       autoCompleteJS.input.addEventListener(eventType, () => {
         if (eventType === "blur") {
@@ -6026,8 +6020,6 @@ function verifyMnemonic() {
   .) DOMContentLoaded
   **********************************************************************************************/
 
-    // DEFAULT TOKEN
-
     document.addEventListener('DOMContentLoaded', function () {
 		console.log('👂 listen DOMContentLoaded')
       const erc20Option = document.getElementById('erc20Option');
@@ -6037,21 +6029,50 @@ function verifyMnemonic() {
       const removeErc20Address = document.getElementById('removeErc20Address');
       const infoErc20Address = document.getElementById('infoErc20Address');
 
- 
+	    
+//   ------------------------------------
+// .) LISTEN TO EDIT ALIAS NAME CHANGE
+//   ------------------------------------
+// 	  document.getElementById('editAlias').addEventListener('click', function () {
+//     const aliasInput = document.getElementById('aliasName');
+//     aliasInput.readOnly = !aliasInput.readOnly;
+//     this.textContent = aliasInput.readOnly ? 'Edit' : 'Save';
+//   });
+const aliasInput = document.getElementById('aliasName');
+  const editButton = document.getElementById('editAlias');
 
+  function enableEditing() {
+	  console.log('edit alias name')
+    aliasInput.readOnly = false;
+    editButton.textContent = 'Save';
+  }
+
+  function disableEditing() {
+    aliasInput.readOnly = true;
+    editButton.textContent = 'Edit';
+    // You can add additional code here to save the changes, e.g., sending data to the server
+    console.log('Alias name saved:', aliasInput.value);
+  }
+
+  editButton.addEventListener('click', function () {
+    if (aliasInput.readOnly) {
+      enableEditing();
+    } else {
+      disableEditing();
+    }
+  });
 //   ------------------------------------
 // .) LISTEN TO STEALTH ADDRESS CHANGE
 //   ------------------------------------
-//  event listener to update localStorage when the checkbox is toggled
-document.getElementById('stealthAddressCheckbox').addEventListener('change', function() {
-  if (this.checked) {
-    localStorage.setItem('stealthAddressActive', 'true');
-    console.warn('Stealth Address enabled and stored in localStorage');
-  } else {
-    localStorage.setItem('stealthAddressActive', 'false');
-    console.warn('Stealth Address disabled and stored in localStorage');
-  }
-});
+	document.getElementById('stealthAddressCheckbox').addEventListener('change', function() {
+	if (this.checked) {
+		localStorage.setItem('stealthAddressActive', 'true');
+		console.warn('Stealth Address enabled and stored in localStorage');
+	} else {
+		localStorage.setItem('stealthAddressActive', 'false');
+		console.warn('Stealth Address disabled and stored in localStorage');
+	}
+	});
 
 //   ------------------------------------
 // .) LISTEN TO TOKENTYPE CHANGES
@@ -6086,12 +6107,10 @@ document.getElementById('stealthAddressCheckbox').addEventListener('change', fun
       });
 
 
-
       
 //   ------------------------------------
 // .) REMOVE TOKEN
 //   ------------------------------------
-
       removeErc20Address.addEventListener('click',  function () {
 
 				Swal.fire({ title: "Are you sure?", text: "You won't be able to revert this!", icon: "warning", showCancelButton: true, confirmButtonColor: "#3085d6", cancelButtonColor: "#d33", confirmButtonText: "Yes, delete it!" })
@@ -6809,26 +6828,6 @@ alert('Invalid Ethereum address');
                 console.log("Decoded yBytes:", yBytes);
 
 
-                // Step 3: Concatenate x and y bytes
-                // const publicKeyBytes = ethers.concat([xBytes, yBytes]);
-
-                // ---
-                // Public Key as BigInt
-                // ---
-                // Step 4: Convert concatenated bytes to a BigInt
-                // const publicKeyBigInt = BigInt(ethers.hexlify(publicKeyBytes));
-                // console.log("Public Key as BigInt:", publicKeyBigInt);
-                
-                // ---
-                // uncompressedPublicKey
-                // ---
-                // Step 2: Concatenate x and y to form the uncompressed public key
-                // const publicKeyBytes = ethers.concat([xBytes, yBytes]);
-                // Step 3: Optionally add the 0x04 prefix for uncompressed keys
-                // const uncompressedPublicKey = ethers.hexlify(ethers.concat([new Uint8Array([0x04]), publicKeyBytes]));
-                // console.log("Uncompressed Public Key:", uncompressedPublicKey);
-
-
                 // ---
                 // compressedPublicKey
                 // ---
@@ -6888,17 +6887,14 @@ alert('Invalid Ethereum address');
 			console.log('TOKEN TYPE CHANGED')
 
 			const selectedType = this.value;
-    const erc20Selector = document.getElementById('erc20Selector');
-
-
-
-    const erc20Details = document.getElementById('erc20Details');
-    if (this.value === 'erc20') {
-        erc20Details.classList.remove('d-none');
-    } else {
-        erc20Details.classList.add('d-none');
-    }
-});
+			const erc20Selector = document.getElementById('erc20Selector');
+			const erc20Details = document.getElementById('erc20Details');
+			if (this.value === 'erc20') {
+				erc20Details.classList.remove('d-none');
+			} else {
+				erc20Details.classList.add('d-none');
+			}
+		});
 
 
 /////////////
@@ -7225,21 +7221,12 @@ const precurrentNonce = await provider.getTransactionCount(signer.address);
 				}
 
 				 
-// resultMessage
-
 		return
-	
-		
-		// const recipientAddress = document.getElementById('recipientAddress').value;
-		// const amount = document.getElementById('amount').value;
-		// const tokenType = document.getElementById('tokenType').value;
-		
 
 });
 
 	// return cws
 });
-
 
 
 
@@ -7258,17 +7245,12 @@ document.getElementById('cancelTransactionBtn').addEventListener('click', functi
 
 
 
-
 // Function to get ETH to USD conversion rate from CoinGecko
 async function getEthUsdPrice() {
     const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
     const data = await response.json();
     return data.ethereum.usd;
 }
-
- 
-
-
 
 
    // *********************************
@@ -7328,7 +7310,7 @@ async function getEthUsdPrice() {
         // ADD DOCS TO UI
         // 1-ADD TO UI(table)
         // let cid2ui = addCidToUI(title, cid)
-        console.log('cid2ui:', cid2ui)
+        // console.log('cid2ui:', cid2ui)
         
         // ADD DOC NEW
 
@@ -7340,12 +7322,12 @@ async function getEthUsdPrice() {
         // ADD TO LOCALSTORAGE
         let scid = cid.trim()
         let ct = [];
-        let documentAttestLink = null;
+        let documentAttestLink = '';//null no es aceptado por polybase
         let doc = { title: title, cid: scid, courtesy_translations: ct, attestation: documentAttestLink }//NEW
         console.log('doc:', doc)
         SaveDocToLocalStorage(doc);
 
-		loadDocs
+		loadDocs()
         
         // HASH OF DOCS
         const hash = ethers.sha256(ethers.toUtf8Bytes(doc));

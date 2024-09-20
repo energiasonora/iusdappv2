@@ -6,6 +6,7 @@ a sovereign decentralized platform (SDP) for peer to peer  public and private co
 demo https://iusnaturalis.web.app
 git https://github.com/energiasonora/iusdappv2
 
+polybase zk db https://testnet.polybase.xyz/v0/collections/Collection/records/pk%2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3%2FSTARKID%2FSTARKID
 
 # INSTALL
 ```
@@ -32,6 +33,7 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+v5.02 fixed upload to ipfs
 v5.01 lighthouse as ipfs provider
 v4.13 fix autopopulate erc20
 v4.12 fix unlock screen
