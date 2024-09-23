@@ -23,6 +23,7 @@ yarn parcel src/index.html  --port 4343 --https
 # deploy to firebase
 
 ```
+rm -rf .parcel-cache
 nvm use 20
 yarn parcel src/index.html --dist-dir public  --public-url ./
 firebase deploy --only hosting:iusnaturalis
@@ -33,6 +34,8 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+v5.04 display public docs
+v5.03 change alias name
 v5.02 fixed upload to ipfs
 v5.01 lighthouse as ipfs provider
 v4.13 fix autopopulate erc20

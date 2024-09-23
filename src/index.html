@@ -57,6 +57,13 @@
     <input name="avatarIMG" id="avatarIMGfile" type="file" style="display:none" accept="image/*" /> <!-- ex fileCreateItemFile -->
     <img id="avatarIMG" src="img/anonym.jpg" alt="Avatar" class=""> <!-- ex itemImgMINT -->
  
+	<!-- <span id="userAlias"></span> -->
+	<span id="userAlias" class="d-flex align-items-center justify-content-center"  style=" word-break: break-all; " ></span>
+
+	<!-- <div class="d-flex align-items-center justify-content-center" style="height: 100px;">
+		<span id="userAlias">name</span>
+	  </div> -->
+
     <div class="container mt-3">
       <div class="row">
         <div class="col text-center" id="configButtons">
@@ -88,8 +95,8 @@
 	
 	<ul id="cwContacts" class="nav"> </ul>
 
+	<!-- id="createIPFSDelivery" -->
 <button class="btn btn-primary btn-lg fullwidth "
-id="createIPFSDelivery"
 onclick="event.stopPropagation();publishInDID((this.parentElement))" disabled data-translate="publicipfs">
 <i class="fa-solid fa-envelope-circle-check"></i> Preparer comme Envoi
 IPFS</button>
@@ -182,7 +189,7 @@ IPFS</button> -->
 
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v5.02 </span>
+			<span>v5.04 </span>
 		</nav>
 	</div>
 
@@ -345,11 +352,11 @@ IPFS</button> -->
 	</div>
 	<br>
 	<div id="addDocsButtons" class="">
-	  <button class="btn btn-primary btn-lg " id="createIPFSDelivery"
+	  <!-- <button class="btn btn-primary btn-lg " id="createIPFSDelivery"
 		onclick="event.stopPropagation();publishInDID((this.parentElement))" disabled data-translate="publicipfs">
 		<i class="fa-solid fa-envelope-circle-check"></i> Preparer comme Envoi
 		IPFS</button>
-	  <br>
+	  <br> -->
   
   </section>
   
@@ -1075,6 +1082,11 @@ aria-hidden="true">
 		window.lighthouse = lighthouse
 
 
+        import { getPublicKey, utils } from '@noble/secp256k1';
+        import * as secp from '@noble/secp256k1';
+        window.getPublicKey = getPublicKey;
+        window.utils = utils;
+        window.secp = secp;
 
 </script>
 
@@ -3411,49 +3423,182 @@ return formattedDate;
 // console.log(simplifyDate(dateString)); // Output: "01 May 2024"
 
 
-function openCard(toAddr ,avtr) {
-console.log(' openCard()', toAddr, avtr)
-let a= toAddr;
-let b= avtr;
-console.log('OPENCARD DATA a:',a)
-console.log('OPENCARD DATA b:',b)
-let avatar = "./anonym.jpg"
-let htmlData = `<address>${toAddr} <svg id="innerAddress" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br>
-<p>no more info available</p>`;
-let shortAddr = toAddr.substring(0, 6) + "..." + toAddr.substring(38, 42);
-// -----------
-// TRUST
-// -----------
-	Swal.fire({ imageUrl: avtr, 
-			imageWidth: 300, 
-			imageHeight: 300, 
-			imageAlt: 'Avatar image', 
-			html: htmlData,
-			showDenyButton: true,
-			showCancelButton: false,
-			showCloseButton: true, 
-			confirmButtonText: 'trust',
-			denyButtonText: 'Block',
-			customClass: {
-				actions: 'my-actions',
-				cancelButton: 'order-1 right-gap',
-				confirmButton: 'order-2',
-				denyButton: 'order-3',
-},
-}).then((result) => {
-if (result.isConfirmed) {
-	// Swal.fire('Saved into your trusted contacts!', '', 'success')
-	editContact(toAddr)
+async function openCard(toAddr, avtr) {
+    console.log('openCard()', toAddr, avtr);
+    
+    // Initial avatar image
+    let avatar = "./anonym.jpg";
 
+    // Prepare the basic HTML data
+    let htmlData = `<address>${toAddr} <svg id="innerAddress" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br>
+    <p>Loading additional information  <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </p>`;
 
-} else if (result.isDenied) {
-	// Swal.fire('Address blocked', '', 'info')
-	RemoveContactFromLocalStorage(toAddr)
+    // Show the initial modal with basic info
+    Swal.fire({
+        imageUrl: avtr,
+        imageWidth: 300,
+        imageHeight: 300,
+        imageAlt: 'Avatar image',
+        html: htmlData,
+        showDenyButton: true,
+        showCancelButton: false,
+        showCloseButton: true,
+        confirmButtonText: 'Trust',
+        denyButtonText: 'Block',
+        customClass: {
+            actions: 'my-actions',
+            cancelButton: 'order-1 right-gap',
+            confirmButton: 'order-2',
+            denyButton: 'order-3',
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            editContact(toAddr);
+        } else if (result.isDenied) {
+            RemoveContactFromLocalStorage(toAddr);
+        }
+    });
 
+    // Fetch the DID record in the background
+    let did = `did:ius:${toAddr}`;
+    let rdid = await readDIDRecord(did);
+
+    if (rdid.data == null) {
+        console.warn('DID NULL, create ONE');
+    } else {
+        console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
+
+        // AVATAR
+        if (rdid.data.avatar) {
+            avatar = JSON.parse(rdid.data.avatar);
+            console.log('We have an avatar');
+        } else {
+            console.log('Avatar data is empty');
+        }
+
+        // NAME
+        let alias = rdid.data.alias;
+        if (alias) {
+            console.log('Name in DID: ', alias);
+        } else {
+            console.log('Alias data is empty');
+        }
+
+        // DOCUMENTS
+        let docs = rdid.data.cid;
+		// ds= docs
+        if (docs) {
+            console.log('Docs in DID: ');
+			// PROCESS DOCS
+			docs = await loadPublicDocsCard(docs)
+			pd = docs
+			
+        } else {
+            console.log('No docs in DID');
+        }
+
+        // Update the Swal modal with the fetched data
+        Swal.update({
+            imageUrl: avatar || "./anonym.jpg",
+            html: `
+                <address>${toAddr} <svg id="innerAddress" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br>
+                ${alias ? `<p>Name: ${alias}</p>` : '<p>Name not available</p>'}
+                ${docs ? `<p>Docs: ${docs}</p>` : '<p>No documents available</p>'}
+            `
+        });
+    }
 }
-})
-// ---
-}
+
+
+
+
+// async function openCard(toAddr ,avtr) {
+// console.log(' openCard()', toAddr, avtr)
+// let a= toAddr;
+// let b= avtr;
+// console.log('OPENCARD DATA a:',a)
+// console.log('OPENCARD DATA b:',b)
+// let avatar = "./anonym.jpg"
+
+// // --- 
+// // read did
+
+// let did = `did:ius:${toAddr}`
+// let rdid =  await readDIDRecord(did);
+
+
+// 	if(rdid.data==null){
+// 				console.warn('DID NULL, creatre ONE')
+			
+// 			} else {
+// 				console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
+
+
+// 				// AVATAR
+// 				let avtr = rdid.data.avatar;
+// 				if (avtr) {
+// 					let avatar = JSON.parse(avtr);
+// 					console.log('we have an avatar');
+
+// 				} 
+// 				else { console.log('Avatar data is empty'); }
+
+// 				// NAME
+// 				let alias = rdid.data.alias;
+// 				if (alias) {
+// 					console.log('Name in DID: ',alias);
+
+// 				}
+// 				 else { console.log('aliasName data is empty'); }
+
+// 				//  DOCUMENTS
+// 				let docs = rdid.data.cid;
+// 				if (docs) {
+// 					console.log('Docs in DID: ',docs);
+// 				} 
+// 				else { console.log('no docs in DID'); }
+// 			}
+
+
+
+// // --- 
+
+// let htmlData = `<address>${toAddr} <svg id="innerAddress" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br>
+// <p>no more info available</p>`;
+
+// let shortAddr = toAddr.substring(0, 6) + "..." + toAddr.substring(38, 42);
+// // -----------
+// // TRUST
+// // -----------
+// 	Swal.fire({ imageUrl: avtr, 
+// 			imageWidth: 300, 
+// 			imageHeight: 300, 
+// 			imageAlt: 'Avatar image', 
+// 			html: htmlData,
+// 			showDenyButton: true,
+// 			showCancelButton: false,
+// 			showCloseButton: true, 
+// 			confirmButtonText: 'trust',
+// 			denyButtonText: 'Block',
+// 			customClass: {
+// 				actions: 'my-actions',
+// 				cancelButton: 'order-1 right-gap',
+// 				confirmButton: 'order-2',
+// 				denyButton: 'order-3',
+// },
+// }).then((result) => {
+// if (result.isConfirmed) {
+// 	// Swal.fire('Saved into your trusted contacts!', '', 'success')
+// 	editContact(toAddr)
+
+
+// } else if (result.isDenied) {
+// 	// Swal.fire('Address blocked', '', 'info')
+// 	RemoveContactFromLocalStorage(toAddr)
+
+// }
+// })
+// }
 
 
 
@@ -4888,6 +5033,7 @@ function verifyMnemonic() {
 					// IF. READ DID 
 					console.log('💬 READ YOUR DID:', did)
 					let rdid =  await readDIDRecord(did);
+					rd= rdid
 					if(rdid.data==null){
 						console.warn('DID NULL, creatre ONE')
 						let avatar = '';
@@ -4916,6 +5062,20 @@ function verifyMnemonic() {
 							document.getElementById('aliasAvatar').src = avatar;
 						} else {
 							console.log('Avatar data is empty');
+						}
+
+						let alias = rdid.data.alias;
+						if (alias) {
+							// let alias = JSON.parse(alias);
+							// document.getElementById('avatarIMG').src = avatar;
+							// document.getElementById('aliasAvatar').src = avatar;
+							document.getElementById('aliasName').value = alias;
+							document.getElementById('userAlias').innerText = alias;
+
+							
+
+						} else {
+							console.log('aliasName data is empty');
 						}
 
 						// ACTIVATE BUTTON TO MINT OR UPDATE
@@ -5103,6 +5263,49 @@ function verifyMnemonic() {
 
         }
 
+
+		async function updateDIDdocs(id, newdocs) {
+      console.log('updateDIDdocs()')
+
+    //   let signer = await getLocalWalletSigner();
+	let signer = await getSigner() 
+
+      if (!signer) {
+        console.log('Handle case where signer is not obtained');
+      }
+      else {
+        console.log('Now you have the signer, do whatever you need with it:', signer);
+		// defaultNamespace: "pk/0xee1b340c80295bb60ada66e0396a44b70c479a857c357b37883d27efe030aaf8baf25fde75eaf8881bb6c0f34fac20dbf6896fc373d5835e43ffe01f216feab9/IURISNATURALIS" 
+        const db = new Polybase({ 
+			defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+		});
+		
+        db.signer(async (newdocs) => {
+          console.log('docs to sign:', newdocs)
+
+          const hash = ethers.sha256(ethers.toUtf8Bytes(newdocs));
+          console.log('sha-256', hash);
+
+          const signature = await signer.signMessage(newdocs);
+          console.log('signature:', signature)
+
+          return { h: 'eth-personal-sign', sig: signature, };
+        });
+
+        try {
+          const recordData = await db
+            .collection("STARKID")
+            .record(id)
+            .call("updateCID", [newdocs]);
+          console.log(" updateCID:", recordData);
+
+        } catch (error) {
+          console.error("An error occurred:", error);
+          console.error("Error:", error.reason);
+          fixedToast.fire('Error', error.message, "error");
+        }
+      }
+    }
 
 
 
@@ -6033,11 +6236,7 @@ function verifyMnemonic() {
 //   ------------------------------------
 // .) LISTEN TO EDIT ALIAS NAME CHANGE
 //   ------------------------------------
-// 	  document.getElementById('editAlias').addEventListener('click', function () {
-//     const aliasInput = document.getElementById('aliasName');
-//     aliasInput.readOnly = !aliasInput.readOnly;
-//     this.textContent = aliasInput.readOnly ? 'Edit' : 'Save';
-//   });
+ 
 const aliasInput = document.getElementById('aliasName');
   const editButton = document.getElementById('editAlias');
 
@@ -6047,10 +6246,31 @@ const aliasInput = document.getElementById('aliasName');
     editButton.textContent = 'Save';
   }
 
-  function disableEditing() {
+  async function disableEditing() {
     aliasInput.readOnly = true;
     editButton.textContent = 'Edit';
     // You can add additional code here to save the changes, e.g., sending data to the server
+			// GET SIGNER
+			let presigner = await getSigner()
+							let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+							let signer = presigner.connect(provider);
+							console.log('SIGNER!:', signer);
+							let did = `did:ius:${signer.address}`
+							console.log('DID: ', did)
+
+							// ---------------
+
+							try {
+								console.log('creating did RECORD, signer', signer)
+								await updateAliasDID(did, aliasInput.value, signer) 
+								// updateAliasDID
+							} catch (error) {
+								console.error('An error occurred while creating DID record:', error);
+								return
+							}
+
+
+
     console.log('Alias name saved:', aliasInput.value);
   }
 
@@ -6776,6 +6996,38 @@ alert('Invalid Ethereum address');
 		.)  SEND / RECEIVE TOKENS ERC20
 		**********************************************************************************************/
 
+        // Helper function to convert Base64 URL to Base64
+        function base64UrlToBase64(base64Url) {
+        return base64Url.replace(/-/g, '+').replace(/_/g, '/').padEnd(base64Url.length + (base64Url.length % 4), '=');
+        }
+
+
+        async function generateStealthAddress(privateKeyHex, publicKey) {
+
+            console.warn('🏰 generateStealthAddress()')
+         
+            const hexPublicKey = publicKey.startsWith('0x') ? publicKey.slice(2) : publicKey;
+            const pubPoint = secp.ProjectivePoint.fromHex(hexPublicKey);
+            console.log('pubPoint:',pubPoint)
+
+            const sharedSecret = pubPoint.multiply(BigInt(privateKeyHex)).toHex();
+            console.log('👫sharedSecret( at generateStealthAddress):', sharedSecret);
+            const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
+
+            // 1.Multiply hs by the curve generator point (G): You can use the secp256k1 generator point (which is a constant) to compute the point hs * G.
+            const G = secp.ProjectivePoint.BASE;  // Generator point G
+            const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
+            const hsPoint = G.multiply(hsBigInt);  // hs * G
+
+            // 2.Add Bob’s public key: You now add Bob’s public key as an elliptic curve point to hs * G. Ensure Bob's public key is in the correct format for the addition.
+            const stealthPubPoint = hsPoint.add(pubPoint);  // hs * G + Bob's public key
+
+            // 3.Convert the resulting point to an Ethereum address: Finally, you convert the resulting elliptic curve point to an Ethereum address. This is typically done by compressing the point to its x-coordinate, hashing it, and then converting it to an Ethereum address.
+            const stealthPubKey = stealthPubPoint.toHex();  // Convert to hex
+            const stealthAddress = ethers.computeAddress('0x' + stealthPubKey);  // Convert to Ethereum address
+            console.log('👻Stealth Address:', stealthAddress);
+            return { stealthAddress, sharedSecret }
+        }
 
 
 		async function openSend(addr) {
@@ -6809,7 +7061,11 @@ alert('Invalid Ethereum address');
             // get peer publickey
             let peerAddr = document.getElementById('peerAddr').getAttribute('data-address')
             console.log('🤼‍♀️ peerAddr: ', peerAddr)
-            let didData = await fetchDID(peerAddr)
+
+			// check did
+			let peerDId = `did:ius:${peerAddr}`;
+
+            let didData = await fetchDID(peerDId)
             let peerPublicKey = didData.data.publicKey 
             console.log('🤸‍♀️ peerPublicKey: ', peerPublicKey)
 
@@ -6985,39 +7241,38 @@ let preferredIndex = localStorage.getItem('preferredTokenIndex');
 
 			const formattedAddress = ethers.getAddress(userAddress);
 
+			// ................................
 			// ERC20-BALANCE
+			// ................................
 			let erc20balance;
-			try {
-				erc20balance = await tokenContract.balanceOf(formattedAddress);
-			} 
+			try { erc20balance = await tokenContract.balanceOf(formattedAddress); } 
 			catch (error) {
-			document.getElementById('txbal').innerHTML = `❌ Error getting ERC-20 balance: ${error.reason}, using provider ${selectedProvider}`;
-
+				document.getElementById('txbal').innerHTML = `❌ Error getting ERC-20 balance: ${error.reason}, using provider ${selectedProvider}`;
 				if (error.message.includes('Failed to fetch')) { console.warn('Error getting balance: Network or fetch issue. refetch?'); } 
 				else { console.warn('Error getting balance:', error); }
 			}
-
 			const decimals = await tokenContract.decimals();
 			console.log('decimals:',decimals);
-
 			let formatedBalance = ethers.formatUnits(erc20balance, decimals);
 			console.log('formatedBalance:',formatedBalance);
 			console.warn(`ERC-20 Balance of ${preferredToken.tokenName}: ${formatedBalance} `);
 			document.getElementById('txbal').innerHTML = `ERC-20 balance:  ${formatedBalance}`;
 
 
+
+
+			// ................................
 			// CHECK IF ERC20 BALANCE >= AMOUNT
+			// ................................
 			const amountToSend = ethers.parseUnits(amountInput.value, decimals);  // 18 is the number of decimals for Ether
 			console.log('amountToSend:',amountToSend);
-
 			if (erc20balance >= amountToSend) {
 			document.getElementById('txbal').innerHTML += ` <br>✅ Enough ERC-20 balance `;
-
 			}
 			else{
 				document.getElementById('confirmTransactionBtn').innerHTML = `Confirm`
-			document.getElementById('txbal').innerHTML = `Insufficient ERC-20 balance: ❌  ${formatedBalance}`;
-			return 
+				document.getElementById('txbal').innerHTML = `Insufficient ERC-20 balance: ❌  ${formatedBalance}`;
+				return 
 			}
 
 
@@ -7025,38 +7280,26 @@ let preferredIndex = localStorage.getItem('preferredTokenIndex');
 
 			let signer = await getSigner() 
 
-					// GAS BALANCE
-					const gasBalance = await provider.getBalance(signer.address);
+			// ................................
+			// GAS BALANCE
+			// ................................
+				const gasBalance = await provider.getBalance(signer.address);
 				const formatedgasBalance = ethers.formatEther(gasBalance);
 				console.log(`GAS Balance : ${formatedgasBalance} GAS`);
 				document.getElementById('txbal').innerHTML += `<br><br>Gas balance: ⛽${formatedgasBalance}  `;
-				// document.getElementById('txbal').innerHTML += `<br> Gas balance: ⛽${formatedgasBalance}  `;
+				document.getElementById('transactionDetails').innerHTML += `<span id="estgas"> Estimating gas <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </span> `;
+				let s = signer.connect(provider);//signer(wallet connected to provider)
+				const cws = await tokenContract.connect(s);// connect tokenContract to signer(contract with signer)
 
 
-
-			document.getElementById('transactionDetails').innerHTML += `<span id="estgas"> Estimating gas 
-				<div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> 
-				</span> `;
-
-
-			// let signer = await getSigner() 
-			let s = signer.connect(provider);//signer(wallet connected to provider)
-			const cws = await tokenContract.connect(s);// connect tokenContract to signer(contract with signer)
-
-
-
-
-			// --------------------
+			// ................................
 			// NOW ESTIMATE GAS FEES
-// check nonce 
-const precurrentNonce = await provider.getTransactionCount(signer.address);
-		console.log('CALCULATE NONCE: ', precurrentNonce)
-
+			// ................................
+			const precurrentNonce = await provider.getTransactionCount(signer.address);
+			console.log('CALCULATE NONCE: ', precurrentNonce)
 			const txGasEstimage = await cws.transfer.estimateGas(toAddress, amountToSend);
 			const formatedtxGasEstimage = ethers.formatEther(txGasEstimage);
-
 			console.log(`Estimated Gas: ${txGasEstimage.toString()}`);
-			// document.getElementById('estgas').innerHTML = `<br>Estimated gas: ⛽${txGasEstimage.toString()} `;
 			document.getElementById('estgas').innerHTML = `<br>Estimated gas: ⛽${formatedtxGasEstimage} `;
 
 
@@ -7089,14 +7332,10 @@ const precurrentNonce = await provider.getTransactionCount(signer.address);
 				// ERC20 balance and gas balance to pay for this tx
 						if (gasBalance >= gasCostInEth) {
 							console.log(" ✅ Sufficient balance to cover transaction and gas fees!");
-							// document.getElementById('txbal').innerHTML = `Native token balance: ✅ ${formatedBalance}`;
 							document.getElementById('estgas').innerHTML += `<br> ✅ Enough balance to cover  gas fees  `;
-					
 						} else {
-				
 							console.log("❌Insufficient balance to cover transaction and gas fees.");
 							document.getElementById('estgas').innerHTML += `<br> ❌Insufficient balance to cover transaction and gas fees  `;
-							// document.getElementById('txbal').innerHTML += `<br>Native token balance: ${formatedBalance} <br> ❌Insufficient balance to cover transaction and gas fees  `;
 							document.getElementById('confirmTransactionBtn').innerHTML = `Confirm`
 							return
 						}
@@ -7108,7 +7347,7 @@ const precurrentNonce = await provider.getTransactionCount(signer.address);
 
 
 
-					// disable button until gas estimation is loaded
+				// disable button until gas estimation is loaded
 				document.getElementById('confirmTransactionBtn').disabled = false
 				document.getElementById('confirmTransactionBtn').innerHTML = `Confirm`
 
@@ -7120,11 +7359,7 @@ const precurrentNonce = await provider.getTransactionCount(signer.address);
 	// - do the tx
 	///////////////////////////////////////
 	document.getElementById('confirmTransactionBtn').addEventListener('click', async function() {
-		console.log('confirmTransactionBtn CLICKED!')
-
-	// Switch to confirmation tab
-    // const tab = new bootstrap.Tab(document.getElementById('result-tab'));
-    // tab.show();
+	console.log('confirmTransactionBtn CLICKED!')
 
 	//  Show result tab
 	const resultTab = new bootstrap.Tab(document.getElementById('result-tab'));
@@ -7132,9 +7367,7 @@ const precurrentNonce = await provider.getTransactionCount(signer.address);
 
 	// make this modal unclosable
 
-	document.getElementById('resultMessage').innerHTML = `<span id="makingtx"> Making transaction ( do not close this modal)
-				<div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> 
-		 </span>`;
+	document.getElementById('resultMessage').innerHTML = `<span id="makingtx"> Making transaction ( do not close this modal) <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </span>`;
 
 		//  ---------------------------
 		// SEND
@@ -7148,9 +7381,7 @@ const precurrentNonce = await provider.getTransactionCount(signer.address);
 
 					console.log(`Transaction hash: ${tx.hash}`);
 					document.getElementById('resultMessage').innerHTML = `<span class ="tx">Transaction hash:  ${tx.hash} ✅</span>`;
-					document.getElementById('resultMessage').innerHTML += `<span class ="txdone">waiting for confirmation
-				<div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> 
-						 </span>`;
+					document.getElementById('resultMessage').innerHTML += `<span class ="txdone">waiting for confirmation <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </span>`;
 
 					// Wait for the transaction to be mined
 					const receipt = await tx.wait();
@@ -7326,23 +7557,27 @@ async function getEthUsdPrice() {
         let doc = { title: title, cid: scid, courtesy_translations: ct, attestation: documentAttestLink }//NEW
         console.log('doc:', doc)
         SaveDocToLocalStorage(doc);
+		d=doc
 
+        // ADD DOCS TO UI
 		loadDocs()
         
         // HASH OF DOCS
-        const hash = ethers.sha256(ethers.toUtf8Bytes(doc));
+        const hash = ethers.sha256(ethers.toUtf8Bytes(JSON.stringify(doc)));
         console.log('sha-256', hash);
         
 
         // ADD TO DID
         let did = `did:ius:${userAddress}`;
-        // let did = `did:ethr:${userAddress}`;
-        await updateDIDdocs(did, doc)
+		// getDocsFromLocalstorage
+		let docsFromLS = localStorage.getItem('documents');
+
+        await updateDIDdocs(did, docsFromLS)
 
         // activate envoi button
         console.log('ACTIVA BOTON ENVOI')
-        document.getElementById('createIPFSDelivery').disabled = false;// DESACTIVAR BOTON createIPFSDelivery
-        document.querySelector('#cancelAttesting').disabled = false;
+        // document.getElementById('createIPFSDelivery').disabled = false;// DESACTIVAR BOTON createIPFSDelivery
+        // document.querySelector('#cancelAttesting').disabled = false;
 
 
         // RETORE toggleButton
@@ -7468,6 +7703,66 @@ async function getEthUsdPrice() {
 
 
 
+	async function loadPublicDocsCard(docs) {
+  console.log('loadPublicDocsCard()',docs);
+
+  let LoadDocs = JSON.parse(docs);
+  let htmlContent = '';
+
+  if (LoadDocs) {
+    LoadDocs.forEach((e) => {
+      let t = e.title,
+          n = e.cid,
+          i = e.courtesy_translations,
+		  at= e.attestation;
+
+      var s = [];
+
+      i.forEach((e, t) => {
+        let n = e.lang,
+            i = `<button type="button" class="btn btn-outline-info px-3 waves-effect" onclick="event.stopPropagation(); viewItem('${e.cid}')">  <span>${n} </span><svg width="18" height="16" class="svg-inline--fa fa-language" aria-hidden="true" data-prefix="fas" data-icon="language" role="img" viewBox="0 0 640 512"> <path fill="currentColor" d="M0 128c0-35.3 28.7-64 64-64h512c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zm320 0v256h256V128H320zm-141.7 47.9c-3.2-7.2-10.4-11.9-18.3-11.9s-15.1 4.7-18.3 11.9l-64 144c-4.5 10.1.1 21.9 10.2 26.4s21.9-.1 26.4-10.2l8.9-20.1h73.6l8.9 20.1c4.5 10.1 16.3 14.6 26.4 10.2s14.6-16.3 10.2-26.4l-64-144zM160 233.2l19 42.8h-38l19-42.8zM448 164c11 0 20 9 20 20v4h60c11 0 20 9 20 20s-9 20-20 20h-2l-1.6 4.5c-8.9 24.4-22.4 46.6-39.6 65.4.9.6 1.8 1.1 2.7 1.6l18.9 11.3c9.5 5.7 12.5 18 6.9 27.4s-18 12.5-27.4 6.9L467 333.8c-4.5-2.7-8.8-5.5-13.1-8.5-10.6 7.5-21.9 14-34 19.4l-3.6 1.6c-10.1 4.5-21.9-.1-26.4-10.2s.1-21.9 10.2-26.4l3.6-1.6c6.4-2.9 12.6-6.1 18.5-9.8L410 286.1c-7.8-7.8-7.8-20.5 0-28.3s20.5-7.8 28.3 0l14.6 14.6.5.5c12.4-13.1 22.5-28.3 29.8-45H376c-11 0-20-9-20-20s9-20 20-20h52v-4c0-11 9-20 20-20z" /> </svg></button>`;
+        s.push(i);
+      });
+
+      let o = `<div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">${t}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" onclick="event.stopPropagation();editTitle('${t}',event)" height="13px"> 
+                      <path fill='currentColor' d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/>
+                    </svg>
+                  </h5>
+                  <p class="card-text"></p>
+                  <p class="card-link" onclick="copyItem(event,innerHTML)">${n}</p>
+                </div>
+                <div class="card-footer text-muted">
+                  <span>
+                    <button type="button" class="btn btn-outline-info px-3 waves-effect" onclick="event.stopPropagation();viewItem('${n}')"> 
+                      <svg width="18" height="16" class="svg-inline--fa fa-eye" aria-hidden="true" data-prefix="fas" data-icon="eye" role="img" viewBox="0 0 576 512"> 
+                        <path fill="currentColor" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4 142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1 3.3-7.9 3.3-16.7 0-24.6-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zm144 224c0 79.5-64.5 144-144 144s-144-64.5-144-144 64.5-144 144-144 144 64.5 144 144zm-144-64c0 35.3-28.7 64-64 64-11.5 0-22.3-3-31.6-8.4-.2 2.8-.4 5.5-.4 8.4 0 53 43 96 96 96s96-43 96-96-43-96-96-96c-2.8 0-5.6.1-8.4.4 5.3 9.3 8.4 20.1 8.4 31.6z">
+                        </path>
+                      </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();deleteItem((this.parentElement))">
+                      <svg xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512">
+                        <path fill="currentColor" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+                      </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();shareItem('${n}')">
+                      <svg xmlns="http://www.w3.org/2000/svg"  width="18" height="16"  viewBox="0 0 512 512"> 
+                        <path fill="currentColor" d="M352 320c-22.1 0-42.1 8.6-57.4 22.7l-126-78.3c.9-5 1.4-10.1 1.4-15.4s-.5-10.4-1.4-15.4l126-78.3C309.9 183.4 329.9 192 352 192c44.2 0 80-35.8 80-80s-35.8-80-80-80-80 35.8-80 80c0 5.3.5 10.4 1.4 15.4l-126 78.3c-15.3-14.1-35.3-22.7-57.4-22.7-44.2 0-80 35.8-80 80s35.8 80 80 80c22.1 0 42.1-8.6 57.4-22.7l126 78.3c-.9 5-1.4 10.1-1.4 15.4 0 44.2 35.8 80 80 80s80-35.8 80-80-35.8-80-80-80z">
+                        </path>
+                      </svg>
+                    </button>
+                    <button type="button" class="btn btn-outline-info waves-effect px-3">${s.join("")}</button>
+                  </span>
+                </div>
+              </div>`;
+      htmlContent += o;
+    });
+  }
+
+  return htmlContent;
+}
 
 
     async function loadDocs() {
