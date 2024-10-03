@@ -1701,6 +1701,7 @@ body.swal2-height-auto {
 	z-index: 2;
 	background-color: rgb(65 48 124 / 94%);
 	color: white;
+	row-gap: 1em;
   
 	
   }
@@ -1881,7 +1882,7 @@ body.swal2-height-auto {
    }
  
    .swal2-modal, .swal2-popup{
-	background-color: #484848!important;
+	/* background-color: #484848!important; */
     border-color: #000!important;
 	color: #fff!important;
 	box-shadow: 0 0 10px #9d6d6d;
@@ -1933,3 +1934,6 @@ body.swal2-height-auto {
 
 
   .card { background-color: var(--card); }
+.txbal{
+	word-wrap: break-word;
+}

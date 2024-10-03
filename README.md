@@ -34,6 +34,8 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+v5.06 send native and erc20 stealth addrs txs
+v5.05 stealthaddr fixes(in progress). save contacts into did
 v5.04 display public docs
 v5.03 change alias name
 v5.02 fixed upload to ipfs
