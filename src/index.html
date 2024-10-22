@@ -57,12 +57,7 @@
     <input name="avatarIMG" id="avatarIMGfile" type="file" style="display:none" accept="image/*" /> <!-- ex fileCreateItemFile -->
     <img id="avatarIMG" src="img/anonym.jpg" alt="Avatar" class=""> <!-- ex itemImgMINT -->
  
-	<!-- <span id="userAlias"></span> -->
 	<span id="userAlias" class="d-flex align-items-center justify-content-center"  style=" word-break: break-all; " ></span>
-
-	<!-- <div class="d-flex align-items-center justify-content-center" style="height: 100px;">
-		<span id="userAlias">name</span>
-	  </div> -->
 
     <div class="container mt-3">
       <div class="row">
@@ -74,12 +69,12 @@
                 d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
             </svg>
           </button>
-          <button type="button" id="" class="btn btn-danger" onclick="event.stopPropagation(); scanAddress()">
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-              <path
-                d="M0 80C0 53.5 21.5 32 48 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V80zM64 96v64h64V96H64zM0 336c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V336zm64 16v64h64V352H64zM304 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48zm80 64H320v64h64V96zM256 304c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16v96c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16v64c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V304zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z" />
-            </svg>
+
+		  <button type="button" id="" class="btn btn-danger" onclick="event.stopPropagation(); showWallet()">
+				<svg xmlns="http://www.w3.org/2000/svg" height="1em"  viewBox="0 0 512 512">
+					<path d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-224c0-35.3-28.7-64-64-64L80 128c-8.8 0-16-7.2-16-16s7.2-16 16-16l368 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L64 32zM416 272a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
           </button>
+
           <button type="button" id="" class="btn btn-success" onclick="event.stopPropagation(); settings()">
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
               <path
@@ -145,8 +140,9 @@ IPFS</button>
 		
 		<main class="main-wrap">
 			<header class="codrops-header">
+				<button id="lightButton" class="traffic-light"></button>
+
 				<h1 class="codrops-header__title" id="userData">IUS NATURALIS</h1>
-				<!-- <span id="miniversion"> gas</span> -->
 				<div id="address"></div>
 				<div id="data"></div>
 
@@ -181,7 +177,7 @@ IPFS</button>
  <!-- ADD PUBLIC DOCUMENTS -->
 	<div class="bottom-nav">
 		<nav class="codrops-demos">
-			<span>v5.06 </span>
+			<span>v5.08</span>
 		</nav>
 	</div>
 
@@ -240,7 +236,6 @@ IPFS</button>
 
 <!-- DID Minter Mdal -->
 	
-  <!-- Modal -->
   <div class="modal fade" id="didMinterModal" tabindex="-1" aria-labelledby="didMinterModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -560,7 +555,7 @@ aria-hidden="true">
 					<hr>
 
 					<!-- -------------------------- -->
-					<h4>WALLET</h4>
+					<h4>TOKEN</h4>
 
 			<!-- Radio Buttons -->
 
@@ -586,24 +581,24 @@ aria-hidden="true">
 						<button type="button" class="btn btn-primary mt-2" id="" onclick="addToken()">+ Add</button>
 						<button type="button" class="btn btn-danger mt-2" id="removeErc20Address">Remove</button>
 						<button type="button" class="btn btn-info mt-2" id="infoErc20Address">Info</button>
-				<hr>
+				<!-- <hr> -->
 
 					</div>
 
 
 
-				<div class="form-check">
+				<div class="form-check" style="display: none;">
 					<input class="form-check-input" type="radio" name="tokenType" id="g1Option" value="g1" disabled>
 					<label class="form-check-label" for="g1Option">Ğ1
 					</label>
 				</div>
 
-			  <div class="form-check">
+			  <div class="form-check" style="display: none;">
 				<input class="form-check-input" type="radio" name="tokenType" id="btcOption" value="btc" disabled>
 				<label class="form-check-label" for="btcOption">BTC</label>
 			  </div>
 
-			  <div class="form-check">
+			  <div class="form-check" style="display: none;">
 				<input class="form-check-input" type="radio" name="tokenType" id="moneroOption" value="monero" disabled>
 				<label class="form-check-label" for="moneroOption">MONERO</label>
 			  </div>
@@ -623,10 +618,15 @@ aria-hidden="true">
 
 
 
-	<h4>Stealth Addresses</h4>
+	<h4>WALLET</h4>
 	<div class="form-check">
 		<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
-		<label class="form-check-label" for="stealthAddressCheckbox">Stealth Address</label>
+		<label class="form-check-label" for="stealthAddressCheckbox"> 👤 Stealth Address</label>
+	  </div>
+
+	  <div class="form-check">
+		<input class="form-check-input" type="checkbox" id="autoPaygas2meCheckbox" name="stealthAddress">
+		<label class="form-check-label" for="stealthAddressCheckbox"> ⛽💲Autopay gas if you are the recipient</label>
 	  </div>
 
 	<br>
@@ -700,9 +700,18 @@ aria-hidden="true">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"  height="16" width="16" >
 						<path fill="currentColor" d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z"/></svg>
 
-					QR groupe Invite</button>
+					CREATE MULTISIG GRUPAL CHAT</button>
 					<!-- scan this qr to be added to this group -->
 
+
+					<button type="button" id="" class="btn btn-primary"
+					onclick="event.stopPropagation(); createGroupChat()" disabled> 
+				
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"  height="16" width="16" >
+						<path fill="currentColor" d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z"/></svg>
+
+					JOIN GROUPE TRHOUGH QR</button>
+					
 				</div>
 
 
@@ -806,6 +815,13 @@ aria-hidden="true">
 				<div class="modal-header">
 				  <h5 class="modal-title" id="walletSendLabel">Send ETH/ERC-20 Transaction</h5>
 				  <button type="button"  id="walletSendXClose" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				
+				  <div class="form-check">
+					<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
+					<label class="form-check-label" for="stealthAddressCheckbox"> 👤 Stealth mode</label>
+				  </div>
+				
+				
 				</div>
 	
 	
@@ -838,7 +854,7 @@ aria-hidden="true">
 
 						
                         <div id="stealthInfo"  class=" mb-3 list-group-item list-group-item-warning" >
-                            <label for="sarecipientAddress" class="form-label">Stealth Address Recipient </label>
+                            <label for="sarecipientAddress" class="form-label">🦹‍♂️ Stealth Address Recipient 🦹‍♀️ </label>
                             <div id="sarecipientAddress" class="wwrap"></div>
                             <div id="staddrInfo" class=""></div>
                         </div>
@@ -1039,6 +1055,114 @@ aria-hidden="true">
 
 
 
+	<!-- WALLET BALANCES MODAL  -->
+	<div class="modal fade" id="walletModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="settingsModalLabel">BALANCES </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+
+				<div class="modal-body" id="walletCardContainer">
+
+
+
+					<!-- -------------------------- -->
+					<h4>PUBLIC</h4>
+
+
+	 
+	
+		
+	
+				<br>
+				<br>
+				<hr>
+
+	<!-- ----------------------------- -->
+
+					<!-- -------------------------- -->
+					<h4>PRIVATE</h4>
+					<ul>
+						<li> <label class="form-check-label" for="stealthAddressCheckbox">👤  from Claude: 0.01ETH(arb-sep) </label> 
+						
+					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); send()" disabled> SEND TO </button>
+					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
+						</li>
+						<li> <label class="form-check-label" for="stealthAddressCheckbox">👤  from Dan: 0.0011ETH(arb-sep) </label> 
+							
+					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); send()" disabled> SEND TO </button>
+					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
+						</li>
+						<li> <label class="form-check-label" for="stealthAddressCheckbox">👤  from  Emily: 12 USDC(arb-sep) </label>
+							
+					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); send()" disabled> SEND TO</button>
+					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
+						 </li>
+					</ul>
+
+
+	 
+	
+		
+	
+				<br>
+				<br>
+				<hr>
+
+	<!-- ----------------------------- -->
+
+
+	<h4>Stealth Addresses</h4>
+	<div class="form-check">
+		<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
+		<label class="form-check-label" for="stealthAddressCheckbox"> 👤 Stealth Address</label>
+	  </div>
+
+	<br>
+	<br>
+	<hr>
+
+
+ 
+
+					<h4>Chats</h4>
+
+					<button type="button" id="" class="btn btn-primary"
+					onclick="event.stopPropagation(); createGroupChat()" disabled> 
+				
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"  height="16" width="16" >
+						<path fill="currentColor" d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z"/></svg>
+
+					CREATE MULTISIG GRUPAL CHAT</button>
+					<!-- scan this qr to be added to this group -->
+
+
+					<button type="button" id="" class="btn btn-primary"
+					onclick="event.stopPropagation(); createGroupChat()" disabled> 
+				
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"  height="16" width="16" >
+						<path fill="currentColor" d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z"/></svg>
+
+					JOIN GROUPE TRHOUGH QR</button>
+					
+				</div>
+
+
+			
+				<div class="modal-footer d-flex justify-content-center">
+					<button type="button" class="btn btn-primary btn-lg" onclick="lock()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"  width="18" height="16">
+						<path fill="currentColor" d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"/></svg>LOCK</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!-- fin WALLET BALANCES MODAL  -->
+
+
 
   <!-- /*********************************************************************************************
   .) FIN MODALS
@@ -1100,6 +1224,7 @@ aria-hidden="true">
 
 		**********************************************************************************************/
 		const apiKeyLighthouse = '0e06cd16.4d3bf2536b7c4219bfb7520bd7b7346e';//lighthouse
+		const INFURA_API_KEY = "9219faae2bac4d24b95c2d967b22005a"; // Replace with your actual Infura API key
 
 		window.optionsList = [
 		{
@@ -1265,14 +1390,14 @@ console.log(`
 					// --------------
 					let currentTokenContract = await loadToken(signer.address)
 					console.log("currentTokenContract()",currentTokenContract)
-
-						// let  addr  =document.getElementById('yourAddress').getAttribute('address');
 					console.warn('USER ADDRESS',signer.address)
-					loadContacts(signer.address)
+					
+					// parece que estaba dos veces aca
+					// loadContacts(signer.address)
 
 
 
-						// POPULATE TOKEN SELECTORS
+					// POPULATE TOKEN SELECTORS
 					populateSelectInput()
 					populateSelectInput('tokenType');//populate selec input inside wallet send
 
@@ -1419,16 +1544,8 @@ console.log(`
 							console.warn('CONTACTO POR URL!',contact)
 							SaveContactsToLocalStorage(contact);
 
-								// console.warn('chatWith()', chatValue, chatavatar )
 									try { await chatWith(chatValue, chatavatar ) } 
 									catch (error) { Toast.fire('Error', error.message, "error"); }
-
-
-							// await chatWith(chatValue,chatavatar)
-							// await chatWith(chatValue, chatavatar || 'anonym.jpg');
-							// await chatWith(chatValue, 'anonym.jpg');
-							// await chatWith(chatValue);
-
 	
 						}
 	
@@ -1456,14 +1573,48 @@ console.log(`
 				//  fin CHECK IF USER COMES FROM A LINK
 				// -----------------------------------------
 					await getChatAddresses()
+					// return
 					 await loadContacts()
+					// await loadContacts(signer.address)
+					
+
+					// if token is set
+					// startBalanceListener();
+				// setInterval(reloadBalance(), 15000);
+				setInterval(loadToken, 15000);
+
+
 					await listenAllNewAddresses()
 
-				 
+
 				
 				}
 				init()
 				
+// ----------------------
+// Start the balance listener
+
+// Function to check balance
+async function checkBalance() {
+	console.log('⏰ BALANCE CHECKED! ')
+  try {
+    // const balance = await tokenContract.balanceOf(walletAddress);
+	reloadBalance()
+ 
+    console.log(`Current balance: ${ethers.formatUnits(balance, 18)} tokens`);
+  } catch (error) {
+    console.error('Error fetching balance:', error);
+  }
+}
+
+// Set interval to check balance every 15 seconds
+const interval = 15000; // 15 seconds
+
+// Start the balance listener
+function startBalanceListener() {
+  console.log('Starting balance listener...');
+  setInterval(checkBalance, interval);
+}
 
 				
 // ------------------------------------------------------
@@ -1584,6 +1735,64 @@ try {
 		clickSynth.triggerAttackRelease("C4", "8n");
 		}
 		
+
+		  // Function to play a tic sound
+		  function playTic() {
+      // Create a ping sound using a simple synthesizer
+      const synth = new Tone.Synth({
+        oscillator: {
+          type: 'sine' // Sine wave for a soft tic sound
+        },
+        envelope: {
+          attack: 0.001,
+          decay: 0.1,
+          sustain: 0,
+          release: 0.1
+        }
+      }).toDestination();
+
+      // Play a high-pitched short note to mimic a tic sound
+      synth.triggerAttackRelease("C6", "8n");
+    }
+
+	 // Function to play a cartoonish tic sound
+	 function cartoonPlayTic() {
+      // Create a more playful sound using a square wave oscillator
+      const synth = new Tone.Synth({
+        oscillator: {
+          type: 'square' // Square wave for a more cartoonish sound
+        },
+        envelope: {
+          attack: 0.001, // Very short attack for a quick sound
+          decay: 0.05,   // Fast decay to give it a pluck-like feel
+          sustain: 0.2,  // Brief sustain to keep it light
+          release: 0.05  // Short release to avoid lingering notes
+        }
+      }).toDestination();
+
+      // Play a high-pitched note for a short duration
+      synth.triggerAttackRelease("G6", "16n");
+    }
+
+	   // Function to play a boing or pop sound
+	function playBoing() {
+      const synth = new Tone.Synth({
+        oscillator: {
+          type: 'triangle' // Smooth waveform for a bouncing effect
+        },
+        envelope: {
+          attack: 0.05,  // Slight delay in attack for a stretchy feel
+          decay: 0.2,    // Longer decay to let the sound bounce
+          sustain: 0,    // No sustain, keeping it short
+          release: 0.2   // Short release to cut it off cleanly
+        },
+        portamento: 0.2  // This creates the pitch glide for a boing effect
+      }).toDestination();
+
+      // Start with a high note and glide downward quickly
+      synth.triggerAttackRelease("C7", "8n");
+    }
+
 		/*********************************************************************************************
 		.) MANAGE MODALS
 		**********************************************************************************************/
@@ -1649,6 +1858,21 @@ function closeModalId(id, event) {
 			},
 			});
 
+			const newMessageToast = swal.mixin({
+			toast: true,
+			position: "bottom-left",
+			showConfirmButton: false,
+			showDenyButton: false,
+			showCancelButton: false,
+			timer: 7000,
+
+			// iconColor: "white",
+			customClass: {
+				popup: "supercolored-toast",
+			},
+		});
+
+			
 			const fixedToast = swal.mixin({
 			toast: true,
 			position: "bottom-end",
@@ -1738,7 +1962,7 @@ function shortAddressSTARK(address) {
 }
 
 async function reloadBalance(){
-	console.log('reloadBalance()')
+	console.log('⏰ ⏰ ⏰reloadBalance()')
 
 	let network = await checkNetwork();
 			console.log('network:', network)
@@ -1761,7 +1985,6 @@ async function reloadBalance(){
 			<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
 			<br>
 		<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
-			
 			`;
 }
 
@@ -2030,35 +2253,6 @@ else {
 }
  
 
-/////////////////////////////
-// ESTO VA EN OTRO LADO
-
-			/////////////////////////////
-			// 2- SHOW QR WITH DID LINK
-			/////////////////////////////
-
-			// console.warn('EVM ADDRESS (getSigner): ', signer.address)
-			// setAddress(signer.address)
-			// let balance= await checkERC20Balance(signer.address) 
-			// let gasBalance= await checkGasBalance(signer.address) 
-			// userData.innerHTML = `		
-			// 	<svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg>
-		
-			// <a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS }">Balance: ${balance}
-			// 	</a>
-			// 	<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
-			// <br>
-			// <div id="miniversion">
-			// <a  target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${signer.address}">gas: ${gasBalance}
-			// 	</a>
-			// </div>
-			// `;
-		 
-			// await loadDID( signer)
-
-// FIN ESTO VA EN OTRO LADO
-/////////////////////////////
-
 			return signer
 			
          
@@ -2315,6 +2509,9 @@ function displayQR(data) {
 		**********************************************************************************************/
 		async function scanAddress() {
 			console.log('SCANNING FOR A NEW USER ADDRESS')
+
+			Swal.close(); // Close the modal
+
 			var audioContext = new AudioContext();
 
 			// open modal
@@ -2358,7 +2555,8 @@ function displayQR(data) {
 			if (chatValue !== null) {
 				console.log(`Value of chat parameter: ${chatValue}`);
 				// address2.value = chatValue;
-				Toast.fire({ icon: 'info', title: 'CHAT WITH:', text: chatValue });
+				Toast.fire({ icon: 'info', title: 'ABOUT THIS CHAT:', text: chatValue });
+				// Toast.fire({ icon: 'info', title: 'CHAT WITH:', text: chatValue });
 				// close nav
 				plToggle()
 				
@@ -2537,20 +2735,21 @@ function displayQR(data) {
 
 		async function  getChatAddresses(){
 			const allConversations = await iusnaturalisxmtp.conversations.list()
-			console.warn('YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP at getChatAddresses()")
+			console.warn('🧸 🧸 🧸 YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP at getChatAddresses()")
 
 			const peerAddressesArray = [];
 
 			allConversations.forEach(async (conversation, index) => {
 				peerAddressesArray.push(conversation.peerAddress);
-				console.log('allConversations foerEach')
+				// console.log('allConversations foerEach')
 				// ADD ADDRESS TO AGENDA IN UI
 						// Here
 
 			})
 			paa = peerAddressesArray;
-			console.log('peerAddressesArray(paa) DECLARED!',peerAddressesArray)
+			console.log('🧶 🧶 🧶 peerAddressesArray(paa) DECLARED!',peerAddressesArray)
 			
+			// HOW MANY OF THEM ARE TRUSTED BY USER?
 
 		}
 		
@@ -2611,6 +2810,25 @@ async function getOrCreateConversation(toAddr) {
 }
 
 
+
+
+
+
+
+
+
+// ------------------------
+// NEW
+// 1111111111111111
+// Set to store addresses of active conversations
+// const activeChats = new Set();
+// achs = activeChats
+
+		// OUTSIDE
+		const activeChats = new Set();
+		achs = activeChats
+
+
 		async function chatWith(toAddr ,imgsrc) {
 			// console.warn('chatWith()', toAddr)
 			console.log('chatWith(): ESTABLISHING NEW CHAT WITH', toAddr)
@@ -2630,6 +2848,21 @@ async function getOrCreateConversation(toAddr) {
 		Toast.fire({ icon: 'success', title: '💬 CHAT WITH:', position: 'center', text: toAddr });
 
 
+
+		// // ----------------------------------------------------
+		// // Check if the chat is already being listened to
+		// if (activeChats.has(toAddr)) {
+		// 	console.log(`📣📣📣 Already chating with toAddrsenderAddress}`);
+		// 	// activeChats.delete(toAddr);
+
+		// } else {
+		// 	// Start listening to the conversation
+		// 	activeChats.add(toAddr);
+		// 	console.log(`💖 💌 Started new conversation with ${toAddr}`);
+		// }
+		
+		// // ----------------------------------------------------
+
 		
 		// GOT TO CHAT TAB
 		console.log(' doing openChat')
@@ -2637,7 +2870,11 @@ async function getOrCreateConversation(toAddr) {
 		console.warn('------- PREPARING CHAT ----------');
 		localStorage.setItem('toAddress', toAddr)
 		
-		loadContacts()
+
+		// quito esto aqui?
+		// loadContacts()
+
+
 		updateBadge()
  
 
@@ -2645,7 +2882,8 @@ async function getOrCreateConversation(toAddr) {
 			try {
 			// Validate if imgsrc is a valid URL
 			new URL(imgsrc);
-			console.log('YES IMAGE SOURCE: Valid URL',imgsrc);
+			console.log('YES IMAGE SOURCE: Valid URL');
+			// console.log('YES IMAGE SOURCE: Valid URL',imgsrc);
 			avatar = imgsrc;  // Assign if valid
 			} catch (e) {
 			console.log('Invalid image source URL',imgsrc);
@@ -2707,7 +2945,7 @@ async function getOrCreateConversation(toAddr) {
 		</button>
 
 		<button id="btn-search-close" class="btn  item" aria-label="Close search form"
-				onclick="event.stopPropagation(); deleteChat(this.parentElement)">
+				onclick="event.stopPropagation(); deleteChat('${toAddr.toString()}')">
 				<svg class="icon icon--cross">
 					<use xlink:href="#icon-cross"></use>
 				</svg>
@@ -2766,12 +3004,7 @@ if (addressExists) {
 
 	console.log('history:', h.length)
 	hhh = h.lengh
-// hash history and save hash to localstorage,
-// then when it ,loads check if it changed
-// if it changed add a badge for newmessages
-// const hhash = ethers.sha256(ethers.toUtf8Bytes(history));
-// console.log('🛅 history hash:', hhash)
-
+ 
 
 	
 } else {
@@ -2789,59 +3022,146 @@ if (addressExists) {
 
 
 // 13123123123123123123123123123123
-console.warn(' 📛 📛 CREATE CHAT (client was already created)')
-conversation = await iusnaturalisxmtp.conversations.newConversation(toAddr)
-// conversation = await createConversation(toAddr);
-// conversation = await  getOrCreateConversation(toAddr); //con map
-console.log('conversation:', conversation)
-console.warn('------- READY TO CHAT 💬 ----------');
-
-// ADD ATTRIBUTE TO BODY(fix dup messg)
-document.body.setAttribute('currentChat', toAddr);
-
-	// ACTIVATE CHAT BUTTONS
-	document.getElementById('chatTextInput').disabled = false;
-document.getElementById('send-button').disabled = false;
-
-// FOCUS ON INPUT
-document.getElementById('chatTextInput').focus();
-	// -----------
+// CAN CHAT?
+const isOnProdNetwork = await iusnaturalisxmtp.canMessage(toAddr);
+console.log("Can message?: " + isOnProdNetwork);
 
 
-var chatBox = document.getElementById("chatBox");
-let shortTo = toAddr.substring(38, 42);
-
-// Listen for new messages in the conversation
-for await (const message of await conversation.streamMessages()) {
-	const now = new Date();
-	const hours = now.getHours().toString().padStart(2, '0'); // Ensure two-digit format
-	const minutes = now.getMinutes().toString().padStart(2, '0'); // Ensure two-digit format
-	const timestamp = `${hours}:${minutes}`;
-	console.log('logMSG:', message)
-	let preferedWallet = localStorage.getItem('preferedWallet');
-	if (!preferedWallet) { console.log('NO PREFERED WALLET SET') }
-	if (preferedWallet) { const values = preferedWallet.split(',').map(item => item.trim()); userAddress = values[1]; }
-	if (message.senderAddress === userAddress) {
-		console.log('YOU')
-		chatBox.innerHTML += `<div><strong class='who'>You:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
-	}
-	if (message.senderAddress == toAddr) {
-		console.log('OTHER', shortTo)
-		mm = message;
-		// let timestamp = message
-		// chatBox.innerHTML += `<div><strong class='who'>${shortTo}:</strong> ${message.content} </div>`;
-		document.getElementById('chatBox').innerHTML += `<div><strong class='who notyou'>${shortTo}:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
 
 
-	}
-	// if (message.contentType.sameAs(ContentTypeMultiplyNumber)) {
-	// 	return message.content; // 21
-	// }
-	console.log(`[${message.senderAddress}]: ${message.content}`)
-	chatBox.scrollTop = chatBox.scrollHeight;
+
+
+		// ----------------------------------------------------
+		// Check if the chat is already being listened to
+		if (activeChats.has(toAddr)) {
+			console.log(`📣📣📣 Already chating with toAddrsenderAddress}`);
+			// activeChats.delete(toAddr);
+		
+					// ----------------------------------------------------
+			
+			
+					console.warn('------- READY TO CHAT 💬 ----------');
+			
+			// ADD ATTRIBUTE TO BODY(fix dup messg)
+			document.body.setAttribute('currentChat', toAddr);
+		
+			// ACTIVATE CHAT BUTTONS
+			document.getElementById('chatTextInput').disabled = false;
+			document.getElementById('send-button').disabled = false;
+			document.getElementById('chatTextInput').focus();
+
+
+		} else {
+			// Start listening to the conversation
+			activeChats.add(toAddr);
+			
+			console.warn(' 📛 📛 CREATE CHAT (client was already created)')
+			conversation = await iusnaturalisxmtp.conversations.newConversation(toAddr)
+			console.log('conversation:', conversation)
+			console.log(`💖 💌 Started new conversation with ${toAddr}`);
+
+					
+					// ----------------------------------------------------
+			
+			
+			console.warn('------- READY TO CHAT 💬 ----------');
+			
+				// ADD ATTRIBUTE TO BODY(fix dup messg)
+				document.body.setAttribute('currentChat', toAddr);
+			
+				// ACTIVATE CHAT BUTTONS
+				document.getElementById('chatTextInput').disabled = false;
+				document.getElementById('send-button').disabled = false;
+				document.getElementById('chatTextInput').focus();
+				// -----------
+			
+			
+			var chatBox = document.getElementById("chatBox");
+			let shortTo = toAddr.substring(38, 42);
+			
+			// Listen for new messages in the conversation
+			for await (const message of await conversation.streamMessages()) {
+				const now = new Date();
+				const hours = now.getHours().toString().padStart(2, '0'); // Ensure two-digit format
+				const minutes = now.getMinutes().toString().padStart(2, '0'); // Ensure two-digit format
+				const timestamp = `${hours}:${minutes}`;
+				console.log('logMSG:', message)
+				let preferedWallet = localStorage.getItem('preferedWallet');
+				if (!preferedWallet) { console.log('NO PREFERED WALLET SET') }
+				if (preferedWallet) { const values = preferedWallet.split(',').map(item => item.trim()); userAddress = values[1]; }
+				if (message.senderAddress === userAddress) {
+					console.log('YOU')
+					chatBox.innerHTML += `<div><strong class='who'>You:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
+				}
+				if (message.senderAddress == toAddr) {
+					console.log('OTHER', shortTo)
+					mm = message;
+					// let timestamp = message
+					// chatBox.innerHTML += `<div><strong class='who'>${shortTo}:</strong> ${message.content} </div>`;
+					document.getElementById('chatBox').innerHTML += `<div><strong class='who notyou'>${shortTo}:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
+			
+			
+				}
+				console.log(`[${message.senderAddress}]: ${message.content}`)
+				chatBox.scrollTop = chatBox.scrollHeight;
+				
+				
+					// if (message.contentType.sameAs(ContentTypeMultiplyNumber)) {
+					// 	return message.content; // 21
+					// }
+			}
+
+
+		}
+
+
+
+
 
 }
+
+
+// NE MANAGEMENT INTENT
+let activeListeners = {};
+AL =activeListeners
+async function startConversation(contactAddress) {
+    // Check if the listener for this contact already exists
+    if (activeListeners[contactAddress]) {
+        console.log('Listener already active for this conversation');
+        return; // Do not create a new listener
+    }
+
+    try {
+        // Start the new conversation
+        const conversation = await xmtpClient.conversations.newConversation(contactAddress);
+        
+        // Set up the listener for this conversation
+        const stream = await conversation.streamMessages();
+        
+        // Store the listener reference
+        activeListeners[contactAddress] = stream;
+
+        // Process messages
+        for await (const message of stream) {
+            console.log('New message:', message.content);
+            // Handle the incoming message
+        }
+
+    } catch (error) {
+        console.error('Error starting conversation:', error);
+    }
 }
+
+function closeConversation(contactAddress) {
+    // Cleanup the listener if it exists
+    if (activeListeners[contactAddress]) {
+        activeListeners[contactAddress].close(); // Close the message stream
+        delete activeListeners[contactAddress]; // Remove from active listeners
+    }
+}
+
+
+
 
 		/*********************************************************************************************
 		.) CONTACTS MANAGEMENT
@@ -2921,6 +3241,16 @@ for await (const message of await conversation.streamMessages()) {
 				elementToModify.classList.add('newmessage');
 				elementToModify.querySelector("span").innerText = shortMsg
 			}
+			else{
+				// NUEVO!
+				document.getElementById('cwContacts').innerHTML += ` 
+					<li data-address="${addr}" id="${addr}"  class='newmessage'> 
+					<a onclick="event.stopPropagation();selectChat((this.parentElement))" >  
+						<img src="./anonym.jpg" alt="Avatar" class="rounded-circle"> 
+						<span>${shortMsg} <span>
+							</a> </li> `
+			}
+
 
 		}
 
@@ -2955,15 +3285,15 @@ async function loadContacts() {
 
 			}
 				if (cwContacts) {
-				console.warn('YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContacts()')
+				console.warn('👨‍👩‍👦 👨‍👩‍👧 👨‍👩‍👧‍👦 YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContacts()')
 			const promises = [];
 			cwContacts.forEach((el, index) => {
 				// is username set?
 				if (el.username || null) {
-					console.log('✅ contact\' s username is not null');
+					// console.log('✅ username is not null');
 					contactInfo = `<span>${el.username} <span>`;
 				} else {
-					console.log('❌ contact\' s username is null');
+					// console.log('❌username is null');
 					let shortAddr = el.address.substring(0, 6) + "..." + el.address.substring(38, 42);
 					contactInfo = `<span>${shortAddr} <span>`;
 				}
@@ -2976,19 +3306,17 @@ async function loadContacts() {
 						readDIDRecord(did)
 							.then(didresult => {
 								if (didresult.data != null) {
-									console.log(did + ' HAS A RECORD!!!');
-									// d=didresult
+									console.log(did + ' HAS A RECORD ✅');
 									let avtr = didresult.data.avatar;
 									if (avtr) {
 										let avatar = JSON.parse(avtr);
 										document.getElementById(did).src = avatar;
-										// Now you can use the avatar object
 									} else {
 										// Handle the case where avtr is empty
-										console.log('Avatar data is empty');
+										console.log('Avatar is empty 👀');
 									}
 								} else {
-									console.log(did + ' DOESN\'T HAVE A RECORD :(#1464)');
+									console.log(did + ' DOESN\'T HAVE A RECORD  📛 ');
 								}
 								resolve(); // Resolve the promise once the operation is done
 							})
@@ -3014,10 +3342,12 @@ async function loadContacts() {
 // Execute all promises concurrently
 Promise.all(promises)
     .then(() => {
-        console.log('All DID record processing completed.');
+        console.log('🙌 ⭐⭐⭐⭐⭐⭐ All DID record processing completed.⭐⭐⭐⭐⭐⭐');
+// change status button
+		document.getElementById('lightButton').style.backgroundColor = 'green'
     })
     .catch(error => {
-        console.error('Error while processing DID records:', error);
+        console.error('❌❌❌ Error while processing DID records:', error);
     });
 
 
@@ -3027,8 +3357,8 @@ Promise.all(promises)
 
 
 
-		function saveContacts(){
-			console.log('saveContacts()')
+	async function saveContacts(){
+		console.log('saveContacts()')
 
     // Retrieve the contacts from localStorage
     const contacts = localStorage.getItem('contacts');
@@ -3038,6 +3368,17 @@ Promise.all(promises)
         return;
     }
 
+
+// 	// encrypt contacts to store it in yourt DID
+// 	let signer = await getSigner() 
+// 		if (!signer) {
+// 		console.log('Handle case where signer is not obtained');
+// 		}
+// 	let pubkey = signer.publicKey;
+// 	let encryptedContacts = await encryptData(contacts, pubkey);
+// console.log('encryptedContacts: ', encryptedContacts)
+
+// return
     // Create a Blob from the contacts data
     const blob = new Blob([contacts], { type: 'application/json' });
 
@@ -3316,7 +3657,7 @@ if (userName) {
 
 }
 
-
+// no usado?
 function updateContactList(contact) {
 // Retrieve existing contacts from localStorage
 var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -3367,30 +3708,84 @@ function SaveDocToLocalStorage(data) {
 //       localStorage.setItem('documents', JSON.stringify(a));
 //     }
 
-// SAVE CONTACTS 
-function SaveContactsToLocalStorage(contact) {
-			console.log('SaveContactsToLocalStorage()')
-			var a = [];
-			a = JSON.parse(localStorage.getItem('contacts')) || [];
+// // SAVE CONTACTS 
+async function SaveContactsToLocalStorage(contact) {
+    console.log('SaveContactsToLocalStorage()');
+    
+    // Retrieve the contacts array from localStorage, or initialize an empty array if none exist
+    var a = JSON.parse(localStorage.getItem('contacts')) || [];
 
-			// Check if the address already exists
-			var isDuplicate = a.some(existingContact => existingContact.address === contact.address);
+    // Check if the address already exists
+    var isDuplicate = a.some(existingContact => existingContact.address === contact.address);
 
-			if (!isDuplicate) {
-				console.warn('CONTACT IS ALREDY HERE, DUPLICATE!')
-				a.push(contact);
-				localStorage.setItem('contacts', JSON.stringify(a));
+    if (!isDuplicate) {
+        console.warn('CONTACT IS ALREADY IN YOUR CONTACTS');
+        a.push(contact);
 
-				// encrypt and save to did?
+        // Save the updated contacts list to localStorage
+        localStorage.setItem('contacts', JSON.stringify(a));
+
+        // Encrypt contacts to store in your DID
+        let signer = await getSigner(); 
+        if (!signer) {
+            console.log('Handle case where signer is not obtained');
+            return;
+        }
+
+        let pubkey = signer.publicKey;
+
+        // Encrypt the contact list (variable 'a' instead of 'contacts')
+        let encryptedContacts = await encryptData(a, pubkey);
+        console.log('encryptedContacts: ', encryptedContacts);
+
+        // Save the encrypted contacts to DID into a private field (not shown in this code)
+        // ...
+
+        return;
+    } else {
+        console.warn('Address already exists in your contacts, skipping save...');
+        return;
+    }
+}
+
+// async function SaveContactsToLocalStorage(contact) {
+// 			console.log('SaveContactsToLocalStorage()')
+// 			var a = [];
+// 			a = JSON.parse(localStorage.getItem('contacts')) || [];
+
+// 			// Check if the address already exists
+// 			var isDuplicate = a.some(existingContact => existingContact.address === contact.address);
+
+// 			if (!isDuplicate) {
+// 				// alert('CONTACT IS ALREDY HERE, DUPLICATE!')
+// 				console.warn('CONTACT IS ALREDY IN YOUR CONTACTS')
+// 				// console.warn('CONTACT IS ALREDY HERE, DUPLICATE!')
+// 				a.push(contact);
+// 				localStorage.setItem('contacts', JSON.stringify(a));
+
+// 				// encrypt contacts to store it in yourt DID
+// 				let signer = await getSigner() 
+// 				if (!signer) {
+// 					console.log('Handle case where signer is not obtained');
+// 				}
+// 				let pubkey = signer.publicKey;
+// 				let encryptedContacts = await encryptData(contacts, pubkey);
+// 				console.log('encryptedContacts: ', encryptedContacts)
+				
+// 				//  save to did INTO PRIV FIELD
+
+
+// 				return
 
 				
-			}
-			else {
-				console.warn('Address already exists in your contacts, skipping save...');
-				// updateContactList(contact)
-				return
-			}
-		}
+// 			}
+// 			else {
+// 				// console.warn('CONTACT IS NOT IN YOUR CONTACTS??')
+// 				console.warn('Address already exists in your contacts, skipping save...');
+// 				// updateContactList(contact)
+// 				return
+// 			}
+// 		}
 
 		function RemoveContactFromLocalStorage(address) {
     console.log('RemoveContactFromLocalStorage()');
@@ -3585,94 +3980,7 @@ async function openCard(toAddr, avtr) {
 
 
 
-
-// async function openCard(toAddr ,avtr) {
-// console.log(' openCard()', toAddr, avtr)
-// let a= toAddr;
-// let b= avtr;
-// console.log('OPENCARD DATA a:',a)
-// console.log('OPENCARD DATA b:',b)
-// let avatar = "./anonym.jpg"
-
-// // --- 
-// // read did
-
-// let did = `did:ius:${toAddr}`
-// let rdid =  await readDIDRecord(did);
-
-
-// 	if(rdid.data==null){
-// 				console.warn('DID NULL, creatre ONE')
-			
-// 			} else {
-// 				console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
-
-
-// 				// AVATAR
-// 				let avtr = rdid.data.avatar;
-// 				if (avtr) {
-// 					let avatar = JSON.parse(avtr);
-// 					console.log('we have an avatar');
-
-// 				} 
-// 				else { console.log('Avatar data is empty'); }
-
-// 				// NAME
-// 				let alias = rdid.data.alias;
-// 				if (alias) {
-// 					console.log('Name in DID: ',alias);
-
-// 				}
-// 				 else { console.log('aliasName data is empty'); }
-
-// 				//  DOCUMENTS
-// 				let docs = rdid.data.cid;
-// 				if (docs) {
-// 					console.log('Docs in DID: ',docs);
-// 				} 
-// 				else { console.log('no docs in DID'); }
-// 			}
-
-
-
-// // --- 
-
-// let htmlData = `<address>${toAddr} <svg id="innerAddress" onclick="event.stopPropagation();customcopy2clipboard('${toAddr}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z" ></path></svg> </address><br>
-// <p>no more info available</p>`;
-
-// let shortAddr = toAddr.substring(0, 6) + "..." + toAddr.substring(38, 42);
-// // -----------
-// // TRUST
-// // -----------
-// 	Swal.fire({ imageUrl: avtr, 
-// 			imageWidth: 300, 
-// 			imageHeight: 300, 
-// 			imageAlt: 'Avatar image', 
-// 			html: htmlData,
-// 			showDenyButton: true,
-// 			showCancelButton: false,
-// 			showCloseButton: true, 
-// 			confirmButtonText: 'trust',
-// 			denyButtonText: 'Block',
-// 			customClass: {
-// 				actions: 'my-actions',
-// 				cancelButton: 'order-1 right-gap',
-// 				confirmButton: 'order-2',
-// 				denyButton: 'order-3',
-// },
-// }).then((result) => {
-// if (result.isConfirmed) {
-// 	// Swal.fire('Saved into your trusted contacts!', '', 'success')
-// 	editContact(toAddr)
-
-
-// } else if (result.isDenied) {
-// 	// Swal.fire('Address blocked', '', 'info')
-// 	RemoveContactFromLocalStorage(toAddr)
-
-// }
-// })
-// }
+ 
 
 
 
@@ -3687,6 +3995,9 @@ if (e.target.tagName === 'LI') {
 	console.log('Right-clicked on li element');
 }
 });
+
+
+
 
 async function initChatClient(wallet) {
 console.warn(`
@@ -3731,16 +4042,12 @@ return xmtp
             console.log('listenAllNewAddresses()')
 
             for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
-                // 	if (message.senderAddress === iusnaturalisxmtp.address) {// This message was sent from me
-                // 		continue
-                // 	}
 
                 // ppppppppppppppppppppppppppp
                 // ALREADY LISTENING FIX
                 // Set to store addresses of active conversations
-                const activeConversations = new Set();
-                aconv = activeConversations
-                // for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
+                // const activeConversations = new Set();
+                // aconv = activeConversations
                 const senderAddress = message.senderAddress;
                 sndadrr = senderAddress
 
@@ -3751,15 +4058,15 @@ return xmtp
                     continue;
                 }
 
-                // Check if the chat is already being listened to
-                if (activeConversations.has(senderAddress)) {
-                    console.log(`📣 Already listening to conversation with ${senderAddress}`);
-                    continue;
-                }
+                // // Check if the chat is already being listened to
+                // if (activeConversations.has(senderAddress)) {
+                //     console.log(`📣📣📣 Already listening to conversation with ${senderAddress}`);
+                //     continue;
+                // }
 
-                // Start listening to the conversation
-                activeConversations.add(senderAddress);
-                console.log(`Started new conversation with ${senderAddress}`);
+                // // Start listening to the conversation
+                // activeConversations.add(senderAddress);
+                // console.log(`Started new conversation with ${senderAddress}`);
 
 
 
@@ -3769,7 +4076,7 @@ return xmtp
                 document.getElementById('chatBadge').style.display = 'inline'
                 document.getElementById('chatBadge').innerText = '!'
                 console.log(`New message from ${message.senderAddress}: ${message.content}`)
-                Toast.fire({ icon: 'info', title: `New message from ${message.senderAddress}`, text: message.content });
+                newMessageToast.fire({ icon: 'info', title: `${message.senderAddress} says:`, text: message.content });
 
 
                 try {
@@ -3840,6 +4147,7 @@ return xmtp
                 }
                 else {
                     console.log('YES: THIS ADDRES IS IN YOUR CONTACT LIST')
+                    // alert('OVERWRITE last msg, INDEX:', storedContacts[index], index)
                     console.log('OVERWRITE last msg, INDEX:', storedContacts[index], index)
                     addknownContact(message.senderAddress, message.content)
 
@@ -3856,54 +4164,48 @@ return xmtp
 // NEW
 // 1111111111111111
 // Set to store addresses of active conversations
-const activeConversations = new Set();
-aconv = activeConversations
-// Listen to new addresses
-// async function listenAllNewAddresses() {
-//     console.log('🔔 Listening for all new addresses...');
-//     try {
-//         for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
-//             await handleIncomingMessage(message);
-//         }
-//     } catch (error) {
-//         console.error('Error listening to new addresses:', error);
+// const activeChats = new Set();
+// aconv = activeChats
+
+// Handle incoming messages
+// async function handleIncomingMessage(message) {
+//     const senderAddress = message.senderAddress;
+
+//     // Skip if the message is from yourself
+//     if (senderAddress === iusnaturalisxmtp.address) {
+//         console.log('📛 Skipping message from yourself.');
+//         return;
 //     }
+
+//     // Check if the chat is already being listened to
+//     if (activeConversations.has(senderAddress)) {
+//         console.log(`📣 Already listening to conversation with ${senderAddress}`);
+//         return;
+//     }
+
+//     // Start listening to the conversation
+//     activeConversations.add(senderAddress);
+//     console.log(`Started new conversation with ${senderAddress}`);
+
+//     // Display notification and badge
+//     document.getElementById('chatBadge').style.display = 'inline';
+//     document.getElementById('chatBadge').innerText = '!';
+
+//     console.log(`New message from ${senderAddress}: ${message.content}`);
+//     fixedToast.fire({ icon: 'info', title: `New message from ${senderAddress}`, text: message.content });
+
+//     await playButtonClickSound();
+//     await handleChatCodes(message);
+//     await updateContacts(message);
+//     updateBadge();
 // }
 
 
-// Handle incoming messages
-async function handleIncomingMessage(message) {
-    const senderAddress = message.senderAddress;
 
-    // Skip if the message is from yourself
-    if (senderAddress === iusnaturalisxmtp.address) {
-        console.log('📛 Skipping message from yourself.');
-        return;
-    }
-
-    // Check if the chat is already being listened to
-    if (activeConversations.has(senderAddress)) {
-        console.log(`📣 Already listening to conversation with ${senderAddress}`);
-        return;
-    }
-
-    // Start listening to the conversation
-    activeConversations.add(senderAddress);
-    console.log(`Started new conversation with ${senderAddress}`);
-
-    // Display notification and badge
-    document.getElementById('chatBadge').style.display = 'inline';
-    document.getElementById('chatBadge').innerText = '!';
-
-    console.log(`New message from ${senderAddress}: ${message.content}`);
-    Toast.fire({ icon: 'info', title: `New message from ${senderAddress}`, text: message.content });
-
-    await playButtonClickSound();
-    await handleChatCodes(message);
-    await updateContacts(message);
-    updateBadge();
-}
-
+	/*********************************************************************************************
+	.)  HANDLERS
+	**********************************************************************************************/
+  
 // Handle different chat codes
 async function handleChatCodes(message) {
     const content = message.content;
@@ -4015,8 +4317,8 @@ console.warn('!!!!! paa DECLARED !!!!!!!!!')
 
 
 
-async function deleteChat() {
-console.warn('DELETING CHAT')
+async function deleteChat(addr) {
+console.warn('👋 🔌 DELETING CHAT', addr)
 // clear URL
 removeParam('chat');
 // remove body's ATTRIBUTE
@@ -4038,6 +4340,8 @@ document.getElementById('send-button').disabled = true;
 
 
 // AQUI TAMBIEN ELIMITAR CHAT
+closeConversation(addr);
+
 
 }
 
@@ -4113,8 +4417,18 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 	async function addAddress() {
 	console.log('addAddress()')
 
+	let cid= dictionary[globalLang]["addAddress"];
+
 			let addressToAdd = Swal.fire({
 				title: dictionary[globalLang]["addAddress"],
+				footer: `
+				<button type="button" id="" class="btn btn-danger" onclick="event.stopPropagation(); scanAddress()">
+					${dictionary[globalLang]["scanqr"]}
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+              <path d="M0 80C0 53.5 21.5 32 48 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V80zM64 96v64h64V96H64zM0 336c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V336zm64 16v64h64V352H64zM304 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48zm80 64H320v64h64V96zM256 304c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16v96c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16v64c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V304zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z"></path>
+            </svg>
+          </button>
+				`,
 				input: 'text',
 				inputAttributes: { autocapitalize: 'off' },
 				showCancelButton: true,
@@ -4214,71 +4528,9 @@ console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
 		}
 
 
-		/*********************************************************************************************
-		.)  Show Password Toggle
-		**********************************************************************************************/
- 
-		// function storePasswordInSession(password) {
-		// 	sessionStorage.setItem("password", password);
-		// }
-
-// 	async function checkRememberPassword() {
-// 		console.log('checkRememberPassword')
-// 		const form = document.getElementById('passwordForm');
-// 		const passwordInput = document.getElementById('password');
-// 		const rememberPassword = document.getElementById('rememberPassword').checked;
-// 		const rememberPasswordwithBiometry = document.getElementById('rememberWithBiometry').checked;
-
-//     // Trigger validation
-//     if (!form.checkValidity()) {
-//         form.classList.add('was-validated');
-//         document.getElementById('rememberPassword').checked = false; // Uncheck the checkbox if validation fails
-//         document.getElementById('rememberWithBiometry').checked = false; // Uncheck the checkbox if validation fails
-//     } else {
-
-
-// 		if (rememberPasswordwithBiometry) {
-//             // Execute your function when the checkbox is checked and password is valid
-//             console.warn("Remember password with BIOMETRY activated .");
-			
-// 			// let password =  passwordInput.value 
-// 			let password = document.getElementById('password').value;
-// 			let  walletAddress  =document.getElementById('yourAddress').getAttribute('address');
-
-// 			try {
-// 				await storePasswordWithBiometrics(password, walletAddress) 
-// 			} catch (error) {
-// 				console.error("Password cannot be stored with Biometrics:", error);
-// 				document.getElementById('rememberWithBiometry').checked = false
-// 			}
-
-
-//         } else {
-//             console.log("Remember password with BIOMETRY deactivated.");
-// 			// BORRAR CREDENCIALES!
-//         }
-
-//         if (rememberPassword) {
-//             console.warn("Remember password with SESSION_STORAGE activated.");
-// 			let password = document.getElementById('password').value;
-			
-// 			try {
-// 				// await storePasswordInSession(password)
-// 			sessionStorage.setItem("password", password);
-
-// 			} catch (error) {
-// 				console.error("Password cannot be stored with Biometrics:", error);
-// 				document.getElementById('rememberWithBiometry').checked = false
-// 			}
-//         } else {
-//             console.log("Remember password with SESSION_STORAGE deactivated.");
-// 			sessionStorage.removeItem("password");
-
-//         }
-
-//     }
-// }
-
+/*********************************************************************************************
+.)  Show Password Toggle
+**********************************************************************************************/
 
  function showPassToggle(){
  console.log('showPassToggle()')
@@ -5222,7 +5474,7 @@ function verifyMnemonic() {
             const record = await collectionReference.record(id).get();
             const { data } = record; // or const data = record.data
             const resultRecord = record.get();
-            console.log('resultRecord:', resultRecord)
+            // console.log('resultRecord:', resultRecord)
             return resultRecord
         }
 
@@ -5793,14 +6045,14 @@ function verifyMnemonic() {
 
 
 		async function getRandomProvider(){
-
+			console.log('getRandomProvider(#5879)')
 			let isCurrentProvider = localStorage.getItem('currentProvider');
 
 				if (isCurrentProvider !== null) {
 					console.log('currentProvider exists:', isCurrentProvider);
 				} else {
-					console.log('currentProvider does not exist');
-					return
+					console.warn('📛📛📛 📛📛📛currentProvider does not exist',isCurrentProvider);
+					// return
 				}
 
 
@@ -5820,7 +6072,7 @@ function verifyMnemonic() {
 			const length = preferredToken.rpcs.length;
 			const randomnumber = Math.floor(Math.random() * length);
 			const selectedProvider = preferredToken.rpcs[randomnumber];
-			console.log('selectedProvider:', selectedProvider, 'from ' , length , 'providers.');
+			console.log('⚙️ selectedProvider:', selectedProvider, 'from ' , length , 'providers.');
 
 			localStorage.setItem('currentProvider',selectedProvider )
 			return selectedProvider
@@ -5854,7 +6106,7 @@ function verifyMnemonic() {
 			const length = preferredToken.rpcs.length;
 			const randomnumber = Math.floor(Math.random() * length);
 			const selectedProvider = preferredToken.rpcs[randomnumber];
-			console.log('selectedProvider:', selectedProvider);
+			console.log('selectedProvider(at checkGasBalance()):', selectedProvider);
 			let provider;
 			try { provider = await new ethers.JsonRpcProvider(selectedProvider); } 
 			catch (error) { console.warn('error creating provider', error) }
@@ -5992,15 +6244,10 @@ function verifyMnemonic() {
 		  userData.innerHTML = `IUS NATURALIS`;
         } 
 
-
-	  // if eth / native
+// #$#$#$#$#$#$#$#$#$#$##$#$#$#$#$#$#$#$#$#$##$#$#$#$#$#$#$#$#$#$#
+// if eth / native
       else if (storedTokenType === 'eth') {
          console.warn('🥁🥁🥁 LOADING ETHEREUM ')
-            // erc20Options.style.display = 'block';
-            // - hide gas balance
-// 2
-
-			// const decimals = 18;
 			const amountInput = document.getElementById('amount');
 			let stepValue  = 0.01; // Minimum step of 0.01 for tokens with decimals
 
@@ -6010,51 +6257,29 @@ function verifyMnemonic() {
 
 			console.warn('🔢  DECIMALS (stepvalue): ',stepValue)
 
-		// CHECK NATIVE (nativeBalance) BALANCE
-
-
-		let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+			// CHECK NATIVE (nativeBalance) BALANCE
+			let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
 
 				let gasBalance
 				try {
 				const balance = await provider.getBalance(addr);
-				// b=balance
 				console.log(`NATIVE GAS bal (crudo) : ${balance} GAS`);
-				//  gasBalance = ethers.formatEther(balance);
 				 nativeBalance = Math.round(ethers.formatEther(balance)* 1000000) / 1000000; // Rounds to 6 decimal places
-
-				//  gasBalance = ethers.formatEther(balance).toFixed(5)
-
 				console.log(`NATIVE GAS Balance : ${nativeBalance} GAS`);
-
-
 				let explorer = 'https://sepolia.arbiscan.io/'
-				// let explorer =preferredToken.explorers[0].url
-				// let tokenAddress =preferredToken.contractAddr
 				let tokenName = 'ETH(arb)'
 				let userAddress= addr
 				userData.innerHTML = ` 
-				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress }">Balance: ${nativeBalance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
-					</div> `;
-				
-
+				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress }">Balance: ${nativeBalance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> </div> `;
 
 			} catch (error) {
 				console.error('Error checking gas  balance:', error.reason);
 				return null;
 			}
 
-
-
-
-
-
-
-
-
-			
         }
-        // else if erc-20
+// #$#$#$#$#$#$#$#$#$#$##$#$#$#$#$#$#$#$#$#$##$#$#$#$#$#$#$#$#$#$#
+// else if erc-20
         else if (storedTokenType === 'erc20') {
         console.log('🥳🥳 LOADING ERC20 ')
 				// ..............................
@@ -6067,7 +6292,6 @@ function verifyMnemonic() {
 				} else {
 					console.warn('No preferred token stored or index out of range.');
 					Toast.fire({ title: "No prefered token set!", text: "No preferred token stored or index out of range.", icon: "warning" });
-					
 					// LOAD DEFAULT TOKENS
 
 				}
@@ -6083,7 +6307,7 @@ function verifyMnemonic() {
 
 				// SELECT RANDOM PROVIDER
 				let selectedProvider =  await getRandomProvider()
-			 console.warn('selectedProvider:', selectedProvider)
+				console.warn('selectedProvider:', selectedProvider)
 				if(selectedProvider === undefined){
 					console.warn('selectedProvider:', selectedProvider)
 					return
@@ -6100,27 +6324,13 @@ function verifyMnemonic() {
 				console.warn('provider', provider) 
 
 				// CHECK GAS
-			// 	let gasBalance
-			// 	try {
-			// 	const balance = await provider.getBalance(addr);
-			// 	b=balance
-			// 	console.log(`GAS bal (crudo) : ${balance} GAS`);
-			// 	//  gasBalance = ethers.formatEther(balance);
-			// 	 gasBalance = Math.round(ethers.formatEther(balance)* 1000000) / 1000000; // Rounds to 6 decimal places
+		
 
-			// 	//  gasBalance = ethers.formatEther(balance).toFixed(5)
-
-			// 	console.log(`GAS Balance : ${gasBalance} GAS`);
-			// } catch (error) {
-			// 	console.error('Error checking gas  balance:', error.reason);
-			// 	return null;
-			// }
-
-	console.warn('📜📜📜 preferredToken.contractAddr:', preferredToken.contractAddr)
-	if(preferredToken.contractAddr == 'nativeToken'){
-	// -------------------------------------
-	// NATIVE TOKEN				
-	// -------------------------------------
+			console.warn('📜📜📜 preferredToken.contractAddr:', preferredToken.contractAddr)
+			if(preferredToken.contractAddr == 'nativeToken'){
+// -------------------------------------
+// NATIVE TOKEN				
+// -------------------------------------
 					console.warn('📜📜📜 LOADING NATIVE TOKEN!')
 			const amountInput = document.getElementById('amount');
 			let stepValue  = 0.01; // Minimum step of 0.01 for tokens with decimals
@@ -6128,34 +6338,18 @@ function verifyMnemonic() {
 			// Set the step attribute, ensuring it's at least 0.01 and at most 1
 			stepValue = Math.max(Math.min(stepValue, 1), 0.01);
 			amountInput.setAttribute('step', stepValue.toString());
-
 			console.warn('🔢  DECIMALS (stepvalue): ',stepValue)
 
-		// CHECK NATIVE (nativeBalance) BALANCE
-
-
-		// let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
-
 				let gasBalance
-				// try {
 				const balance = await provider.getBalance(addr);
 				console.log(`NATIVE GAS bal (crudo) : ${balance} GAS`);
 				 nativeBalance = Math.round(ethers.formatEther(balance)* 1000000) / 1000000; // Rounds to 6 decimal places
 				console.log(`NATIVE GAS Balance : ${nativeBalance} GAS`);
-				// let explorer = 'https://sepolia.arbiscan.io/'
-				// let tokenName = 'ETH(arb)'
-
-
-
 				let explorer =preferredToken.explorers[0].url
-				// let tokenAddress =preferredToken.contractAddr
 				let tokenName =preferredToken.tokenName
-				// let userAddress= addr
-
-
 				let userAddress= addr
 				userData.innerHTML = ` 
-				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress }">Balance: ${nativeBalance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
+				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress }">${nativeBalance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
 					</div> `;
 				
 
@@ -6173,11 +6367,7 @@ function verifyMnemonic() {
 				const balance = await provider.getBalance(addr);
 				b=balance
 				console.log(`GAS bal (crudo) : ${balance} GAS`);
-				//  gasBalance = ethers.formatEther(balance);
-				 gasBalance = Math.round(ethers.formatEther(balance)* 1000000) / 1000000; // Rounds to 6 decimal places
-
-				//  gasBalance = ethers.formatEther(balance).toFixed(5)
-
+				gasBalance = Math.round(ethers.formatEther(balance)* 1000000) / 1000000; // Rounds to 6 decimal places
 				console.log(`GAS Balance : ${gasBalance} GAS`);
 			} catch (error) {
 				console.error('Error checking gas  balance:', error.reason);
@@ -6196,12 +6386,9 @@ function verifyMnemonic() {
 					else { console.warn('Error getting balance:', error); }
 				}
 				console.warn('erc20Balance:',balance);
-
 				const decimals = await tokenContract.decimals();
 				tkxdec= decimals
 				const tokenDecimals = Number(decimals);
-
-
 				
 				// Determine the appropriate step value
 				let stepValue;
@@ -6218,24 +6405,16 @@ function verifyMnemonic() {
 				// Set the step attribute, ensuring it's at least 0.01 and at most 1
 				stepValue = Math.max(Math.min(stepValue, 1), 0.01);
 				amountInput.setAttribute('step', stepValue.toString());
-
 				console.warn('🔢 DECIMALS (stepvalue): ',stepValue)
 				console.log('decimals:',decimals)
-				// ========
-				
 				let erc20Balance = ethers.formatUnits(balance, decimals);
 				console.warn(`ERC-20 Balance of ${preferredToken.tokenName}: ${erc20Balance} `);
-
-
 				let explorer =preferredToken.explorers[0].url
 				let tokenAddress =preferredToken.contractAddr
 				let tokenName =preferredToken.tokenName
 				let userAddress= addr
-				// <svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg>
 				userData.innerHTML = ` 
-				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress }">Balance: ${erc20Balance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">gas: ${gasBalance} </a> </div> `;
-				
-
+				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress }">ERC20: ${erc20Balance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">gas: ${gasBalance} </a> </div> `;
 				// ..............................
 				// FIN Carga el token
 				// ..............................
@@ -6282,7 +6461,7 @@ function verifyMnemonic() {
               .getElementById("autoComplete")
               .setAttribute("placeholder", "Loading...");
             // const source = await fetch( "https://chainid.network/chains.json" );
-            const source = await fetch( "js/chainsv1.json" );
+            const source = await fetch( "chainsv1.json" );
             const data = await source.json();
             document
               .getElementById("autoComplete")
@@ -6366,7 +6545,7 @@ function verifyMnemonic() {
     //   );
 
 
-	const INFURA_API_KEY = "9219faae2bac4d24b95c2d967b22005a"; // Replace with your actual Infura API key
+	// const INFURA_API_KEY = "9219faae2bac4d24b95c2d967b22005a"; // Replace with your actual Infura API key
 	const httpsRpcAddresses = resultado.rpc.map((address) => {
 	if (address.startsWith("https://") && address.includes("${INFURA_API_KEY}")) {
 		return address.replace("${INFURA_API_KEY}", INFURA_API_KEY);
@@ -7010,6 +7189,12 @@ if (contractAddr == '') {
 
 
 
+
+  /*********************************************************************************************
+  .) STEALTH WALLET
+  **********************************************************************************************/
+
+
         //  createStealthWallet(privateKey, publicKey) 
         async function createStealthWallet(privateKey, publicKey) {
 
@@ -7234,7 +7419,7 @@ alert('Invalid Ethereum address');
 }
 
 
-	/*********************************************************************************************
+		/*********************************************************************************************
 		.)  SEND / RECEIVE TOKENS ERC20
 		**********************************************************************************************/
 
@@ -8385,6 +8570,73 @@ async function showCIDQR(cid, title) {
           }
         })
     }
+
+
+
+
+
+	async function encryptData(msg, pubkey){
+
+	//1. firma el hash del mensaje
+	//2. arma un payload con el mensaje + la firma 
+	//3. lo encrpta
+	//4. lo convierte en estring
+	
+	
+	
+	// 0. get priv key
+	let signer = await getSigner() 
+		if (!signer) {
+		console.log('Handle case where signer is not obtained');
+		}
+	let alicePrivateKeyA = signer.privateKey
+
+	// 1.
+	const signature = EthCrypto.sign(
+		alicePrivateKeyA,
+		EthCrypto.hash.keccak256(msg)
+	);
+	console.log('HASH of encryptData(): ',EthCrypto.hash.keccak256(msg))
+
+	// 2.
+	const payload = {
+		message: msg,
+		signature
+	};
+	console.log('payload:', payload)
+
+
+	// 3.
+	const encrypted = await EthCrypto.encryptWithPublicKey(
+		ethers.getBytes(pubkey), // by encrypting with bobs publicKey, only bob can decrypt the payload with his privateKey
+		JSON.stringify(payload) // we have to stringify the payload before we can encrypt it
+	);
+
+
+	// 4.
+	const encryptedString = EthCrypto.cipher.stringify(encrypted);
+	// console.log('🔒 Encrypted data:', encryptedString)
+
+	return encryptedString
+	}
+
+
+
+		/*********************************************************************************************
+		.) SHOW WALLET
+		**********************************************************************************************/
+		async function showWallet() {
+			console.log('showWallet')
+
+			Swal.close(); // Close the modal
+
+			// var audioContext = new AudioContext();
+
+			// open modal
+			openModalId('#walletModal')
+
+		}
+
 
 
 

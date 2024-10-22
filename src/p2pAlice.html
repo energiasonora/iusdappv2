@@ -22,6 +22,11 @@
     <script src="js/sweetalert2.all.min.js"></script>
 
     <style>
+         @media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    background-color: black;
+  }
+}
         body {
             background-color: black;
             color: green;
@@ -127,19 +132,41 @@
         .colored-toast .swal2-html-container {
             color: white;
         }
+
+.traffic-light {
+	width: 10px!important;
+	height: 10px !important;
+	border-radius: 50%;
+	background-color: red;
+	border: 2px solid black;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+    margin: .44em;    
+  }
+
+  .light{
+    position: fixed;
+    top: 10px;
+    right: 10px;
+  }
     </style>
 </head>
 
 <body>
+    <div id="lightButtonB" class="light">🔴</div>
+
     <h1>P2P ALICE</h1>
     <p>Encrypt, sign and send message</p>
 
 
     <!-- Segunda fila con dos columnas -->
     <div class="row">
+        
         <!-- Columna A - ALICE -->
         <div class="col">
             <h3>ALICE</h3>
+            
+            <!-- <div id="lightButton" class="traffic-light"></div> -->
             <span id="aliceAddress" class="addr"></span>
 
             <div id="aliceMessageForm">
@@ -191,12 +218,16 @@
 
     <br><br>
     <div id="resultAddress"></div>
+
+
+	
+	<div class="search__related" id="chatBox">
+	
+	</div>
+
+
     <script src="js/ethers-6.13.2.umd.min.js"></script>
     <!-- <script src="js/ethers-5.7.2.umd.min.js" type="application/javascript"></script> -->
-
-
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-
 
 
     <script type="module">
@@ -271,15 +302,22 @@
         // INIT
         // -----------------------------------------
         async function init() {
-            let alicewallet = await aliceWallet()
-            const alicePrivateKeyA = alicewallet.privateKey;
-            console.log('alice private key:', alicePrivateKeyA)
 
-            let alicePrivateKey = ethers.getBytes(alicePrivateKeyA);
+            let alicewallet = await aliceWallet()
+            a= alicewallet
+
+            
+            // DISPLAY ADDRESS
             document.getElementById('aliceAddress').innerHTML = alicewallet.address
             console.log('alicewallet:', alicewallet.address)
 
-            document.getElementById('alicemessageInput').value = 'hola mundo'
+            // SET DEFAULT MESSAGE
+            document.getElementById('alicemessageInput').value = 'hola bob'
+
+            // GET MESSAGE HASH
+            let hash = EthCrypto.hash.keccak256(document.getElementById('alicemessageInput').value)
+            alicehHash.innerText = "Hash: " + hash;
+
 
             let bobwallet = await bobWallet()
             b = bobwallet
@@ -287,18 +325,60 @@
 
             // CHAT
             const iusnaturalisxmtp = await Client.create(alicewallet)
-            const conversations = iusnaturalisxmtp.conversations
-    
+            console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
+            document.getElementById('lightButtonB').innerHTML= '🟢'
+            // document.getElementById('lightButton').style.backgroundColor = 'green'
 
+
+            const conversations = iusnaturalisxmtp.conversations
 			window.iusnaturalisxmtp = iusnaturalisxmtp;// make GLOBAL
 			window.chats= iusnaturalisxmtp.conversations
+
+                // LISTEN TO NEW CONVERSATIONS
+                let userAddress= a.address
+                let toAddr = b.address
+            let shortTo = toAddr.substring(38, 42);
+
+            conversation = await iusnaturalisxmtp.conversations.newConversation(toAddr)
+
+            for await (const message of await conversation.streamMessages()) {
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0'); // Ensure two-digit format
+                const minutes = now.getMinutes().toString().padStart(2, '0'); // Ensure two-digit format
+                const timestamp = `${hours}:${minutes}`;
+                console.log('logMSG:', message)
+                let preferedWallet = localStorage.getItem('preferedWallet');
+                if (!preferedWallet) { console.log('NO PREFERED WALLET SET') }
+                if (preferedWallet) { const values = preferedWallet.split(',').map(item => item.trim()); userAddress = values[1]; }
+                if (message.senderAddress === userAddress) {
+                    console.log('YOU')
+                    chatBox.innerHTML += `<div><strong class='who'>You:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
+                }
+                if (message.senderAddress == toAddr) {
+                    console.log('OTHER', shortTo)
+                    mm = message;
+
+                    //  DECRYPT FROM ALICE's SIDE..........
+                    const encryptedObject = EthCrypto.cipher.parse(message.content);
+                    const decrypted = await EthCrypto.decryptWithPrivateKey( a.privateKey, encryptedObject );
+                    const decryptedPayload = JSON.parse(decrypted);
+                    // check signature
+                    const senderAddress = EthCrypto.recover( decryptedPayload.signature, EthCrypto.hash.keccak256(decryptedPayload.message) );
+                    console.log( 'Got message from ' + senderAddress + ': ' + decryptedPayload.message );
+                    document.getElementById('chatBox').innerHTML += `<div><strong class='who notyou'>${shortTo}:</strong> ${decryptedPayload.message}<span class="timestamp">  ${timestamp} &check; </span></div>`;
+
+                    }
+                    console.log(`[${message.senderAddress}]: ${message.content}`)
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+            }
 
         }
         init()
 
 
         // -----------------------------------------
-        // BUTTONS
+        // SEND MSG
         // -----------------------------------------
         document.getElementById('aliceSend').addEventListener('click', async function (event) {
             console.log('ALICE SEND')
@@ -320,6 +400,7 @@
                 alicePrivateKeyA,
                 EthCrypto.hash.keccak256(msg)
             );
+            console.log('HASH: ',EthCrypto.hash.keccak256(msg))
             // console.log('signature:', signature)
 
             // 2.
@@ -342,20 +423,15 @@
             console.log('⚠️ 🧳 🧮 Alice encrypted message to Bob:', encryptedString)
 
             // 5. send encrypted message
-            const conversation = await iusnaturalisxmtp.conversations.newConversation(b.address)
             // await conversation.send(encryptedString)
 
 
             // 5b. send optimistic encrypted message
-            // standard (string) message
             const preparedTextMessage = await conversation.prepareMessage(encryptedString);
-            //After preparing an optimistic message, use its `send` method to send it.
-            // await preparedTextMessage.send();
             try {
                 preparedTextMessage.send();
-            // preparedMessage.send();
-            } catch (e) {
-            // handle error, enable canceling and retries (see below)
+        } catch (e) {
+                console.log("error!:", e)
             }
 
 
@@ -367,13 +443,13 @@
 
 
 
-        let alicehHash = document.getElementById('aliceHash')
         // AUTOHASH ALICE
+        let alicehHash = document.getElementById('aliceHash')
         alicemessageInput.addEventListener("input", function () {
             console.log('text changed', alicemessageInput.value)
             const text = alicemessageInput.value;
-            // const hash = ethers.keccak256(ethers.toUtf8Bytes(text));
-            const hash = ethers.sha256(ethers.toUtf8Bytes(text));
+            // const hash = ethers.sha256(ethers.toUtf8Bytes(text));
+            let hash = EthCrypto.hash.keccak256(text)
             alicehHash.innerText = "Hash: " + hash;
             aliceHash.setAttribute("data-hash", hash);
             console.log('sha-256', hash);
@@ -381,159 +457,8 @@
         });
 
 
-        // / AUTOHASH BOB
-        // bobmessageInput.addEventListener("input", function () {
-        //     console.log('text changed', bobmessageInput.value)
-        //     const text = bobmessageInput.value;
-        //     // const hash = ethers.keccak256(ethers.toUtf8Bytes(text));
-        //     const hash = ethers.sha256(ethers.toUtf8Bytes(text));
-        //     bobHash.innerText = "Hash: " + hash;
-        //     bobHash.setAttribute("data-hash", hash);
-        //     console.log('sha-256', hash);
-
-        // });
-
-
-
-        async function encryptDecryptMessage() {
-            console.log('encryptDecryptMessage()')
-            const alice = EthCrypto.createIdentity();
-            console.log('alice identity:', alice)
-            const bob = EthCrypto.createIdentity();
-            const secretMessage = 'My new name is Satoshi Buterin';
-
-
-            //1. firma el hash del mensaje
-            //2. arma un payload con el mensaje + la firma 
-            //3. lo encrpta
-            //4. lo convierte en estring
-
-
-            // 1.
-            const signature = EthCrypto.sign(
-                alice.privateKey,
-                EthCrypto.hash.keccak256(secretMessage)
-            );
-
-            // 2.
-            const payload = {
-                message: secretMessage,
-                signature
-            };
-
-            // 3.
-            console.log('3 👾🤖 bob.publicKey:', bob.publicKey)
-
-            const encrypted = await EthCrypto.encryptWithPublicKey(
-                bob.publicKey, // by encrypting with bobs publicKey, only bob can decrypt the payload with his privateKey
-                JSON.stringify(payload) // we have to stringify the payload before we can encrypt it
-            );
-
-            console.log('Alice encrypted message to Bob:', encrypted)
-            // messagesResult.innerHTML +='Alice encrypted message to Bob:', encrypted;
-            /*  { iv: 'c66fbc24cc7ef520a7...', ephemPublicKey: '048e34ce5cca0b69d4e1f5...', ciphertext: '27b91fe986e3ab030...', mac: 'dd7b78c16e462c42876745c7...' }
-            */
-
-
-            // 4.
-            // we convert the object into a smaller string-representation
-            const encryptedString = EthCrypto.cipher.stringify(encrypted);
-            // > '812ee676cf06ba72316862fd3dabe7e403c7395bda62243b7b0eea5eb..'
-            // console.log('encryptedString: ', encryptedString)
-            // now we send the encrypted string to bob over the internet.. *bieb, bieb, blob*
-
-
-            // SEND AND DECRYPT FROM BOB's SIDE..........
-
-            // we parse the string into the object again
-            const encryptedObject = EthCrypto.cipher.parse(encryptedString);
-
-            const decrypted = await EthCrypto.decryptWithPrivateKey(
-                bob.privateKey,
-                encryptedObject
-            );
-            const decryptedPayload = JSON.parse(decrypted);
-
-            // check signature
-            const senderAddress = EthCrypto.recover(
-                decryptedPayload.signature,
-                EthCrypto.hash.keccak256(decryptedPayload.message)
-            );
-
-            console.log(
-                'Got message from ' +
-                senderAddress +
-                ': ' +
-                decryptedPayload.message
-            );
-            messagesResult.innerHTML += 'Got message from ' + senderAddress + ': ' + decryptedPayload.message
-
-            // > 'Got message from 0x19C24B2d99FB91C5...: "My name is Satoshi Buterin" Buterin'
-
-
-
-            // ----------------------
-            // Creating an answer
-            // ----------------------
-            const answerMessage = 'And I am Bob Kelso';
-            const answerSignature = EthCrypto.sign(
-                bob.privateKey,
-                EthCrypto.hash.keccak256(answerMessage)
-            );
-            const answerPayload = {
-                message: answerMessage,
-                signature: answerSignature
-            };
-
-            const alicePublicKey = EthCrypto.recoverPublicKey(
-                decryptedPayload.signature,
-                EthCrypto.hash.keccak256(payload.message)
-            );
-
-            const encryptedAnswer = await EthCrypto.encryptWithPublicKey(
-                alicePublicKey,
-                JSON.stringify(answerPayload)
-            );
-            console.log('encryptedAnswer:', encryptedAnswer)
-            // now we send the encryptedAnswer to alice over the internet.. *bieb, bieb, blob*
-
-
-            // --------------------------------
-            // DECRYPT BOB ANSWER -REDUNDAT
-            // --------------------------------
-            // we convert the object into a smaller string-representation
-            const encryptedStringb = EthCrypto.cipher.stringify(encryptedAnswer);
-            // console.log('encryptedStringb:',encryptedStringb)
-            const encryptedObjectb = EthCrypto.cipher.parse(encryptedStringb);
-
-            const decryptedb = await EthCrypto.decryptWithPrivateKey(
-                alice.privateKey,
-                encryptedObjectb
-            );
-            const decryptedPayloadb = JSON.parse(decryptedb);
-
-            const senderAddressb = EthCrypto.recover(
-                decryptedPayloadb.signature,
-                EthCrypto.hash.keccak256(decryptedPayloadb.message)
-            );
-
-            console.log(
-                'Got message from ' +
-                senderAddressb +
-                ': ' +
-                decryptedPayloadb.message
-            );
-
-            messagesResult.innerHTML += '<br>Got message from ' + senderAddressb + ': ' + decryptedPayloadb.message
-
-
-        }
-        // encryptDecryptMessage()
-
-        // async function decryptMessage(){
-
-
-        // }
+   
+ 
     </script>
 </body>
 
