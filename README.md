@@ -1,6 +1,8 @@
 # IUS DAPP
 
-a sovereign decentralized platform (SDP) for peer to peer  public and private communication.
+Ius Naturalis is a project centered on digital sovereignty, addressing key areas such as value creation and transfer, communication, document management, and the resolution of public and private disputes—all approached from a sovereign perspective under natural law jurisdiction.
+We are developing a self-custodial wallet that integrates chat and public document management capabilities, including attestation and dispute resolution mechanisms.
+Our goal is to foster a web3 culture rooted in sovereignty, promoting the adoption of customary practices for managing public goods and embracing decentralized solutions in governance.
 
 
 # DEMO
