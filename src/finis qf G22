@@ -1,0 +1,37 @@
+- on a reflechisse sur la razon pour la quelle on a considere que on ne atire pass aux inversors de par example 100k euro. 
+Ma perspective, on est pass souverain du largent. 
+on deverais incluir la monnae libre, les monnaies alternatives basse sur le Euro digital (ver MICA et )
+
+- Ius Ntauralis, est , aussi une plataforme decentralisse, pour les monnaies libres.
+On mars on attends le sortie de G1 v2, et nous sommes aussi en train de creer notre version basee sur lidee de le JEU(jardin dechangs universalle) appele trok.
+POur ca on a inclu notre version de comme une wallet deberais etre, pret pour faire des conexion et echanges entre pairs (les communes).
+
+- On doit reconsiderer lestrategie pour continue a financer le developement en mantenance de ce logiciel aussi. 
+
+
+-- 
+# petite recapitulacion apres le fin du QF G22.
+merci a tous pour votre participation dans ce projet. On a collecte x euro en differents criptos.
+ca a ete inclu implicitement dans le pla de financement propose, mais il servira a publir et finir les functinoalites que je suis on train dintegre. 
+On es sur la version 5.12
+ce version a
+- une implementacion fnctionale sur les stealth address.
+ on a cree un model integre dans lecran de wallet entre chaque utilizateur
+ photo1
+
+ les stealth address ou address furtives sert a avoir privacity sur des ecosystemes evm publiques commme ethereum,arbitrum, polygon, avax etc.
+
+ pendant ces deux semaines je vecu  modestement que avec le sutien economique de ce projet. je mange pas de fromage mas ca marche comme meme. je voyage environ 400 km avec mi petite moto souverain entre chez moi a la campagne et lofficine chez buenos aires, inclus.
+
+ apres les stealth address amellierement je cree des petites indivatifs visuelles pour montrer le etat de la connexion entre pairs et du wallet.
+
+ pour les contact, je resolu un bug qui duplique les message entre pairs dan le chat.
+ le plus important pour les contats es q mantenault ils son atacche a vos DIDs.
+ca implique que on peut utiliser la meme phrase mnemonique dans differents dispositifs et avoir la meme agenda automatiquement!. 
+POur les novelles arrives, les donnes et metadones sont enregistre dans polybase, une experiment de db decentralice(on vera comme ca marche!), mais cela implique aussi la faison souverane, ou chaque utilisateur , souveranement, peut  mintee leur prope DID (comme ca les DID seron aussi beacoup plus resilient pour etre inclus dans le blockchains, qui son le premier endroit ou les donnes son cherche dans le mechanisme de IUS NATURALIS).
+Jconsidere que va va ammelluerer lexperience dutilisation, pasque on peut avoir la meme phrase mnemonique dans dispositifs et preserve la meme historial d'agenda automatiquement.
+
+
+
+
+

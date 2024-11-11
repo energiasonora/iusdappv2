@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERC-20 Token Selectors</title>
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+
+    <style>
+        .token-info {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        body {
+            background-color: black;
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <label for="tokenSelector1">Select Default Token:</label>
+        <select id="tokenSelector1" class="token-selector">
+          <!-- Options will be populated dynamically -->
+        </select>
+      </div>
+      
+      <div>
+        <label for="tokenSelector2">Select Default Token:</label>
+        <select id="tokenSelector2" class="token-selector">
+          <!-- Options will be populated dynamically -->
+        </select>
+      </div>
+      
+      <div>
+        <label for="tokenSelector3">Select Default Token:</label>
+        <select id="tokenSelector3" class="token-selector">
+          <!-- Options will be populated dynamically -->
+        </select>
+      </div>
+      
+      <script>
+        // Array of tokens to populate the selectors
+        const tokens = [
+          { name: "-- Choose a Token --", value: "" },
+          { name: "Token 1", value: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d" },
+          { name: "Token 2", value: "0xFb1cb5a6dADDcE008d86f72057265A3afC82d539" },
+          { name: "Token 3", value: "0xTokenAddress3" }
+        ];
+      
+        // Get all selectors by class name
+        const selectors = document.querySelectorAll('.token-selector');
+      
+        // Function to populate a <select> element with options
+        function populateSelector(selector) {
+          tokens.forEach(token => {
+            const option = document.createElement('option');
+            option.value = token.value;
+            option.textContent = token.name;
+            selector.appendChild(option);
+          });
+        }
+      
+        // Populate each selector with token options
+        selectors.forEach(selector => populateSelector(selector));
+      </script>
+      
+
+
+    <div id="tokenSelector1-info" class="token-info"></div>
+    <div id="tokenSelector2-info" class="token-info"></div>
+    <div id="tokenSelector3-info" class="token-info"></div>
+
+
+    <script>
+        // Global variable to store selected token
+        // let selectedToken = '';
+
+        // Global variable to store the selected token and token data
+        let selectedToken = '';
+        const tokenState = {
+            tokenData: {}, // Caches token data to avoid redundant fetches
+        };
+
+        // Function to fetch token data
+        async function fetchTokenData(tokenAddress) {
+            const erc20Abi = [
+                "function name() view returns (string)",
+                "function symbol() view returns (string)",
+                "function decimals() view returns (uint8)",
+            ];
+            const provider = new ethers.JsonRpcProvider(`https://arbitrum-sepolia.blockpi.network/v1/rpc/public`);
+            const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, provider);
+            const [name, symbol, decimals] = await Promise.all([
+                tokenContract.name(),
+                tokenContract.symbol(),
+                tokenContract.decimals(),
+            ]);
+            return { name, symbol, decimals };
+        }
+
+        function updateAllSelectors(newToken) {
+            // Loop through all selectors and set their value to the new token
+            document.querySelectorAll('.token-selector').forEach(selector => {
+                selector.value = newToken;
+            });
+        }
+
+        function updateUI(data) {
+            // Update the UI for all selectors with the token information
+            document.querySelectorAll('.token-info').forEach(infoDiv => {
+                infoDiv.textContent = `${data.name} (${data.symbol}) - Decimals: ${data.decimals}`;
+            });
+        }
+        async function onSelectorChange(event) {
+            const tokenAddress = event.target.value;
+
+            // Update the selected token and synchronize selectors
+            selectedToken = tokenAddress;
+            updateAllSelectors(selectedToken);
+
+            // Check if we have token data cached, fetch if not
+            if (!tokenState.tokenData[tokenAddress]) {
+                const data = await fetchTokenData(tokenAddress);
+                tokenState.tokenData[tokenAddress] = data; // Cache the token data
+                updateUI(data);
+            } else {
+                updateUI(tokenState.tokenData[tokenAddress]);
+            }
+        }
+
+        // Attach event listener to all selectors
+        document.querySelectorAll('.token-selector').forEach(selector => {
+            selector.addEventListener('change', onSelectorChange);
+        });
+    </script>
+
+</body>
+
+</html>

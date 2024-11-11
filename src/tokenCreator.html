@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOKEN CREATOR</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.01.min.css">
+
+    <style>
+        /* Your existing CSS styles here */
+        :root {
+            --transition-1: all 0.3s ease-in-out;
+            --transition-2: all 0.2s ease-in-out;
+        }
+
+
+        #selection {
+            word-break: break-all;
+        }
+
+        .autoComplete_wrapper {
+            width: 90% !important;
+        }
+
+
+        body {
+            background: black;
+            color: green;
+        }
+
+
+        /* COLORED TOAST */
+
+        .colored-toast.swal2-icon-success {
+            background-color: #45bb00 !important;
+        }
+
+        .colored-toast.swal2-icon-error {
+            background-color: #f27474 !important;
+        }
+
+        .colored-toast.swal2-icon-warning {
+            background-color: #f8bb86 !important;
+        }
+
+        .colored-toast.swal2-icon-info {
+            background-color: #3fc3ee !important;
+        }
+
+        .colored-toast.swal2-icon-question {
+            background-color: #87adbd !important;
+        }
+
+        .colored-toast .swal2-title {
+            color: white;
+        }
+
+        .colored-toast .swal2-close {
+            color: white;
+        }
+
+        .colored-toast .swal2-html-container {
+            color: white;
+        }
+
+        /* ---------- */
+
+        .hoverable {
+            color: black;
+        }
+
+        .hoverable:hover {
+            color: red;
+            /* Hover color */
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <h1>TOKEN SELECTOR FOR IUS NATURALIS</h1>
+
+<p>To test add contract from arbitrium sepolia: 0xFb1cb5a6dADDcE008d86f72057265A3afC82d539 </p>
+
+
+
+<div id="address"></div>
+<div id="data"></div>
+<p>your address:</p>
+<pre id="yourAddress"> </pre>
+<p>---------------</p>
+
+<button type="button" class="btn btn-primary" onclick="openModalId('#defaultTokenModal')"> Add Token </button>
+
+
+    <h1>token selectors</h1>
+    <div>
+        <label for="tokenSelector1">Select Default Token:</label>
+        <select id="tokenSelector1" class="token-selector">
+            <!-- Options will be populated dynamically -->
+        </select>
+    </div>
+
+    <div>
+        <label for="tokenSelector2">Select Default Token:</label>
+        <select id="tokenSelector2" class="token-selector">
+            <!-- Options will be populated dynamically -->
+        </select>
+    </div>
+
+
+    <h1 class="codrops-header__title" id="userData">TOKEN: __ ()</h1>
+    <div id="bigBalanceWalletmodal"></div>
+    <div id="bigBalanceWalletsendmodal"></div>
+
+
+
+    <div id="tokenSelector1-info" class="token-info"></div>
+    <div id="tokenSelector2-info" class="token-info"></div>
+    <div id="tokenSelector3-info" class="token-info"></div>
+
+
+
+
+    <!-- ---------------------------------------------- -->
+    <!--  Modal addNewToken -->
+    <!-- ---------------------------------------------- -->
+    <div class="modal fade" id="addNewTokenModal" tabindex="-1" aria-labelledby="addNewTokenModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewTokenModalLabel">Add Token</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="mb-3">
+                        <label for="autoComplete" class="form-label">Select EVM chain</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-search" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg>
+                            </span>
+                            <input type="search" class="form-control" id="autoComplete" placeholder="Enter search term"
+                                tabindex="1">
+                        </div>
+                    </div>
+
+
+
+                    <div class="selection"></div>
+
+                    <div class="alert alert-warning alert-dismissible fade show" id="selectionResult"> </div>
+
+                    <!-- ERC-20 Options -->
+                    <div id="erc20SetContract" class="mt-3" style="display: none;">
+
+                        <!-- Contract Address Selector -->
+                        <div class="mb-3">
+                            <label for="contractAddress" class="form-label">Smart Contract Address</label>
+                            <input type="text" class="form-control" id="contractAddress" placeholder="0x..." required
+                                pattern="^0x[a-fA-F0-9]{40}$">
+                            <div class="invalid-feedback">
+                                Please provide a valid Ethereum smart contract address (0x followed by 40 hex
+                                characters).
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                                <span id="validLink"></span>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" id="addERC20contract" onclick="addConctract()"
+                            style="display: inline;">Add ERC-20</button>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- ---------------------------------------------- -->
+    <!--  Modal defaultToken -->
+    <!-- ---------------------------------------------- -->
+    <div class="modal fade" id="defaultTokenModal" tabindex="-1" aria-labelledby="defaultTokenModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="defaultTokenModalLabel">Default Token</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Radio Buttons -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tokenType" id="evmOption" value="evm">
+                        <label class="form-check-label" for="evmOption">EVM</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tokenType" id="trokOption" value="trok" disabled>
+                        <label class="form-check-label" for="trokOption">TROK</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tokenType" id="btcOption" value="btc"
+                            disabled>
+                        <label class="form-check-label" for="btcOption">BTC</label>
+                    </div>
+
+                    <!-- ERC-20 Options -->
+                    <div id="erc20Options" class="mt-3" style="display: none;">
+
+                        <!-- Contract Address Selector -->
+                        <label for="erc20Selector" class="form-label">Select ERC-20 Contract</label>
+
+    <!-- <div id="erc20Selector" class="form-select mb-3 token-info"></div> -->
+
+                        <!-- <select class="form-select mb-3" id="erc20Selector">
+                            <option value="eth-0x123...">Ethereum - 0x123...</option>
+                            <option value="bsc-0x456...">Binance Smart Chain - 0x456...</option>
+                            <option value="polygon-0x789...">Polygon - 0x789...</option>
+                            <option value="avalanche-0xabc...">Avalanche - 0xabc...</option>
+                        </select> -->
+
+    <div>
+        <label for="tokenSelector3">Select Default Token:</label>
+        <select id="tokenSelector3" class="token-selector">
+            <!-- Options will be populated dynamically -->
+        </select>
+    </div>
+
+
+                        <!-- Add, Remove, Info Buttons -->
+
+                        <button type="button" class="btn btn-primary mt-2" id="" onclick="addToken()">+ Add</button>
+                        <button type="button" class="btn btn-danger mt-2" id="removeErc20Address">Remove</button>
+                        <button type="button" class="btn btn-info mt-2" id="infoErc20Address">Info</button>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+/*********************************************************************************************
+		.) VARIABLES
+		// https://sepolia.etherscan.io/address/0xc4bF5CbDaBE595361438F8c6a187bDc330539c60#code
+
+		**********************************************************************************************/
+		const apiKeyLighthouse = '0e06cd16.4d3bf2536b7c4219bfb7520bd7b7346e';//lighthouse
+		const INFURA_API_KEY = "9219faae2bac4d24b95c2d967b22005a"; // Replace with your actual Infura API key
+
+
+		window.globalOptionsList = [
+			{
+                'ALCHEMY_API_KEY': 'X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I',
+                'INFURA_API_KEY' : '9219faae2bac4d24b95c2d967b22005a',
+				'IPFS_GATEWAY': 'https://gateway.lighthouse.storage/ipfs/',
+				"POLYBASE_DB": "https://explorer.testnet.polybase.xyz/studio/pk%2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3%2FSTARKID/collections/STARKID",
+				"ZK_PUBKEY": "2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3"
+			},
+        ]
+// infura:9219faae2bac4d24b95c2d967b22005a
+// alchemy: X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I
+
+        /*********************************************************************************************
+        .) INIT
+        **********************************************************************************************/
+        window.onload = async () => {
+            console.log('window.onload')
+
+        };
+
+
+        async function init() {
+            console.log('init()')
+
+            let alicewallet = await aliceWallet()
+            a = alicewallet
+            const userAddress = alicewallet.address;
+            // addr = aliceWallet.address;
+            addr =userAddress
+            document.getElementById('yourAddress').setAttribute('address', userAddress);
+            yourAddress.innerHTML = `${userAddress} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${userAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> <svg id='shareAddress' onclick="event.stopPropagation();copy2clipboard('${userAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path fill='currentColor'  d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>`;
+            console.log(`Your address: ${userAddress} `)
+
+            populateTokenSelector()
+
+ 
+            await loadToken(userAddress)
+ 
+
+
+        }
+        init()
+
+        // ----------------------------------------------------------------------------
+        // POPULATE SELECTOR
+        // ----------------------------------------------------------------------------
+       async  function getPreferredToken() {
+          console.log('getPreferredToken()')
+
+            // let storedTokens = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+            let storedTokens = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+            if (storedTokens.length === 0) {
+                console.log('🤷 There are no tokens (EVM_TOKENS)  in localstorage we  add USDC(arbitrum sepolia) as default ')
+                const defaultToken = {
+                    tokenName: "USDC",
+                    chainName: "Arbitrum Sepolia",
+                    chainId: 421614,
+                    contractAddr: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",  // Example contract address
+                    rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   // Example RPC endpoint
+                    explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
+                };
+                storedTokens.push(defaultToken);
+
+                  const defaultTokenB = {
+                    tokenName: "ETH(arb)",
+                    chainName: "Arbitrum Sepolia",
+                    chainId: 421614,
+                    contractAddr: "nativeToken",  // Example contract address
+                    rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   // Example RPC endpoint
+                    explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
+                };
+                storedTokens.push(defaultTokenB);
+
+
+                localStorage.setItem('EVM_TOKENS', JSON.stringify(storedTokens));
+                populateTokenSelector()
+                
+                // return 
+            } else {
+                console.log('💁‍♂️ YES There are EVM_TOKENS in localstorage', storedTokens)
+
+            }
+
+            const preferredTokenKey = localStorage.getItem('PREFERRED_TOKEN');
+            console.log('preferredTokenKey:',preferredTokenKey)
+            if (!preferredTokenKey) return null; // No preferred token set
+
+            // Split the preferred token key to get chainName and contractAddr
+            const [preferredChainId, preferredContractAddr] = preferredTokenKey.split('-');
+            console.log('preferredChainId:',preferredChainId)
+            console.log('preferredContractAddr:',preferredContractAddr)
+
+            return storedTokens.find(token => 
+                token.chainId === JSON.parse(preferredChainId) && token.contractAddr === preferredContractAddr  );
+        }
+
+            // Usage
+            // const preferredToken = getPreferredToken();
+            // if (preferredToken) {
+            //     console.log("Preferred Token:", preferredToken);
+            // } else {
+            //     console.log("No preferred token set.");
+            // }
+                    
+        // Function to set the preferred token in localStorage
+        function setPreferredToken(chainId, contractAddr) {
+            console.warn('🤠 🤠 🤠prefered token CHANGED!')
+
+            const preferredTokenKey = `${chainId}-${contractAddr}`;
+            localStorage.setItem('PREFERRED_TOKEN', preferredTokenKey);
+        }
+
+
+        
+        // Function to populate all selectors with options, marking the preferred token as selected
+        function populateTokenSelector() {
+                let storedTokens = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+                const preferredTokenKey = localStorage.getItem('PREFERRED_TOKEN');
+                const selectElements = document.querySelectorAll('.token-selector');
+
+                selectElements.forEach(selectElement => {
+                    // Clear existing options
+                    selectElement.innerHTML = '';
+                    
+                    // Populate options
+                    storedTokens.forEach(token => {
+                        const option = document.createElement('option');
+                        option.value = `${token.chainId}-${token.contractAddr}`;
+                        option.textContent = `${token.tokenName} ${token.chainName} (${token.chainId})`;
+
+                        // Mark the option as selected if it matches the preferred token key
+                        const tokenKey = `${token.chainId}-${token.contractAddr}`;
+                        if (tokenKey === preferredTokenKey) {
+                            option.selected = true;
+                        }
+
+                        selectElement.appendChild(option);
+                    });
+                });
+            }
+
+
+
+
+
+            // Event listener to handle selector change and update the preferred token
+            document.querySelectorAll('.token-selector').forEach(selectElement => {
+                selectElement.addEventListener('change', async(event)  => {
+                    const selectedValue = event.target.value;
+                    console.warn(' 🤖🤖🤖 TOKEN SELECTOR CHANGED!',selectedValue)
+                    s=selectedValue;
+                    const [chainId, contractAddr] = selectedValue.split('-');
+                    console.log('setPreferredToken::',chainId, contractAddr);
+                    setPreferredToken(chainId, contractAddr);
+
+
+                console.log('contractAddr:', contractAddr)
+                if (contractAddr === 'nativeToken') {
+                    localStorage.setItem('selectedTokenType', 'native');
+
+                } else {
+                    localStorage.setItem('selectedTokenType', 'erc20');
+                }
+
+                    // Synchronize all selectors with the new preferred token
+                    populateTokenSelector();
+                    await loadToken(addr)
+
+                });
+            });
+
+          
+
+
+
+
+        // Update the UI for all selectors with the token information
+        // function updateUI(data) {
+        //     document.querySelectorAll('.token-info').forEach(infoDiv => {
+        //         infoDiv.textContent = `${data.name} (${data.symbol}) - Decimals: ${data.decimals}`;
+        //     });
+        // }
+
+        // Loop through all selectors and set their value to the new token
+        // function updateAllSelectors(newToken) {
+        //     console.warn('updateAllSelectors:', newToken)
+        //     document.querySelectorAll('.token-selector').forEach(selector => {
+        //         selector.value = newToken;
+        //     });
+        // }
+
+
+
+        /*********************************************************************************************
+          .) GET BALANCE
+          **********************************************************************************************/
+
+        // Example ERC-20 ABI including the symbol function
+         erc20Abi = [
+            "function totalSupply() view returns (uint256)",
+            "function balanceOf(address account) view returns (uint256)",
+            "function transfer(address recipient, uint256 amount) returns (bool)",
+            "function transferFrom(address sender, address recipient, uint256 amount) returns (bool)",
+            "function approve(address spender, uint256 amount) returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)",
+            "function symbol() view returns (string)"  // Include the symbol function
+        ];
+
+
+
+
+
+        async function selectRandomProvider(rpcs){
+            console.log('selectRandomProvider');
+
+            let providerLength = rpcs.length;
+            let randomProvider = Math.floor(Math.random() * providerLength);
+            let selectedProvider = rpcs[randomProvider];
+            console.log('👁️‍🗨️selectedProvider 👁️‍🗨️:', selectedProvider);
+
+            if (selectedProvider.includes("INFURA_API_KEY")) {
+                    let INFURA_API_KEY = globalOptionsList[0].INFURA_API_KEY;
+                    selectedProvider = `https://arbitrum-mainnet.infura.io/v3/${INFURA_API_KEY}`;
+                    console.log("INFURA:", selectedProvider);
+            
+            } else if (selectedProvider.includes("ALCHEMY_API_KEY")) {
+                    let ALCHEMY_API_KEY = globalOptionsList[0].ALCHEMY_API_KEY;
+                    selectedProvider = `https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
+                    console.log("ALCHEMY:", selectedProvider);
+
+                    // return "Alchemy";
+                }  else {
+                console.log("URL does not contain INFURA_API_KEY placeholder.");
+            }
+   
+
+            return selectedProvider
+
+        }
+
+async function reloadBalances(){
+    console.warn('reloadBalances()')
+
+
+}
+        
+          async function loadToken(addr) {
+            console.warn('loadToken()')
+            
+            const storedTokenType = localStorage.getItem('selectedTokenType');
+            // userData.innerHTML = ''
+            // data.innerHTML = '... LOADING ...'
+            userData.innerHTML = '... LOADING ...'
+
+
+		/*********************************************************************************************
+		.)  NATIVE 
+		**********************************************************************************************/
+
+            // ETHEREUM
+            if (storedTokenType === 'native') {
+                console.warn('💛💛 LOADING ETHEREUM 💛💛 ')
+
+                let token = await getPreferredToken()
+                tok = token
+                console.log('TOkEN PREFERIDO:', token)
+                if (token ===null ){
+                    console.log('TOKEN NULL:');
+                    return;
+                    }
+
+                let tokenname = token.tokenName
+                let chainid = token.chainId
+                let chainname = token.chainName
+        
+                // let providerLength = token.rpcs.length;
+                // let randomProvider = Math.floor(Math.random() * providerLength);
+                //  let selectedProvider = token.rpcs[randomProvider];
+                // console.log('selectedProvider:', selectedProvider);
+
+                let selectedProvider= await selectRandomProvider(token.rpcs)
+
+                // let provider = await new ethers.JsonRpcProvider(selectedProvider);
+                let provider
+try {
+    provider = await new ethers.JsonRpcProvider(selectedProvider);
+    console.log("🤓Provider initialized successfully:", provider);
+} catch (error) {
+    console.warn("🤬Failed to initialize provider:", error.message || error);
+}
+                // console.log('provider:', provider); 
+               
+
+                let balance = await provider.getBalance(addr);
+                let nativeBalance = ethers.formatEther(balance);
+                let gasName = token.tokenName;
+                console.log(`GAS Balance: ${nativeBalance} `);
+
+                let explorerLengh  =token.explorers.length;
+                let randomExplorer = Math.floor(Math.random() * explorerLengh);
+                let explorer = token.explorers[randomExplorer].url;
+                console.log('explorer:', explorer)
+
+                userData.innerHTML = ` 
+                <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${addr}">${nativeBalance} ${tokenname}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> </div> `;                
+
+
+
+            }
+
+		/*********************************************************************************************
+		.)  ERC20 
+		**********************************************************************************************/
+
+            else if (storedTokenType === 'erc20') {
+                console.warn('💚💚 LOADING ERC20 💚💚 ')
+
+                // ..............................
+                // Carga el token
+                // ..............................
+                let token = await getPreferredToken()
+                tok = token
+                console.log('TOkEN PREFERIDO:', token)
+                if (token ===null ){
+                    console.log('TOKEN NULL:');
+                    return;
+                    }
+
+                let tokenname = token.tokenName
+                let chainid = token.chainId
+                let chainname = token.chainName
+                let contractAddr = token.contractAddr
+                
+                
+                // let providerLength = token.rpcs.length;
+                // let randomProvider = Math.floor(Math.random() * providerLength);
+                //  let selectedProvider = token.rpcs[randomProvider];
+                // console.log('selectedProvider:', selectedProvider);
+
+                let selectedProvider= await selectRandomProvider(token.rpcs)
+
+                // let provider = await new ethers.JsonRpcProvider(selectedProvider);
+let provider
+try {
+    provider = await new ethers.JsonRpcProvider(selectedProvider);
+    console.log("🤓Provider initialized successfully:", provider);
+} catch (error) {
+    console.warn("🤬Failed to initialize provider:", error.message || error);
+}
+
+                console.log('provider:', provider); 
+                // let   tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
+
+let tokenContract; 
+try {
+    tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
+    console.log("Token contract initialized successfully:", tokenContract);
+} catch (error) {
+    console.error("Failed to initialize token contract:", error.message || error);
+}
+console.log('tokenContract:', tokenContract);
+
+
+
+
+                // let erc20balance = await tokenContract.balanceOf(addr);
+                
+let erc20balance
+try {
+    erc20balance = await tokenContract.balanceOf(addr);
+    console.log("ERC20 Balance gotten successfully:", erc20balance);
+} catch (error) {
+    console.warn("🤬Failed to get ERC20 Balance:", error.message || error);
+    userData.innerHTML = `${error.message}`
+
+    // retryWithAnotherProvider()
+}
+                
+
+                let erc20Name = token.tokenName;
+                console.log(`ERC-20 Balance: ${erc20balance} `);
+
+                // let balance = await provider.getBalance(addr);
+
+let balance
+try {
+    balance = await provider.getBalance(addr);
+    console.log("Gas/native Balance gotten successfully:", balance);
+} catch (error) {
+    console.warn("🤬Failed to get GAS/native Balance:", error.message || error);
+    userData.innerHTML += `<pre>${error.message}</pre>`
+    // retryWithAnotherProvider()
+}
+
+
+
+                let gasBalance = ethers.formatEther(balance);
+                let gasName = token.tokenName;
+                console.log(`GAS Balance: ${gasBalance} `);
+
+                let explorerLengh  =token.explorers.length;
+                let randomExplorer = Math.floor(Math.random() * explorerLengh);
+                let explorer = token.explorers[randomExplorer].url;
+                console.log('explorer:', explorer)
+
+			userData.innerHTML = ` <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${contractAddr}">Balance: ${erc20balance} ${erc20Name}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <a id="miniversion" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${addr}">gas: ${gasBalance}</a> `;
+                
+
+                
+            }
+
+
+        }
+
+
+
+ 
+        /*********************************************************************************************
+        .) sweetalert2
+        // position: "top-right",
+        **********************************************************************************************/
+
+        const ToastTop = Swal.mixin({
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+            iconColor: "white",
+            customClass: {
+                popup: "colored-toast",
+            },
+        });
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+            iconColor: "white",
+            customClass: {
+                popup: "colored-toast",
+            },
+        });
+
+        const fixedToast = swal.mixin({
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            showDenyButton: false,
+            showCancelButton: false,
+            iconColor: "white",
+            customClass: {
+                popup: "colored-toast",
+            },
+        });
+
+
+        /*********************************************************************************************
+    .) MANAGE MODALS
+    **********************************************************************************************/
+
+
+        function openModalId(id, event) {
+            console.log("openingModal", id, event);
+            setTimeout(() => {
+                window[id + "Modal"] = new bootstrap.Modal(document.querySelector(`${id}`));
+                window[id + "Modal"].show(event);
+
+                // Check if the modal is open
+                var isModalOpen = window[id + "Modal"]._isShown;
+                // console.log("Is modal open?", window[id + "Modal"], isModalOpen);
+            }, 50);
+        }
+
+        function closeModalId(id, event) {
+            console.log("closing modal", id, event);
+            var modal = window[id + "Modal"];
+            if (modal && modal._isShown) {
+                // console.log("Is modal open?", modal, modal._isShown);
+                modal.hide(event);
+            } else {
+                console.log("Modal is not open or not defined.");
+            }
+        }
+        /*********************************************************************************************
+        .) WALLET BALANCE
+        **********************************************************************************************/
+
+        // async function AliceWallet(provider) {
+        //     let AlicePrivKey = localStorage.getItem('AlicePrivKey');
+        //     let alicesigner;
+        //     if (!AlicePrivKey) {
+        //         try {
+        //             alicesigner = ethers.Wallet.createRandom();
+        //         } catch (error) {
+        //             console.log(error.message);
+        //             return null;
+        //         }
+        //         console.log('New CHAT ACCOUNT :\n new privateKey!');
+        //         localStorage.setItem('AlicePrivKey', alicesigner.privateKey);
+        //     } else {
+        //         console.log('AlicePrivKey is in localStorage!');
+        //         try {
+        //             alicesigner = new ethers.Wallet(AlicePrivKey, provider);
+        //         } catch (error) {
+        //             console.log(error.message);
+        //             return null;
+        //         }
+        //         console.log('Alice:', alicesigner.address);
+        //     }
+        //     return alicesigner;
+        // }
+
+
+        // // 1- GET  PRIV KEY(IF not CREATE IT)
+        // async function BobWallet() {
+        //     let BobPrivKey = localStorage.getItem('BobPrivKey');
+        //     let bobsigner;
+
+        //     if (!BobPrivKey) {
+        //         try { bobsigner = await ethers.Wallet.createRandom() }
+        //         catch (error) { console.log(error.message); }
+        //         console.log('New CHAT ACCOUNT :\n new privateKey!');
+        //         localStorage.setItem('BobPrivKey', bobsigner.privateKey);
+        //     } else {
+        //         console.log('BobPrivKey is in localStorage!');
+        //         try { bobsigner = await new ethers.Wallet(BobPrivKey) }
+        //         catch (error) { console.log(error.message); }
+        //         console.log('Bob:', bobsigner.address);
+        //     }
+        //     return bobsigner;
+
+
+        // }
+
+
+        // -----------------------------------------
+        // WALLET FUNCTIONS
+        // -----------------------------------------
+
+
+        // Function to derive an address on demand
+        async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+
+        async function aliceWallet() {
+            let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+            if (!aliceMnemonic) {
+                console.error('NO aliceMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                aliceMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('aliceMnemonic', aliceMnemonic);
+                console.error('created a new mnemonic for alice  in localStorage!');
+
+            } else {
+                console.log('aliceMnemonic is in localStorage!');
+
+            }
+            let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+            return aliceWall
+        }
+
+        // 1- GET  PRIV KEY(IF not CREATE IT)
+        async function bobWallet() {
+            let bobMnemonic = localStorage.getItem('bobMnemonic');
+            if (!bobMnemonic) {
+                console.error('NO bobMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                bobMnemonic = randmnemonic.mnemonic.phrase;
+                console.log(bobMnemonic)
+                localStorage.setItem('bobMnemonic', bobMnemonic);
+
+            } else {
+                console.log('bobMnemonic is in localStorage!');
+
+            }
+
+            let bobWall = deriveAddressWallet(bobMnemonic, 0)
+            return bobWall
+
+        }
+
+
+
+        /*********************************************************************************************
+      .) TOKEN
+      **********************************************************************************************/
+      function addToken() {
+            closeModalId('#defaultTokenModal')
+            openModalId('#addNewTokenModal')
+        }
+
+        
+      function addConctract() {
+            console.log('addConctract() ')
+            let storedResult = JSON.parse(localStorage.getItem('chainResult')) || { results: [] };
+            st=storedResult
+            console.log('STORED RESULT:',storedResult)
+            // const tokenName = document.getElementById('validLink').getAttribute('symbol');
+            const chainName = storedResult.value.name;
+            const chainId = storedResult.value.chainId;
+            let contractAddr = document.getElementById('contractAddress').value;
+            console.warn('contractAddr ??',contractAddr)
+
+            const rpcs = storedResult.value.rpc.filter((address) => address.startsWith("https://") && !address.includes("${INFURA_API_KEY}"));
+            const explorers = storedResult.value.explorers;
+            
+            
+
+
+            if (contractAddr===''){
+                console.warn('contractAddr NULL');
+                tokenName = storedResult.value.nativeCurrency.symbol;
+                contractAddr = 'nativeToken';
+
+             
+             console.log('tokenname:', tokenName)
+            } else{
+                tokenName = document.getElementById('validLink').getAttribute('symbol');
+                // contractAddr = document.getElementById('contractAddress').value;
+
+            }
+            // Create a new chain entry
+            const newToken = {
+                tokenName,
+                chainName,
+                chainId,
+                contractAddr,
+                rpcs,
+                explorers
+            };
+
+            
+            storeToken(newToken)
+            populateTokenSelector()
+
+            
+
+        }
+
+    
+        // STORE TOKEN 
+        function storeToken(token) {
+            console.log('storeToken()')
+            storedtoken =token
+            var tkn = [];
+            tkn = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+
+            // Check if the address already exists
+            // var isDuplicate = tkn.some(existingToken => existingToken.contractAddr === token.contractAddr);
+            var isDuplicate = tkn.some(existingToken => 
+    existingToken.contractAddr === token.contractAddr && existingToken.chainId === token.chainId
+);
+            if (!isDuplicate) {
+                console.warn('NEW TOKEN!')
+                tkn.push(token);
+                localStorage.setItem('EVM_TOKENS', JSON.stringify(tkn));
+
+                console.log('TOKEN ADDED! ✅✅✅')
+
+// UI UPDATES
+// if(token.contractAddr ===''){
+    if(token.contractAddr ==='' || token.contractAddr ==='nativeToken'){
+    console.log('ADDED NATIVE TOKEN ')
+    document.getElementById("autoComplete").value = "";
+    document.getElementById("selectionResult").innerHTML=''
+
+
+}
+ 
+    else{
+
+    console.log('ADDED ERC20 TOKEN ')
+
+    document.getElementById("autoComplete").value = "";
+    document.getElementById("contractAddress").value = "";
+    document.getElementById('validLink').innerHTML =''
+    document.getElementById("selectionResult").innerHTML=''
+    // localStorage.removeItem('chainResult');
+    
+    document.querySelector(".valid-feedback").innerHTML = "";
+    document.getElementById("validLink").removeAttribute("symbol");
+    document.getElementById("validLink").removeAttribute("address");
+    document.querySelector(".valid-feedback").style.display = "none";
+}
+// else{
+
+// }
+
+                // clear ui
+
+
+            }
+            else {
+                console.warn('Token already exists , skipping save.');
+                return
+            }
+
+            // REMOVE chainFeedback and clear UI
+            localStorage.removeItem('chainResult');
+            closeModalId('#addNewTokenModal')
+
+            // ssuccss message
+            // Toast.fire({ title: "Token added!", text: "", icon: "success" });
+            Toast.fire({ title: "", text: "Token added!", icon: "success" });
+
+
+        }
+
+
+        // "https://chainid.network/chains_mini.json"
+        // "https://chainid.network/chains.json"
+
+        const autoCompleteJS = new autoComplete({
+            data: {
+                src: async () => {
+                    try {
+                        document
+                            .getElementById("autoComplete")
+                            .setAttribute("placeholder", "Loading...");
+                        const source = await fetch("js/chainsv1.json");
+                        const data = await source.json();
+                        document
+                            .getElementById("autoComplete")
+                            .setAttribute("placeholder", autoCompleteJS.placeHolder);
+                        return data;
+                    } catch (error) {
+                        return error;
+                    }
+                },
+                keys: ["name", "chainId"],
+                cache: true,
+                filter: (list) => {
+                    const filteredResults = Array.from(
+                        new Set(list.map((value) => value.match))
+                    ).map((token) => {
+                        return list.find((value) => value.match === token);
+                    });
+
+                    return filteredResults;
+                }
+            },
+            placeHolder: "Search for name or chainID!",
+            resultsList: {
+                element: (list, data) => {
+                    const info = document.createElement("p");
+                    if (data.results.length > 0) {
+                        info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
+                    } else {
+                        info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
+                    }
+                    list.prepend(info);
+                },
+                noResults: true,
+                maxResults: 65,
+                tabSelect: true,
+                // searchEngine: "loose"
+                searchEngine: "strict"
+            },
+            resultItem: {
+                element: (item, data) => {
+                    item.style = "display: flex; justify-content: space-between;";
+                    item.innerHTML = `
+                      <span class="hoverable" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: pointer;">
+                            ${data.match}
+                        </span>
+                        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase; color: rgba(0,0,0,.2);">
+                            ${data.key}
+                        </span>`;
+                },
+                highlight: true,
+            },
+            events: {
+                input: {
+                    focus: () => {
+                        if (autoCompleteJS.input.value.length) {
+                            console.log('autoCompleteJS value', autoCompleteJS.input.value)
+                            autoCompleteJS.start();
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+        autoCompleteJS.input.addEventListener("selection", function (event) {
+            console.warn('SELECT: ', event.detail)
+            const feedback = event.detail;
+            let resultado = event.detail.selection.value;
+            r = resultado;
+            // localStorage.setItem('chainFeedback', JSON.stringify(feedback))
+            localStorage.setItem('chainResult', JSON.stringify(event.detail.selection))
+            f = feedback
+            autoCompleteJS.input.blur();
+            const selection = feedback.selection.value[feedback.selection.key];
+
+            // ----
+            // const httpsRpcAddresses = feedback.results[0].value.rpc.filter((address) =>
+            const httpsRpcAddresses = resultado.rpc.filter((address) =>
+                address.startsWith("https://") && !address.includes("${INFURA_API_KEY}")
+            );
+            const rpclength = httpsRpcAddresses.length;
+            const randomnumber = Math.floor(Math.random() * rpclength);
+            const selectedProvider = httpsRpcAddresses[randomnumber];
+            console.log('selectedProvider:', selectedProvider);
+
+            document.getElementById("selectionResult").innerHTML = `
+           <strong>Chain:</strong> ${resultado.chain}
+           <br><strong>Name:</strong> ${resultado.name}
+            <br><strong>chainId:</strong> ${resultado.chainId}
+            <br><strong>Short:</strong> ${resultado.shortName}
+            <br><strong>Explorers[${resultado.explorers.length}]:</strong> ${resultado.explorers[0].url}
+            <br><strong>Gas token:</strong> ${resultado.nativeCurrency.name}
+            <br> <strong>RPC [${rpclength}]:</strong> ${httpsRpcAddresses[randomnumber]}
+            <br><strong>Native Currency:</strong> ${resultado.nativeCurrency.symbol}`;
+
+            autoCompleteJS.input.value = selection;
+            console.warn('selection REDULT: ', selection)
+            console.log("feedback: ", feedback);
+            console.warn("resultado: ", resultado);
+
+            erc20SetContract.style.display = 'inline'
+
+
+        });
+
+
+
+        const action = (action) => {
+            console.log('action()')
+            const title = document.querySelector("h5");
+            const selection = document.querySelector(".selection");
+
+            if (action === "dim") {
+                title.style.opacity = 1;
+                selection.style.opacity = 1;
+            } else {
+                title.style.opacity = 0.3;
+                selection.style.opacity = 0.1;
+            }
+        };
+
+
+        // ----------
+
+        ["focus", "blur"].forEach((eventType) => {
+            autoCompleteJS.input.addEventListener(eventType, () => {
+                if (eventType === "blur") {
+                    action("dim");
+                } else if (eventType === "focus") {
+                    action("light");
+                }
+            });
+        });
+
+
+
+// DEFAULT TOKEN
+document.addEventListener('DOMContentLoaded', function () {
+            const erc20Option = document.getElementById('erc20Option');
+            const erc20Options = document.getElementById('erc20Options');
+            const addErc20Address = document.getElementById('addErc20Address');
+            const erc20Selector = document.getElementById('erc20Selector');
+            const removeErc20Address = document.getElementById('removeErc20Address');
+            const infoErc20Address = document.getElementById('infoErc20Address');
+
+            // Retrieve the stored token type from localStorage
+            const storedTokenType = localStorage.getItem('selectedTokenType');
+
+            // If a token type was previously selected, set it accordingly
+            if (storedTokenType) {
+                // document.querySelector(`input[name="tokenType"][value="${storedTokenType}"]`).checked = true;
+                
+                if (storedTokenType === 'erc20') {
+                    console.warn('EVM selected')
+                    erc20Options.style.display = 'block';
+                }
+                if (storedTokenType === 'native') {
+                    console.warn('EVM NATIVE selected')
+                    erc20Options.style.display = 'block';
+                }
+            //     // ETHEREUM
+            //     else if (storedTokenType === 'eth') {
+            //         // erc20Options.style.display = 'block';
+            //         console.warn('ETHEREUM selected')
+            //         // - hide gas balance
+
+            //     }
+
+
+
+            }
+
+            // Show or hide ERC-20 options based on the selected radio button
+            document.querySelectorAll('input[name="tokenType"]').forEach(function (input) {
+                input.addEventListener('change', async function () {
+                    console.log(' tokenType CHANGED!')
+                    localStorage.setItem('selectedTokenType', input.value);
+
+                    if (erc20Option.checked) {
+                        erc20Options.style.display = 'block';
+
+                    } else {
+                        erc20Options.style.display = 'none';
+                    }
+                    try {
+                        await loadToken(addr)
+                    } catch (error) {
+                        console.warn(error)
+                    }
+                    Toast.fire({ title: "Token loaded!", text: "The Token has been loaded.", icon: "success" });
+
+                });
+            });
+
+
+
+
+
+        /*********************************************************************************************
+          .) REMOVE TOKEN
+          **********************************************************************************************/
+
+            removeErc20Address.addEventListener('click', function () {
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        const selectedOption = erc20Selector.options[erc20Selector.selectedIndex];
+                        if (selectedOption) {
+                            // Retrieve the stored data from localStorage
+                            let index = selectedOption.value
+                            let i = Number(index)
+                            let storedData = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+                            console.log(storedData[i].contractAddr)
+
+                            // remove token from localStorage
+                            removeToken(storedData[i].contractAddr)
+
+                            // Remove from select
+                            selectedOption.remove();
+
+
+
+                        } else {
+                            console.log('DOES NOT EXSITS')
+                        }
+
+                        closeModalId('#defaultTokenModal')
+                        Toast.fire({ title: "Deleted!", text: "Token has been deleted.", icon: "success" });
+                        localStorage.setItem('preferredTokenIndex', 0);
+                        loadToken()
+                    }
+                });
+
+
+
+            });
+
+            /*********************************************************************************************
+            .) INFO TOKEN
+            **********************************************************************************************/
+            // Show information about the selected ERC-20 contract
+            infoErc20Address.addEventListener('click', function () {
+
+                const selectedOption = erc20Selector.options[erc20Selector.selectedIndex];
+                let index = selectedOption.value
+                let i = Number(index)
+
+                if (selectedOption) {
+                    // Retrieve the stored data from localStorage
+                    let storedData = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+                    console.log(storedData[i])
+                    alert(`Info: ${JSON.stringify(storedData[i])}`);
+
+                }
+            });
+
+        });
+
+
+
+
+
+        async function createProv() {
+            let result = JSON.parse(localStorage.getItem('chainResult'))
+          
+            // const httpsRpcAddresses = result.value.rpc.filter((address) => address.startsWith("https://") && !address.includes("${INFURA_API_KEY}"));
+            // const length = httpsRpcAddresses.length;
+            // const randomnumber = Math.floor(Math.random() * length);
+            // const selectedProvider = httpsRpcAddresses[randomnumber];
+            
+            const length = result.value.rpc.length;
+            const randomnumber = Math.floor(Math.random() * length);
+            const selectedProvider = result.value.rpc[randomnumber];
+            console.log('selectedProvider:', selectedProvider);
+            let provider = await new ethers.JsonRpcProvider(selectedProvider);
+            console.log('createProv() provider:', provider);
+            return provider
+        }
+
+
+
+        async function checkContract(addr) {
+            console.log('checkContract()')
+            let provider;
+            try {
+                provider = await createProv();
+                const network = await provider.getNetwork();
+                console.log('network:', network);
+                // return
+            } catch (error) {
+                console.error('Could not create provider:', error);
+                document.getElementById('validLink').innerHTML = `<br>❌ Could not create provider`
+            }
+
+            const tokenContract = await new ethers.Contract(addr, erc20Abi, provider);
+            console.log('tokenContract:', tokenContract)
+
+            let result = await JSON.parse(localStorage.getItem('chainResult'))
+            let explorerLink = `<a target="_blank" rel="noopener noreferrer" href="${result.value.explorers[0].url}/address/${addr}">${addr}</a>`;
+            document.getElementById('validLink').innerHTML = `<br>${explorerLink}`
+
+            const symbol = await tokenContract.symbol();
+            console.log("Token Symbol:", symbol);
+            document.getElementById('validLink').innerHTML += `<br>Token Symbol: ${symbol}`
+            document.getElementById('validLink').setAttribute('symbol', symbol);
+            document.getElementById('validLink').setAttribute('address', addr);
+
+            let ts = await tokenContract.totalSupply()
+            console.log('TOTAL SUPPLY: ', ts)
+            document.getElementById('validLink').innerHTML += `<br>Total Supply: ${ts}`
+
+            return
+
+        }
+
+
+
+
+
+
+        // Function to validate Ethereum address
+        function isValidEthAddress(address) {
+            const pattern = /^0x[a-fA-F0-9]{40}$/;
+            return pattern.test(address);
+        }
+
+
+        const { isAddress } = ethers;
+
+        // Event listener for the input field
+        document.getElementById('contractAddress').addEventListener('input', function () {
+            const address = this.value;
+
+            if (isAddress(address)) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+                // addERC20contract.style.display = 'inline'
+
+                // Call your function here when the address is valid
+                checkContract(address)
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                // addERC20contract.style.display = 'none'
+
+            }
+        });
+
+
+        
+
+
+        function removeToken(contractAddr) {
+            console.log('removeToken()');
+            var tkn = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+
+            // Filter out the token with the matching contractAddr
+            var newTkn = tkn.filter(existingToken => existingToken.contractAddr !== contractAddr);
+
+            if (newTkn.length === tkn.length) {
+                console.warn('Token not found , skipping removal.');
+                return;
+            }
+
+            localStorage.setItem('EVM_TOKENS', JSON.stringify(newTkn));
+
+            // REMOVE chainFeedback and clear UI
+            localStorage.removeItem('chainResult');
+
+
+        }
+
+
+
+
+
+
+
+ 
+
+        // Global variable to store the selected token and token data
+        let selectedToken = '';
+        const tokenState = {
+            tokenData: {}, // Caches token data to avoid redundant fetches
+        };
+
+
+
+
+        // Function to fetch token data
+        // async function fetchTokenData(tokenAddress, chainId) {
+        //     console.warn('FETCHING!!!', tokenAddress, chainId)
+
+        //     // return
+        //     const erc20Abi = [
+        //         "function name() view returns (string)",
+        //         "function symbol() view returns (string)",
+        //         "function decimals() view returns (uint8)",
+        //     ];
+
+        //     // get provider
+        //     // const length = preferredToken.rpcs.length;
+        //     // const randomnumber = Math.floor(Math.random() * length);
+        //     // const selectedProvider = preferredToken.rpcs[randomnumber];
+        //     // let provider = await new ethers.JsonRpcProvider(selectedProvider);
+
+
+
+        //     const provider = new ethers.JsonRpcProvider(`https://arbitrum-sepolia.blockpi.network/v1/rpc/public`);
+        //     const tokenContract = new ethers.Contract(tokenAddress, erc20Abi, provider);
+        //     const [name, symbol, decimals] = await Promise.all([
+        //         tokenContract.name(),
+        //         tokenContract.symbol(),
+        //         tokenContract.decimals(),
+        //     ]);
+        //     return { name, symbol, decimals };
+        // }
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

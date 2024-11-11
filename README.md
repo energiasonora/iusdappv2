@@ -65,33 +65,38 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
-v5.09 ::: bug: no muestra el cambio a token (x ej usdc) cuando se selecciona un EVM
-v5.08 new wallet stats(brouillon), status buton, bugsFix: multiples duplicated messages, 
-v5.07 manage stealth addrs funds
-v5.07a fix chainsv1.json
-v5.06 send native and erc20 stealth addrs txs
-v5.05 stealthaddr fixes(in progress). save contacts into did
-v5.04 display public docs
-v5.03 change alias name
-v5.02 fixed upload to ipfs
-v5.01 lighthouse as ipfs provider
-v4.13 fix autopopulate erc20
-v4.12 fix unlock screen
-v4.11 avatar img fix
-v4.10 qr scan fix
-v4.09 chatUI fix. step with 0 decimal tokens. wiki links
-v4.08 wallet. add tokens. send/receibe
-v4.07 fixing agenda management. fixed newmessage stucked class. fixing bug deletes username
-v4.06 fixed scan and chat did bug
-v4.05 fix restore seed
-v4.04 improved mnemonic backup process
-v4.03 check contract and address balance in explorer
-v4.0 improved DID management
-v3.4 https://youtu.be/p4xMzkIS5wQ
+- v5.12 ui fixes, wallet button reposition
+- v5.11a pufix balances display
+- v5.11 public
+- v5.10 new wallet modal adn ux fixes
+* v5.09 ::: bug: no muestra el cambio a token (x ej usdc) cuando se selecciona un EVM
+* v5.08 new wallet stats(brouillon), status buton, bugsFix: multiples duplicated messages, 
+- v5.07 manage stealth addrs funds
+- v5.07a fix chainsv1.json
+- v5.06 send native and erc20 stealth addrs txs
+- v5.05 stealthaddr fixes(in progress). save contacts into did
+- v5.04 display public docs
+- v5.03 change alias name
+- v5.02 fixed upload to ipfs
+- v5.01 lighthouse as ipfs provider
+- v4.13 fix autopopulate erc20
+- v4.12 fix unlock screen
+- v4.11 avatar img fix
+- v4.10 qr scan fix
+- v4.09 chatUI fix. step with 0 decimal tokens. wiki links
+- v4.08 wallet. add tokens. send/receibe
+- v4.07 fixing agenda management. fixed newmessage stucked class. fixing bug deletes username
+- v4.06 fixed scan and chat did bug
+- v4.05 fix restore seed
+- v4.04 improved mnemonic backup process
+- v4.03 check contract and address balance in explorer
+- v4.0 improved DID management
+- v3.4 https://youtu.be/p4xMzkIS5wQ
 - fixed ui bugs. when clicking oiutside navbar should close the navbar when comming fron t2addr (external) link 
 - preparing UI to broadcast signatures functionality
 - contacts: add functionality for states(trust:green, block:red, none:white)
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## License
 

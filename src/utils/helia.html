@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prueba de IPFS y Arweave</title>
+  <script type="module">
+    import { createHelia } from 'https://cdn.jsdelivr.net/npm/@helia/core/+esm';
+    import { unixfs } from 'https://cdn.jsdelivr.net/npm/@helia/unixfs/+esm';
+    import { MemoryBlockstore } from 'https://cdn.jsdelivr.net/npm/blockstore-core/+esm';
+    import Arweave from 'https://cdn.jsdelivr.net/npm/arweave/+esm';
+
+    async function testHelia() {
+      try {
+        const blockstore = new MemoryBlockstore();
+        const helia = await createHelia({ blockstore });
+        const fs = unixfs(helia);
+
+        // Añadir un archivo a IPFS
+        const fileContent = new TextEncoder().encode('Hola, IPFS con Helia!');
+        const cid = await fs.addFile(fileContent);
+        logMessage(`Archivo añadido a IPFS con CID: ${cid.toString()}`);
+
+        // Obtener el archivo de IPFS
+        const fileStream = fs.get(cid);
+        for await (const chunk of fileStream) {
+          logMessage(`Contenido del archivo IPFS: ${new TextDecoder().decode(chunk)}`);
+        }
+      } catch (error) {
+        logMessage(`Error en Helia: ${error.message}`);
+      }
+    }
+
+    async function testArweave() {
+      try {
+        // Conectar con el cliente de Arweave
+        const arweave = Arweave.init({
+          host: 'arweave.net',
+          port: 443,
+          protocol: 'https'
+        });
+
+        // Crear una transacción con datos
+        const transaction = await arweave.createTransaction({ data: 'Hola, Arweave!' });
+        logMessage(`Transaction ID de Arweave: ${transaction.id}`);
+
+        // Obtén el archivo desde Arweave
+        const data = await arweave.transactions.getData(transaction.id, { decode: true, string: true });
+        logMessage(`Contenido del archivo en Arweave: ${data}`);
+      } catch (error) {
+        logMessage(`Error en Arweave: ${error.message}`);
+      }
+    }
+
+    function logMessage(message) {
+      const output = document.getElementById('output');
+      output.innerHTML += `<p>${message}</p>`;
+    }
+    
+    window.onload = () => {
+      document.getElementById('runHelia').addEventListener('click', testHelia);
+      document.getElementById('runArweave').addEventListener('click', testArweave);
+    };
+  </script>
+</head>
+<body>
+  <h1>Pruebas con IPFS y Arweave</h1>
+  <button id="runHelia">Probar IPFS con Helia</button>
+  <button id="runArweave">Probar Arweave</button>
+
+  <div id="output" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;">
+    <h2>Salida:</h2>
+  </div>
+</body>
+</html>

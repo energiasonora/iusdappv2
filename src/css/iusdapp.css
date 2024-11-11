@@ -1956,3 +1956,9 @@ body.swal2-height-auto {
 	
 margin: .44em;    
   }
+
+  .light{
+    position: fixed;
+    top: 10px;
+    right: 10px;
+  }

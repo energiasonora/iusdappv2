@@ -1,0 +1,144 @@
+/* html, body {
+    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    background: #222;
+  } */
+  section {
+      font-family: 'Exo', sans-serif;
+      font-weight: 100;
+      color: #fff;
+      /* position: absolute; */
+      z-index: 1000;
+      top: 50vh;
+      /* transform: translateY(-50%); */
+      text-align: center;
+      display: inline-block;
+      margin: auto;
+      left: 0;
+      right: 0;
+      padding: 5px;
+      .top {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+      .bal {
+        font-size: 50px;
+        color: #09E828;
+      }
+      .eth {
+        font-size: 20px;
+        color: #fff;
+        margin-left: 10px;
+      }
+      .bottom {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+  }
+  /* footer {
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    display: block;
+    width: 100%;  
+    font-family: 'Exo', sans-serif;
+    font-weight: 100;
+    font-size: 10px;
+    color: #fff;
+    letter-spacing: 2px;
+    a {
+      color: #09E828;
+      text-decoration: none;
+    }
+  } */
+
+  .claim, 
+  .sendto{
+    background: var(--c2);
+    color: var(--c1);
+  }
+
+  
+
+  .claim:hover, 
+  .sendto:hover{
+    background: chartreuse;
+    color: var(--c2);
+    cursor: pointer;
+  }
+
+
+  #bigBalanceWalletmodal{
+    width: 100%;
+  }
+  #bigBalanceWalletsendmodal span, 
+ #bigBalanceWalletmodal span{
+    color: var(--c2)!important;
+ }
+
+  
+  .iusbutton{
+    background-color: #d17c781f!important;
+    /* background-color: var(--c2)!important; */
+    /* iusbutton */
+    /* #d17c781f */
+  }
+
+
+  #amount{
+    font-size: xxx-large;
+
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--main);
+    color: var(--c1);
+    text-align: right;
+  }
+
+
+  #amountsendgroup{
+    height: 130px;
+    /* width: 212px; */
+  }
+  #tokenType{
+    background-color: transparent;
+    color: var(--c1);
+  }
+
+  #transactionForm{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+  }
+
+  .miniversion{
+    font-size: small;
+  }
+
+  .custom-color {
+    color: var(--c2)!important; 
+    /* color: var(--main)!important; */
+}
+
+
+/* @media screen and (max-width: 40em) { */
+@media screen and (max-width: 420px) {
+.codrops-header__title{max-width:244px}
+}
+
+
+.fullwith{
+  width: 100%;
+}
+
+#stealthSection{
+  width: 100%;
+}
+
+
+
+

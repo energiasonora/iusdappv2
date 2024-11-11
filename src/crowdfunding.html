@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowdfunding DApp</title>
+    <!-- <script type="text/javascript" src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"></script> -->
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" /> -->
+    
+    <style>
+        :root {
+            --c0b: #222;
+            --c0: #001F3F;
+            --c1: #b79b00;
+            --c2: #136700;
+            --c3: #fff;
+            --font: green;
+
+            --bk: linear-gradient(var(--c0), var(--c0b));
+            --contrast: #000 linear-gradient(var(--c3), var(--c2));
+            --bckmodal: #262626;
+            --reversable: #000;
+            --modalborder: #fce806;
+
+            --loaderIN: #f3f3f3;
+            --loaderOUT: var(--c1);
+            --mainBk: #41307c;
+
+        }
+
+        body {
+            color: var(--font);
+            /* background: var(--bk); */
+            background-image: radial-gradient(circle, #5c0067 0%, var(--bckmodal) 100%);
+
+            background-image: radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%);
+            /* padding: 0 12em !important; */
+        }
+
+        /* Default padding for all screen sizes */
+        body {
+            padding: 0;
+        }
+
+        /* Media query for desktop and bigger screens */
+        @media screen and (min-width: 1024px) {
+            body {
+                padding: 0 7em !important;
+            }
+        }
+
+        /* Media query for tablets */
+        @media screen and (max-width: 1023px) and (min-width: 768px) {
+            body {
+                padding: 0 2em !important;
+            }
+        }
+
+        /* Media query for phones */
+        @media screen and (max-width: 767px) {
+            body {
+                padding: 0 !important;
+            }
+        }
+
+
+        /* .w3-green{ */
+        #myBar {
+            color: var(--c0) !important;
+            text-shadow: 0 1px black
+        }
+
+        .swal2-title,
+        .swal2-input {
+            color: var(--c3);
+        }
+
+        .swal2-modal {
+            background-color: var(--bckmodal);
+            color: var(--c3);
+            border: 1px solid var(--modalborder);
+            box-shadow: 0 0 10px var(--modalborder);
+            background-image: radial-gradient(circle, var(--c2) 0%, var(--bckmodal) 100%);
+        }
+
+        #swal2-content a {
+            color: var(--c3);
+        }
+
+        /* COLORED TOASTS */
+
+        .colored-toast.swal2-icon-success {
+            background-color: #45bb00 !important;
+        }
+
+        .colored-toast.swal2-icon-error {
+            background-color: #f27474 !important;
+        }
+
+        .colored-toast.swal2-icon-warning {
+            background-color: #f8bb86 !important;
+        }
+
+        .colored-toast.swal2-icon-info {
+            background-color: #3fc3ee !important;
+        }
+
+        .colored-toast.swal2-icon-question {
+            background-color: #87adbd !important;
+        }
+
+        .colored-toast .swal2-title {
+            color: white;
+        }
+
+        .colored-toast .swal2-close {
+            color: white;
+        }
+
+        .colored-toast .swal2-html-container {
+            color: white;
+        }
+
+        .icons {
+            /* width: 20px; */
+            fill: aliceblue;
+        }
+
+        svg .icons:hover {
+            fill: red;
+        }
+
+        .currency {
+            color: var(--c3);
+        }
+
+
+
+
+        /* Center the loader */
+        .loader-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* height: 100vh; */
+        }
+
+        /* --var(--loaderIN) #f3f3f3 */
+        /* --var(--loaderOUT) #f3f3f3 */
+        .loader {
+            border: 6px solid var(--loaderIN);
+            border-top: 6px solid var(--loaderOUT);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        .swal2-content {
+            color: var(--c3) !important;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .swal2-footer a,
+        .swal2-footer p {
+            color: var(--c1);
+        }
+
+
+        /* --------------------------------------------- */
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            border: 3px solid green;
+        }
+
+        .connected {}
+
+        .counter-boxes {
+            display: flex;
+            /* color: white; */
+            /* width: 100px; */
+            /* margin: 10px; */
+            /* text-align: center; */
+            /* line-height: 75px; */
+            /* font-size: 30px; */
+        }
+
+        .count-box {
+            width: auto;
+            color: white;
+            width: 100px;
+            margin: 10px;
+            text-align: center;
+            /* line-height: 75px; */
+            /* font-size: 30px; */
+
+
+        }
+
+        .w3-teal, .w3-hover-teal:hover {
+    color: #fff !important;
+    background-color: #00968838 !important;
+}
+    </style>
+    <link rel="stylesheet" href="skin.css">
+    <link rel="stylesheet" href="loader.css">
+</head>
+
+<body class="w3-container w3-teal">
+
+
+    <div class="w3-container ">
+        <p>
+            <button onclick="connection()" id="connection"
+                class="w3-button w3-green w3-border w3-border-green  w3-round-large w3-right disconnected">CONNECT</button>
+            <button onclick="disconnection()" id="disconnection"
+                class="w3-button w3-green w3-border w3-border-green  w3-round-large w3-right disconnected"
+                style="display: none;">DISCONNECT</button>
+
+        </p>
+        <h1 data-translate="crowdfundingdapp">Crowdfunding DApp
+        </h1>
+        <span id="mini">V2.0</span>
+
+        <select class="right translation" id="langswitch">
+            <option value="en">en</option>
+            <option value="fr">fr</option>
+            <option value="es">es</option>
+        </select>
+
+        <select class="right translation" id="networkPreference" style="display: none;">
+            <option value="mainnet">Mainnet</option>
+            <option value="testnet">Testnet</option>
+        </select>
+        <p id="userContributions" data-translate="userContributions"> Soverain and decentraliced Crowdfunding.</p>
+        <!-- <p>Your address: <span class="w3-tag" id="address"></span>
+            <button onclick="withdrawFunds()" style="display: none;">Withdraw Funds</button>
+        </p> -->
+    </div>
+
+    <div id="headerNotes"></div>
+
+    <div class="w3-container w3-teal">
+        <div id="userContributions">
+            <h2><span data-translate="project">Project: </span> IUS NATURALIS</h2>
+            <p><strong data-translate="goal">Goal:</strong> <span id="goal"></span></p>
+            <p><strong data-translate="period">Period:</strong> 11-11-2024 / 13-12-2024<span id="period"></span></p>
+            <p><strong data-translate="receptor">Address</strong> <span id="receptor"></span></p>
+            <p><strong data-translate="donations">Donations</strong> <span id="donations"></span></p>
+            <p><strong data-translate="raised">Raised</strong> <span id="raised"></span></p>
+
+            <!-- COMIENZO -->
+            <div class="hero connect-page">
+
+                <div class="container" id="countdownClock">
+                    <div class="hero-body">
+                        <div class="campaign campaign-0">
+                            <div class="counter timer">
+                                <strong data-translate="timeleft">Time Left:</strong>
+                                <!-- <span class="title">time remaining</span> -->
+                                <div class="counter-boxes">
+                                    <div class="count-box">
+                                        <h1 class="value day" id="days">0</h1>
+                                        <span data-translate="days">Days</span>
+                                    </div>
+                                    <div class="count-box">
+                                        <h1 class="value hour" id="hours">0</h1>
+                                        <span data-translate="hours">Hours</span>
+                                    </div>
+                                    <div class="count-box">
+                                        <h1 class="value minute" id="minutes">0</h1>
+                                        <span data-translate="minutes">Minutes</span>
+                                    </div>
+                                    <div class="count-box">
+                                        <h1 class="value second" id="seconds">0</h1>
+                                        <span data-translate="seconds">Seconds</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- FIN -->
+
+            <p id="yourContrib" style="display: none;"><strong data-translate="yourcontribution">Your
+                    Contribution:</strong>
+                <span id="userContribution"></span>
+                <button onclick="withdrawFunds()" style="display: none;">Withdraw Funds</button>
+            </p>
+            <br>
+            <p class="  w3-center	">
+                <button class=" w3-red  w3-button w3-center w3-border w3-border-green  w3-round-large  	"
+                    onclick="enterAmount()" data-translate="contribute">Contribute</button>
+            </p>
+            <div class="w3-light-grey">
+                <div id="myBar" class="w3-container w3-green" style="width:0%">0%</div>
+            </div>
+
+            <br>
+        </div>
+    </div>
+
+
+
+    <button onclick="accordion('Demo2')" class="w3-button w3-block w3-left-align "
+        data-translate="smartcontractdetails"> Smart contract details</button>
+    <div id="Demo2" class="w3-hide w3-container w3-green">
+        <p><strong data-translate="contract">Contract:</strong> <span id="contract" class="w3-tag"></span> </p>
+        <p><strong data-translate="chain">Chain:</strong> <span class="w3-tag" id="chain"></span></p>
+        <div id="chainAlert"></div>
+        <p><strong data-translate="raisedamount">Raised Amount:</strong> <span id="raisedAmount" class="w3-tag"></span>
+        </p>
+
+        <p><strong data-translate="status">Status:</strong>
+            <span class="w3-tag" id="status">Ongoing!</span>
+        </p>
+    </div>
+
+
+    <button onclick="accordion('Demo3')" class="w3-button w3-block w3-left-align " data-translate="projectdetails">
+        Project details</button>
+    <div id="Demo3" class="w3-hide w3-container w3-green">
+        <div id="projectAlert"></div>
+        <!-- <p><strong>website:</strong> <span id="website" class="w3-tag"></span> </p> -->
+        <p>Web: <span class="w3-tag" id="website">
+                <a href="https://iusnaturalis.web.app/" target="_blank" rel="noopener noreferrer">
+                    iusnaturalis.web.app</a>
+            </span></p>
+        <p> <strong data-translate="gitrepository">Git repository:</strong> <span class="w3-tag" id="git"> <a
+                    href="https://github.com/energiasonora/iusdappv2" target="_blank" rel="noopener noreferrer">
+                    https://github.com/energiasonora/iusdappv2</a></span></p>
+        <p> <strong data-translate="whitepaper">Whitepaper:</strong>
+            <a href="https://gateway.lighthouse.storage/ipfs/QmXDvZZNdi1AHbVYwmHduCwDu2AAXZi3rmK5ZSKFwccrDe"
+                target="_blank" rel="noopener noreferrer"> FR v4</a>
+            <a href="https://gateway.lighthouse.storage/ipfs/QmcuahnLzwQrcnQo6JzPCu9Dg4PRNmNBAxYhtySdiHCLmN"
+                target="_blank" rel="noopener noreferrer"> EN v4</a>
+            <a href="https://gateway.lighthouse.storage/ipfs/QmT3sGPGrmtGcGiuEf5WqK4YyxviRNtozG42m9ezAGpcLS"
+                target="_blank" rel="noopener noreferrer"> ES v7</a>
+        </p>
+    </div>
+
+    <!-- TUTORIALES -->
+
+    <button onclick="accordion('Demo4')" class="w3-button w3-block w3-left-align " data-translate="tutorials">
+        Tutorials</button>
+    <div id="Demo4" class="w3-hide w3-container w3-green">
+        <!-- <div id="projectAlert"></div> -->
+        <!-- <p><strong>website:</strong> <span id="website" class="w3-tag"></span> </p> -->
+        <!-- <p>Web: <span class="w3-tag" id="website">
+                <a href="http://iuris.web.app" target="_blank" rel="noopener noreferrer">
+                    iuris.web.app</a>
+            </span></p>
+            
+        <p> <strong data-translate="gitrepository">Git repository:</strong> <span class="w3-tag" id="git"> <a
+                    href="https://gitlab.com/energiasonora/iurisnaturalis" target="_blank" rel="noopener noreferrer">
+                    https://gitlab.com/energiasonora/iurisnaturalis</a></span></p> -->
+        <p> <strong data-translate="howtocontribute">How to Contribute (PDF):</strong>
+            <a href="https://gateway.lighthouse.storage/ipfs/QmcuXAFVfL11V3yeXK4VYTV7QmtAjT6v9uotVQxQMLCTEe"
+                target="_blank" rel="noopener noreferrer"> FR </a>
+            <a href="https://gateway.lighthouse.storage/ipfs/QmSJ2NDRG4UntxpjVRebQNRU7fNx6bYqPcWhTrUX2Nf24B"
+                target="_blank" rel="noopener noreferrer"> EN </a>
+            <a href="https://gateway.lighthouse.storage/ipfs/QmcrsHUKGuXA8hvAByZc5ygGRLbzkC32UxcBqdBkDusWN6"
+                target="_blank" rel="noopener noreferrer"> ES</a>
+        </p>
+    </div>
+
+
+    <div class="w3-container"> </div>
+
+
+    <div>
+    </div>
+
+    <hr>
+
+    <h2 data-translate="contributors">Contributors</h2>
+    <ul id="contributors" class="w3-ul"> </ul>
+
+
+
+    </div>
+
+    <script src="js/dictionaryCrowdfunding.js"></script>
+
+    <script type="text/javascript">
+        /*******************************************************************************************
+        .) OPTIONSLIST
+        *********************************************************************************************/
+        // https://docs.chain.link/data-feeds/price-feeds/addresses?network=ethereum&page=1
+        // "API": 'https://endpoints.omniatech.io/v1/matic/mumbai/public',
+        // 
+        // https://mumbai.rpc.thirdweb.com
+        // https://polygon-mumbai-pokt.nodies.app
+
+        // 0x691E71Ff60cF56d4f6417b203b25A683afE9a9B6
+        // "CONTRACT": "0x6110E20C5e5d522003CA652CCE1535D56Fc38c1f",
+
+        optionsList = [
+
+        // 0x86f5f96F9475F0DB34b07D4F0D14cAAFAe82a0Bd
+        {
+                "TOKEN_CHAIN_NAME": 'Arbitrum One',
+                "TOKEN_NAME": 'ETH',
+                "TOKEN_SYMBOL": 'ETH',
+                "API": 'https://arbitrum.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+                "CONTRACT": "0x86f5f96F9475F0DB34b07D4F0D14cAAFAe82a0Bd",
+                "CONTRACT_CHAINID": '42161',
+                "CONTRACT_ABI": 'crowdfundingv3',
+                "CCIP_EXPLORER": "https://ccip.chain.link/",
+                "EXPLORER": "https://arbiscan.io",
+                "CHAINLINK_CONTRACT": "",
+                "ORACLEAPI":"https://ethereum-sepolia.publicnode.com",
+                "NATIVEUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x694AA1769357215DE4FAC081bf1f309aDC325306", 'assetSymbol': 'ETH / USD', 'chainid': "11155111", }],
+                "EURUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x1a81afB8146aeFfCFc5E50e8479e826E7D55b910", 'assetSymbol': 'EUR / USD', 'chainid': "11155111", }],
+                "CHAIN_CONFIG":
+                {
+                    chainId: '42161', // chainId in hexadecimal, decimal equivalent is 80001
+                    chainName: 'Arbitrum One',
+                    rpcUrls: ['https://arbitrum.io/v3/9219faae2bac4d24b95c2d967b22005a'],
+                    nativeCurrency: {
+                        name: 'ETH',
+                        symbol: 'ETH',
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ["https://arbiscan.io/"]
+
+                }
+            },
+        {
+                "TOKEN_CHAIN_NAME": 'Arbitrum Sepolia',
+                "TOKEN_NAME": 'Sepolia',
+                "TOKEN_SYMBOL": 'ETHsep',
+                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+                "ORACLEAPI":"https://ethereum-sepolia.publicnode.com",
+                "CONTRACT": "0xB95dD22fe4f5478835d3Ef4D59eB61bA56bb3293",
+                "CONTRACT_CHAINID": '421614',
+                "CONTRACT_ABI": 'crowdfundingv3',
+                "CCIP_EXPLORER": "https://ccip.chain.link/",
+                "EXPLORER": "https://sepolia.arbiscan.io",
+                "CHAINLINK_CONTRACT": "",
+                "NATIVEUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x694AA1769357215DE4FAC081bf1f309aDC325306", 'assetSymbol': 'ETH / USD', 'chainid': "11155111", }],
+                "EURUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x1a81afB8146aeFfCFc5E50e8479e826E7D55b910", 'assetSymbol': 'EUR / USD', 'chainid': "11155111", }],
+                "CHAIN_CONFIG":
+                {
+                    chainId: '421614', // chainId in hexadecimal, decimal equivalent is 80001
+                    chainName: 'Arbitrum Sepolia',
+                    rpcUrls: ['https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a'],
+                    // rpcUrls: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   
+                    nativeCurrency: {
+                        name: 'ETH',
+                        symbol: 'ETH',
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ["https://sepolia.etherscan.io/"]
+
+                }
+
+            },
+        {
+                "TOKEN_CHAIN_NAME": 'Sepolia',
+                "TOKEN_NAME": 'Sepolia',
+                "TOKEN_SYMBOL": 'ETHsep',
+                "API": 'https://ethereum-sepolia.publicnode.com',
+                "CONTRACT": "0x503ee25f5664aE959B7C30430E04E5751bAa98D9",
+                "CONTRACT_CHAINID": '11155111',
+                "CONTRACT_ABI": 'crowdfundingv3',
+                "CCIP_EXPLORER": "https://ccip.chain.link/",
+                "EXPLORER": "https://sepolia.etherscan.io/",
+                "CHAINLINK_CONTRACT": "",
+                "NATIVEUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x694AA1769357215DE4FAC081bf1f309aDC325306", 'assetSymbol': 'ETH / USD', 'chainid': "11155111", }],
+                "EURUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x1a81afB8146aeFfCFc5E50e8479e826E7D55b910", 'assetSymbol': 'EUR / USD', 'chainid': "11155111", }],
+                "CHAIN_CONFIG":
+                {
+                    chainId: '0xaa36a7', // chainId in hexadecimal, decimal equivalent is 80001
+                    chainName: 'Sepolia',
+                    rpcUrls: ['https://ethereum-sepolia.publicnode.com'],
+                    nativeCurrency: {
+                        name: 'ETH',
+                        symbol: 'ETH',
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ["https://sepolia.etherscan.io/"]
+
+                }
+
+            },
+            {
+                "TOKEN_CHAIN_NAME": 'Polygon',
+                "TOKEN_NAME": 'Matic',
+                "TOKEN_SYMBOL": 'MATIC',
+                "API": 'https://polygon-bor.publicnode.com',
+                "CONTRACT": "0x691E71Ff60cF56d4f6417b203b25A683afE9a9B6",
+                "CONTRACT_CHAINID": '137',
+                "CONTRACT_ABI": 'crowdfundingv3',
+                "CCIP_EXPLORER": "https://ccip.chain.link/",
+                "EXPLORER": "https://polygonscan.com/",
+                "CHAINLINK_CONTRACT": "",
+                "NATIVEUSD_ORACLE_CONTRACT": [
+                    {
+                        'oracleContract': "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0",
+                        'assetSymbol': 'MATIC / USD',
+                        'chainid': "137",
+                    }
+                ],
+                "EURUSD_ORACLE_CONTRACT": [
+                    {
+                        'oracleContract': "0x73366Fe0AA0Ded304479862808e02506FE556a98",
+                        'assetSymbol': 'EUR / USD',
+                        'chainid': "137",
+                    }
+                ],
+                "CHAIN_CONFIG":
+                {
+                    chainId: "0x89",
+                    rpcUrls: ['https://polygon-rpc.com/'],
+                    chainName: 'Polygon Mainnet',
+                    nativeCurrency: {
+                        name: 'MATIC',
+                        symbol: 'MATIC',
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ["https://polygonscan.com/"]
+                }
+            },
+
+
+
+
+            // {
+            //     "TOKEN_CHAIN_NAME": 'Polygon zkEVM',
+            //     "TOKEN_NAME": 'Matic ZkEVM',
+            //     "TOKEN_SYMBOL": 'MATIC',
+            //     "API": 'https://rpc.ankr.com/polygon_zkevm',
+            //     "CONTRACT": "0x4bF546fC1A24F24c1F88e315B0ED96BF853C3D1a",
+            //     "CONTRACT_CHAINID": '1101',
+            //     "CONTRACT_ABI": 'crowdfundingv3',
+            //     "CCIP_EXPLORER": "https://ccip.chain.link/",
+            //     "EXPLORER": "https://zkevm.polygonscan.com",
+            //     "CHAINLINK_CONTRACT": "",
+            //     "NATIVEUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada", 'assetSymbol': 'MATIC / USD', 'chainid': "80001", }],
+            //     "EURUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A", 'assetSymbol': 'EUR / USD', 'chainid': "80001", }],
+            //     "CHAIN_CONFIG":
+            //     {
+            //         // chainId: "80001",
+            //         chainId: '0x44d', // chainId in hexadecimal, decimal equivalent is 80001
+            //         chainName: 'Mumbai',
+            //         rpcUrls: ['https://rpc.ankr.com/polygon_zkevm'],
+            //         nativeCurrency: {
+            //             name: 'Polygon zkEVM',
+            //             symbol: 'ETH',
+            //             decimals: 18
+            //         },
+            //         blockExplorerUrls: ["https://zkevm.polygonscan.com"]
+            //     }
+
+            // },
+            // {
+            //     "TOKEN_CHAIN_NAME": 'Mumbai',
+            //     "TOKEN_NAME": 'Matic',
+            //     "TOKEN_SYMBOL": 'MATIC',
+            //     "API": 'https://mumbai.rpc.thirdweb.com',
+            //     "CONTRACT": "0xa438027C37604a42fa7821EA642BFd5b2FcA9E21",
+            //     "CONTRACT_CHAINID": '80001',
+            //     "CONTRACT_ABI": 'crowdfundingv3',
+            //     "CCIP_EXPLORER": "https://ccip.chain.link/",
+            //     "EXPLORER": "https://mumbai.polygonscan.com/",
+            //     "CHAINLINK_CONTRACT": "",
+            //     "NATIVEUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada", 'assetSymbol': 'MATIC / USD', 'chainid': "80001", }],
+            //     "EURUSD_ORACLE_CONTRACT": [{ 'oracleContract': "0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A", 'assetSymbol': 'EUR / USD', 'chainid': "80001", }],
+            //     "CHAIN_CONFIG":
+            //     {
+            //         chainId: '0x13881', // chainId in hexadecimal, decimal equivalent is 80001
+            //         chainName: 'Mumbai',
+            //         rpcUrls: ['https://polygon-mumbai.api.onfinality.io/public'],
+            //         nativeCurrency: {
+            //             name: 'MATIC',
+            //             symbol: 'MATIC',
+            //             decimals: 18
+            //         },
+            //         blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
+
+            //     }
+
+            // }
+        ];
+
+        ABIs = {
+            crowdfundingv3: [{ "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "FundsWithdrawn", "type": "event" }, { "inputs": [{ "internalType": "string", "name": "_pseudonym", "type": "string" }], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContractBalance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "contributor", "type": "address" }], "name": "getContributorPseudonym", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "pseudonyms", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "withdrawAllFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "stateMutability": "payable", "type": "receive" }],
+            crowfounding: [{ "inputs": [], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "inputs": [], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }],
+            crowfundingv2: [{ "inputs": [{ "internalType": "string", "name": "_pseudonym", "type": "string" }], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "inputs": [], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "contributor", "type": "address" }], "name": "getContributorPseudonym", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "pseudonyms", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
+        };
+        // Update these values with your smart contract address and ABI
+        const contractAddress = optionsList[0].CONTRACT;
+        const contractABI = ABIs[optionsList[0].CONTRACT_ABI];
+
+        let contract;
+        let userAddress;
+
+
+        /*******************************************************************************************
+         .) ONLOAD INIT
+        *********************************************************************************************/
+        // Initialize the DApp when the page is loaded
+        window.onload = async () => {
+
+
+
+
+            reloadTranslations()
+
+            // PreferedC
+            // NETWORK = localStorage.getItem('GLOBALCHAIN')
+            // if (NETWORK === null) {
+            //     console.log('GLOBALCHAIN is null');
+            //     localStorage.setItem("GLOBALCHAIN", 0);
+            //     GLOBALCHAIN = 0;
+            // }
+            // networkPreference
+
+            GLOBALCHAIN = localStorage.getItem("GLOBALCHAIN");
+            if (GLOBALCHAIN === null) {
+                console.log('GLOBALCHAIN is null');
+                localStorage.setItem("GLOBALCHAIN", 0);
+                GLOBALCHAIN = 0;
+            }
+            else {
+                console.log('GLOBALCHAIN is not null');
+            }
+
+            // let provider = await new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`);
+            let provider =  await new ethers.JsonRpcProvider(optionsList[0].API);
+
+            let contract = new ethers.Contract(contractAddress, contractABI, provider);
+
+
+            deadline = localStorage.getItem('deadline')
+            if (!deadline) {
+                deadline = await contract.deadline();
+                console.log('deadline', parseInt(deadline._hex, 16))
+                localStorage.setItem('deadline', deadline)
+                updateTimeLeftFromDeadline(deadline)
+
+            }
+
+            else {
+
+                updateTimeLeftFromDeadline(deadline)
+
+
+                let currentDeadline = await contract.deadline();
+                // console.log('currentDeadline :', currentDeadline)
+                console.log('currentDeadline :', parseInt(currentDeadline._hex, 16), deadline)
+
+                if (currentDeadline != deadline) {
+                    console.log('deadline changed...')
+                    localStorage.setItem('deadline', currentDeadline)
+
+                    updateTimeLeftFromDeadline(currentDeadline)
+
+                }
+                else {
+                    console.log('deadline is the same')
+
+
+                }
+                // check its the same deadline(prevent contract swap/changement)
+                // 1715049750
+
+            }
+            // timeleft = await contract.timeLeft();
+
+            // updateTimeLeft(timeleft);
+            // updateTimeLeftFromDeadline(deadline)
+
+            getListOfContributors(contract)
+
+            displayContractInfo(contract);
+
+            // METAMASK OR LOCALWALLET?
+            let preferedWallet = localStorage.getItem('preferedWallet');
+            if (!preferedWallet) {
+                console.log('NO PREFERED WALLET SET')
+                // connect();
+                return
+            }
+            if (preferedWallet) {
+                const values = preferedWallet.split(',').map(item => item.trim());
+                const walletChoice = values[0];
+                userAddr = values[1];
+                console.log('PREFERED WALLET:', walletChoice)
+                console.log('USER ADDRESS:', userAddr)
+
+                if (walletChoice == "METAMASK") {
+                    console.log('METAMASK IS PREFERED')
+
+                }
+                if (walletChoice == "LOCALWALLET") {
+                    console.log('LOCALWALLET IS PREFERED')
+
+                }
+            }
+
+
+
+            document.getElementById('connection').addEventListener('click', connectToggle, false);
+
+
+
+            // await enterAmount()
+
+        };
+
+
+
+        async function getListOfContributors(contract) {
+            console.log('getListOfContributors()', contract)
+
+            let contributorsCount = await contract.getContributorsCount();
+            donations= contributorsCount;
+            // donations.innerHTML= `${contributorsCount}`
+            document.getElementById('donations').innerHTML = contributorsCount
+
+            let recipient =  await contract.owner();
+            document.getElementById('receptor').innerHTML = recipient
+
+            let amoutRaised  =  await contract.raisedAmount();
+            document.getElementById('raised').innerHTML =ethers.formatUnits(amoutRaised) + "ETH"; 
+
+
+
+            let contributorsList = [];
+            contributors.innerHTML = ''
+
+            console.log('contributorsCount:', parseInt(contributorsCount._hex, 16))
+            if (parseInt(contributorsCount._hex, 16) == 0) {
+                console.log('ZEROO')
+                contributors.innerHTML += ` <li>There are no contributors yet... </li>`
+
+            }
+            for (let i = 0; i < contributorsCount; i++) {
+                const contributorAddress = await contract.contributors(i);
+                const pseudonym = await contract.getContributorPseudonym(contributorAddress);
+
+                // contributors.innerHTML += ` <li><span class="w3-tag w3-xlarge w3-padding w3-red" style="transform:rotate(-5deg)"> CONTRIBUTOR </span> ${pseudonym},${contributorAddress} </li>`
+                contributors.innerHTML += ` <li>${pseudonym},${contributorAddress} </li>`
+
+                contributorsList.push({
+                    address: contributorAddress,
+                    pseudonym: pseudonym
+                });
+            }
+
+            return contributorsList;
+        }
+
+        async function displayContractInfo(contract) {
+            console.log('displayContractInfo 3()')
+
+
+
+
+            let contractChain = optionsList[0].CONTRACT_CHAINID;
+            chain.innerHTML = contractChain;
+
+
+            let goal = await contract.goal();
+            g=goal
+            console.warn('🛶 goal:',goal)
+            let raisedAmount = await contract.raisedAmount();
+            raised = raisedAmount
+
+
+            // goal from wei to ethv2
+            let goalInUsd = await convertOnceWeiToUsd(goal)
+            gusd=goalInUsd
+
+            // const goalInCrypto = ethers.utils.formatUnits(goal, "ether");
+            let goalInCrypto = ethers.formatUnits(goal);
+            console.log('goalInCrypto:', goalInCrypto)
+
+
+            document.getElementById('goal').innerHTML = `${goalInCrypto} ${optionsList[0].TOKEN_SYMBOL} ( ${dictionary[globalLang]["aproximatedly"]}: ${valueInUSD} USD )`
+
+            // const convertedRaisedAmount = raisedAmount / 1000000000000000000;
+            const convertedRaisedAmount = Number(raisedAmount) / 1000000000000000000;
+
+            document.getElementById('raisedAmount').innerHTML = convertedRaisedAmount.toString() + `${optionsList[0].TOKEN_SYMBOL}`;
+            document.getElementById('contract').innerHTML = contractAddress;
+
+            // Update progress bar
+            const progressValue = goal === 0n ? 0n : (raisedAmount * 100n) / goal;
+            myBar.style.width = `${progressValue}%`
+            myBar.innerHTML = `${Number(progressValue).toFixed(2)}%`;
+
+        }
+
+        async function displayUserContributions(contract, usearAddress) {
+            console.log('displayUserContributions()')
+
+            let cryptovalueinusd = localStorage.getItem('cryptovalueinusd')
+
+            if (cryptovalueinusd) {
+                console.log('SAVED IN LOCALSTORAGE:cryptovalueinusd:', cryptovalueinusd)
+
+                cryptovalueinusd = await getOraclePricefromContract();
+
+            }
+            else {
+                console.log(' cryptovalueinusd NOT SAVED IN LOCALSTORAGE')
+
+            }
+
+            // let cryptovalueinusd = await getOraclePricefromContract();
+            console.log('cryptovalueinusd:', cryptovalueinusd)
+
+            // userAddress?
+            const userContribution = await contract.contributions(userAddress);
+
+            const C = 1000000000000000000;//1 ether in wei
+            const B = cryptovalueinusd;//dollar price of 1 ether
+            const A = parseInt(userContribution._hex, 16); //quantity of crypto in wei
+            let result = (A * B) / C;
+            console.log('(A * B) / C:', result)
+            valueInUSD = result.toFixed(2);
+            console.log('valueInUSD:', valueInUSD)
+
+            // convert wei to ether
+            const etherAmount = ethers.utils.formatUnits(userContribution, "ether");
+            console.log('etherAmount:', etherAmount)
+
+            document.getElementById('userContribution').innerHTML = `${etherAmount} ${optionsList[0].TOKEN_SYMBOL} ( aproximatedly: ${valueInUSD})`
+
+
+        }
+
+        async function connection() {
+            console.log('connection()')
+
+
+            if (window.ethereum) {
+                metamaskConnection()
+                document.getElementById('disconnection').style.display = 'none'
+                document.getElementById('yourContrib').style.display = 'block'
+
+            } else {
+                alert('Please install MetaMask to use this DApp.');
+            }
+
+        }
+
+
+
+
+
+
+        // DISCONNECT
+        async function disconnection() {
+            console.log('disconnection()')
+            if (window.ethereum) {
+                // metamaskConnection()
+            } else {
+                alert('Please install MetaMask to use this DApp.');
+            }
+
+
+            // CHANGE BUTTON
+            document.getElementById('connection').style.display = "block"; // boton CONNECT
+            document.getElementById("disconnection").style.display = "none";
+            document.getElementById('yourContrib').style.display = 'none'
+
+            // DELETE WALLET CHOICE FROM LOCALSTORAGE
+            localStorage.removeItem("wallet");
+            // hide your participation
+            // document.getElementById("attesttionUI").setAttribute("style", "display:none !important");
+            // DELETE ADDRESS RESTORE  BANNER
+            // usrAddr.innerHTML = "";
+            document.getElementById('disconnection').innerHTML = ""
+            // UNSET GLOBAL ADDRESS
+            userAddress = "";
+            // headMessages.innerHTML = "";
+        }
+
+
+
+        async function metamaskConnection() {
+            console.log('metamaskConnection()')
+
+            if (window.ethereum) {
+                const provider = window.ethereum;
+                try {
+                    await provider.request({ method: 'eth_requestAccounts' });
+                    console.log('CONNECTED! MetaMask is connected!');
+                    Toast.fire({ icon: "success", title: "Wallet connected!" });
+                    const accounts = await provider.request({ method: 'eth_accounts' });
+                    console.log('Connected account:', accounts[0]);
+                } catch (error) {
+                    console.error('Error connecting to MetaMask:', error);
+                }
+            } else {
+                console.error('MetaMask is not installed!');
+            }
+
+            // Initialize the ethers.js provider and contract
+            // let standaloneProvider = await new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`);
+            const providerMetamask = new ethers.providers.Web3Provider(window.ethereum);
+            console.log('providerMetamask:', providerMetamask)
+
+            const signer = providerMetamask.getSigner();
+            console.log('signer:', signer)
+            // contract = new ethers.Contract(contractAddress, contractABI, standaloneProvider);
+            // contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+            // METAMASK SPECIFIC
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            userAddress = accounts[0];
+            localStorage.setItem('preferedWallet', `METAMASK, ${userAddress}`)
+            console.log('userAddress:', userAddress)
+            // address.innerHTML = userAddress;
+            var shortAddr = userAddress.substring(0, 6) + "..." + userAddress.substring(38, 42);
+            document.getElementById('disconnection').innerHTML = `${shortAddr} <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width='14'><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg> `;
+
+
+            // CHANGE BUTTON
+            document.getElementById('connection').style.display = "none"; // boton CONNECT
+            document.getElementById("disconnection").style.display = "block";
+            // document.getElementById('connection').classList.add('connected')
+            // document.getElementById('connection').classList.remove('disconnected')
+
+
+            let currentChain = await signer.getChainId()
+            chain.innerHTML = currentChain;
+            const desiredChain = optionsList[0].CONTRACT_CHAINID;
+
+            console.log('TokenIds currentChain:', currentChain, '... desiredChain:', desiredChain)
+            if (desiredChain != currentChain) {
+                console.warn('YOUR METAMASK IS NOT IN THE CORRECT CHAIN, PLEASE CHANGE IT.');
+
+                await fixedToast.fire({
+                    icon: 'error',
+                    html: `<p>YOUR METAMASK IS NOT IN THE CORRECT CHAIN!</p>
+                    <button class="w3-button w3-yellow" onclick="changeNetwork()">PLEASE CHANGE IT</button> 
+                    `,
+                })
+
+
+                chainAlert.innerHTML = ` <div class="w3-panel w3-yellow w3-display-container"> <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span> <h3>Warning!</h3> <p>YOUR METAMASK IS NOT IN THE CORRECT CHAIN,<button class="w3-button w3-yellow">PLEASE CHANGE IT</button>  to ${desiredChain}.</p> </div>`
+
+
+
+
+
+                return;
+                // -------
+                // Switch to desired network
+                // const binance = { name: 'Binance Smart Chain', chainId: '0x38', nativeCurrency: { name: 'Binance Coin', symbol: 'BNB', decimals: 18 }, rpcUrls: ['https://bsc-dataseed.binance.org/'], blockExplorerUrls: ['https://bscscan.com'] };
+                // const sepolia = { name: 'Sepolia test network', chainId: ethers.utils.hexlify(11155111), nativeCurrency: { name: 'Sepolia test network', symbol: 'SepoliaETH', decimals: 18 }, rpcUrls: ['https://ethereum-sepolia.publicnode.com'], blockExplorerUrls: ['https://sepolia.etherscan.io'] };
+                // const matic = { chainName: 'Polygon Mainnet', chainId: ethers.utils.hexlify(137), nativeCurrency: { name: 'MATIC', decimals: 18, symbol: 'MATIC', }, rpcUrls: ['https://polygon-rpc.com/'], };
+                // const mumbai = { chainName: 'Polygon Mumbai', chainId: ethers.utils.hexlify(80001), nativeCurrency: { name: 'MUMBAI', decimals: 18, symbol: 'MUMBAI', }, rpcUrls: ['https://polygon-mumbai-pokt.nodies.app'], };
+
+                // try {
+                //     await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [mumbai], });
+                // }
+                // catch (error) { console.error('Error connecting to Sepolia Network:', error); }
+
+                // return
+
+            }
+            else {
+                console.log('YES, YOU ARE IN THE CORRECT CHAIN')
+
+                const contractAddress = optionsList[GLOBALCHAIN].CONTRACT;
+                const contractABI = ABIs[optionsList[GLOBALCHAIN].CONTRACT_ABI];
+                metamaskcontract = new ethers.Contract(contractAddress, contractABI, providerMetamask);
+
+
+                console.log('displayUserContributions', metamaskcontract, userAddress);
+                displayUserContributions(metamaskcontract, userAddress);
+            }
+
+
+        }
+
+
+        // --------------------------------------
+        function connectToggle(event) {
+            console.log('connectToggle')
+
+        }
+
+
+
+        async function changeNetwork() {
+            console.log('changeNetwork()')
+
+            const binance = { name: 'Binance Smart Chain', chainId: '0x38', nativeCurrency: { name: 'Binance Coin', symbol: 'BNB', decimals: 18 }, rpcUrls: ['https://bsc-dataseed.binance.org/'], blockExplorerUrls: ['https://bscscan.com'] };
+            const sepolia = { name: 'Sepolia test network', chainId: ethers.utils.hexlify(11155111), nativeCurrency: { name: 'Sepolia test network', symbol: 'SepoliaETH', decimals: 18 }, rpcUrls: ['https://ethereum-sepolia.publicnode.com'], blockExplorerUrls: ['https://sepolia.etherscan.io'] };
+            const matic = {
+                chainId: "0x89",
+                rpcUrls: ['https://polygon-rpc.com/'],
+                chainName: 'Polygon Mainnet',
+                nativeCurrency: {
+                    name: 'MATIC',
+                    symbol: 'MATIC',
+                    decimals: 18
+                },
+                blockExplorerUrls: ["https://polygonscan.com/"]
+            };
+            // chainId: ethers.utils.hexlify(80001),
+            const mumbai = {
+                chainId: "0x013881",
+                chainName: 'Polygon Mumbai',
+                rpcUrls: ['https://endpoints.omniatech.io/v1/matic/mumbai/public'],
+                nativeCurrency: {
+                    name: 'MUMBAI',
+                    symbol: 'MUMBAI',
+                    decimals: 18
+                },
+                blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
+
+            };
+
+
+
+            try {
+                await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [optionsList[GLOBALCHAIN].CHAIN_CONFIG], });
+
+                // await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [matic], });
+            }
+            catch (error) {
+                console.error('Error connecting to Sepolia Network:', error);
+            }
+
+
+            swal.close()
+
+
+
+        }
+
+
+        // Self-contained and auto-executable function
+        // async function updateTimeLeft(timeLeft) {
+        //     let originalTimeLeft = timeLeft;
+        //     let timeLeftInSeconds = timeLeft;
+
+        //     // Update time left display every second
+        //     setInterval(() => {
+        //         const days = Math.floor(timeLeftInSeconds / (3600 * 24));
+        //         const hours = Math.floor((timeLeftInSeconds % (3600 * 24)) / 3600);
+        //         const minutes = Math.floor((timeLeftInSeconds % 3600) / 60);
+        //         const seconds = timeLeftInSeconds % 60;
+
+        //         document.getElementById('days').textContent = days;
+        //         document.getElementById('hours').textContent = hours;
+        //         document.getElementById('minutes').textContent = minutes;
+        //         document.getElementById('seconds').textContent = seconds;
+
+        //         // Update the timeLeftInSeconds for the next interval
+        //         timeLeftInSeconds -= 1;
+        //     }, 1000);
+        // };
+
+        let intervalId = null; // Declare a variable to hold the interval ID
+
+        async function updateTimeLeftFromDeadline(newDeadline) {
+            if (intervalId !== null) { // Check if there's an existing interval
+                clearInterval(intervalId); // Clear the existing interval
+            }
+
+            const startTimestamp = Math.floor(Date.now() / 1000);
+            let timeLeftInSecondsFromDeadline = newDeadline - startTimestamp;
+
+            // Update time left display every second
+            intervalId = setInterval(() => {
+                const days = Math.floor(timeLeftInSecondsFromDeadline / (3600 * 24));
+                const hours = Math.floor((timeLeftInSecondsFromDeadline % (3600 * 24)) / 3600);
+                const minutes = Math.floor((timeLeftInSecondsFromDeadline % 3600) / 60);
+                const seconds = timeLeftInSecondsFromDeadline % 60;
+
+                // Update the display
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+
+                // Update the timeLeftInSeconds for the next interval
+                timeLeftInSecondsFromDeadline -= 1;
+
+                // Check if the deadline is reached
+                if (timeLeftInSecondsFromDeadline <= 0) {
+                    clearInterval(intervalId); // Stop the interval
+                    console.log("Deadline reached");
+                }
+            }, 1000);
+        }
+        // async function updateTimeLeftFromDeadline(deadline) {
+
+
+        //     const deadlineTimestamp = deadline;
+
+        //     // Get the current Unix timestamp
+        //     const currentTimestamp = Math.floor(Date.now() / 1000);
+
+        //     // Calculate the time left in seconds
+        //     let timeLeftInSecondsFromDeadline = deadlineTimestamp - currentTimestamp;
+
+        //     // Update time left display every second
+        //     const intervalId = setInterval(() => {
+        //         const days = Math.floor(timeLeftInSecondsFromDeadline / (3600 * 24));
+        //         const hours = Math.floor((timeLeftInSecondsFromDeadline % (3600 * 24)) / 3600);
+        //         const minutes = Math.floor((timeLeftInSecondsFromDeadline % 3600) / 60);
+        //         const seconds = timeLeftInSecondsFromDeadline % 60;
+
+        //         // Update the display
+        //         document.getElementById('days').textContent = days;
+        //         document.getElementById('hours').textContent = hours;
+        //         document.getElementById('minutes').textContent = minutes;
+        //         document.getElementById('seconds').textContent = seconds;
+
+        //         // Update the timeLeftInSeconds for the next interval
+        //         timeLeftInSecondsFromDeadline -= 1;
+
+        //         // Check if the deadline is reached
+        //         if (timeLeftInSecondsFromDeadline <= 0) {
+        //             clearInterval(intervalId); // Stop the interval
+        //             console.log("Deadline reached");
+        //         }
+        //     }, 1000);
+        // };
+
+
+        async function convertOnceWeiToUsd(wei) {
+            console.log('convertOnceWeiToUsd()')
+            let oracleContract = optionsList[0].NATIVEUSD_ORACLE_CONTRACT[0].oracleContract;//eth-usd on sepolia
+            let api = optionsList[0].ORACLEAPI
+            let assetSymbol = optionsList[0].NATIVEUSD_ORACLE_CONTRACT[0].assetSymbol;//eth-usd on sepolia
+            let cryptovalueinusd = await getOraclePricefromContract(oracleContract, api, assetSymbol);
+            cvalue= cryptovalueinusd;
+            const C = BigInt(1000000000000000000); // 1 ether in wei
+            const B = isNaN(cryptovalueinusd) ? 0n : BigInt(Math.round(cryptovalueinusd));
+            const A = BigInt(wei); // Quantity of crypto in wei
+            let result = (A * B) / C;
+            r=result
+            let decimalResult = Number(result) / 100; // Adjust for scale if needed
+            console.log(decimalResult.toFixed(2));
+            valueInUSD = decimalResult.toFixed(2);
+            // valueInUSD = result.toFixed(2);
+
+
+            console.log('GOAL valueInUSD:', valueInUSD)
+            return valueInUSD
+
+        }
+
+        async function withdrawFunds() {
+            try {
+                // Call the withdrawFunds function on the smart contract
+                const transaction = await contract.withdrawFunds();
+                await transaction.wait();
+
+                // Refresh contract and user information
+                displayContractInfo();
+                // displayUserContributions(contract, userAddress);
+
+                alert('Funds successfully withdrawn!');
+            } catch (error) {
+                console.error('Error withdrawing funds:', error.message);
+                alert('Error withdrawing funds. Please check the console for details.');
+            }
+        }
+
+
+
+        async function contribute(amount, contributor) {
+            console.log('contribute')
+            // Toast.fire("Contribution!", '', "success");
+            // make the transaction in your metamask (or similar) wallet
+            // text: "don't close this window",
+            // <p>don't close this window</p>
+
+            Swal.fire({
+                // icon: "warning",
+                title: "Make the transaction...",
+                html: `
+                <div class="loader-container">
+                <div class="loader"></div>
+                </div>
+                `,
+                showDenyButton: false,
+                showCancelButton: false,
+                showConfirmButton: false,
+                allowOutsideClick: () => {
+                    const popup = Swal.getPopup() as HTMLElement
+                    popup.classList.remove('swal2-show')
+                    setTimeout(() => {
+                        popup.classList.add('animate__animated', 'animate__headShake')
+                    })
+                    setTimeout(() => {
+                        popup.classList.remove('animate__animated', 'animate__headShake')
+                    }, 500)
+                    return false
+                },
+                footer: `<p>don't close this window</p>`
+            });
+
+
+
+            // ----------
+
+            // Get user's Ethereum address
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            userAddress = accounts[0];
+            // try { provider = new ethers.providers.Web3Provider(window.ethereum) }
+            // catch (error) { console.log('error:', error); return; }
+            providerMetamask = new ethers.providers.Web3Provider(window.ethereum);
+
+            const signer = await providerMetamask.getSigner();
+            console.log('signer:', signer)
+
+            contractz = new ethers.Contract(contractAddress, contractABI, signer);
+            console.log('contractz:', contractz)
+
+
+            // CHECK CHAIN IS CORRECT
+            // const signer = provider.getSigner()
+            const desiredChain = `${optionsList[0].CONTRACT_CHAINID}`;
+            let currentChain = await signer.getChainId()
+            console.log('TokenIds currentChain:', currentChain, '... desiredChain:', desiredChain)
+
+
+
+            console.log('desiredChain:', desiredChain, 'currentChain', currentChain)
+            if (desiredChain != currentChain) {
+                console.warn('YOUR METAMASK IS NOT IN THE CORRECT CHAIN, PLEASE CHANGE IT.');
+                // headerNotes.innerHTML = ` <div class="w3-panel w3-red"> <h3>Alert!</h3>
+                //     YOUR METAMASK IS NOT IN THE CORRECT CHAIN, PLEASE <button class="w3-button w3-yellow">PLEASE CHANGE IT</button> 
+                // </div> `
+                // headerNotes.innerHTML = ` <div class="w3-panel w3-yellow w3-display-container"> <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span> <h3>Warning!</h3> <p>YOUR METAMASK IS NOT IN THE CORRECT CHAIN,<button class="w3-button w3-yellow">PLEASE CHANGE IT</button>  to ${desiredChain}.</p> </div>`
+
+
+                await fixedToast.fire({
+                    icon: 'error',
+                    html: `<p>YOUR METAMASK IS NOT IN THE CORRECT CHAIN!</p>
+                    <button class="w3-button w3-yellow" onclick="changeNetwork()">PLEASE CHANGE IT</button> 
+                    `,
+                })
+
+
+
+                // Swal.close();
+
+                return
+                // -------
+                // Switch to Sepolia network
+                // ethereum.request({
+                //     method: 'wallet_addEthereumChain',
+                //     params: [{ "chainId": "0xaa36a7", "chainName": "Sepolia", "rpcUrls": ["https://ethereum-sepolia.publicnode.com"], "nativeCurrency": { "name": "Sep", "symbol": "SEPOLIA", "decimals": 18 }, "blockExplorerUrls": ["https://sepolia.etherscan.io/"] }],
+                // })
+
+
+            }
+            else { console.log('YES, YOU ARE IN THE CORRECT CHAIN') }
+
+
+
+            //    GET GAS PRICE AND GAS  ESTIMATION
+            const gasPrice = await providerMetamask.getGasPrice();
+            console.log('gasPrice:', gasPrice)
+
+            // ENCODE DATA
+            // let amount = amount
+            const amountToSend = ethers.utils.parseEther(amount); // 1 ETH
+            console.log('amount to send:', amountToSend)
+            const weiValue = ethers.utils.parseUnits(amount, 'ether');
+            console.log('weiValue:', weiValue.toString());
+
+            // let contributorPseudonym = 'pepe'
+            let contributorPseudonym = contributor.toString();
+            console.log('contributor:', contributorPseudonym)
+
+
+            // function contribute(string memory _pseudonym) public payable {
+            // 'abi': 'function depositToCustomAddress(address)',
+            // 'abi': 'function contribute(string)',
+
+            try {
+                tx = await contractz.connect(signer).contribute(contributorPseudonym, { value: amountToSend });
+                // tx = await contractz.connect(signer).contribute({ value: amountToSend });
+                //  tx = await contractz.connect(signer).depositToCustomAddress(recipientAddress, { value: weiValue, }); 
+
+            }
+
+            catch (error) {
+                console.log('error line 888:', error);
+                // fixedToast.fire("Error!", error.reason, "error");
+
+
+                // text: error.data.message,
+                Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: error.data.message,
+                    // iconColor: 'white',
+                    // customClass: {
+                    //     popup: 'colored-toast'
+                    // },
+                    footer: '<a href="https://iuris.web.app/docs/">What is this error?</a>'
+                });
+
+                return;
+
+            }
+
+
+            console.log('Function executed!', tx);
+            // headerNotes.innerHTML = `  <div class="alert alert-success alert-dismissible fade show headerNotes"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button> <strong>Transaction success!</strong> <a href="${optionsList[GLOBALCHAIN].EXPLORER + '/tx/' + tx.hash}" target="_blank" rel="noopener noreferrer">${tx.hash}</a> </div>`
+
+            // CLOSE MODAL
+            Swal.close();
+
+
+
+
+
+            // MESSAGE WITH TX
+
+            headerNotes.innerHTML = ` <div class="w3-panel w3-green"> <h3>Success!</h3>
+                <strong>Transaction success!</strong> <a href="${optionsList[0].EXPLORER + '/tx/' + tx.hash}" target="_blank" rel="noopener noreferrer">${tx.hash}</a>
+                </div> `
+
+
+            // LAUNCH FANCY CONFETTI
+            setTimeout(shoot, 0);
+            setTimeout(shoot, 100);
+            setTimeout(shoot, 200);
+
+            console.log('transaction link', optionsList[0].EXPLORER + '/tx/' + tx.hash);
+
+
+            // let providerLocal = await new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`);
+            let providerLocal =  await new ethers.JsonRpcProvider(optionsList[0].API);
+
+            let contract = new ethers.Contract(contractAddress, contractABI, providerLocal);
+            await getListOfContributors(contract)
+            // syncBalance()
+        }
+
+
+        const defaults = {
+            spread: 360,
+            ticks: 100,
+            gravity: 0,
+            decay: 0.94,
+            startVelocity: 30,
+        };
+
+        function shoot() {
+            confetti({
+                ...defaults,
+                particleCount: 30,
+                scalar: 1.2,
+                shapes: ["circle", "square"],
+                colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
+            });
+
+            confetti({
+                ...defaults,
+                particleCount: 20,
+                scalar: 2,
+                shapes: ["emoji"],
+                shapeOptions: {
+                    emoji: {
+                        value: ["🦄", "🌈"],
+                    },
+                },
+            });
+        }
+
+        /*********************************************************************************************
+        .) sweetalert2
+        // position: "top-right",
+        **********************************************************************************************/
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            // position: "bottom-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: toast => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast'
+            },
+        });
+
+        const fixedToast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: true,
+            didOpen: toast => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+            iconColor: 'white',
+            customClass: { popup: 'colored-toast' },
+        });
+
+        /*********************************************************************************************
+              .) ACCORDION
+              **********************************************************************************************/
+        function accordion(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+
+        /*********************************************************************************************
+            .)  FILL CURRENCY AND DEPOSIT MENU
+            **********************************************************************************************/
+        function fillSelect() {
+            currencySelect.innerHTML = '';
+            try {
+                const selectElement = document.getElementById("currencySelect");
+
+                if (!selectElement) {
+                    throw new Error("Unable to find the select element.");
+                }
+
+
+                optionsList[0].deposits.forEach(currency => {
+                    const option = document.createElement("option");
+                    option.value = currency.value;
+
+                    option.setAttribute("data-contract", currency.contract);
+                    option.setAttribute("data-chainid", currency.chainid);
+                    option.setAttribute("data-api", currency.api);
+                    option.textContent = currency.label;
+
+                    if (currency.disabled) { option.disabled = true; }
+
+                    selectElement.appendChild(option);
+                });
+
+
+            } catch (error) {
+                console.error("wait! An error occurred:", error.message);
+                const selectElement = document.getElementById("currencySelect");
+
+                const option = document.createElement("option");
+                option.textContent = 'no deposit options';
+                selectElement.appendChild(option);
+
+            }
+
+
+        }
+
+
+        // priceCalcInCrypto = (usdvalue, quantity) => {
+        priceCalcFiatToCrypto = (fiatvalue, quantity) => {
+            console.log('priceCalcFiatToCrypto()', fiatvalue, quantity)
+            console.log('converts fiat to crypto')
+
+            // ---
+            const A = quantity;
+            const C = fiatvalue;
+            const B = 1;
+            let result = (A * B) / C;
+            if (fiatValue) { cryptoValue.value = result.toFixed(8); }
+            else { console.error("fiatValue is not defined or not an HTML element."); }
+            //    -----
+            // let result = quantity * fiatvalue;
+            // result = result.toFixed(2);
+            // cryptoValue.value = result;
+        }
+
+        // priceCalcInUSD = (usdvalue, quantity) => {
+        priceCalcCryptoToFiat = (fiatvalue, quantity) => {
+            console.log('priceCalcCryptoToFiat(usdvalue, quantity)', fiatvalue, quantity)
+            console.log('converts crypto to fiat(usd-eur-ars)')
+
+            let result = quantity * fiatvalue;
+            result = result.toFixed(2);
+            fiatValue.value = result;
+            // 
+            // const A = quantity;
+            // const C = fiatvalue;
+            // const B = 1;
+            // let result = (A * B) / C;
+            // if (fiatValue) { fiatValue.value = result.toFixed(8); }
+            // else { console.error("fiatValue is not defined or not an HTML element."); }
+        }
+
+
+        async function getOraclePricefromContract() {
+            console.log('getOraclePricefromContract()')
+
+            let oracleContract = optionsList[0].NATIVEUSD_ORACLE_CONTRACT[0].oracleContract;//eth-usd on sepolia
+            let api = optionsList[0].API
+            let assetSymbol = optionsList[0].NATIVEUSD_ORACLE_CONTRACT[0].assetSymbol;
+            try {
+                // providerLocal = new ethers.providers.JsonRpcProvider(api);//SEPOLIA
+             providerLocal =  await new ethers.JsonRpcProvider(optionsList[0].API);
+
+            } catch (error) {
+                console.warn("Error retrieving Chainlink price:", error);
+            }
+
+            const chainlinkContract = await new ethers.Contract(oracleContract, ["function latestRoundData() view returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)"], providerLocal);
+            try {
+                const priceData = await chainlinkContract.latestRoundData();
+                const price = ethers.formatUnits(priceData.answer, 8); // Assuming 8 decimals for USD
+                console.log(`Latest ${assetSymbol} Price: $${price}`);
+                localStorage.setItem('lastOraclePrice', price)
+                return price
+            } catch (error) {
+                console.warn("Error retrieving Chainlink price in contract:", error);
+            }
+
+        }
+
+        async function enterAmount() {
+            console.log('enterAmount() ')
+            // ---------------------------------------------------------------
+            // AMOUNT CALCULATOR
+            // ---------------------------------------------------------------
+            // oracleContainer.style.display='none'
+            // oracleLoader.style.display='inline-flex'
+
+
+            let oracleContract = optionsList[0].NATIVEUSD_ORACLE_CONTRACT[0].oracleContract;//eth-usd on sepolia
+            let api = optionsList[0].API
+            let assetSymbol = optionsList[0].NATIVEUSD_ORACLE_CONTRACT[0].assetSymbol;//eth-usd on sepolia
+
+            let currencyValueInUSD;
+
+            const inputStepCrypto = 0.01
+            // const inputStepCrypto = 0.001
+            const inputStepFiat = 1
+            let initfiatValue = localStorage.getItem('fiatAmount')
+            let initcryptoValue = localStorage.getItem('cryptoAmount')
+            let initFiatPreference = localStorage.getItem('fiatPreference')
+
+
+
+            Swal.fire({
+                title: 'Calculate amount',
+                html: `
+                <div class="lds-dual-ring" id='oracleLoader' style='display:inline-flex'></div>
+                <div id="oracleContainer" style='display:none'>
+                <select class="" name="currency" id="currencySelect">
+									<option value="${currencyValueInUSD}">USD</option>
+									<option value="matic-network" disabled>EURO</option>
+									<option value="dai" disabled>ARS</option> 
+								</select>
+                <input type="number" value="${initfiatValue}" step="${inputStepFiat}" class="swal2-input" id="fiatValue">
+                <br>
+                <span  class='currency'>${optionsList[0].TOKEN_NAME}</span>
+                <input type="number" value="${initcryptoValue}" step="${inputStepCrypto}" class="swal2-input" id="cryptoValue">
+            </div>
+                    `,
+                initfiatValue,
+                didOpen: async () => {
+
+                    let currencyValueInUSDRAW2;
+
+                    getOraclePricefromContract().then(function (result) {
+                        // Once the promise is resolved, assign the result to currencyValueInUSDRAW
+                        currencyValueInUSDRAW2 = result;
+                        // Now you can do something with currencyValueInUSDRAW here
+                        console.log('LOADED', currencyValueInUSDRAW2);
+
+                        // oracleContainer.style.display = 'none'
+                        // oracleLoader.style.display = 'inline-flex'
+                        oracleContainer.style.display = 'block'
+                        oracleLoader.style.display = 'none'
+
+                        currencyValueInUSD = Number(currencyValueInUSDRAW2).toFixed(2)
+                        console.log('currencyValueInUSD:', currencyValueInUSD)
+                        // let currencyValueInUSD = Number(currencyValueInUSDRAW2).toFixed(2)
+
+                        if (initfiatValue) {
+                            console.log('initfiatValue:', initfiatValue)
+                            console.log('initfiatValue TRUE ')
+                            // let A = initfiatValue;
+                            // let B = 1
+                            // let C = currencyValueInUSD
+                            // // let result = (A * B) / C;
+                            // let result = (BigInt(A) * BigInt(B)) / BigInt(C);
+
+                            let A = BigInt(initfiatValue); // Convert A to BigInt
+                            let B = BigInt(1); // Convert B to BigInt (though 1 is already a number, it’s good practice to be explicit)
+                            let C = BigInt(currencyValueInUSD); // Convert C to BigInt
+
+                            let result = (A * B) / C;
+
+                            // let result = (Number(A) * Number(B)) / Number(C);
+
+                            cryptoValue.value = result
+
+
+                            // priceCalcFiatToCrypto(fiatvalue, quantityInFiat); // Has to do this from MUMBAI
+
+                        }
+                        else if (initcryptoValue) {
+                            console.log('initcryptoValue TRUE', initcryptoValue)
+                            console.log('currencyValueInUSD?', currencyValueInUSD)
+
+                            // let A = initcryptoValue
+                            // let B = currencyValueInUSD
+                            // let C = 1
+                            // let result = (A * B) / C
+                            // initfiatValue = result
+                            // initcryptoValue = initcryptoValue
+                            
+                            // initfiatValue
+                            let result = initcryptoValue * currencyValueInUSD;
+                            // let initfiatValue = result.toFixed(2);
+
+                            let decimalResult = Number(result) / 100; // Adjust for scale if needed
+                            // console.log(decimalResult.toFixed(2));
+                            let initfiatValue = decimalResult.toFixed(2);
+
+
+
+                            fiatValue.value = initfiatValue;
+
+
+
+                        }
+                        else {
+                            console.log('initcryptoValue FALSE')
+
+                            initfiatValue = currencyValueInUSD
+                            initcryptoValue = 1
+                        }
+
+
+
+                        if (initFiatPreference === null) {
+                            // fiatAmount is null
+                            console.log('initFiatPreference is null, default to USD');
+                        } else {
+                            console.log('initFiatPreference is ', initFiatPreference);
+
+                        }
+
+                        if (initfiatValue === null && initcryptoValue === null) {
+                            console.log('Both fiatAmount and cryptoAmount are null');
+                        } else {
+                            if (initfiatValue === null) {
+                                console.log('fiatAmount is null');
+                                if (initcryptoValue !== null) {
+                                    console.log('cryptoAmount is not null:', initcryptoValue);
+                                }
+                            }
+                            if (initcryptoValue === null) {
+                                console.log('cryptoAmount is null');
+                                if (initfiatValue !== null) {
+                                    console.log('fiatAmount is not null:', initfiatValue);
+                                }
+                            }
+                        }
+
+
+
+
+
+
+
+
+
+
+                    });
+
+
+                    const inputFiat = document.getElementById('fiatValue')
+                    const inputCrypto = document.getElementById('cryptoValue')
+                    const currencySelect = document.getElementById("currencySelect");
+                    var popup = Swal.getPopup();
+                    var outputElement = popup.querySelector('output');
+                    outputElement.style.display = 'none';
+                    // 	 PRICE
+                    inputFiat.addEventListener('change', function () {
+                        console.log('FIAT value changed!', inputFiat.value)
+                        const fiatvalue = currencyValueInUSD; // get currency (ETH,MATIC,USD)
+                        const quantityInFiat = inputFiat.value; //get price
+                        priceCalcFiatToCrypto(fiatvalue, quantityInFiat); // Has to do this from MUMBAI
+                        localStorage.setItem('fiatAmount', quantityInFiat)
+                        localStorage.removeItem('cryptoAmount')
+                        console.log('cryptoAmount removed from localstorage')
+
+
+                    })
+                    inputCrypto.addEventListener('change', function () {
+                        console.log('CRYPTO value changed!', inputCrypto.value)
+                        const fiatvalue = currencyValueInUSD; // get currency (ETH,MATIC,USD)
+                        const quantityInCrypto = inputCrypto.value; //get price
+                        priceCalcCryptoToFiat(fiatvalue, quantityInCrypto); // Has to do this from MUMBAI
+
+                        localStorage.setItem('cryptoAmount', quantityInCrypto)
+                        localStorage.removeItem('fiatAmount')
+
+                        console.log('fiatAmount removed from localstorage')
+                    })
+                },
+                allowOutsideClick: () => {
+                    const popup = Swal.getPopup() as HTMLElement
+                    popup.classList.remove('swal2-show')
+                    setTimeout(() => {
+                        popup.classList.add('animate__animated', 'animate__headShake')
+                    })
+                    setTimeout(() => {
+                        popup.classList.remove('animate__animated', 'animate__headShake')
+                    }, 500)
+                    return false
+                },
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: 'Continue',
+                denyButtonText: 'No',
+                customClass: {
+                    actions: 'my-actions',
+                    cancelButton: 'order-1 right-gap',
+                    confirmButton: 'order-2',
+                    denyButton: 'order-3',
+                },
+                input: "text",
+                inputPlaceholder: "Name or message",
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "please, enter contributor's name or message !";
+                    }
+                },
+            })
+
+                .then(async (result) => {
+                    if (result.isConfirmed) {
+                        console.log('amount', fiatValue.value, result.value)
+                        await contribute(fiatValue.value, result.value)
+
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info')
+                    }
+                    // })
+
+                })
+
+        }
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+</body>
+
+</html>
