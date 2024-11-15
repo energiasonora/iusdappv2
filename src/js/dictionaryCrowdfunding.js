@@ -36,7 +36,9 @@ var dictionary = {
     receptor:"Receptor",
     period:"Period",
     donations:"Donations",
-    raised:"Raised"
+    raised:"Raised",
+    donatehere:"Donate to this address",
+    donateherechain:"to this chain"
   },
   fr: {
     crowdfundingdapp: "DApp de financement participatif",
@@ -65,7 +67,9 @@ var dictionary = {
     receptor:"Receptor",
     period:"Period",
     donations:"Donations",
-    raised:"Raised"
+    raised:"Soulevé",
+    donatehere:"Faites vos don dans cette adress",
+    donateherechain:"dans ce chaine"
   },
   es: {
     crowdfundingdapp: "DApp de financiación colectiva ",
@@ -95,7 +99,9 @@ var dictionary = {
     receptor:"Receptor",
     period:"Periodo",
     donations:"Donations",
-    raised:"Raised"
+    raised:"Colectado",
+    donatehere:"Donar en esta address",
+    donateherechain:"en esta red"
   },
 };
 

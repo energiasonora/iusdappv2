@@ -167,32 +167,33 @@
 			</symbol>
 		</defs>
 	</svg>
-
-
+	
+	
+	
+				<!-- <div class="search-wrap">
+					<button id="btn-search" class="btn btn--search" style="display: none;"> <svg class="icon icon--search">
+							<use xlink:href="#icon-search"></use>
+						</svg></button>
+				</div> -->
 
 	<main class="main-wrap">
 		<header class="codrops-header">
 			<button id="lightButton" class="traffic-light"></button>
 
 
-			<!-- <section id="userData">
-					<span class="top">My Balance:</span>
+		
+				 <section id="" class="tokenBalance">
+					<span class="top"> Arbitrum Sepolia(461614):</span>
 					<span class="bal">-999.9999</span>
 					<span class="eth">ETH</span>
-				 </section> -->
-			<h1 class="codrops-header__title" id="userData">IUS NATURALIS</h1>
-			<div id="address"></div>
-			<div id="data"></div>
+					<span class="bottom"> 0.00043 ETH</span>
+				</section>
 
-			<div class="search-wrap">
-				<button id="btn-search" class="btn btn--search" style="display: none;"> <svg class="icon icon--search">
-						<use xlink:href="#icon-search"></use>
-					</svg></button>
-			</div>
 
-			<span class="badge bg-primary" id="chatBadge">-</span>
+
 			<button id="" class="right hamburger hamburger--elastic" type="button" aria-label="Menu"
-				aria-controls="navigation">
+			aria-controls="navigation">
+			<span class="badge bg-primary" id="chatBadge">-</span>
 				<span class="hamburger-box">
 					<span class="hamburger-inner"></span>
 				</span>
@@ -637,29 +638,6 @@
 
 					</div>
 
-					<!-- <div class="form-check"  style="display: none;">
-						<input class="form-check-input" type="radio" name="tokenType" id="trokOption" value="trok" disabled>
-						<label class="form-check-label" for="trokOption">TROK</label>
-					  </div>
-
-				<div class="form-check" style="display: none;">
-					<input class="form-check-input" type="radio" name="tokenType" id="g1Option" value="g1" disabled>
-					<label class="form-check-label" for="g1Option">Ğ1
-					</label>
-				</div>
-
-			  <div class="form-check" style="display: none;">
-				<input class="form-check-input" type="radio" name="tokenType" id="btcOption" value="btc" disabled>
-				<label class="form-check-label" for="btcOption">BTC</label>
-			  </div>
-
-			  <div class="form-check" style="display: none;">
-				<input class="form-check-input" type="radio" name="tokenType" id="moneroOption" value="monero" disabled>
-				<label class="form-check-label" for="moneroOption">MONERO</label>
-			  </div> -->
-
-
-
 
 
 					<br>
@@ -921,7 +899,7 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-					<section id="bigBalanceWalletsendmodal">
+					<section id="bigBalanceWalletsendmodal" class="tokenBalance">
 						<span class="top"> Arbitrum Sepolia(461614):</span>
 						<span class="bal">-999.9999</span>
 						<span class="eth">ETH</span>
@@ -1221,7 +1199,7 @@
 
 				<div class="modal-body" id="walletCardContainer">
 					
-					<section id="bigBalanceWalletmodal">
+					<section id="bigBalanceWalletmodal" class="tokenBalance">
 						<span class="top"> Arbitrum Sepolia(461614):</span>
 						<span class="bal">-999.9999</span>
 						<span class="eth">ETH</span>
@@ -1389,6 +1367,15 @@
 		const apiKeyLighthouse = '0e06cd16.4d3bf2536b7c4219bfb7520bd7b7346e';//lighthouse
 		const INFURA_API_KEY = "9219faae2bac4d24b95c2d967b22005a"; // Replace with your actual Infura API key
 
+		window.globalOptionsList = [
+			{
+                'ALCHEMY_API_KEY': 'X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I',
+                'INFURA_API_KEY' : '9219faae2bac4d24b95c2d967b22005a',
+				'IPFS_GATEWAY': 'https://gateway.lighthouse.storage/ipfs/',
+				"POLYBASE_DB": "https://explorer.testnet.polybase.xyz/studio/pk%2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3%2FSTARKID/collections/STARKID",
+				"ZK_PUBKEY": "2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3"
+			},
+        ]
 		window.optionsList = [
 			{
 				"ERC20_TOKEN_ADDRESS": "0x3723A0d04ABDFA902d47426973E0cb49C2fC3B86",//trok arb sepolia
@@ -1514,6 +1501,7 @@
 			// SET ADDRESS
 			console.warn('EVM ADDRESS (getSigner): ', signer.address)
 			setAddress(signer.address)
+			getPreferredToken()
 
 			// CREATE CHAT
 			await createXMPTchat(signer);
@@ -1523,33 +1511,53 @@
 			// - USDC(erc20/ arbitrum sepolia) ==> FAUCET: 
 			// - ETH( native token/ arbitrum sepolia) ==> FAUCET: 
 			// --------------
-			let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
-			if (storedData.length === 0) {
-				console.log('🤷 There are no tokens (ERC20_TOKENS)  in localstorage we  add USDC(arbitrum sepolia) as default ')
-				const defaultToken = {
-					tokenName: "USDC",
-					chainName: "Arbitrum Sepolia",
-					chainId: 421614,
-					contractAddr: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",  // Example contract address
-					rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a"],   // Example RPC endpoint
-					explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
-				};
-				storedData.push(defaultToken);
+			// getPreferredToken()
+			// let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+			// if (storedData.length === 0) {
+			// 	console.log('🤷🤷🤷 There are no tokens (ERC20_TOKENS)  in localstorage we  add USDC(arbitrum sepolia) as default ')
+			// 	const defaultToken = {
+			// 		tokenName: "USDC",
+			// 		chainName: "Arbitrum Sepolia",
+			// 		chainId: 421614,
+			// 		contractAddr: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",  // Example contract address
+			// 		rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a"],   // Example RPC endpoint
+			// 		explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
+			// 	};
+			// 	storedData.push(defaultToken);
 
-				const defaultTokenB = {
-					tokenName: "ETH(arb)",
-					chainName: "Arbitrum Sepolia",
-					chainId: 421614,
-					contractAddr: "nativeToken",  // Example contract address
-					rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a"],   // Example RPC endpoint
-					explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
-				};
+			// 	const defaultTokenB = {
+			// 		tokenName: "ETH(arb)",
+			// 		chainName: "Arbitrum Sepolia",
+			// 		chainId: 421614,
+			// 		contractAddr: "nativeToken",  // Example contract address
+			// 		rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a"],   // Example RPC endpoint
+			// 		explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
+			// 	};
 
 
-				storedData.push(defaultTokenB);
+			// 	storedData.push(defaultTokenB);
 
-				localStorage.setItem('ERC20_TOKENS', JSON.stringify(storedData));
-			}
+			// 	localStorage.setItem('ERC20_TOKENS', JSON.stringify(storedData));
+
+			// 	// set USDC as default
+			// 	console.warn('set USDC as default')
+			// 	let preferredTokenKey = `${defaultToken.chainId}-${defaultToken.contractAddr}`;
+			// 	localStorage.setItem('PREFERRED_TOKEN', preferredTokenKey);
+
+			// }
+			// localStorage.getItem('PREFERRED_TOKEN');
+
+			// if (!PREFERRED_TOKEN) {
+			// 	console.warn('NO PREFERRED TOKEN')
+			// }
+			// else{
+			// 	console.warn('YES PREFERRED TOKEN')
+
+			// }
+
+
+
+
 
 			// --------------
 			// LOAD BALANCE
@@ -1736,7 +1744,7 @@
 			// if token is set
 			// startBalanceListener();
 			// setInterval(reloadBalance(), 15000);
-			setInterval(loadToken, 15000);
+			// setInterval(loadToken, 15000);
 
 
 			await listenAllNewAddresses()
@@ -2154,7 +2162,9 @@
 
 		async function reloadBalance() {
 			console.log('⏰ ⏰ ⏰reloadBalance()')
+			console.log('⏰ ⏰ REHACER ESTA FUNCION')
 
+			return
 			let network = await checkNetwork();
 			console.log('network:', network)
 
@@ -2173,7 +2183,7 @@
 			let gasBalance = await checkGasBalance(addr)
 			userData.innerHTML = `			
 			<a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS}">Balance: ${balance}</a>
-			<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
+			<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
 			<br>
 		<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
 			`;
@@ -2311,7 +2321,7 @@
 
 
 			await loadDID(signer)
-			syncBalance()
+			reloadBalances()
 			await init(signer)
 
 			if (!signer) {
@@ -2417,10 +2427,10 @@
 						setTimeout(() => {
 							console.warn('ADDING REMEMBER TO BACKUP WALLET TO HEADERNOTES ****************^^^^^^^^^^')
 							headerNotes.innerHTML = `
-					<div class="alert alert-warning alert-dismissible fade show headerNotes">
+					<div class="alert  alert-dismissible fade show ">
 						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 						<strong>Alert!</strong> Remember to backup your wallet.
-						<button type="button" class="btn btn-primary" onclick="backup()">Backup Now</button>
+						<button type="button" class="" onclick="backup()">Backup Now</button>
 					</div>
 					`;
 						}, 5000);
@@ -3003,7 +3013,7 @@ chatAddress.innerHTML = `<div class="" id="peerAddr" data-address="${toAddr}" >
 
 actionButtons.innerHTML = `
 <button type="button" id="peerSend" class="btn btn-approve item" style="display: none;"
-onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" disabled>
+onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" >
 	
 <svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
 			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
@@ -3017,7 +3027,7 @@ d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5
 </button>
 
 <button type="button" id="peerReceive" class="btn btn-reject item" style="display: none;"
-onclick="event.stopPropagation(); openReceive('${toAddr.toString()}')"  disabled>
+onclick="event.stopPropagation(); openReceive('${toAddr.toString()}')"  >
 <svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
 			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
 			</svg>
@@ -3134,7 +3144,7 @@ headerNotes.innerHTML = ``
 			// -------------------
 			actionButtons.innerHTML = `
                 <button type="button" id="peerSend" class="btn btn-approve item" style="display: none;"
-        onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" disabled>
+        onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" >
 		<svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
 			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
 			</svg>
@@ -3147,7 +3157,7 @@ headerNotes.innerHTML = ``
 		</button>
 
 		<button type="button" id="peerReceive" class="btn btn-reject item" style="display: none;"
-				onclick="event.stopPropagation(); openReceive('${toAddr.toString()}')"  disabled>
+				onclick="event.stopPropagation(); openReceive('${toAddr.toString()}')"  >
 				<svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
 			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
 			</svg>
@@ -3170,6 +3180,7 @@ headerNotes.innerHTML = ``
 			// activate buttons
 			peerSend.style.display = 'inline';
 			peerReceive.style.display = 'inline'
+			
 			peerSend.disabled = false;
 			peerReceive.disabled = false;
 
@@ -5578,7 +5589,7 @@ initChatClient()
 			headerNotes.innerHTML = ``
 			setAddress(wallet.address)
 			await loadDID(wallet)
-			syncBalance()
+			reloadBalances()
 
 
 			// remove xmtp from localstorage
@@ -6269,33 +6280,33 @@ initChatClient()
 		.)  BALANCE
 		**********************************************************************************************/
 
-		async function syncBalance() {
-			console.log('syncBalance()')
-			let addr = document.getElementById('yourAddress').getAttribute('address');
-			let balance = await checkERC20Balance(addr)
-			let gasBalance = await checkGasBalance(addr)
-			userData.innerHTML = `			
-			<a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS}">Balance: ${balance}</a>
-			<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
-			<br>
-			<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
-			`;
+		// async function syncBalance() {
+		// 	console.log('syncBalance()')
+		// 	let addr = document.getElementById('yourAddress').getAttribute('address');
+		// 	let balance = await checkERC20Balance(addr)
+		// 	let gasBalance = await checkGasBalance(addr)
+		// 	userData.innerHTML = `			
+		// 	<a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS}">Balance: ${balance}</a>
+		// 	<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
+		// 	<br>
+		// 	<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
+		// 	`;
 
-		}
-
-
-
-		async function syncTokenBalance() {
-			console.log('syncTokenBalance()')
-
-			let explorer = preferredToken.explorers[0].url
-			let tokenAddress = preferredToken.contractAddr
-			let userAddress = addr
+		// }
 
 
-			userData.innerHTML = ` <svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg> <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress}">Balance: ${balance} </a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">gas: ${gasBalance} </a> </div> `;
 
-		}
+		// async function syncTokenBalance() {
+		// 	console.log('syncTokenBalance()')
+
+		// 	let explorer = preferredToken.explorers[0].url
+		// 	let tokenAddress = preferredToken.contractAddr
+		// 	let userAddress = addr
+
+
+		// 	userData.innerHTML = ` <svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg> <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress}">Balance: ${balance} </a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">gas: ${gasBalance} </a> </div> `;
+
+		// }
 
 
 		async function getRandomProvider() {
@@ -6334,51 +6345,127 @@ initChatClient()
 
 
 
-		async function checkGasBalance(walletAddress) {
-			console.log('checkGasBalance() of ', walletAddress)
 
-			// Retrieve selector index  from localStorage
-			let preferredIndex = localStorage.getItem('preferredTokenIndex');
-			if (preferredIndex === null) {
-				preferredIndex = 0;
-			} else {
-				preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
-			}
-
-			// Retrieve the stored data from localStorage
-			let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
-
-			// If the preferred index is within the range of stored tokens, return the corresponding token details
-			if (storedData[preferredIndex]) {
-				preferredToken = storedData[preferredIndex];
-				//  pref= preferredToken
-			} else {
-				console.log('some problem in checkERC20Balance')
-				return
-			}
-
-			const length = preferredToken.rpcs.length;
-			const randomnumber = Math.floor(Math.random() * length);
-			const selectedProvider = preferredToken.rpcs[randomnumber];
-			console.log('selectedProvider(at checkGasBalance()):', selectedProvider);
-			let provider;
-			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
-			catch (error) { console.warn('error creating provider', error) }
-			console.log('provider to check gas :', provider);
-			try {
-				const balance = await provider.getBalance(walletAddress);
-				console.log(`GAS bal (crudo) : ${balance} GAS`);
-
-				const gasBalance = ethers.formatEther(balance);
-				console.log(`GAS Balance : ${gasBalance} GAS`);
-				// console.log(`GAS Balance of ${optionsList[0].ERC20_TOKEN_ADDRESS}: ${gasBalance} GAS`);
-
-				return gasBalance;
-			} catch (error) {
-				console.error('Error checking balance:', error.reason);
-				return null;
-			}
+		function lock() {
+			console.log('lock()')
+			document.getElementById("loader").style.display = "none";//flex
+			lockscreen.style.display = 'flex'
+			closeModalId('#settingsModal')
+			document.querySelector(".sidebar").classList.remove("isOpen");
+			document.querySelector(".overlay").classList.remove("overlayisOpen");
+			sessionStorage.removeItem('password')
 		}
+
+
+		/*********************************************************************************************
+	  .) BALANCES
+	  **********************************************************************************************/
+		async function reloadBalances(){
+    console.warn('reloadBalances()')
+
+			let addr = document.getElementById('yourAddress').getAttribute('address');
+			let balance = await checkERC20Balance(addr)
+			let gasBalance = await checkGasBalance(addr)
+
+
+			// userData.innerHTML = ` <a id="" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS}">Balance: ${balance}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a> `;
+
+
+			
+            let storedTokenType = localStorage.getItem('selectedTokenType');
+
+
+		/*********************************************************************************************
+		.)  NATIVE 
+		**********************************************************************************************/
+		if (storedTokenType === 'native') {
+			console.warn('💛💛💛 LOADING NATIVE  ')
+			populateBalances(gasBalance)
+
+		}
+		if (storedTokenType === 'erc20') {
+			console.warn('💚💚💚 LOADING ERC20')
+			populateBalances(gasBalance,balance)
+
+		}
+		return
+
+
+
+
+
+
+}
+
+async function checkGasBalance(address) {
+    console.warn('checkGasBalance()')
+    let token = await getPreferredToken()
+    let selectedProvider = await selectRandomProvider(token.rpcs)
+    let provider
+    try {
+        provider = await new ethers.JsonRpcProvider(selectedProvider);
+        console.log("🤓Provider initialized successfully:", provider);
+    } catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); }
+    
+    // let balance = await provider.getBalance(address);
+
+    let balance
+	try { balance = await provider.getBalance(address); } 
+    catch (error) { console.error('Error checking balance:', error.reason); return null; }
+    const gasBalance = ethers.formatEther(balance);
+    console.log(`GAS Balance: ${gasBalance} `);
+    return gasBalance
+
+    // let nativeBalance = ethers.formatEther(balance);
+    // let gasName = token.tokenName;
+}
+
+
+// async function checkGasBalance(walletAddress) {
+// 			console.log('checkGasBalance() of ', walletAddress)
+
+// 			// Retrieve selector index  from localStorage
+// 			let preferredIndex = localStorage.getItem('preferredTokenIndex');
+// 			if (preferredIndex === null) {
+// 				preferredIndex = 0;
+// 			} else {
+// 				preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
+// 			}
+
+// 			// Retrieve the stored data from localStorage
+// 			let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+
+// 			// If the preferred index is within the range of stored tokens, return the corresponding token details
+// 			if (storedData[preferredIndex]) {
+// 				preferredToken = storedData[preferredIndex];
+// 				//  pref= preferredToken
+// 			} else {
+// 				console.log('some problem in checkERC20Balance')
+// 				return
+// 			}
+
+// 			const length = preferredToken.rpcs.length;
+// 			const randomnumber = Math.floor(Math.random() * length);
+// 			const selectedProvider = preferredToken.rpcs[randomnumber];
+// 			console.log('selectedProvider(at checkGasBalance()):', selectedProvider);
+// 			let provider;
+// 			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
+// 			catch (error) { console.warn('error creating provider', error) }
+// 			console.log('provider to check gas :', provider);
+// 			try {
+// 				const balance = await provider.getBalance(walletAddress);
+// 				console.log(`GAS bal (crudo) : ${balance} GAS`);
+
+// 				const gasBalance = ethers.formatEther(balance);
+// 				console.log(`GAS Balance : ${gasBalance} GAS`);
+// 				// console.log(`GAS Balance of ${optionsList[0].ERC20_TOKEN_ADDRESS}: ${gasBalance} GAS`);
+
+// 				return gasBalance;
+// 			} catch (error) {
+// 				console.error('Error checking balance:', error.reason);
+// 				return null;
+// 			}
+// 		}
 
 
 		async function checkERC20Balance(userAddress) {
@@ -6411,9 +6498,6 @@ initChatClient()
 			let provider;
 			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
 			catch (error) { console.warn('error creating provider', error) }
-			console.log('provider*?:', provider);
-			p = provider
-
 			let contractAddr = preferredToken.contractAddr
 			const tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
 			t = tokenContract;
@@ -6463,26 +6547,6 @@ initChatClient()
 
 
 
-
-		function lock() {
-			console.log('lock()')
-			document.getElementById("loader").style.display = "none";//flex
-			lockscreen.style.display = 'flex'
-			closeModalId('#settingsModal')
-			document.querySelector(".sidebar").classList.remove("isOpen");
-			document.querySelector(".overlay").classList.remove("overlayisOpen");
-			sessionStorage.removeItem('password')
-		}
-
-
-		/*********************************************************************************************
-	  .) BALANCES
-	  **********************************************************************************************/
-		async function reloadBalances(){
-    console.warn('reloadBalances()')
-
-
-}
 		/*********************************************************************************************
 	  .) TOKEN
 	  **********************************************************************************************/
@@ -6507,7 +6571,7 @@ initChatClient()
 
                     // return "Alchemy";
                 }  else {
-                console.log("URL does not contain INFURA_API_KEY placeholder.");
+                console.log("OK! URL does not contain INFURA_API_KEY placeholder.");
             }
    
 
@@ -6515,381 +6579,161 @@ initChatClient()
 
         }
 	       
-	  async function loadToken(addr) {
-            console.warn('loadToken()')
-            
-            const storedTokenType = localStorage.getItem('selectedTokenType');
-            userData.innerHTML = '... LOADING ...'
 
 
-		/*********************************************************************************************
-		.)  NATIVE 
-		**********************************************************************************************/
 
-            // ETHEREUM
-            if (storedTokenType === 'native') {
-                console.warn('💛💛 LOADING ETHEREUM 💛💛 ')
+async function loadToken(addr) {
+    console.warn('🏦loadToken()')
 
-                let token = await getPreferredToken()
-                tok = token
-                console.log('TOkEN PREFERIDO:', token)
-                if (token ===null ){
-                    console.log('TOKEN NULL:');
-                    return;
-                    }
+    if (!addr) { // Check if addr is undefined, null, or an empty value
+        console.log('Address not provided');
+        addr = userAddress
+    }
 
-                let tokenname = token.tokenName
-                let chainid = token.chainId
-                let chainname = token.chainName
-        
 
-                let selectedProvider= await selectRandomProvider(token.rpcs)
-
-                // let provider = await new ethers.JsonRpcProvider(selectedProvider);
-                let provider
-try {
-    provider = await new ethers.JsonRpcProvider(selectedProvider);
+    let token = await getPreferredToken()
+    let selectedProvider = await selectRandomProvider(token.rpcs)
+    let provider
+    try { provider = await new ethers.JsonRpcProvider(selectedProvider); } 
+    catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); }
     console.log("🤓Provider initialized successfully:", provider);
-} catch (error) {
-    console.warn("🤬Failed to initialize provider:", error.message || error);
-}
-
-                let balance = await provider.getBalance(addr);
-                let nativeBalance = ethers.formatEther(balance);
-                let gasName = token.tokenName;
-                console.log(`GAS Balance: ${nativeBalance} `);
-
-                let explorerLengh  =token.explorers.length;
-                let randomExplorer = Math.floor(Math.random() * explorerLengh);
-                let explorer = token.explorers[randomExplorer].url;
-                console.log('explorer:', explorer)
-
-                userData.innerHTML = ` 
-                <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${addr}">${nativeBalance} ${tokenname}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> </div> `;                
-
-
-
-            }
-
-		/*********************************************************************************************
-		.)  ERC20 
-		**********************************************************************************************/
-
-            else if (storedTokenType === 'erc20') {
-                console.warn('💚💚 LOADING ERC20 💚💚 ')
+    // let balance = await provider.getBalance(address);
+
+    let balance
+	try { balance = await provider.getBalance(addr); } 
+    catch (error) { console.error('Error checking balance:', error.reason); return null; }
+    const gasBalance = ethers.formatEther(balance);
+    console.log(`💛💛💛 GAS Balance: ${gasBalance} `);
+
+    let chainName = token.chainName
+    let chainId = token.chainId
+    
+    let tokenName = token.tokenName
+    
+    // EXPLORER - LINK
+    let explorerLengh = token.explorers.length;
+    let randomExplorer = Math.floor(Math.random() * explorerLengh);
+    let explorer = token.explorers[randomExplorer].url;
+    console.log('explorer:', explorer)
+
+
+	
+	if(token.contractAddr ==='' || token.contractAddr ==='nativeToken'){
+		console.warn('💛💛💛💛 IS NATIVE ')
+		populateBalances(chainName,chainId, tokenName, explorer,addr, gasBalance) 
+
+	}
+	if( token.contractAddr !='nativeToken'){
+
+		console.warn('💛💛💛💛 IS ERC20 ')
+		let contractAddr = token.contractAddr
+		let tokenContract;
+		try { tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider); } 
+		catch (error) { console.error("Failed to initialize token contract:", error.message || error); }
+		// console.log('tokenContract:', tokenContract);
+		let erc20balance
+		try { erc20balance = await tokenContract.balanceOf(addr); }
+		catch (error) { console.warn("🤬Failed to get ERC20 Balance:", error.message || error); }
+
+// 999
+				const decimals = await tokenContract.decimals();
+				console.log('decimals:', decimals);
+				let formatedBalance = ethers.formatUnits(erc20balance, decimals);
+// 99999
+
+		console.log("ERC20 Balance gotten successfully:", erc20balance);
+		console.log('populateBalances():',chainName,chainId, tokenName, explorer, addr, gasBalance, erc20balance, contractAddr) 
+		populateBalances(chainName,chainId, tokenName, explorer, addr, gasBalance, formatedBalance, contractAddr) 
+		// populateBalances(chainName,chainId, tokenName, explorer, addr, gasBalance, erc20balance, contractAddr) 
+
+	}
+
+
+    }
+	// <span class="bal" > <a class="miniversion" target="_blank" rel="noopener noreferrer" href="${link}">gas: ${gasBal}</a> </span>
+
+
+	// <section id="bigBalanceWalletmodal" class="tokenBalance">
+	// 					<span class="top"> Arbitrum Sepolia(461614):</span>
+	// 					<span class="bal">-999.9999</span>
+	// 					<span class="eth">ETH</span>
+	// 					<span class="bottom">
+	// 						<a class="miniversion" target="_blank" rel="noopener noreferrer" href="">gas: 0.0002</a>
+	// 					</span>
+	// 				</section>
+    function populateBalances(chainName,chainId, tokenName, explorer, address,  gasBal, tokenBal, contractAddr) {
+		console.warn(chainName,chainId, tokenName, explorer, address,  gasBal, tokenBal, contractAddr) 
+
+    // if(!tokenBal){
+		if (tokenBal === undefined) {
+
+        console.log('means its a native token', gasBal,tokenBal)
+
+        let link = explorer + '/address/'+address;
+        const selectElements = document.querySelectorAll('.tokenBalance');
+        selectElements.forEach(balanceDisplayer => {
+			console.log('FILLING BALANCE FOR NATIVE',chainName,chainId, tokenName ,gasBal, link)
+
+            balanceDisplayer.innerHTML =    `
+			<span class="top">${chainName} (${chainId})</span>
+			<span class="bal" > ${gasBal}</span>
+			<span class="eth">${tokenName}</span>
+			`
+        });
+
+    }
+    else{
+        console.log('means its a ERC20 token',tokenBal)
+
+        let linktokenbalance = explorer + '/address/'+contractAddr;
+        let linkgasbalance = explorer + '/address/'+address;
+        let linktoken = explorer + '/token/'+contractAddr;
+       
+        const selectElements = document.querySelectorAll('.tokenBalance');
+        selectElements.forEach(balanceDisplayer => {
+
+			// console.log('FILLING BALANCE for ERC20 ',chainName,chainId,tokenBal, tokenName ,gasBal, link)
+            balanceDisplayer.innerHTML =    `
+			<span class="top">${chainName} (${chainId})</span>
+			<span class="bal" > ${tokenBal} </span>
+			<span class="eth">${tokenName}</span> 
+			<span class="bottom"> gas: ${gasBal} </span>
+			`
+
+			// CON LINKS
+			// `
+			// <span class="top">${chainName} (${chainId})</span>
+			// <span class="bal" >
+            //     <a class="" target="_blank" rel="noopener noreferrer" href="${linktokenbalance}">${tokenBal}</a>
+			// 	</span>
+			// <span class="eth">
+            //     <a class="" target="_blank" rel="noopener noreferrer" href="${linktoken}">${tokenName}</a>
+			// 	</span>
+            // <span class="bottom">
+            //     <a class="" target="_blank" rel="noopener noreferrer" href="${linkgasbalance}">gas: ${gasBal}</a>
+            // </span>
+			// `
 
-                // ..............................
-                // Carga el token
-                // ..............................
-                let token = await getPreferredToken()
-                tok = token
-                console.log('TOkEN PREFERIDO:', token)
-                if (token ===null ){
-                    console.log('TOKEN NULL:');
-                    return;
-                    }
-
-                let tokenname = token.tokenName
-                let chainid = token.chainId
-                let chainname = token.chainName
-                let contractAddr = token.contractAddr
-                
-                
-                // let providerLength = token.rpcs.length;
-                // let randomProvider = Math.floor(Math.random() * providerLength);
-                //  let selectedProvider = token.rpcs[randomProvider];
-                // console.log('selectedProvider:', selectedProvider);
-
-                let selectedProvider= await selectRandomProvider(token.rpcs)
-
-                // let provider = await new ethers.JsonRpcProvider(selectedProvider);
-let provider
-try {
-    provider = await new ethers.JsonRpcProvider(selectedProvider);
-    console.log("🤓Provider initialized successfully:", provider);
-} catch (error) {
-    console.warn("🤬Failed to initialize provider:", error.message || error);
-}
-
-                console.log('provider:', provider); 
-                // let   tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
-
-let tokenContract; 
-try {
-    tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
-    console.log("Token contract initialized successfully:", tokenContract);
-} catch (error) {
-    console.error("Failed to initialize token contract:", error.message || error);
-}
-console.log('tokenContract:', tokenContract);
-
-
-
-
-                // let erc20balance = await tokenContract.balanceOf(addr);
-                
-let erc20balance
-try {
-    erc20balance = await tokenContract.balanceOf(addr);
-    console.log("ERC20 Balance gotten successfully:", erc20balance);
-} catch (error) {
-    console.warn("🤬Failed to get ERC20 Balance:", error.message || error);
-    userData.innerHTML = `${error.message}`
-
-    // retryWithAnotherProvider()
-}
-                
-
-                let erc20Name = token.tokenName;
-                console.log(`ERC-20 Balance: ${erc20balance} `);
-
-                // let balance = await provider.getBalance(addr);
-
-let balance
-try {
-    balance = await provider.getBalance(addr);
-    console.log("Gas/native Balance gotten successfully:", balance);
-} catch (error) {
-    console.warn("🤬Failed to get GAS/native Balance:", error.message || error);
-    userData.innerHTML += `<pre>${error.message}</pre>`
-    // retryWithAnotherProvider()
-}
-
-
-
-                let gasBalance = ethers.formatEther(balance);
-                let gasName = token.tokenName;
-                console.log(`GAS Balance: ${gasBalance} `);
-
-                let explorerLengh  =token.explorers.length;
-                let randomExplorer = Math.floor(Math.random() * explorerLengh);
-                let explorer = token.explorers[randomExplorer].url;
-                console.log('explorer:', explorer)
-
-			userData.innerHTML = ` <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${contractAddr}">Balance: ${erc20balance} ${erc20Name}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <a id="miniversion" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${addr}">gas: ${gasBalance}</a> `;
-                
-
-                
-            }
-
-
-        }
-
-
-
-		// async function loadToken(addr) {
-		// 	// console.warn('loadToken()')
-		// 	console.log('🥳🥳 LOADING /RELOADING TOKEN')
-
-		// 	const storedTokenType = localStorage.getItem('selectedTokenType');
-		// 	data.innerHTML = ''
-
-
-
-		// 	//   // If a token type was previously selected, set it accordingly
-		// 	if (storedTokenType) {
-
-		// 		// #$#$#$#$#$#$#$#$#$#$##$#$#$#$#$#$#$#$#$#$##$#$#$#$#$#$#$#$#$#$#
-		// 		if (storedTokenType === 'inactive') {
-		// 			console.warn('inactive selected (wallet is off)')
-		// 			userData.innerHTML = `IUS NATURALIS`;
-
-		// 		}
-		// 		// else if erc-20 FIX
-		// 		else if (storedTokenType === 'erc20') {
-		// 			// rewrite to evm
-		// 			localStorage.setItem('selectedTokenType', 'evm');  // Optionally store the default
-		// 			console.warn('🥳🥳 BUG FIXED>> RELOAD THE PAGE')
-		// 			fixedToast.fire('🚧 BUG AUTOFIXED ✅', `PLEASE RELOAD THE PAGE <button onclick="location.reload();">🔄</button>`, "error");
-
-		// 		}
-
-		// 		else if (storedTokenType === 'evm') {
-		// 			// console.log('🥳🥳 LOADING EVM')
-		// 			// ..............................
-		// 			// Carga el token
-		// 			// ..............................
-		// 			let preferredToken = await recallStoredToken();
-		// 			p = preferredToken
-		// 			if (preferredToken) {
-		// 				// console.warn('Preferred Token*:', preferredToken);
-		// 				// You can now use preferredToken.tokenName, preferredToken.chainName, etc.
-		// 			} else {
-		// 				console.warn('No preferred token stored or index out of range.');
-		// 				Toast.fire({ title: "No prefered token set!", text: "No preferred token stored or index out of range.", icon: "warning" });
-		// 				// LOAD DEFAULT TOKENS
-
-		// 			}
-
-		// 			if (!addr) {
-		// 				// console.warn('No address provided to loadToken function');
-		// 				addr = document.getElementById('yourAddress').getAttribute('address');
-		// 			}
-
-		// 			// Continue with the rest of your function if addr is provided
-		// 			// console.log(`Loading token for address: ${addr}`);
-
-
-		// 			// SELECT RANDOM PROVIDER
-		// 			let selectedProvider = await getRandomProvider()
-		// 			// console.warn('selectedProvider:', selectedProvider)
-		// 			if (selectedProvider === undefined) {
-		// 				// console.warn('selectedProvider:', selectedProvider)
-		// 				return
-		// 			}
-		// 			// console.warn('selectedProvider', selectedProvider)
-
-		// 			// GET PROVIDER
-		// 			let provider;
-		// 			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
-		// 			catch (error) {
-		// 				console.warn('error creating provider', error)
-		// 				// store current provider  and store it to filter it before selecting a new one
-		// 			}
-		// 			// console.warn('provider', provider)
-
-		// 			// CHECK GAS
-
-
-		// 			console.warn('💎 preferredToken.contractAddr:', preferredToken.contractAddr)
-		// 			if (preferredToken.contractAddr == 'nativeToken') {
-		// 				// -------------------------------------
-		// 				// NATIVE TOKEN				
-		// 				// -------------------------------------
-		// 				console.warn('💎💎💎 LOADING NATIVE TOKEN!')
-		// 				const amountInput = document.getElementById('amount');
-		// 				let stepValue = 0.01; // Minimum step of 0.01 for tokens with decimals
-		// 				stepValue = Math.max(Math.min(stepValue, 1), 0.01);
-		// 				amountInput.setAttribute('step', stepValue.toString());
-		// 				console.warn('🔢  DECIMALS (stepvalue): ', stepValue)
-		// 				let gasBalance
-		// 				const balance = await provider.getBalance(addr);
-		// 				console.log(`NATIVE GAS bal (crudo) : ${balance} GAS`);
-		// 				nativeBalance = Math.round(ethers.formatEther(balance) * 1000000) / 1000000; // Rounds to 6 decimal places
-		// 				console.log(`NATIVE GAS Balance : ${nativeBalance} GAS`);
-		// 				let explorer = preferredToken.explorers[0].url
-		// 				let tokenName = preferredToken.tokenName
-		// 				let userAddress = addr
-		// 				userData.innerHTML = ` 
-		// 				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">${nativeBalance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> </div> `;
-		// 				let chainName = preferredToken.chainName
-		// 				let chainId = preferredToken.chainId
-		// 				adjustBalances(explorer, userAddress, nativeBalance, tokenName, chainName, chainId)
-
-		// 			} else {
-		// 				// -------------------------------------
-		// 				// ERC20 TOKEN				
-		// 				// -------------------------------------
-		// 				let gasBalance
-		// 				try {
-		// 					const balance = await provider.getBalance(addr);
-		// 					gasBalance = Math.round(ethers.formatEther(balance) * 1000000) / 1000000; // Rounds to 6 decimal places
-		// 					console.warn(`GAS Balance : ${gasBalance} GAS`);
-		// 				} catch (error) {
-		// 					console.error('Error checking gas  balance:', error.reason);
-		// 					return null;
-		// 				}
-
-		// 				let contractAddr = preferredToken.contractAddr
-		// 				const tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
-		// 				let balance;
-		// 				try { balance = await tokenContract.balanceOf(addr); }
-		// 				catch (error) {
-		// 					if (error.message.includes('Failed to fetch')) { console.warn('Error getting balance: Network or fetch issue. refetch?'); }
-		// 					else { console.warn('Error getting balance:', error); }
-		// 				}
-		// 				console.warn('erc20Balance:', balance);
-		// 				const decimals = await tokenContract.decimals();
-		// 				const tokenDecimals = Number(decimals);
-		// 				let stepValue;
-		// 				if (tokenDecimals === 0) {
-		// 					stepValue = 1; // Only whole numbers
-		// 				} else {
-		// 					stepValue = 0.01; // Minimum step of 0.01 for tokens with decimals
-		// 				}
-		// 				const amountInput = document.getElementById('amount');
-		// 				stepValue = Math.max(Math.min(stepValue, 1), 0.01);
-		// 				amountInput.setAttribute('step', stepValue.toString());
-		// 				console.warn('decimals:', decimals)
-		// 				let erc20Balance = ethers.formatUnits(balance, decimals);
-		// 				console.warn(`ERC-20 Balance of ${preferredToken.tokenName}: ${erc20Balance} `);
-		// 				let explorer = preferredToken.explorers[0].url
-		// 				let tokenAddress = preferredToken.contractAddr
-		// 				let tokenName = preferredToken.tokenName
-		// 				let userAddress = addr
-		// 				userData.innerHTML = ` <a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress}">ERC20: ${erc20Balance} ${tokenName}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">gas: ${gasBalance} </a> </div> `;
-		// 				let chainName = preferredToken.chainName
-		// 				let chainId = preferredToken.chainId
-
-		// 				// SEND MODAL
-		// 				document.getElementById('bigBalanceWalletsendmodal').innerHTML = ` <span class="top">${chainName} (${chainId})</span> <span class="bal" >${erc20Balance}</span> <span class="eth">${tokenName}</span> <span class="bottom"> <a class="miniversion" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress}">gas: ${gasBalance}</a> </span>`
-
-		// 				// WALLET MODAL
-		// 				document.getElementById('bigBalanceWalletmodal').innerHTML = ` <span class="top">${chainName} (${chainId})</span> <span class="bal" >${erc20Balance}</span> <span class="eth">${tokenName}</span> <span class="bottom"> <a class="miniversion" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress}">gas: ${gasBalance}</a> </span>`
-
-		// 				// ..............................
-		// 				// FIN Carga el token
-		// 				// ..............................
-		// 			}
-
-
-		// 		}
-
-		// 		document.querySelector(`input[name="tokenType"][value="${storedTokenType}"]`).checked = true;
-
-
-		// 	}
-		// 	else {
-		// 		console.warn('No token type selected in localStorage, setting default to INACTIVE');
-		// 		document.querySelector('input[name="tokenType"][value="inactive"]').checked = true;
-		// 		localStorage.setItem('selectedTokenType', 'inactive');  // Optionally store the default
-		// 		erc20Options.style.display = 'none';
-
-		// 	}
-
-
-
-
-
-
-		// }
-
-
-		//  https://sepolia.arbiscan.io 0xFb1cb5a6dADDcE008d86f72057265A3afC82d539 11 PDTROK
-		//  adjustBalances('https://sepolia.arbiscan.io', '0xFb1cb5a6dADDcE008d86f72057265A3afC82d539',  11 , 'PDTROK')
-
-		function adjustBalances(explorer, userAddress, nativeBalance, tokenName, chainName, chainId) {
-			// adjustBalances(explorer,userAddress,nativeBalance,tokenName,chainName,chainId)
-
-			document.getElementById('userData').innerHTML = ` 
-				<a id="" target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">
-					${nativeBalance} ${tokenName}
-					</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
-					</div> `;
-
-
-			// SEND MODAL
-			document.getElementById('bigBalanceWalletsendmodal').innerHTML = `
-					<span class="top">${chainName} (${chainId})</span>
-					<span class="bal" >${nativeBalance}</span>
-					<span class="eth">${tokenName}</span>
-					`
-
-			// WALLET MODAL
-			document.getElementById('bigBalanceWalletmodal').innerHTML = `
-					<span class="top">${chainName} (${chainId})</span>
-					<span class="bal" >${nativeBalance}</span>
-					<span class="eth">${tokenName}</span>
-					`
  
+        });
+    }
+}
 
-		}
+
+	 
 
 		function addToken() {
 			closeModalId('#defaultTokenModal')
 			openModalId('#addNewTokenModal')
 		}
 
+
+
+
+
+		/*********************************************************************************************
+	  .) AUTOCOMPLETE JS -ADD TOKENS
+	  **********************************************************************************************/
 
 		const autoCompleteJS = new autoComplete({
 			data: {
@@ -6999,14 +6843,14 @@ try {
 			console.log('selectedProvider:', selectedProvider);
 
 			document.getElementById("selectionResult").innerHTML = `
-		<strong>Chain:</strong> ${resultado.chain}
-		<br><strong>Name:</strong> ${resultado.name}
-		<br><strong>chainId:</strong> ${resultado.chainId}
-		<br><strong>Short:</strong> ${resultado.shortName}
-		<br><strong>Explorers[${resultado.explorers.length}]:</strong> ${resultado.explorers[0].url}
-		<br><strong>Gas token:</strong> ${resultado.nativeCurrency.name}
-		<br> <strong>RPC [${rpclength}]:</strong> ${httpsRpcAddresses[randomnumber]}
-		<br><strong>Native Currency:</strong> ${resultado.nativeCurrency.symbol}`;
+			<strong>Chain:</strong> ${resultado.chain}
+			<br><strong>Name:</strong> ${resultado.name}
+			<br><strong>chainId:</strong> ${resultado.chainId}
+			<br><strong>Short:</strong> ${resultado.shortName}
+			<br><strong>Explorers[${resultado.explorers.length}]:</strong> ${resultado.explorers[0].url}
+			<br><strong>Gas token:</strong> ${resultado.nativeCurrency.name}
+			<br> <strong>RPC [${rpclength}]:</strong> ${httpsRpcAddresses[randomnumber]}
+			<br><strong>Native Currency:</strong> ${resultado.nativeCurrency.symbol}`;
 
 			autoCompleteJS.input.value = selection;
 			console.warn('selection REDULT: ', selection)
@@ -7182,58 +7026,133 @@ try {
 			storeToken(newToken)
 
 			// repopupulate select
-			populateSelectInput()
-			populateSelectInput('tokenType');//populate selec input inside wallet send
+			populateTokenSelector()
+			// populateSelectInput('tokenType');//populate selec input inside wallet send
 
 
 		}
+
+
+
+
+
+		 // STORE TOKEN 
+		 function storeToken(token) {
+            console.log('storeToken()')
+            storedtoken =token
+            var tkn = [];
+            tkn = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+
+            // Check if the address already exists
+            // var isDuplicate = tkn.some(existingToken => existingToken.contractAddr === token.contractAddr);
+            var isDuplicate = tkn.some(existingToken => 
+    existingToken.contractAddr === token.contractAddr && existingToken.chainId === token.chainId
+);
+            if (!isDuplicate) {
+                console.warn('NEW TOKEN!')
+                tkn.push(token);
+                localStorage.setItem('EVM_TOKENS', JSON.stringify(tkn));
+
+                console.log('TOKEN ADDED! ✅✅✅')
+
+// UI UPDATES
+// if(token.contractAddr ===''){
+    if(token.contractAddr ==='' || token.contractAddr ==='nativeToken'){
+    console.log('ADDED NATIVE TOKEN ')
+    document.getElementById("autoComplete").value = "";
+    document.getElementById("selectionResult").innerHTML=''
+
+
+}
+ 
+    else{
+
+    console.log('ADDED ERC20 TOKEN ')
+
+    document.getElementById("autoComplete").value = "";
+    document.getElementById("contractAddress").value = "";
+    document.getElementById('validLink').innerHTML =''
+    document.getElementById("selectionResult").innerHTML=''
+    // localStorage.removeItem('chainResult');
+    
+    document.querySelector(".valid-feedback").innerHTML = "";
+    document.getElementById("validLink").removeAttribute("symbol");
+    document.getElementById("validLink").removeAttribute("address");
+    document.querySelector(".valid-feedback").style.display = "none";
+}
+// else{
+
+// }
+
+                // clear ui
+
+
+            }
+            else {
+                console.warn('Token already exists , skipping save.');
+                return
+            }
+
+            // REMOVE chainFeedback and clear UI
+            localStorage.removeItem('chainResult');
+            closeModalId('#addNewTokenModal')
+
+            // ssuccss message
+            // Toast.fire({ title: "Token added!", text: "", icon: "success" });
+            Toast.fire({ title: "", text: "Token added!", icon: "success" });
+
+
+        }
+
+
+
 
 
 		// STORE TOKEN 
-		function storeToken(token) {
-			console.log('storeToken()', token)
-			var tkn = [];
-			tkn = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+		// function storeToken(token) {
+		// 	console.log('storeToken()', token)
+		// 	var tkn = [];
+		// 	tkn = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
 
-			// Check if the address already exists
-			//   var isDuplicate = tkn.some(existingToken => existingToken.contractAddr === token.contractAddr);
-			var isDuplicate = tkn.some(existingToken =>
-				existingToken.contractAddr === token.contractAddr &&
-				existingToken.chainId === token.chainId
-			);
+		// 	// Check if the address already exists
+		// 	//   var isDuplicate = tkn.some(existingToken => existingToken.contractAddr === token.contractAddr);
+		// 	var isDuplicate = tkn.some(existingToken =>
+		// 		existingToken.contractAddr === token.contractAddr &&
+		// 		existingToken.chainId === token.chainId
+		// 	);
 
-			if (!isDuplicate) {
-				console.warn('NEW TOKEN!')
-				tkn.push(token);
-				localStorage.setItem('ERC20_TOKENS', JSON.stringify(tkn));
-			}
-			else {
-				console.warn('Token already exists , skipping save.');
-				return
-			}
+		// 	if (!isDuplicate) {
+		// 		console.warn('NEW TOKEN!')
+		// 		tkn.push(token);
+		// 		localStorage.setItem('ERC20_TOKENS', JSON.stringify(tkn));
+		// 	}
+		// 	else {
+		// 		console.warn('Token already exists , skipping save.');
+		// 		return
+		// 	}
 
-			// REMOVE chainFeedback and clear UI
-			localStorage.removeItem('chainResult');
-			console.warn('chainResult removed from localStorage')
+		// 	// REMOVE chainFeedback and clear UI
+		// 	localStorage.removeItem('chainResult');
+		// 	console.warn('chainResult removed from localStorage')
 
-			// set prefered token index to this token
-			const length = document.getElementById('erc20Selector').length;
-			let newindex = length - 1;
-			localStorage.setItem('preferredTokenIndex', newindex);
+		// 	// set prefered token index to this token
+		// 	const length = document.getElementById('erc20Selector').length;
+		// 	let newindex = length - 1;
+		// 	localStorage.setItem('preferredTokenIndex', newindex);
 
-			// CLEAR UI
-			document.getElementById("autoComplete").value = "";
-			document.getElementById("contractAddress").value = "";
-			document.getElementById("selectionResult").innerHTML = "";
-			document.getElementById("validLink").innerHTML = "";
-			document.getElementById("selectionResult").style.display = "none";
-			document.getElementById("contractAddress").classList.remove('is-valid');
+		// 	// CLEAR UI
+		// 	document.getElementById("autoComplete").value = "";
+		// 	document.getElementById("contractAddress").value = "";
+		// 	document.getElementById("selectionResult").innerHTML = "";
+		// 	document.getElementById("validLink").innerHTML = "";
+		// 	document.getElementById("selectionResult").style.display = "none";
+		// 	document.getElementById("contractAddress").classList.remove('is-valid');
 
-			closeModalId('#addNewTokenModal')
+		// 	closeModalId('#addNewTokenModal')
 
-			Toast.fire({ title: "Token added!", text: "A new Token has been added.", icon: "success" });
+		// 	Toast.fire({ title: "Token added!", text: "A new Token has been added.", icon: "success" });
 
-		}
+		// }
 
 		function removeToken(contractAddr) {
 			console.log('removeToken()');
@@ -7259,17 +7178,92 @@ try {
 
 
 		
-		/*********************************************************************************************
-		 .) POPULATE TOKENS
-		 **********************************************************************************************/
-	 // Function to set the preferred token in localStorage
-	 function setPreferredToken(chainId, contractAddr) {
-	   console.warn('🤠 🤠 🤠prefered token CHANGED!')
+	
+		  // ----------------------------------------------------------------------------
+        // POPULATE SELECTOR
+        // ----------------------------------------------------------------------------
+		async  function getPreferredToken() {
+          console.log('getPreferredToken()')
 
-	   const preferredTokenKey = `${chainId}-${contractAddr}`;
-	   localStorage.setItem('PREFERRED_TOKEN', preferredTokenKey);
-   }
 
+// 1- GET TOKENS
+		  let storedTokens = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
+            if (storedTokens.length === 0) {
+                console.log('🤷 There are no tokens (EVM_TOKENS)  in localstorage we  add USDC(arbitrum sepolia) as default ')
+                const defaultToken = {
+                    tokenName: "USDC",
+                    chainName: "Arbitrum Sepolia",
+                    chainId: 421614,
+                    contractAddr: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",  // Example contract address
+                    rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   // Example RPC endpoint
+                    explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
+                };
+                storedTokens.push(defaultToken);
+
+                  const defaultTokenB = {
+                    tokenName: "ETH(arb)",
+                    chainName: "Arbitrum Sepolia",
+                    chainId: 421614,
+                    contractAddr: "nativeToken",  // Example contract address
+                    rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   // Example RPC endpoint
+                    explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
+                };
+                storedTokens.push(defaultTokenB);
+
+
+                localStorage.setItem('EVM_TOKENS', JSON.stringify(storedTokens));
+                populateTokenSelector()
+                
+                // return 
+            } else {
+                console.log('💁‍♂️ YES There are EVM_TOKENS in localstorage', storedTokens)
+
+            }
+
+
+
+// 2- GET PREFERED TOKEN
+            let preferredTokenKey = localStorage.getItem('PREFERRED_TOKEN');
+			if (preferredTokenKey !== null) {
+				console.log('PREFERRED_TOKEN exists in localStorage:', preferredTokenKey);
+				} else {
+				console.log('PREFERRED_TOKEN does not exist in localStorage');
+				
+				// Get first in selector and set that as deffaullt
+                let preferredTokenKey = localStorage.getItem('PREFERRED_TOKEN');
+				let defaultPreferredOption = `${storedTokens[0].chainId}-${storedTokens[0].contractAddr}`;
+				setPreferredToken(defaultPreferredOption)
+				}
+
+            // Split the preferred token key to get chainName and contractAddr
+            const [preferredChainId, preferredContractAddr] = preferredTokenKey.split('-');
+            console.log('preferredChainId:',preferredChainId)
+            console.log('preferredContractAddr:',preferredContractAddr)
+
+            return storedTokens.find(token => 
+                token.chainId === JSON.parse(preferredChainId) && token.contractAddr === preferredContractAddr  );
+        }
+
+    
+                    
+        // Function to set the preferred token in localStorage
+        function setPreferredToken(chainId, contractAddr) {
+            console.warn('🤠 🤠 🤠prefered token CHANGED!')
+
+            const preferredTokenKey = `${chainId}-${contractAddr}`;
+            localStorage.setItem('PREFERRED_TOKEN', preferredTokenKey);
+
+			if (contractAddr === 'nativeToken') {
+                    localStorage.setItem('selectedTokenType', 'native');
+
+                } else {
+                    localStorage.setItem('selectedTokenType', 'erc20');
+                }
+
+        }
+
+
+        
         // Function to populate all selectors with options, marking the preferred token as selected
         function populateTokenSelector() {
                 let storedTokens = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
@@ -7296,113 +7290,43 @@ try {
                     });
                 });
             }
-		function updateAllTokenSelectors(newToken) {
-			console.log('👨‍👩‍👦‍👦👨‍👩‍👦‍👦👨‍👩‍👦‍👦 updateAllTokenSelectors()')
-			const storedTokenType = localStorage.getItem('selectedTokenType');
 
-      // Loop through all selectors and set their value to the new token
-      document.querySelectorAll('.token-selector').forEach(selector => {
-        selector.value = newToken;
-      });
-    }
-
-	
-		// function populateSelectInput(selectId) {
-		// 	console.log('👨‍👩‍👦‍👦 populateSelectInput()')
-
-		// 	return 
-		// 	const storedTokenType = localStorage.getItem('selectedTokenType');
-
-			 
-
-		// 	 if (storedTokenType === 'evm') {
-		// 		console.log('🧩do something if EVM')
-		// 		document.getElementById('tokenType').style.display = 'block'
-		// 		document.getElementById('erc20Options').style.display = 'block';
-		// 		document.getElementById('fixedtokenType').style.display = 'none'
-
-
-		// 		// 1. get storedData (storedTokens/evm_tokens)
-		// 		let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+		
 			
-			
-		// 		// 2. get index of prefered token // quizas AQUI usar el la info del token en vez del indice
-		// 		// Retrieve the preferred selection from localStorage or default to 0
-		// 		let preferredIndex = localStorage.getItem('preferredTokenIndex');
-		// 		preferredIndex = preferredIndex !== null ? parseInt(preferredIndex, 10) : 0;
-
-		// 		// Set default value if no argument is passed
-		// 		selectId = selectId || 'erc20Selector';
-		// 		const selectElement = document.getElementById(selectId);
-
-		// 		// Clear the existing options
-		// 		selectElement.innerHTML = '';
-
-		// 		// Populate the select input with the stored data
-		// 		storedData.forEach((token, index) => {
-		// 			const option = document.createElement('option');
-		// 			option.value = index;
-		// 			option.textContent = `${token.tokenName} ${token.chainName} (${token.chainId})`;
-		// 			if (preferredIndex === index) {
-		// 				option.selected = true; // Set the preferred item as selected
-		// 			}
-		// 			selectElement.appendChild(option);
-
-		// 		});
-		// 	}
-
-		// }
 
 
 
 
+            // Event listener to handle selector change and update the preferred token
+            document.querySelectorAll('.token-selector').forEach(selectElement => {
+                selectElement.addEventListener('change', async(event)  => {
+                    const selectedValue = event.target.value;
+                    console.warn(' 🤖🤖🤖 TOKEN SELECTOR CHANGED!',selectedValue)
+                    s=selectedValue;
+                    const [chainId, contractAddr] = selectedValue.split('-');
+                    console.log('setPreferredToken::',chainId, contractAddr);
+                    setPreferredToken(chainId, contractAddr);
+					
+					// Synchronize all selectors with the new preferred token
+					populateTokenSelector();
+					await loadToken(userAddress)
 
 
+                // console.log('contractAddr:', contractAddr)
+                // if (contractAddr === 'nativeToken') {
+                //     localStorage.setItem('selectedTokenType', 'native');
 
-		// Event listener to store the selected option
-		document.getElementById('erc20Selector').addEventListener('change', async function () {
-			console.warn('erc20MainSelector() changed!')
-			let selectedIndex = this.value;
-			localStorage.setItem('preferredTokenIndex', selectedIndex);
-
-			// borrar contenedor
-			data.innerHTML = ''
-
-			await loadToken()
+                // } else {
+                //     localStorage.setItem('selectedTokenType', 'erc20');
+                // }
 
 
-		});
+                });
+            });
 
+          
 
-
-
-		function recallStoredToken() {
-			// Retrieve the preferred token index from localStorage
-			let preferredIndex = localStorage.getItem('preferredTokenIndex');
-
-			// Set the default index to 0 if no preferred index is stored
-			if (preferredIndex === null) {
-				preferredIndex = 0;
-			} else {
-				preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
-			}
-
-			// Retrieve the stored data from localStorage
-			let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
-
-			// If the preferred index is within the range of stored tokens, return the corresponding token details
-			if (storedData[preferredIndex]) {
-				return storedData[preferredIndex];
-			} else {
-				// Handle the case where the index is out of range
-				return null;
-			}
-		}
-
-
-
-
-
+	 
 
 
 
@@ -7425,15 +7349,13 @@ try {
 			// BOB can comput the private key to the stealth addres
 			// b +hs
 			const hprivkeyBigInt = BigInt(privateKey);  // hs should already be in hex or BigInt format
-			b = hprivkeyBigInt
+			// b = hprivkeyBigInt
 
 			const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
-			hs = hsBigInt
+			// hs = hsBigInt
 
 			computedPrivKey = hprivkeyBigInt + hsBigInt
-
 			console.warn('🛰️ computedPrivKey: ', computedPrivKey)
-
 
 			eth2bigint = ethers.toBigInt(computedPrivKey)
 
@@ -8152,7 +8074,9 @@ try {
 					const conversation = await iusnaturalisxmtp.conversations.newConversation(toAddress)
 					let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
 					await conversation.send(`${message}`, {})
-					await loadToken(addr)// UPDATE BALANCE
+					// await loadToken(addr)// UPDATE BALANCE
+					await loadToken(userAddress)// UPDATE BALANCE
+
 
 
 
@@ -8184,7 +8108,8 @@ try {
 						console.warn('🐭 storedTokenType: ', storedTokenType)
 						if (storedTokenType === 'evm') {
 							// if (storedTokenType === 'erc20') {
-							preferredToken = await recallStoredToken();
+							preferredToken = await getPreferredToken();
+							// preferredToken = await recallStoredToken();
 							tokenName = preferredToken.tokenName;
 							const telength = preferredToken.explorers.length;
 							const terandomnumber = Math.floor(Math.random() * telength);
@@ -8217,7 +8142,7 @@ try {
 
 						let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
 						await conversation.send(`${message}`, {})
-						await loadToken(addr)// UPDATE BALANCE
+						await loadToken(userAddress)// UPDATE BALANCE
 
 
 						// -------------------------------
@@ -8959,8 +8884,8 @@ try {
 				input.addEventListener('change', async function () {
 					console.log('🎏 tokenType CHANGED!')
 					localStorage.setItem('selectedTokenType', input.value);
-					populateSelectInput()
-					populateSelectInput('tokenType');//populate selec input inside wallet send
+					populateTokenSelector()
+					// populateSelectInput('tokenType');//populate selec input inside wallet send
 
 					if (erc20Option.checked) {
 						erc20Options.style.display = 'block';

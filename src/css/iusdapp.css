@@ -186,8 +186,14 @@ a,
 	align-items: center;
 	width: 100%;
 	padding: 0.5em 0.75em 2.5em 1.5em;
-	/* padding: 1.5em 0.75em 2.5em 1.5em; */
 	text-align: left;
+
+
+    display: flex;
+    /* padding: .75em; */
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-top: 2em;
 
 }
 

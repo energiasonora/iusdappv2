@@ -26,6 +26,8 @@
       .bal {
         font-size: 50px;
         color: #09E828;
+
+        font-family: Inconsolata, Monaco, monospace;
       }
       .eth {
         font-size: 20px;
@@ -36,6 +38,8 @@
         display: block;
         margin-bottom: 10px;
         font-size: 16px;
+        font-family: Inconsolata, Monaco, monospace;
+
       }
   }
   /* footer {
@@ -74,8 +78,10 @@
   #bigBalanceWalletmodal{
     width: 100%;
   }
-  #bigBalanceWalletsendmodal span, 
- #bigBalanceWalletmodal span{
+  /* #bigBalanceWalletsendmodal span,  */
+ /* #bigBalanceWalletmodal span */
+ 
+ .tokenValue span{
     color: var(--c2)!important;
  }
 
@@ -140,5 +146,6 @@
 }
 
 
-
-
+.tokenBalance{
+  z-index: 3;
+}
