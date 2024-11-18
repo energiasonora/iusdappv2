@@ -24,7 +24,7 @@
             --c0b: #222;
             --c0: #001F3F;
             --c1: #b79b00;
-            --c2: #136700;
+            --c2: #001f3f;
             --c3: #fff;
             --font: green;
 
@@ -92,8 +92,17 @@
             color: var(--c3);
             border: 1px solid var(--modalborder);
             box-shadow: 0 0 10px var(--modalborder);
-            background-image: radial-gradient(circle, var(--c2) 0%, var(--bckmodal) 100%);
+            background-image: radial-gradient(circle, var(--c2) 0%, var(--bckmodal) 100%)!important;
         }
+
+
+	  /* .swal2-modal{
+			background-color: var(--bckmodal);
+			color: var(--reversable);
+			border: 1px solid var(--modalborder);
+			box-shadow: 0 0 10px var(--modalborder);
+			background-image: radial-gradient(circle, var(--c5) 0%, var(--bckmodal) 100%);
+	  }   */
 
         #swal2-content a {
             color: var(--c3);
@@ -443,6 +452,57 @@
     <script src="js/dictionaryCrowdfunding.js"></script>
 
     <script type="text/javascript">
+
+		/*********************************************************************************************
+		.) sweetalert2
+		// position: "top-right",
+		**********************************************************************************************/
+
+		const ToastTop = Swal.mixin({
+			toast: true,
+			position: "bottom-end",
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener("mouseenter", Swal.stopTimer);
+				toast.addEventListener("mouseleave", Swal.resumeTimer);
+			},
+			iconColor: "white",
+			customClass: {
+				popup: "colored-toast",
+			},
+		});
+  
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            // position: "bottom-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: toast => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast'
+            },
+        });
+
+        const fixedToast = Swal.mixin({
+            toast: true,
+            position: "top",
+            showConfirmButton: true,
+            didOpen: toast => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+            iconColor: 'white',
+            customClass: { popup: 'colored-toast' },
+        });
+
         /*******************************************************************************************
         .) OPTIONSLIST
         *********************************************************************************************/
@@ -473,7 +533,7 @@
                     'chainid': "42161", }],
                 "CHAIN_CONFIG":
                 {
-                    chainId: '42161', // chainId in hexadecimal, decimal equivalent is 80001
+                    chainId: '0xa4b1', // chainId in hexadecimal, decimal equivalent is 42161
                     chainName: 'Arbitrum One',
                     rpcUrls: ['https://arbitrum.io/v3/9219faae2bac4d24b95c2d967b22005a'],
                     nativeCurrency: {
@@ -489,7 +549,7 @@
     //    1-  TESTNET
         {
                 "TOKEN_CHAIN_NAME": 'Arbitrum Sepolia',
-                "TOKEN_NAME": 'Sepolia',
+                "TOKEN_NAME": 'ETH Sepolia',
                 "TOKEN_SYMBOL": 'ETHsep',
                 "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
                 "ORACLEAPI":"https://ethereum-sepolia.publicnode.com",
@@ -509,7 +569,8 @@
                     'chainid': "421614", }],
                 "CHAIN_CONFIG":
                 {
-                    chainId: '421614', // chainId in hexadecimal, decimal equivalent is 80001
+                    chainId: '0x66eee', // 421614 in hexadecimal format
+                    // chainId: '0x66e5a', // 421614 in hexadecimal format
                     chainName: 'Arbitrum Sepolia',
                     rpcUrls: ['https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a'],
                     // rpcUrls: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   
@@ -627,7 +688,9 @@ async function setNetworkPreference(value) {
     const networkValue = value === "mainnet" ? 0 : 1;
     console.log("setNetworkPreference: GLOBALCHAIN", networkValue);
     localStorage.setItem("GLOBALCHAIN", networkValue);
-    await loadContract(networkValue);
+
+    // clearUI();
+    // await loadContract(networkValue);
 
 }
 
@@ -635,9 +698,18 @@ async function setNetworkPreference(value) {
 document.getElementById("networkPreference").addEventListener("change",  function () {
     console.log('networkPreference CHANGED to ',this.value)
     const selectedValue = this.value;
-    setNetworkPreference(selectedValue);
+    const networkValue = this.value === "mainnet" ? 0 : 1;
 
+console.log('CHANGED TO:',networkValue)
+// return
     clearUI();
+     loadContract(networkValue);
+     localStorage.setItem("GLOBALCHAIN", networkValue);
+     GLOBALCHAIN = networkValue
+
+    // await loadContract(this.value);
+    // setNetworkPreference(selectedValue);
+
     // await loadContract();
 });
 
@@ -663,6 +735,7 @@ function loadNetworkPreference() {
 // loadNetworkPreference();
 
 function clearUI(){
+    clearInterval(intervalId); // Stop the interval
     document.getElementById('donations').innerHTML = ''
             document.getElementById('receptor').innerHTML = ''
             document.getElementById('raised').innerHTML ='' 
@@ -673,7 +746,6 @@ function clearUI(){
              document.getElementById('userContribution').innerHTML =''
              document.getElementById('donatehere').innerHTML =''
              document.getElementById('donateherechain').innerHTML =''
-             clearInterval(intervalId); // Stop the interval
                 document.getElementById('days').textContent = 0;
                 document.getElementById('hours').textContent = 0;
                 document.getElementById('minutes').textContent = 0;
@@ -811,12 +883,17 @@ async function loadContract(option){
         async function displayContractInfo(contract) {
             console.log('displayContractInfo 3()')
 
+            let GLOBALCHAIN = localStorage.getItem('GLOBALCHAIN')
             let contractChain = optionsList[GLOBALCHAIN].CONTRACT_CHAINID;
             chain.innerHTML = contractChain;
 
             let donatehere = optionsList[GLOBALCHAIN].CONTRACT;
-            document.getElementById('donatehere').innerHTML = `${optionsList[GLOBALCHAIN].CONTRACT} <svg id='' onclick="event.stopPropagation();copy2clipboard('${optionsList[GLOBALCHAIN].CONTRACT}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> <svg id='' onclick="event.stopPropagation();copy2clipboard('${optionsList[GLOBALCHAIN].CONTRACT}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path fill='currentColor'  d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>`;
-            document.getElementById('donateherechain').innerHTML = `${optionsList[GLOBALCHAIN].CONTRACT_CHAINID} <svg id='' onclick="event.stopPropagation();copy2clipboard('${optionsList[GLOBALCHAIN].CONTRACT_CHAINID}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> <svg id='' onclick="event.stopPropagation();copy2clipboard('${optionsList[GLOBALCHAIN].CONTRACT_CHAINID}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path fill='currentColor'  d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>`;
+            document.getElementById('donatehere').innerHTML = `${optionsList[GLOBALCHAIN].CONTRACT} <svg id='' onclick="event.stopPropagation();copy2clipboard('${optionsList[GLOBALCHAIN].CONTRACT}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> 
+            
+            `;
+
+            document.getElementById('donateherechain').innerHTML = `${optionsList[GLOBALCHAIN].CONTRACT_CHAINID} <svg id='' onclick="event.stopPropagation();copy2clipboard('${optionsList[GLOBALCHAIN].CONTRACT_CHAINID}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> 
+            `;
             
 
             let goal = await contract.goal();
@@ -836,12 +913,25 @@ async function loadContract(option){
             document.getElementById('goal').innerHTML = `${goalInCrypto} ${optionsList[GLOBALCHAIN].TOKEN_SYMBOL} ( ${dictionary[globalLang]["aproximatedly"]}: ${valueInUSD} USD )`
             const convertedRaisedAmount = Number(raisedAmount) / 1000000000000000000;
             document.getElementById('raisedAmount').innerHTML = convertedRaisedAmount.toString() + `${optionsList[GLOBALCHAIN].TOKEN_SYMBOL}`;
-            document.getElementById('contract').innerHTML =`<a target="_blank" rel="noopener noreferrer" href="${optionsList[GLOBALCHAIN].EXPLORER}/address/${contract}">${contract}</a>`;
+            document.getElementById('contract').innerHTML =`<a target="_blank" rel="noopener noreferrer" href="${optionsList[GLOBALCHAIN].EXPLORER}/address/${optionsList[GLOBALCHAIN].CONTRACT}">${optionsList[GLOBALCHAIN].CONTRACT}</a>`;
 
             // Update progress bar
             const progressValue = goal === 0n ? 0n : (raisedAmount * 100n) / goal;
-            myBar.style.width = `${progressValue}%`
+            // myBar.style.width = `${progressValue}%`
+            // Set the width of the progress bar
+            myBar.style.width = `${progressValue}%`;
             myBar.innerHTML = `${Number(progressValue).toFixed(2)}%`;
+
+            // Change background color based on progress value
+            if (progressValue < 2) {
+                myBar.style.backgroundColor = "red"; // Less than 20%
+            } else if (progressValue < 70) {
+                myBar.style.backgroundColor = "yellow"; // Between 20% and 70%
+            } else if (progressValue <= 100) {
+                myBar.style.backgroundColor = "green"; // Between 70% and 100%
+            } else {
+                myBar.style.backgroundColor = "gray"; // Over 100% (if needed)
+            }
 
         }
 
@@ -878,7 +968,7 @@ async function loadContract(option){
             console.log('valueInUSD:', valueInUSD)
 
             // convert wei to ether
-            const etherAmount = ethers.utils.formatUnits(userContribution, "ether");
+            const etherAmount = ethers.formatUnits(userContribution, "ether");
             console.log('etherAmount:', etherAmount)
 
             document.getElementById('userContribution').innerHTML = `${etherAmount} ${optionsList[GLOBALCHAIN].TOKEN_SYMBOL} ( aproximatedly: ${valueInUSD})`
@@ -896,7 +986,7 @@ async function loadContract(option){
                 document.getElementById('yourContrib').style.display = 'block'
 
             } else {
-                alert('Please install MetaMask to use this DApp.');
+                alert('Please install or connect MetaMask or similar first.');
             }
 
         }
@@ -955,20 +1045,19 @@ async function loadContract(option){
 
             // Initialize the ethers.js provider and contract
             // let standaloneProvider = await new ethers.providers.JsonRpcProvider(`${optionsList[GLOBALCHAIN].API}`);
-            const providerMetamask = new ethers.providers.Web3Provider(window.ethereum);
+            // const providerMetamask = new ethers.providers.Web3Provider(window.ethereum);//v5
+            const providerMetamask = new ethers.BrowserProvider(window.ethereum);//v6
+
             console.log('providerMetamask:', providerMetamask)
 
             const signer = providerMetamask.getSigner();
             console.log('signer:', signer)
-            // contract = new ethers.Contract(contractAddress, contractABI, standaloneProvider);
-            // contract = new ethers.Contract(contractAddress, contractABI, signer);
 
             // METAMASK SPECIFIC
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             userAddress = accounts[0];
             localStorage.setItem('preferedWallet', `METAMASK, ${userAddress}`)
             console.log('userAddress:', userAddress)
-            // address.innerHTML = userAddress;
             var shortAddr = userAddress.substring(0, 6) + "..." + userAddress.substring(38, 42);
             document.getElementById('disconnection').innerHTML = `${shortAddr} <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width='14'><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/></svg> `;
 
@@ -976,17 +1065,24 @@ async function loadContract(option){
             // CHANGE BUTTON
             document.getElementById('connection').style.display = "none"; // boton CONNECT
             document.getElementById("disconnection").style.display = "block";
-            // document.getElementById('connection').classList.add('connected')
-            // document.getElementById('connection').classList.remove('disconnected')
 
 
-            let currentChain = await signer.getChainId()
+            // let currentChain = await signer.getChainId()
+            // let getcurrentChain = await providerMetamask.getNetwork();
+            // let currentChain = Number(currentChain.#chainId);
+            let network = await providerMetamask.getNetwork();
+            let currentChain = Number(network.chainId);
+
             chain.innerHTML = currentChain;
+            // chain.innerHTML = Number(currentChain.#chainId);
+
             const desiredChain = optionsList[GLOBALCHAIN].CONTRACT_CHAINID;
 
             console.log('TokenIds currentChain:', currentChain, '... desiredChain:', desiredChain)
             if (desiredChain != currentChain) {
                 console.warn('YOUR METAMASK IS NOT IN THE CORRECT CHAIN, PLEASE CHANGE IT.');
+                console.log('desiredCHain:', desiredChain);
+                console.log('currentChain:', currentChain);
 
                 await fixedToast.fire({
                     icon: 'error',
@@ -1046,7 +1142,8 @@ async function loadContract(option){
             console.log('changeNetwork()')
 
             const binance = { name: 'Binance Smart Chain', chainId: '0x38', nativeCurrency: { name: 'Binance Coin', symbol: 'BNB', decimals: 18 }, rpcUrls: ['https://bsc-dataseed.binance.org/'], blockExplorerUrls: ['https://bscscan.com'] };
-            const sepolia = { name: 'Sepolia test network', chainId: ethers.utils.hexlify(11155111), nativeCurrency: { name: 'Sepolia test network', symbol: 'SepoliaETH', decimals: 18 }, rpcUrls: ['https://ethereum-sepolia.publicnode.com'], blockExplorerUrls: ['https://sepolia.etherscan.io'] };
+            const sepolia = { name: 'Sepolia test network', chainId: ethers.toBeHex(11155111), nativeCurrency: { name: 'Sepolia test network', symbol: 'SepoliaETH', decimals: 18 }, rpcUrls: ['https://ethereum-sepolia.publicnode.com'], blockExplorerUrls: ['https://sepolia.etherscan.io'] };
+
             const matic = {
                 chainId: "0x89",
                 rpcUrls: ['https://polygon-rpc.com/'],
@@ -1080,7 +1177,7 @@ async function loadContract(option){
                 // await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [matic], });
             }
             catch (error) {
-                console.error('Error connecting to Sepolia Network:', error);
+                console.error('Error changing Network:', error);
             }
 
 
@@ -1101,7 +1198,11 @@ async function loadContract(option){
             }
 
             const startTimestamp = Math.floor(Date.now() / 1000);
-            let timeLeftInSecondsFromDeadline = newDeadline - startTimestamp;
+            console.log('newDeadline:',newDeadline)
+            console.log('startTimestamp:',startTimestamp)
+            // let timeLeftInSecondsFromDeadline = newDeadline - startTimestamp;
+            let timeLeftInSecondsFromDeadline = Number(newDeadline) - startTimestamp;
+
             t=timeLeftInSecondsFromDeadline;
             // Update time left display every second
             intervalId = setInterval(() => {
@@ -1210,11 +1311,7 @@ async function loadContract(option){
 
         async function contribute(amount, contributor) {
             console.log('contribute')
-            // Toast.fire("Contribution!", '', "success");
-            // make the transaction in your metamask (or similar) wallet
-            // text: "don't close this window",
-            // <p>don't close this window</p>
-
+ 
             Swal.fire({
                 // icon: "warning",
                 title: "Make the transaction...",
@@ -1243,25 +1340,37 @@ async function loadContract(option){
 
 
             // ----------
+            let accounts
+            if (typeof window.ethereum !== "undefined") {
+                 accounts = await window.ethereum.request({
+                    method: "eth_requestAccounts",
+                });
+                console.log(accounts);
+            } else {
+                console.error("Ethereum object is not available. Install MetaMask or another wallet.");
+            }
 
-            // Get user's Ethereum address
-            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+
+          
+            // -------
             userAddress = accounts[0];
-            // try { provider = new ethers.providers.Web3Provider(window.ethereum) }
-            // catch (error) { console.log('error:', error); return; }
-            providerMetamask = new ethers.providers.Web3Provider(window.ethereum);
+            providerMetamask = new ethers.BrowserProvider(window.ethereum);//v6
 
             const signer = await providerMetamask.getSigner();
-            console.log('signer:', signer)
+            console.log('🧞‍♂️ 🧞‍♂️🧜‍♂️🧜‍♂️signer:', signer)
+
+            let contractAddress = optionsList[GLOBALCHAIN].CONTRACT;
+            let contractABI = ABIs[optionsList[GLOBALCHAIN].CONTRACT_ABI];
 
             contractz = new ethers.Contract(contractAddress, contractABI, signer);
             console.log('contractz:', contractz)
 
 
             // CHECK CHAIN IS CORRECT
-            // const signer = provider.getSigner()
             const desiredChain = `${optionsList[GLOBALCHAIN].CONTRACT_CHAINID}`;
-            let currentChain = await signer.getChainId()
+            // let currentChain = await signer.getChainId()
+            let network = await providerMetamask.getNetwork();
+            let currentChain = Number(network.chainId);
             console.log('TokenIds currentChain:', currentChain, '... desiredChain:', desiredChain)
 
 
@@ -1269,11 +1378,7 @@ async function loadContract(option){
             console.log('desiredChain:', desiredChain, 'currentChain', currentChain)
             if (desiredChain != currentChain) {
                 console.warn('YOUR METAMASK IS NOT IN THE CORRECT CHAIN, PLEASE CHANGE IT.');
-                // headerNotes.innerHTML = ` <div class="w3-panel w3-red"> <h3>Alert!</h3>
-                //     YOUR METAMASK IS NOT IN THE CORRECT CHAIN, PLEASE <button class="w3-button w3-yellow">PLEASE CHANGE IT</button> 
-                // </div> `
-                // headerNotes.innerHTML = ` <div class="w3-panel w3-yellow w3-display-container"> <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span> <h3>Warning!</h3> <p>YOUR METAMASK IS NOT IN THE CORRECT CHAIN,<button class="w3-button w3-yellow">PLEASE CHANGE IT</button>  to ${desiredChain}.</p> </div>`
-
+             
 
                 await fixedToast.fire({
                     icon: 'error',
@@ -1283,17 +1388,7 @@ async function loadContract(option){
                 })
 
 
-
-                // Swal.close();
-
                 return
-                // -------
-                // Switch to Sepolia network
-                // ethereum.request({
-                //     method: 'wallet_addEthereumChain',
-                //     params: [{ "chainId": "0xaa36a7", "chainName": "Sepolia", "rpcUrls": ["https://ethereum-sepolia.publicnode.com"], "nativeCurrency": { "name": "Sep", "symbol": "SEPOLIA", "decimals": 18 }, "blockExplorerUrls": ["https://sepolia.etherscan.io/"] }],
-                // })
-
 
             }
             else { console.log('YES, YOU ARE IN THE CORRECT CHAIN') }
@@ -1301,49 +1396,31 @@ async function loadContract(option){
 
 
             //    GET GAS PRICE AND GAS  ESTIMATION
-            const gasPrice = await providerMetamask.getGasPrice();
-            console.log('gasPrice:', gasPrice)
+            // let gasPrice = await providerMetamask.getGasPrice(); no longer compatible in v6
+            // console.log('gasPrice:', gasPrice)
+            let feeData = await providerMetamask.getFeeData();
+            let gasPrice = feeData.gasPrice; // This gives the gas price
+            console.log(`⛽ Gas Price: ${gasPrice.toString()}`);
+
 
             // ENCODE DATA
-            // let amount = amount
-            const amountToSend = ethers.utils.parseEther(amount); // 1 ETH
+            const amountToSend = ethers.parseEther(amount); // 1 ETH
             console.log('amount to send:', amountToSend)
-            const weiValue = ethers.utils.parseUnits(amount, 'ether');
+            const weiValue = ethers.parseUnits(amount, 'ether');
             console.log('weiValue:', weiValue.toString());
 
             // let contributorPseudonym = 'pepe'
             let contributorPseudonym = contributor.toString();
             console.log('contributor:', contributorPseudonym)
 
-
-            // function contribute(string memory _pseudonym) public payable {
-            // 'abi': 'function depositToCustomAddress(address)',
-            // 'abi': 'function contribute(string)',
-
             try {
                 tx = await contractz.connect(signer).contribute(contributorPseudonym, { value: amountToSend });
-                // tx = await contractz.connect(signer).contribute({ value: amountToSend });
-                //  tx = await contractz.connect(signer).depositToCustomAddress(recipientAddress, { value: weiValue, }); 
-
             }
 
             catch (error) {
+                e=error
                 console.log('error line 888:', error);
-                // fixedToast.fire("Error!", error.reason, "error");
-
-
-                // text: error.data.message,
-                Swal.fire({
-                    icon: "error",
-                    title: "Error!",
-                    text: error.data.message,
-                    // iconColor: 'white',
-                    // customClass: {
-                    //     popup: 'colored-toast'
-                    // },
-                    footer: '<a href="https://iuris.web.app/docs/">What is this error?</a>'
-                });
-
+                fixedToast.fire("", error.shortMessage, "error");
                 return;
 
             }
@@ -1413,39 +1490,7 @@ async function loadContract(option){
             });
         }
 
-        /*********************************************************************************************
-        .) sweetalert2
-        // position: "top-right",
-        **********************************************************************************************/
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top",
-            // position: "bottom-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: toast => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-            iconColor: 'white',
-            customClass: {
-                popup: 'colored-toast'
-            },
-        });
-
-        const fixedToast = Swal.mixin({
-            toast: true,
-            position: "top",
-            showConfirmButton: true,
-            didOpen: toast => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-            iconColor: 'white',
-            customClass: { popup: 'colored-toast' },
-        });
-
+    
         /*********************************************************************************************
               .) ACCORDION
               **********************************************************************************************/
@@ -1568,9 +1613,6 @@ async function loadContract(option){
             // ---------------------------------------------------------------
             // AMOUNT CALCULATOR
             // ---------------------------------------------------------------
-            // oracleContainer.style.display='none'
-            // oracleLoader.style.display='inline-flex'
-
 
             let oracleContract = optionsList[GLOBALCHAIN].NATIVEUSD_ORACLE_CONTRACT[0].oracleContract;//eth-usd on sepolia
             let api = optionsList[GLOBALCHAIN].API
@@ -1579,12 +1621,25 @@ async function loadContract(option){
             let currencyValueInUSD;
 
             const inputStepCrypto = 0.01
-            // const inputStepCrypto = 0.001
             const inputStepFiat = 1
-            let initfiatValue = localStorage.getItem('fiatAmount')
-            let initcryptoValue = localStorage.getItem('cryptoAmount')
-            let initFiatPreference = localStorage.getItem('fiatPreference')
+            // ---
+            let initfiatValue = localStorage.getItem('fiatAmount');
+            if (initfiatValue === null) { console.log("fiatAmount is not in localStorage, doing something else..."); }
+             else { console.log("fiatAmount exists:", initfiatValue); }
+      
+            // ---
 
+            let initcryptoValue = localStorage.getItem('initcryptoValue')
+            if (initcryptoValue === null) { console.log("initcryptoValue is not in localStorage"); }
+             else { 
+                console.log( "initcryptoValue exists in localStorage, calculating value in crypto:", initcryptoValue); 
+                let usdPrice = getOraclePricefromContract()
+                console.log('usdPrice:',usdPrice)
+            }
+
+            let initFiatPreference = localStorage.getItem('fiatPreference')
+            if (initFiatPreference === null) { console.log("fiatPreference is not in localStorage"); }
+            else { console.log("initcryptoVafiatPreferencelue exists:", initFiatPreference); }
 
 
             Swal.fire({
@@ -1603,7 +1658,7 @@ async function loadContract(option){
                 <input type="number" value="${initcryptoValue}" step="${inputStepCrypto}" class="swal2-input" id="cryptoValue">
             </div>
                     `,
-                initfiatValue,
+                // initfiatValue,
                 didOpen: async () => {
 
                     let currencyValueInUSDRAW2;
@@ -1613,62 +1668,41 @@ async function loadContract(option){
                         currencyValueInUSDRAW2 = result;
                         // Now you can do something with currencyValueInUSDRAW here
                         console.log('LOADED', currencyValueInUSDRAW2);
-
-                        // oracleContainer.style.display = 'none'
-                        // oracleLoader.style.display = 'inline-flex'
                         oracleContainer.style.display = 'block'
                         oracleLoader.style.display = 'none'
 
                         currencyValueInUSD = Number(currencyValueInUSDRAW2).toFixed(2)
                         console.log('currencyValueInUSD:', currencyValueInUSD)
+
+                        // Convert to BigInt by scaling up to avoid decimals
+                        let scaledCurrencyValue = Math.round(currencyValueInUSD * 100); // Convert to integer (e.g., 304932)
+                        let C = BigInt(scaledCurrencyValue);
+                        console.log("Scaled Currency Value:", scaledCurrencyValue);
+                        console.log("BigInt Value of C:", C);
                         // let currencyValueInUSD = Number(currencyValueInUSDRAW2).toFixed(2)
 
                         if (initfiatValue) {
                             console.log('initfiatValue:', initfiatValue)
                             console.log('initfiatValue TRUE ')
-                            // let A = initfiatValue;
-                            // let B = 1
-                            // let C = currencyValueInUSD
-                            // // let result = (A * B) / C;
-                            // let result = (BigInt(A) * BigInt(B)) / BigInt(C);
 
                             let A = BigInt(initfiatValue); // Convert A to BigInt
                             let B = BigInt(1); // Convert B to BigInt (though 1 is already a number, it’s good practice to be explicit)
-                            let C = BigInt(currencyValueInUSD); // Convert C to BigInt
-
+                            // let C = BigInt(currencyValueInUSD); // Convert C to BigInt
+                            let C = BigInt(scaledCurrencyValue); // Convert C to BigInt
                             let result = (A * B) / C;
-
-                            // let result = (Number(A) * Number(B)) / Number(C);
-
                             cryptoValue.value = result
-
-
                             // priceCalcFiatToCrypto(fiatvalue, quantityInFiat); // Has to do this from MUMBAI
 
                         }
                         else if (initcryptoValue) {
                             console.log('initcryptoValue TRUE', initcryptoValue)
                             console.log('currencyValueInUSD?', currencyValueInUSD)
-
-                            // let A = initcryptoValue
-                            // let B = currencyValueInUSD
-                            // let C = 1
-                            // let result = (A * B) / C
-                            // initfiatValue = result
-                            // initcryptoValue = initcryptoValue
                             
                             // initfiatValue
                             let result = initcryptoValue * currencyValueInUSD;
-                            // let initfiatValue = result.toFixed(2);
-
                             let decimalResult = Number(result) / 100; // Adjust for scale if needed
-                            // console.log(decimalResult.toFixed(2));
                             let initfiatValue = decimalResult.toFixed(2);
-
-
-
                             fiatValue.value = initfiatValue;
-
 
 
                         }
@@ -1702,18 +1736,17 @@ async function loadContract(option){
                                 console.log('cryptoAmount is null');
                                 if (initfiatValue !== null) {
                                     console.log('fiatAmount is not null:', initfiatValue);
+                                    console.log('cryptoValue:', currencyValueInUSD);
+
+                                    const fiatvalue = currencyValueInUSD; // get currency (ETH,MATIC,USD)
+                                    const quantityInFiat = inputFiat.value; //get price
+                                    priceCalcFiatToCrypto(fiatvalue, quantityInFiat)
+                                    // priceCalcFiatToCrypto(fiatvalue, initfiatValue)
+
+
                                 }
                             }
                         }
-
-
-
-
-
-
-
-
-
 
                     });
 
@@ -1736,6 +1769,7 @@ async function loadContract(option){
 
 
                     })
+                    
                     inputCrypto.addEventListener('change', function () {
                         console.log('CRYPTO value changed!', inputCrypto.value)
                         const fiatvalue = currencyValueInUSD; // get currency (ETH,MATIC,USD)
@@ -1794,6 +1828,7 @@ async function loadContract(option){
 
 
     </script>
+	<script src="js/sweetalert2.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 </body>
 

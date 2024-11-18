@@ -149,3 +149,13 @@
 .tokenBalance{
   z-index: 3;
 }
+
+.tokenBalance select{
+
+  background: none;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: Exo, sans-serif;
+
+}

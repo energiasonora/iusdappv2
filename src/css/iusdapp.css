@@ -185,7 +185,8 @@ a,
 	flex-wrap: wrap;
 	align-items: center;
 	width: 100%;
-	padding: 0.5em 0.75em 2.5em 1.5em;
+	padding: 0.5em 0.75em 0 1.5em;
+	/* padding: 0.5em 0.75em 2.5em 1.5em; */
 	text-align: left;
 
 
@@ -726,7 +727,7 @@ z-index: -1;
   }
   #qrtroqcontainer{
 	  height: calc(100vh - 81px);
-	margin-top: 81px;
+	/* margin-top: 81px; */
   }
   
   #chatheader{
@@ -944,7 +945,7 @@ z-index: -1;
    
 	#qrtroqcontainer {
 	max-height: calc(100vh - 81px)!important;
-	margin-top: 81px!important;
+	/* margin-top: 81px!important; */
 	display: flex;
 	justify-content: center;
 	align-items: center;

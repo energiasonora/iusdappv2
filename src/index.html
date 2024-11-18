@@ -182,13 +182,21 @@
 
 
 		
-				 <section id="" class="tokenBalance">
+				 <!-- <section id="" class="tokenBalance">
 					<span class="top"> Arbitrum Sepolia(461614):</span>
 					<span class="bal">-999.9999</span>
 					<span class="eth">ETH</span>
 					<span class="bottom"> 0.00043 ETH</span>
+				</section> -->
+				<section id="" class="tokenBalance">
+					<span class="top"> </span>
+					<span class="bal">
+				</span>
+					<span class="eth">
+				</span>
+					<span class="bottom">Loading balance <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div>
+				</span>
 				</section>
-
 
 
 			<button id="" class="right hamburger hamburger--elastic" type="button" aria-label="Menu"
@@ -616,28 +624,48 @@
 
 					<!-- Radio Buttons -->
 
-					<div class="form-check">
+					<!-- <div class="form-check">
 						<input class="form-check-input" type="radio" name="tokenType" id="inactiveOption"
 							value="inactive">
 						<label class="form-check-label" for="inactiveOption">Inactive</label>
-					</div>
+					</div> -->
 
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="tokenType" id="erc20Option" value="evm">
+						<input class="form-check-input" type="radio" name="tokenType" id="erc20Option" value="evm" checked>
 						<label class="form-check-label" for="erc20Option">EVM( eth, erc20, etc)</label>
 					</div>
 
 					<!-- ERC-20 Options -->
-					<div id="erc20Options" class="mt-3" style="display: none;">
-
+					<!-- <div id="erc20Options" class="mt-3" style="display: none;"> -->
+					<div id="erc20Options" class="mt-3" >
 						<select class="form-select mb-3 token-selector" id="erc20Selector"> </select>
-
 						<button type="button" class="btn btn-primary mt-2" id="" onclick="addToken()">+ Add</button>
 						<button type="button" class="btn btn-danger mt-2" id="removeErc20Address">Remove</button>
 						<button type="button" class="btn btn-info mt-2" id="infoErc20Address">Info</button>
-
 					</div>
 
+
+					<br>
+
+					<div class="form-check">
+                        <input class="form-check-input" type="radio" name="tokenType" id="g1Option" value="g1"
+                            disabled>
+                        <label class="form-check-label" for="g1Option">G1</label>
+                    </div>
+
+
+
+					<div class="form-check">
+                        <input class="form-check-input" type="radio" name="tokenType" id="moneroOption" value="monero"
+                            disabled>
+                        <label class="form-check-label" for="moneroOption">MONERO</label>
+                    </div>
+
+					<div class="form-check">
+                        <input class="form-check-input" type="radio" name="tokenType" id="btcOption" value="btc"
+                            disabled>
+                        <label class="form-check-label" for="btcOption">BTC</label>
+                    </div>
 
 
 					<br>
@@ -649,10 +677,7 @@
 
 
 					<h4>WALLET</h4>
-					<!-- <div class="form-check">
-						<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
-						<label class="form-check-label" for="stealthAddressCheckbox"> 👤 Stealth Address</label>
-					</div> -->
+			 
 
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" id="autoPaygas2meCheckbox"
@@ -961,9 +986,7 @@
 								<!-- <div id="stealthInfo" class=" mb-3 list-group-item list-group-item-warning"> -->
 
 								<div id="stealthSection" class=" mb-3 list-group-item list-group-item-warning">
-									<!-- <input class="form-check-input" type="checkbox" id="walletmodalstealthAddressCheckbox" name="stealthAddress"> -->
-									<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox"
-										name="stealthAddress">
+									<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
 									<label for="sarecipientAddress" class="form-label">🦹‍♂️ Stealth Address 🦹‍♀️ </label>
 										<div id="stealthInfo">
 
@@ -1220,10 +1243,11 @@
 					<hr>
 					<!-- -------------------------- -->
 					<h4>PUBLIC</h4>
+					<p>Public transactions will display here...</p>
 
-					<p class="amount">3.493 <span class="secondary currency-name">ETH</span> <span
+					<!-- <p class="amount">3.493 <span class="secondary currency-name">ETH</span> <span
 							class="tertiary">(arb)</span> </p>
-					<p class="coin-value">0.0432 <span class="secondary  currency-name">BTC</span> </p>
+					<p class="coin-value">0.0432 <span class="secondary  currency-name">BTC</span> </p> -->
 
 					<br>
 					<br>
@@ -1233,56 +1257,23 @@
 
 					<!-- -------------------------- -->
 					<h4>PRIVATE</h4>
+						<p>Private stealth transactions will display here...</p>
 					<!-- <ul> -->
 
 					<!-- <h4 class="tertiary">Total</h4> -->
-					<p class="amount">1.493 <span class="secondary" id="currency-name">ETH</span> 👤 from Claude
-						<button type="button" id="" class="sendto" onclick="event.stopPropagation(); send()" disabled>
-							SEND TO </button>
-						<button type="button" id="" class="claim" onclick="event.stopPropagation(); claim()" disabled>
-							CLAIM </button>
+					<!-- <p class="amount">1.493 <span class="secondary" id="currency-name">ETH</span> 👤 from Claude
+						<button type="button" id="" class="sendto" onclick="event.stopPropagation(); send()" disabled> SEND TO </button>
+						<button type="button" id="" class="claim" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
 					</p>
 					<p class="coin-value">982.40 <span class="secondary currency-name">USD</span> 👤 from Dan
-						<button type="button" id="" class="sendto" onclick="event.stopPropagation(); send()" disabled>
-							SEND TO </button>
-						<button type="button" id="" class="claim" onclick="event.stopPropagation(); claim()" disabled>
-							CLAIM </button>
+						<button type="button" id="" class="sendto" onclick="event.stopPropagation(); send()" disabled> SEND TO </button>
+						<button type="button" id="" class="claim" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
 					</p>
 					<p class="coin-value">0.1038 <span class="secondary  currency-name">BTC
-							<button type="button" id="" class="sendto" onclick="event.stopPropagation(); send()"
-								disabled> SEND TO </button>
-							<button type="button" id="" class="claim" onclick="event.stopPropagation(); claim()"
-								disabled> CLAIM </button>
-
-						</span></p>
-
-					<!-- <div id="">
-								<h4 class="tertiary">Total</h4>
-								<p class="amount">1.493 <span class="secondary currency-name">ETH</span></p>
-								<p class="coin-value">982.40 <span class="secondary currency-name">USD</span></p>
-								<p class="coin-value">0.1038 <span class="secondary currency-name">BTC</span></p>
-							  </div> -->
-					<!-- <li> <label class="form-check-label" for="stealthAddressCheckbox">👤  from Claude: 0.01ETH(arb-sep) </label> 
-						
-					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); send()" disabled> SEND TO </button>
-					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
-						</li>
-						<li> <label class="form-check-label" for="stealthAddressCheckbox">👤  from Dan: 0.0011ETH(arb-sep) </label> 
-							
-					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); send()" disabled> SEND TO </button>
-					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
-						</li>
-						<li> <label class="form-check-label" for="stealthAddressCheckbox">👤  from  Emily: 12 USDC(arb-sep) </label>
-							
-					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); send()" disabled> SEND TO</button>
-					<button type="button" id="" class="btn btn-primary" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
-						 </li> -->
-					<!-- </ul> -->
-
-
-
-
-
+							<button type="button" id="" class="sendto" onclick="event.stopPropagation(); send()" disabled> SEND TO </button>
+							<button type="button" id="" class="claim" onclick="event.stopPropagation(); claim()" disabled> CLAIM </button>
+						</span>
+					</p> -->
 
 					<br>
 					<br>
@@ -3011,30 +3002,100 @@ chatAddress.innerHTML = `<div class="" id="peerAddr" data-address="${toAddr}" >
 	</div>`;
 
 
+	// <svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
+	// 			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
+	// 			</svg>
+	
+	// <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
+	// <path fill="currentColor"
+	// d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/>
+	// </svg>
+	
+	// <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
+	//   <path fill="currentColor"
+	// 	   d="m 500.32774,4.5983885 c 8.47915,5.8766415 12.92861,16.0348375 11.33352,26.1930325 l -53.7293,349.240439 c -1.25928,8.14335 -6.21245,15.27927 -13.43232,19.30897 -7.21988,4.0297 -15.86693,4.53341 -23.50657,1.34323 L 320.58645,358.9599 263.07931,421.16836 c -7.47174,8.14334 -19.22502,10.82981 -29.55112,6.80011 -10.3261,-4.0297 -17.04226,-14.01999 -17.04226,-25.10166 v -70.18389 c 0,-3.35808 1.25928,-6.54826 3.52598,-9.06682 l 140.7036,-153.46431 c 4.86922,-5.28898 4.70132,-13.43232 -0.3358,-18.46945 -5.03712,-5.03712 -13.18047,-5.37293 -18.46945,-0.58766 L 171.15183,302.796 97.022193,265.6892 C 88.123278,261.23974 82.41454,252.34083 82.162684,242.43449 81.910828,232.52815 87.115854,223.29342 95.67896,218.34025 L 471.78405,3.4230601 c 8.98287,-5.1210737 20.06453,-4.6173616 28.54369,1.1753284 z"
+	// 	   style="stroke-width:0.83952" />
+	// 	<path fill="currentColor"
+	// 	   d="m 96.141605,280 v 10.5 c 6.399995,1.2 12.599995,2.7 18.199995,4.2 12.8,3.4 20.4,16.6 17,29.4 -3.4,12.8 -16.6,20.4 -29.4,17 -10.899995,-2.9 -21.099995,-4.9 -30.199995,-5 -7.3,-0.1 -14.7,1.7 -19.4,4.4 -2.1,1.3 -3.1,2.4 -3.5,3 -0.3,0.5 -0.7,1.2 -0.7,2.8 v 0.6 c 0.2,0.2 0.9,1.2 3.3,2.6 5.8,3.5 14.4,6.2 27.4,10.1 l 0.9,0.3 v 0 c 11.1,3.3 25.899995,7.8 37.899995,15.3 13.7,8.6 26.1,22.9 26.4,44.9 0.3,22.5 -11.4,38.9 -26.7,48.5 -6.7,4.1 -13.9,7 -21.299995,8.8 V 488 c 0,13.3 -10.7,24 -24,24 -13.3,0 -24,-10.7 -24,-24 v -11.4 c -9.5,-2.3 -18.2,-5.3 -25.6,-7.8 -2.1,-0.7 -4.1,-1.4 -6,-2 C 3.8416048,462.6 -2.9583952,449 1.2416048,436.4 c 4.2,-12.6 17.8000002,-19.4 30.4000002,-15.2 2.6,0.9 5,1.7 7.3,2.5 13.6,4.6 23.4,7.9 33.9,8.3 8,0.3 15.1,-1.6 19.2,-4.1 1.9,-1.2 2.8,-2.2 3.2,-2.9 0.4,-0.6 0.9,-1.8 0.8,-4.1 v -0.2 c 0,-1 0,-2.1 -4,-4.6 -5.7,-3.6 -14.3,-6.4 -27.1,-10.3 l -1.9,-0.6 c -10.8,-3.2 -25,-7.5 -36.4,-14.4 -13.5,-8.1 -26.50000018,-22 -26.60000018,-44.1 -0.1,-22.9 12.90000018,-38.6 27.70000018,-47.4 6.4,-3.8 13.3,-6.4 20.2,-8.2 l 0.2,-11.1 c 0,-13.3 10.7,-24 24,-24 13.3,0 24,10.7 24,24 z"
+	// 	   />
+	// </svg>
 actionButtons.innerHTML = `
 <button type="button" id="peerSend" class="btn btn-approve item" style="display: none;"
 onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" >
-	
-<svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
-			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
-			</svg>
+	 
 
-<svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
-<path fill="currentColor"
-d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/>
+<svg xmlns="http://www.w3.org/2000/svg" height="26" width="30" viewBox="0 0 512 512">
+  <defs
+     >
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       >
+      <rect
+         width="106.35429"
+         height="78.068573"
+         x="9.0514288"
+         y="187.25142" />
+    </clipPath>
+  </defs>
+  <g
+     transform="matrix(1.0583559,0,0,1.0583559,678.18141,477.32181)">
+    <path
+    fill="currentColor"
+       d="M 122.34961 22.404297 C 102.90845 22.541942 83.4884 23.208407 64.123047 25.130859 C 32.005914 32.74301 13.633824 64.1977 0.21875 91.888672 C 0.59031759 190.50417 -1.4164071 289.14446 1.4707031 387.73828 C -3.2139611 442.01413 47.311879 490.4789 100.67578 488.32227 C 204.56767 490.26899 308.49622 489.76604 412.37695 487.41016 C 455.00842 491.66379 499.19766 461.88412 507.98047 419.36328 C 511.41267 368.1022 508.76569 316.55734 508.78125 265.18555 C 507.78692 215.81739 510.67596 166.53718 511.68359 117.21094 C 515.55612 76.22511 486.62687 34.631163 445.61328 27.0625 C 370.4731 21.75639 294.91505 23.445051 219.58984 22.759766 C 187.21286 23.414564 154.75154 22.174889 122.34961 22.404297 z M 201.33008 50.462891 C 212.79999 49.869523 223.82167 54.325756 218.06445 67.503906 C 209.21938 71.892696 199.05142 70.553919 189.57227 69.984375 C 171.09491 60.335654 186.58305 51.225791 201.33008 50.462891 z M 378.60742 50.566406 C 390.32146 49.91717 401.56028 54.29308 395.27734 67.503906 C 386.45439 71.191451 376.63239 70.842293 367.3125 69.888672 C 347.70261 60.542435 363.54651 51.401138 378.60742 50.566406 z M 322.3125 50.871094 C 331.96784 50.788552 340.38367 54.86352 337.62695 66.570312 C 330.16888 73.751755 318.8153 69.887874 309.69727 69.847656 C 286.68559 62.694044 306.22027 51.008663 322.3125 50.871094 z M 264.42578 50.941406 C 274.04887 51.473285 281.70092 56.245902 276.58398 68.197266 C 268.02568 71.247765 258.77202 70.661056 249.875 70.027344 C 226.87374 60.949739 248.38729 50.054941 264.42578 50.941406 z M 142.29883 51.388672 C 153.70762 50.793577 164.46957 55.141948 159.0625 68.197266 C 148.96874 70.847251 138.41711 70.813462 128.07422 70.197266 C 111.89302 61.089951 127.63038 52.153794 142.29883 51.388672 z M 77.707031 52.076172 C 92.665231 51.670858 108.69779 64.278245 87.421875 71.65625 C 80.094115 76.927688 59.493487 74.453071 61.580078 62.40625 C 64.330772 55.131697 70.90785 52.260405 77.707031 52.076172 z M 437.95117 52.96875 C 446.58069 53.499952 453.61391 57.964614 448.89453 69.212891 C 443.09003 74.370841 435.13393 71.031306 428.54102 69.896484 C 404.75443 62.12546 423.56864 52.083413 437.95117 52.96875 z M 467.25 80.292969 C 476.05807 81.586828 488.63451 99.731074 478.24023 109.76172 C 466.60642 116.16445 463.30811 98.48209 460.08594 91.316406 C 460.02046 82.597419 463.24633 79.704851 467.25 80.292969 z M 46.603516 86.378906 C 55.239528 88.381655 54.94777 115.64672 45.767578 124.4668 C 27.678762 132.02244 32.290326 103.51577 34.990234 94.416016 C 39.854266 87.850904 43.724845 85.711323 46.603516 86.378906 z M 475.48633 127.70508 C 482.88498 128.68897 484.4465 151.48356 480.40625 160.5957 C 466.82241 175.97111 460.27278 144.01616 466.13281 135.30664 C 469.90454 129.47352 473.02011 127.37711 475.48633 127.70508 z M 40.814453 145.95508 C 49.217435 147.73322 53.436635 176.59025 44.138672 185.625 C 25.792326 195.14735 31.36027 164.06133 31.361328 154.93945 C 34.746186 147.77739 38.013459 145.36236 40.814453 145.95508 z M 40.980469 208.54102 C 52.108736 209.14498 50.554573 235.88456 45.646484 247.69336 C 23.833505 257.07186 35.227386 222.776 31.134766 212.80273 C 35.168308 209.6538 38.412407 208.40164 40.980469 208.54102 z M 39.839844 272.02734 C 47.059432 271.21967 54.10366 277.1786 48.970703 290.89062 C 53.446289 317.27501 29.027322 321.93058 29.65625 293.76172 C 25.225649 280.40896 32.620256 272.83501 39.839844 272.02734 z M 41.21875 334.38086 C 52.218054 336.41594 49.773587 364.74996 44.185547 374.0332 C 22.790671 382.03895 32.805162 348.13594 31.330078 337.73047 C 35.426918 334.84191 38.680449 333.91123 41.21875 334.38086 z M 471.94531 344.46094 C 478.73409 344.06655 486.56003 350.35745 480.28711 360.78516 C 480.87081 383.10497 465.25145 377.82384 465.10938 358.71484 C 462.01336 349.11908 466.66515 344.76768 471.94531 344.46094 z M 470.67188 395.33984 C 478.65718 394.06626 486.55386 416.73373 475.44727 424.66406 C 464.24942 442.94477 451.89416 417.35385 463.35742 406.02734 C 465.33878 398.85039 468.01011 395.76437 470.67188 395.33984 z M 39.148438 396.43164 C 47.847352 396.03896 61.578726 413.3123 53.775391 426.22266 C 43.216724 433.89031 34.462757 418.70246 32.900391 409.98633 C 32.280075 400.43953 35.194385 396.61013 39.148438 396.43164 z M 434.27539 440.71289 C 446.12895 441.04492 455.68569 447.75243 440.74805 457.34375 C 433.99085 464.01104 415.7483 463.43418 412.89062 453.14844 C 414.44671 444.05227 425.05595 440.45464 434.27539 440.71289 z M 81.375 441.21289 C 91.803448 441.12577 102.40272 445.68911 97.503906 458.07031 C 90.667329 462.10042 82.378987 460.01552 75.302734 457.87891 C 54.842676 449.12311 67.966996 441.32491 81.375 441.21289 z M 198.75195 442.04102 C 213.4483 442.93836 227.47155 463.64651 203.53711 462.19922 C 187.4029 470.94821 164.91368 452.25832 188.92773 445.10156 C 191.93254 442.68284 195.36049 441.83394 198.75195 442.04102 z M 141.35742 442.52539 C 154.60522 442.21689 166.14334 462.95414 145.95898 462.19336 C 121.76352 471.47841 104.66936 448.36725 135.66211 444.07031 C 137.537 443.04316 139.46488 442.56946 141.35742 442.52539 z M 263.73242 443.12109 C 277.19347 442.15213 282.34051 468.51692 262.22656 462.17383 L 261.14258 462.19141 C 238.2028 472.70994 231.45057 437.16585 257.50391 445.38477 C 259.71688 443.95564 261.80941 443.25952 263.73242 443.12109 z M 379.1582 443.6582 C 388.70431 443.42939 397.27041 447.13603 395.02344 458.26562 C 386.99499 462.49158 377.5563 462.2952 368.7793 461.44922 C 344.61406 455.35156 363.24802 444.03956 379.1582 443.6582 z M 319.95703 443.70898 C 329.25388 443.54534 337.67159 447.22686 336.33203 457.82812 C 328.18613 464.52763 316.89905 461.83691 307.25195 462.34961 C 286.52546 454.93748 304.46229 443.98172 319.95703 443.70898 z "
+       transform="matrix(0.94486174,0,0,0.94486174,-640.78767,-451.00312)" />
+    <ellipse
+       cx="-202.56619"
+       cy="-210.81996"
+       rx="27.581959"
+       ry="26.432711" />
+    <path
+       d="m -273.24879,-343.55709 c 13.57934,10.94417 4.11256,28.6271 3.41272,42.97431 -10.35834,67.32918 -20.71667,134.65835 -31.07501,201.987523 -3.43922,19.509709 -24.89016,15.261767 -37.40273,7.947861 -17.40404,-7.232275 -34.80807,-14.464554 -52.21211,-21.696824 -14.03121,14.463338 -26.74618,30.398355 -41.64405,43.894173 -18.22479,9.955603 -29.72162,-11.436298 -26.27918,-27.030747 0.34571,-12.376906 -0.72391,-24.885926 0.5957,-37.171936 27.04118,-31.56409 56.15653,-61.55691 84.00114,-92.51238 11.76322,-6.14486 16.85643,-30.97909 -2.7603,-22.80647 -37.13867,32.99389 -74.27734,65.98779 -111.41601,98.98168 -17.34792,-9.11662 -35.49459,-16.87377 -52.30927,-26.89798 -15.32278,-14.96944 2.6642,-30.2801 16.70772,-36.00336 77.25242,-44.14424 154.50483,-88.28848 231.75725,-132.43272 5.69186,-3.32683 13.22323,-3.00646 18.62413,0.76687 z"
+       />
+  </g>
 </svg>
+
+
+
+
 <span>SEND</span>
 </button>
 
 <button type="button" id="peerReceive" class="btn btn-reject item" style="display: none;"
 onclick="event.stopPropagation(); openReceive('${toAddr.toString()}')"  >
-<svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
-			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
-			</svg>
-<svg height="16" width="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-	<path fill="currentColor"
-		d="m 506.43491,498.16358 c -7,10.1 -19.1,15.4 -31.2,13.5 l -416.000001,-64 c -9.7,-1.5 -18.2,-7.4 -23,-16 -4.8,-8.6 -5.4,-18.9 -1.6,-28 l 49.7,-119.6 -74.1,-68.5 c -9.70000029,-8.9 -12.9000003,-22.9 -8.1000003,-35.2 4.8,-12.3 16.7000003,-20.3 29.9000003,-20.3 h 83.600001 c 4,0 7.8,1.5 10.7,4.2 l 182.9,167.6 c 6.3,5.8 16,5.6 22,-0.4 6,-6 6.4,-15.7 0.7,-22 l -180.7,-203.4 44.2,-88.300001 c 5.3,-10.5999996 15.9,-17.39999965 27.7,-17.69999965 11.8,-0.3 22.8,5.90000005 28.7,16.09999965 l 256,448.000001 c 6.1,10.7 5.5,23.9 -1.4,34 z"/>
+
+
+<svg xmlns="http://www.w3.org/2000/svg" height="26" width="30" viewBox="0 0 512 512">
+
+  <defs
+     >
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       >
+      <rect
+         width="106.35429"
+         height="78.068573"
+         x="9.0514288"
+         y="187.25142" />
+    </clipPath>
+  </defs>
+  <g
+     transform="matrix(1.0583559,0,0,1.0583559,678.18141,477.32181)">
+    <path
+    fill="currentColor"
+       transform="matrix(0.94486174,0,0,0.94486174,-640.78767,-451.00312)"
+       d="M 122.34961,22.404297 C 102.90845,22.541942 83.4884,23.208407 64.123047,25.130859 32.005914,32.74301 13.633824,64.1977 0.21875,91.888672 0.59031759,190.50417 -1.4164071,289.14446 1.4707031,387.73828 -3.2139611,442.01413 47.311879,490.4789 100.67578,488.32227 c 103.89189,1.94672 207.82044,1.44377 311.70117,-0.91211 42.63147,4.25363 86.82071,-25.52604 95.60352,-68.04688 3.4322,-51.26108 0.78522,-102.80594 0.80078,-154.17773 -0.99433,-49.36816 1.89471,-98.64837 2.90234,-147.97461 C 515.55612,76.22511 486.62687,34.631163 445.61328,27.0625 370.4731,21.75639 294.91505,23.445051 219.58984,22.759766 c -32.37698,0.654798 -64.8383,-0.584877 -97.24023,-0.355469 z m 78.98047,28.058594 c 11.46991,-0.593368 22.49159,3.862865 16.73437,17.041015 -8.84507,4.38879 -19.01303,3.050013 -28.49218,2.480469 -18.47736,-9.648721 -2.98922,-18.758584 11.75781,-19.521484 z m 177.27734,0.103515 c 11.71404,-0.649236 22.95286,3.726674 16.66992,16.9375 -8.82295,3.687545 -18.64495,3.338387 -27.96484,2.384766 -19.60989,-9.346237 -3.76599,-18.487534 11.29492,-19.322266 z m -56.29492,0.304688 c 9.65534,-0.08254 18.07117,3.992426 15.31445,15.699218 -7.45807,7.181443 -18.81165,3.317562 -27.92968,3.277344 -23.01168,-7.153612 -3.477,-18.838993 12.61523,-18.976562 z m -57.88672,0.07031 c 9.62309,0.531879 17.27514,5.304496 12.1582,17.25586 -8.5583,3.050499 -17.81196,2.46379 -26.70898,1.830078 -23.00126,-9.077605 -1.48771,-19.972403 14.55078,-19.085938 z m -122.12695,0.447266 c 11.40879,-0.595095 22.17074,3.753276 16.76367,16.808594 -10.09376,2.649985 -20.64539,2.616196 -30.98828,2 -16.1812,-9.107315 -0.44384,-18.043472 14.22461,-18.808594 z m -64.591799,0.6875 c 14.9582,-0.405314 30.990759,12.202073 9.714844,19.580078 -7.32776,5.271438 -27.928388,2.796821 -25.841797,-9.25 2.750694,-7.274553 9.327772,-10.145845 16.126953,-10.330078 z M 437.95117,52.96875 c 8.62952,0.531202 15.66274,4.995864 10.94336,16.244141 -5.8045,5.15795 -13.7606,1.818415 -20.35351,0.683593 -23.78659,-7.771024 -4.97238,-17.813071 9.41015,-16.927734 z M 467.25,80.292969 c 8.80807,1.293859 21.38451,19.438105 10.99023,29.468751 -11.63381,6.40273 -14.93212,-11.27963 -18.15429,-18.445314 -0.0655,-8.718987 3.16039,-11.611555 7.16406,-11.023437 z M 46.603516,86.378906 c 8.636012,2.002749 8.344254,29.267814 -0.835938,38.087894 -18.088816,7.55564 -13.477252,-20.95103 -10.777344,-30.050784 4.864032,-6.565112 8.734611,-8.704693 11.613282,-8.03711 z M 475.48633,127.70508 c 7.39865,0.98389 8.96017,23.77848 4.91992,32.89062 -13.58384,15.37541 -20.13347,-16.57954 -14.27344,-25.28906 3.77173,-5.83312 6.8873,-7.92953 9.35352,-7.60156 z m -434.671877,18.25 c 8.402982,1.77814 12.622182,30.63517 3.324219,39.66992 -18.346346,9.52235 -12.778402,-21.56367 -12.777344,-30.68555 3.384858,-7.16206 6.652131,-9.57709 9.453125,-8.98437 z m 0.166016,62.58594 c 11.128267,0.60396 9.574104,27.34354 4.666015,39.15234 -21.812979,9.3785 -10.419098,-24.91736 -14.511718,-34.89063 4.033542,-3.14893 7.277641,-4.40109 9.845703,-4.26171 z m -1.140625,63.48632 c 7.219588,-0.80767 14.263816,5.15126 9.130859,18.86328 4.475586,26.38439 -19.943381,31.03996 -19.314453,2.8711 -4.430601,-13.35276 2.964006,-20.92671 10.183594,-21.73438 z m 1.378906,62.35352 c 10.999304,2.03508 8.554837,30.3691 2.966797,39.65234 -21.394876,8.00575 -11.380385,-25.89726 -12.855469,-36.30273 4.09684,-2.88856 7.350371,-3.81924 9.888672,-3.34961 z m 430.72656,10.08008 c 6.78878,-0.39439 14.61472,5.89651 8.3418,16.32422 0.5837,22.31981 -15.03566,17.03868 -15.17773,-2.07032 -3.09602,-9.59576 1.55577,-13.94716 6.83593,-14.2539 z m -1.27343,50.8789 c 7.9853,-1.27358 15.88198,21.39389 4.77539,29.32422 -11.19785,18.28071 -23.55311,-7.31021 -12.08985,-18.63672 1.98136,-7.17695 4.65269,-10.26297 7.31446,-10.6875 z m -431.523442,1.0918 c 8.698914,-0.39268 22.430288,16.88066 14.626953,29.79102 -10.558667,7.66765 -19.312634,-7.5202 -20.875,-16.23633 -0.620316,-9.5468 2.293994,-13.3762 6.248047,-13.55469 z m 395.126952,44.28125 c 11.85356,0.33203 21.4103,7.03954 6.47266,16.63086 -6.7572,6.66729 -24.99975,6.09043 -27.85743,-4.19531 1.55609,-9.09617 12.16533,-12.6938 21.38477,-12.43555 z m -352.90039,0.5 c 10.428448,-0.0871 21.02772,4.47622 16.128906,16.85742 -6.836577,4.03011 -15.124919,1.94521 -22.201172,-0.1914 -20.460058,-8.7558 -7.335738,-16.554 6.072266,-16.66602 z m 117.37695,0.82813 c 14.69635,0.89734 28.7196,21.60549 4.78516,20.1582 -16.13421,8.74899 -38.62343,-9.9409 -14.60938,-17.09766 3.00481,-2.41872 6.43276,-3.26762 9.82422,-3.06054 z m -57.39453,0.48437 c 13.2478,-0.3085 24.78592,20.42875 4.60156,19.66797 -24.19546,9.28505 -41.28962,-13.82611 -10.29687,-18.12305 1.87489,-1.02715 3.80277,-1.50085 5.69531,-1.54492 z m 122.375,0.5957 c 13.46105,-0.96896 18.60809,25.39583 -1.50586,19.05274 l -1.08398,0.0176 c -22.93978,10.51853 -29.69201,-25.02556 -3.63867,-16.80664 2.21297,-1.42913 4.3055,-2.12525 6.22851,-2.26368 z m 115.42578,0.53711 c 9.54611,-0.22881 18.11221,3.47783 15.86524,14.60742 -8.02845,4.22596 -17.46714,4.02958 -26.24414,3.1836 -24.16524,-6.09766 -5.53128,-17.40966 10.3789,-17.79102 z m -59.20117,0.0508 c 9.29685,-0.16364 17.71456,3.51788 16.375,14.11914 -8.1459,6.69951 -19.43298,4.00879 -29.08008,4.52149 -20.72649,-7.41213 -2.78966,-18.36789 12.70508,-18.64063 z" />
+    <ellipse
+       cx="-202.56619"
+       cy="-210.81996"
+       rx="27.581959"
+       ry="26.432711" />
+    <path
+       d="m -273.5957,-76.572091 c -12.74642,11.903856 -28.92098,0.0427 -43.02695,-2.669356 -65.20124,-19.73106 -130.40236,-39.462213 -195.60342,-59.193613 -18.83158,-6.15078 -11.60698,-26.7902 -2.60488,-38.14888 9.60987,-16.21296 19.2194,-32.42599 28.82916,-48.63894 -12.34463,-15.92709 -26.33158,-30.75826 -37.59644,-47.40719 -7.29163,-19.4445 15.50515,-27.81638 30.46018,-22.21328 12.20509,2.08401 24.74016,2.78564 36.71823,5.82113 27.44416,31.2144 53.04076,64.26098 79.76943,96.18514 4.42812,12.51097 28.29834,21.04862 22.96785,0.47689 -27.43862,-41.41247 -54.87721,-82.82506 -82.31598,-124.2376 11.46735,-15.89216 21.70134,-32.76651 33.99218,-48.00304 16.97706,-13.06342 29.60375,6.89936 33.2937,21.60852 32.83239,82.69634 65.66488,165.39256 98.49729,248.088889 2.49255,6.103429 1.11559,13.514761 -3.3804,18.33088 z"
+        />
+  </g>
 </svg>
+
+
 <span>RECEIVE</span>
 </button>
 
@@ -6391,10 +6452,6 @@ initChatClient()
 		return
 
 
-
-
-
-
 }
 
 async function checkGasBalance(address) {
@@ -6416,56 +6473,7 @@ async function checkGasBalance(address) {
     console.log(`GAS Balance: ${gasBalance} `);
     return gasBalance
 
-    // let nativeBalance = ethers.formatEther(balance);
-    // let gasName = token.tokenName;
 }
-
-
-// async function checkGasBalance(walletAddress) {
-// 			console.log('checkGasBalance() of ', walletAddress)
-
-// 			// Retrieve selector index  from localStorage
-// 			let preferredIndex = localStorage.getItem('preferredTokenIndex');
-// 			if (preferredIndex === null) {
-// 				preferredIndex = 0;
-// 			} else {
-// 				preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
-// 			}
-
-// 			// Retrieve the stored data from localStorage
-// 			let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
-
-// 			// If the preferred index is within the range of stored tokens, return the corresponding token details
-// 			if (storedData[preferredIndex]) {
-// 				preferredToken = storedData[preferredIndex];
-// 				//  pref= preferredToken
-// 			} else {
-// 				console.log('some problem in checkERC20Balance')
-// 				return
-// 			}
-
-// 			const length = preferredToken.rpcs.length;
-// 			const randomnumber = Math.floor(Math.random() * length);
-// 			const selectedProvider = preferredToken.rpcs[randomnumber];
-// 			console.log('selectedProvider(at checkGasBalance()):', selectedProvider);
-// 			let provider;
-// 			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
-// 			catch (error) { console.warn('error creating provider', error) }
-// 			console.log('provider to check gas :', provider);
-// 			try {
-// 				const balance = await provider.getBalance(walletAddress);
-// 				console.log(`GAS bal (crudo) : ${balance} GAS`);
-
-// 				const gasBalance = ethers.formatEther(balance);
-// 				console.log(`GAS Balance : ${gasBalance} GAS`);
-// 				// console.log(`GAS Balance of ${optionsList[0].ERC20_TOKEN_ADDRESS}: ${gasBalance} GAS`);
-
-// 				return gasBalance;
-// 			} catch (error) {
-// 				console.error('Error checking balance:', error.reason);
-// 				return null;
-// 			}
-// 		}
 
 
 		async function checkERC20Balance(userAddress) {
@@ -6595,9 +6603,13 @@ async function loadToken(addr) {
     let selectedProvider = await selectRandomProvider(token.rpcs)
     let provider
     try { provider = await new ethers.JsonRpcProvider(selectedProvider); } 
-    catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); }
+    catch (error) { 
+		console.warn("🤬Failed to initialize provider:", error.message || error);
+	 Toast.fire('Error', error.message, "error");
+
+	 }
     console.log("🤓Provider initialized successfully:", provider);
-    // let balance = await provider.getBalance(address);
+	Toast.fire('token loaded!','', "success");
 
     let balance
 	try { balance = await provider.getBalance(addr); } 
@@ -6669,6 +6681,10 @@ async function loadToken(addr) {
 
         console.log('means its a native token', gasBal,tokenBal)
 
+		// round balance for ui
+		const rounded = Math.round(gasBal * 100000) / 100000; // Multiply and divide by 10^5
+
+
         let link = explorer + '/address/'+address;
         const selectElements = document.querySelectorAll('.tokenBalance');
         selectElements.forEach(balanceDisplayer => {
@@ -6676,7 +6692,7 @@ async function loadToken(addr) {
 
             balanceDisplayer.innerHTML =    `
 			<span class="top">${chainName} (${chainId})</span>
-			<span class="bal" > ${gasBal}</span>
+			<span class="bal" > ${rounded}</span>
 			<span class="eth">${tokenName}</span>
 			`
         });
@@ -6692,8 +6708,10 @@ async function loadToken(addr) {
         const selectElements = document.querySelectorAll('.tokenBalance');
         selectElements.forEach(balanceDisplayer => {
 
-			// console.log('FILLING BALANCE for ERC20 ',chainName,chainId,tokenBal, tokenName ,gasBal, link)
-            balanceDisplayer.innerHTML =    `
+
+// continuar esta idea de ponerlo encima de tokenBalances/
+			// <select class="tokenBalanceSelector top token-selector" id=""> </select>
+            balanceDisplayer.innerHTML =`
 			<span class="top">${chainName} (${chainId})</span>
 			<span class="bal" > ${tokenBal} </span>
 			<span class="eth">${tokenName}</span> 
@@ -7249,16 +7267,15 @@ async function loadToken(addr) {
         // Function to set the preferred token in localStorage
         function setPreferredToken(chainId, contractAddr) {
             console.warn('🤠 🤠 🤠prefered token CHANGED!')
-
             const preferredTokenKey = `${chainId}-${contractAddr}`;
             localStorage.setItem('PREFERRED_TOKEN', preferredTokenKey);
 
-			if (contractAddr === 'nativeToken') {
-                    localStorage.setItem('selectedTokenType', 'native');
+			// if (contractAddr === 'nativeToken') {
+            //         localStorage.setItem('selectedTokenType', 'native');
 
-                } else {
-                    localStorage.setItem('selectedTokenType', 'erc20');
-                }
+            //     } else {
+            //         localStorage.setItem('selectedTokenType', 'erc20');
+            //     }
 
         }
 
@@ -7653,13 +7670,17 @@ async function loadToken(addr) {
 			const stealthAddressOn = localStorage.getItem('stealthAddressAlwaysOn');
 			if (stealthAddressOn === 'true') {
 				console.log('stealthAddressAlwaysOn is on')
-				// To check the checkbox
 				checkbox.checked = true;
-				// also run de function to load the stealth
+				localStorage.setItem('stealthAddressActive', true)
+
 				prepareStealthAddr()
+
+				// recipientAddress= document.getElementById('sarecipientAddress').innerHTML 
+
 			} else {
 				console.log('stealthAddressAlwaysOn is off')
 				checkbox.checked = false;
+				localStorage.setItem('stealthAddressActive', false)
 
 			}
 
@@ -7709,15 +7730,20 @@ async function loadToken(addr) {
 		///////////////////////////////////////
 		// 1. SEND
 		///////////////////////////////////////
+		// PRESEND
+		// Declare shared scope variables
+let txGasEstimate;
+let customRecipientAddress
+let preferredToken
+
+// CLICK SEND BUTTOn
 		document.getElementById('sendTransactionBtn').addEventListener('click', async function (event) {
 			console.log('CLICKED sendTransactionBtn')
 
 
 			// clear ui
 			document.getElementById('transactionDetails').innerHTML =''
-
-			// disable CONFIRM button until gas estimation is loaded
-			document.getElementById('confirmTransactionBtn').disabled = true
+			document.getElementById('confirmTransactionBtn').disabled = true;// disable CONFIRM button until gas estimation is loaded
 			document.getElementById('confirmTransactionBtn').innerHTML = `<div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> `
 			const amountInput = document.getElementById('amount');
 			const amount = document.getElementById('amount').value;
@@ -7733,21 +7759,10 @@ async function loadToken(addr) {
 			const storedTokenType = localStorage.getItem('selectedTokenType');
 
 
-
-
-
-
-
-
-
-
-
 			// is EVM TOKEN (hay que cambiar erc20 a EVM para hacerlo menos confuso)
-			// if (storedTokenType === 'erc20') {
 			if (storedTokenType === 'evm') {
 				console.log(' IS ERC20 / EVM OTKEN')
 			}
-
 
 			// Switch to confirmation tab
 			const tab = new bootstrap.Tab(document.getElementById('confirmation-tab'));
@@ -7755,40 +7770,41 @@ async function loadToken(addr) {
 			let addr = document.getElementById('yourAddress').getAttribute('address');
 			let toAddress = document.getElementById('peerAddr').getAttribute('data-address')
 
-			// ----------------
-			let preferredIndex = localStorage.getItem('preferredTokenIndex');
-			// Set the default index to 0 if no preferred index is stored
-			if (preferredIndex === null) {
-				preferredIndex = 0;
-			} else {
-				preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
-			}
-			// Retrieve the stored data from localStorage
-			let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+		// ................................
+		// GET TOKEN
+		// ................................
+		// ---
+		 preferredToken = await getPreferredToken()
+		// let preferredToken = await getPreferredToken()
 
-			// If the preferred index is within the range of stored tokens, return the corresponding token details
-			if (storedData[preferredIndex]) {
-				preferredToken = storedData[preferredIndex];
-				pref = preferredToken
-			} else {
-				console.log('some problem in checkERC20Balance')
-				return
-			}
+		// ................................
+		// GET PROVIDER
+		// ................................
+    let selectedProvider = await selectRandomProvider(preferredToken.rpcs)
+    let provider
+    try {
+        provider = await new ethers.JsonRpcProvider(selectedProvider);
+        console.log("🤓Provider initialized successfully:", provider);
+    } catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); }
+    
 
-			const length = preferredToken.rpcs.length;
-			const randomnumber = Math.floor(Math.random() * length);
-			const selectedProvider = preferredToken.rpcs[randomnumber];
-			console.log('selectedProvider:', selectedProvider);
-			let provider;
-			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
-			catch (error) { console.warn('error creating provider', error) }
-			console.warn('Provider', provider)
+				// ................................
+				// GET RECIPIENT(stealth or piublic address)
+				// ................................
+				// console.log('CHECKBOZ?:', checkbox)
+				let checkbox = document.getElementById("stealthAddressCheckbox").checked;
+				console.log('🤺 CHECKBOZ 2:', checkbox)
 
-
-
-
-
-
+				// let customRecipientAddress
+				if (checkbox) {
+					console.log("The checkbox is checked!");
+					customRecipientAddress = document.getElementById('sarecipientAddress').innerText
+					console.log('🎶stealthAddress is ON 🦍',customRecipientAddress)
+				} else {
+					console.log("The checkbox is not checked.");
+					customRecipientAddress = document.getElementById('recipientAddress').value
+					console.log('stealthAddress is OFF 🔔',customRecipientAddress)
+				}
 
 
 
@@ -7799,7 +7815,6 @@ async function loadToken(addr) {
 			// ERC20-BALANCE
 			// ................................................................................................
 			const formattedAddress = ethers.getAddress(userAddress);
-
 			let signer = await getSigner()
 			let cws;
 			let amountToSend;
@@ -7807,8 +7822,9 @@ async function loadToken(addr) {
 			let s;
 
 
-
-			// NATIVE TOKEN 1
+// ...............................................................
+// NATIVE TOKEN 
+// ...............................................................
 			if (preferredToken.contractAddr == 'nativeToken') {
 				console.log('NATIVE TOKEN')
 				document.getElementById('transactionDetails').innerHTML = `<br><span id="txbal"> NATIVE TOKEN balance:  <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </span> `;
@@ -7834,25 +7850,21 @@ async function loadToken(addr) {
 
 				const precurrentNonce = await provider.getTransactionCount(signer.address);
 				console.log('CALCULATE NONCE: ', precurrentNonce)
-				// let txGasEstimage
-
 				console.log(' Estimated Gas for NATIVE TOKEN')
 				document.getElementById('txbal').innerHTML = `Native Token balance: ✅${formatedgasBalance}  `;
 				document.getElementById('transactionDetails').innerHTML += `<br><span id="estgas"> 🔮 Estimating gas <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </span> `;
 
 				const pretx = {
-					to: recipientAddress,          // Bob's current address
+					to: customRecipientAddress,          // Bob's current address
 					value: amountToSend,          // Amount of ETH to send (here it's all balance)SEND MAXIMUM MINUS ESTIMATED GAS
 					gasLimit: undefined      // Will be estimated next
 				};
-				console.log('pretx', pretx)
+				console.log('✍️🧠🗣️pretx', pretx)
 
-				//  txGasEstimage = await s.estimateGas(pretx);
-				let txGasEstimate;
-
+				// let txGasEstimate;
 				try {
-					txGasEstimate = await s.estimateGas(pretx);
-					console.log('Estimated gas:', txGasEstimate.toString());
+					txGasEstimage = await s.estimateGas(pretx);
+					console.log('Estimated gas:', txGasEstimage.toString());
 				} catch (error) {
 					console.error('Error estimating gas:', error);
 					document.getElementById('estgas').innerHTML = `<span class="text-danger">⛽📛 Gas estimation error: ${error.shortMessage}</span>`;
@@ -7862,19 +7874,17 @@ async function loadToken(addr) {
 
 				}
 
-				tge = txGasEstimate;
-				if (txGasEstimate) {
-					// You can now use txGasEstimate outside the try...catch block
-					console.log('Gas estimate available:', txGasEstimate.toString());
-					document.getElementById('estgas').innerHTML = `Gas estimated for this tx ⛽: ${ethers.formatEther(txGasEstimate)}`
+				tge = txGasEstimage;
+				if (txGasEstimage) {
+					console.log('Gas estimate available:', txGasEstimage.toString());
+					document.getElementById('estgas').innerHTML = `Gas estimated for this tx ⛽: ${ethers.formatEther(txGasEstimage)}`
 				}
-				// console.log('txGasEstimage' ,txGasEstimage)
-
-
-
-
 
 			}
+
+// ...............................................................
+// ERC20
+// ...............................................................
 			else {
 				console.log('if ERC20 TOKEN')
 
@@ -7926,19 +7936,43 @@ async function loadToken(addr) {
 				console.log(`GAS Balance : ${formatedgasBalance} GAS`);
 				let s = signer.connect(provider);//signer(wallet connected to provider)
 				console.log('connected signer to provider:', provider)
+
 				// ................................
 				// NOW ESTIMATE GAS FEES
 				// ................................
-
 				const precurrentNonce = await provider.getTransactionCount(signer.address);
 				console.log('CALCULATE NONCE: ', precurrentNonce)
 				console.log('Estimated Gas for ERC20 TOKEN')
 				cws = await tokenContract.connect(s);// connect tokenContract to signer(contract with signer)
-				txGasEstimage = await cws.transfer.estimateGas(recipientAddress, amountToSend);
+				
+				// ................................
+				// ESTIMATE GAS
+				// ................................
+				// let txGasEstimage;
+				try {
+					console.log('🤳⚠️⛽🛢️estimateGas:', customRecipientAddress, amountToSend);
+					console.log(typeof amountToSend); // Ensure it logs 'bigint'
+
+					txGasEstimage = await cws.transfer.estimateGas(customRecipientAddress, amountToSend);
+
+					// console.log("Gas estimate:", txGasEstimate);
+				} catch (error) {
+					console.error("Error estimating gas:", error);
+					er = error 
+					if (error.code === 'INSUFFICIENT_FUNDS') {
+						console.error("Insufficient funds for gas estimation.");
+					}
+				}
+
+				console.log("⛽ Gas estimate:", txGasEstimage);
+				// console.log(`Estimated Gas: ${txGasEstimage.toString()}`);
+				tge = txGasEstimage;
+
 				const formatedtxGasEstimage = ethers.formatEther(txGasEstimage);
-				console.log(`Estimated Gas: ${txGasEstimage.toString()}`);
-				document.getElementById('txbal').innerHTML += `<br><br>Gas balance: ⛽${formatedgasBalance}  `;
-				document.getElementById('estgas').innerHTML = `<br>Estimated gas: ⛽${formatedtxGasEstimage} `;
+				console.log(`formatedtxGasEstimage: ${formatedtxGasEstimage}`);
+
+				document.getElementById('txbal').innerHTML += `<br><br>Your Gas balance: ⛽${formatedgasBalance}  `;
+				document.getElementById('estgas').innerHTML = `Estimated gas for this tx: ⛽${formatedtxGasEstimage} `;
 
 				const feeData = await provider.getFeeData();
 				const gasPrice = feeData.gasPrice;
@@ -7989,10 +8023,10 @@ async function loadToken(addr) {
 
 
 
-			//////////////////////////////////////////////////////////////////////////////
-			// 2. CONFIRM
-			// - do the tx
-			//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// 2. CONFIRM
+// - do the tx
+//////////////////////////////////////////////////////////////////////////////
 			document.getElementById('confirmTransactionBtn').addEventListener('click', async function () {
 				console.log('confirmTransactionBtn CLICKED!')
 
@@ -8002,54 +8036,40 @@ async function loadToken(addr) {
 				document.getElementById('resultMessage').innerHTML = `<span id="makingtx"> Making transaction ( do not close this modal) <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </span>`;
 
 				//  ---------------------------
-				// SEND
 				// check nonce 
 				const currentNonce = await provider.getTransactionCount(signer.address);
 				console.log('RECALCULATE NONCE: ', currentNonce)
 
-				// NATIVE TOKEN 2
+			
+// ...............................................................
+// NATIVE TOKEN (coonfirmation)
+// ...............................................................	// NATIVE TOKEN 2
 				if (preferredToken.contractAddr == 'nativeToken') {
 					// send NATIVE TOKEN
 					console.log('🚀 SEND NATIVE TOKEN')
+					console.log('🚀 SEND NATIVE TOKEN', customRecipientAddress,amountToSend,txGasEstimage)
+
 					const pretx = {
-						to: recipientAddress,          // Bob's current address
+						to: customRecipientAddress,          // Bob's current address
 						value: amountToSend,          // Amount of ETH to send (here it's all balance)SEND MAXIMUM MINUS ESTIMATED GAS
-						gasLimit: undefined      // Will be estimated next
+						gasLimit: txGasEstimage      // Will be estimated next
 					};
 					console.log('pretx', pretx)
 
-					let txGasEstimate;
-
 					try {
 						tx = await s.sendTransaction(pretx);
-						// console.log('Estimated gas:', txGasEstimate.toString());
 					} catch (error) {
 						console.error('Error estimating gas:', error);
-						// document.getElementById('estgas').innerHTML = `<span class="text-danger">⛽📛 Gas estimation error: ${error.shortMessage}</span>`;
-						// document.getElementById('confirmTransactionBtn').disabled = true
-						// document.getElementById('confirmTransactionBtn').innerHTML = `Confirm`
 						return
 
 					}
 					// SUCCESS
 					console.log(`Transaction hash: ${tx.hash}`);
-
-					// -------------
-					// GET TOKEN EXPLORER
-					// let preferredToken;
-					// let tokenName;
-					// let tokenExplorer;
-					// console.warn('🐭 storedTokenType: ', storedTokenType)
-					// return
-					// if (storedTokenType === 'erc20') {
-					// preferredToken = await recallStoredToken();
 					tokenName = preferredToken.tokenName;
 					const telength = preferredToken.explorers.length;
 					const terandomnumber = Math.floor(Math.random() * telength);
 					let tokenExplorer = preferredToken.explorers[terandomnumber].url;
 					console.log('selectedTokenExplorer:', tokenExplorer);
-					// }
-
 					console.log('+ info: ', tokenName, tokenExplorer)
 
 					// -------
@@ -8075,41 +8095,63 @@ async function loadToken(addr) {
 					let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
 					await conversation.send(`${message}`, {})
 					// await loadToken(addr)// UPDATE BALANCE
+
+					// ??
 					await loadToken(userAddress)// UPDATE BALANCE
 
-
-
-
-
-
-
-
-
-
-				} else {
-					// send ERC20
+				} 
+// ...............................................................
+// ERC20 (confimation)
+// ...............................................................
+				else {
 					console.log(' 🛫 SEND ERC20')
+					console.log('🛫 SEND ERC20', customRecipientAddress,amountToSend,txGasEstimage)
 
+					let tx;
 					try {
-						const tx = await cws.transfer(recipientAddress, amountToSend, { txGasEstimage });
-						console.log(`Transaction hash: ${tx.hash}`);
+						 tx = await cws.transfer(customRecipientAddress, amountToSend, { txGasEstimage });
+				
+
+					} catch (error) {
+							// Handle insufficient funds error
+							if (error.code === 'INSUFFICIENT_FUNDS') {
+								console.error('Insufficient funds for the transaction.');
+								document.getElementById('resultMessage').innerHTML += `<br><span class ="tx"> Error: Insufficient funds for the transaction. 🚫</span>`;
+								document.getElementById('transactionDetails').innerHTML += `<br><span class ="tx"> Error: Insufficient funds for the transaction. 🚫</span>`;
+							} else {
+								// Handle any other errors
+								console.error(`Transaction failed: ${error.message}`);
+								document.getElementById('resultMessage').innerHTML += `<br><span class ="tx"> Error: ${error.message} 🚫</span>`;
+								document.getElementById('transactionDetails').innerHTML += `<span class ="tx"> Error: ${error.message} 🚫</span>`;
+
+							}
+
+							const tab = new bootstrap.Tab(document.getElementById('confirmation-tab'));
+							tab.show();
+						}
+
+
+					// ----
+					// CONTINUE HERE
+					console.log(`Transaction hash: ${tx.hash}`);
 						document.getElementById('resultMessage').innerHTML = `<span class ="tx">Transaction hash:  ${tx.hash} ✅</span>`;
 						document.getElementById('resultMessage').innerHTML += `<span class ="txdone">waiting for confirmation <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div> </span>`;
 
 						// Wait for the transaction to be mined
-						const receipt = await tx.wait();
+						let receipt = await tx.wait();
 						console.log(`Transaction was mined in block ${receipt.blockNumber}`);
 						document.getElementById('resultMessage').innerHTML = `<span class ="tx">Transaction was mined in block ${receipt.blockNumber} ✅</span>`;
 
 						// -------------
-						let preferredToken;
+						// PREPARE RECEIPT
+						// let preferredToken;
 						let tokenName;
 						let tokenExplorer;
+
 						console.warn('🐭 storedTokenType: ', storedTokenType)
 						if (storedTokenType === 'evm') {
-							// if (storedTokenType === 'erc20') {
+							console.log('EVM 👩‍🦳')
 							preferredToken = await getPreferredToken();
-							// preferredToken = await recallStoredToken();
 							tokenName = preferredToken.tokenName;
 							const telength = preferredToken.explorers.length;
 							const terandomnumber = Math.floor(Math.random() * telength);
@@ -8117,9 +8159,21 @@ async function loadToken(addr) {
 							console.log('selectedTokenExplorer:', tokenExplorer);
 						}
 
-						console.log('+ info: ', tokenName, tokenExplorer)
+						// if (storedTokenType === 'erc20') {
+							console.log('PREFERED TOKEN 👩‍🦳:',preferredToken )
+							// preferredToken = await getPreferredToken();
+							tokenName = preferredToken.tokenName;
+							const telength = preferredToken.explorers.length;
+							const terandomnumber = Math.floor(Math.random() * telength);
+							tokenExplorer = preferredToken.explorers[terandomnumber].url;
+							console.log('selectedTokenExplorer:', tokenExplorer);
+						// }
 
+						console.log('+ info: ', tokenName, tokenExplorer)
+						pref=preferredToken;
 						// -------
+				// let txLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`;
+
 						let txLink = `${tokenExplorer}/tx/${tx.hash}`;
 						console.log(`Transaction link: ${txLink}`);
 						document.getElementById('resultMessage').innerHTML += `✅<br><span class ="tx"> SUCCESS 🎉🎉🎉!!! Here is the tx  <a href="${txLink}" target="_blank">Link</a> ✨✨✨</span>`
@@ -8146,25 +8200,7 @@ async function loadToken(addr) {
 
 
 						// -------------------------------
-
-					} catch (error) {
-						// Handle insufficient funds error
-						if (error.code === 'INSUFFICIENT_FUNDS') {
-							console.error('Insufficient funds for the transaction.');
-							document.getElementById('resultMessage').innerHTML += `<br><span class ="tx"> Error: Insufficient funds for the transaction. 🚫</span>`;
-							document.getElementById('transactionDetails').innerHTML += `<br><span class ="tx"> Error: Insufficient funds for the transaction. 🚫</span>`;
-						} else {
-							// Handle any other errors
-							console.error(`Transaction failed: ${error.message}`);
-							document.getElementById('resultMessage').innerHTML += `<br><span class ="tx"> Error: ${error.message} 🚫</span>`;
-							document.getElementById('transactionDetails').innerHTML += `<span class ="tx"> Error: ${error.message} 🚫</span>`;
-
-						}
-
-						const tab = new bootstrap.Tab(document.getElementById('confirmation-tab'));
-						tab.show();
-
-					}
+					// -----
 
 					return
 
@@ -8858,10 +8894,12 @@ async function loadToken(addr) {
 			document.getElementById('stealthAddressCheckbox').addEventListener('change',async function () {
 
 				console.log('👮‍♂️ stealthAddressCheckbox CHANGED..')
-				let recipientAddress;
+				 recipientAddress;
+				// let recipientAddress;
 
 				if (this.checked) {
 					prepareStealthAddr()
+					localStorage.setItem('stealthAddressActive', true)
 
 				return
 
@@ -8870,7 +8908,8 @@ async function loadToken(addr) {
 				} else {
 					// localStorage.setItem('stealthAddressActive', 'false');
 					console.warn('Stealth Address disabled and stored in localStorage');
-				recipientAddress = document.getElementById('recipientAddress').value;
+					localStorage.setItem('stealthAddressActive', false)
+				// recipientAddress = document.getElementById('recipientAddress').value;
 
 				}
 
@@ -8885,7 +8924,6 @@ async function loadToken(addr) {
 					console.log('🎏 tokenType CHANGED!')
 					localStorage.setItem('selectedTokenType', input.value);
 					populateTokenSelector()
-					// populateSelectInput('tokenType');//populate selec input inside wallet send
 
 					if (erc20Option.checked) {
 						erc20Options.style.display = 'block';
@@ -8977,10 +9015,13 @@ function loadSettingsPreferences(){
 	console.log('loadSettingsPreferences()')
 
 		//   ------------------------------------
+		// .) EVM TOKENS
+		//   ------------------------------------
+
+		//   ------------------------------------
 		// .) 🦹‍♂️↔️🦹‍♀️ Stealth addresses always on
 		//   ------------------------------------
 		const checkbox = document.getElementById("stealthaddrAlwaysOnCheckbox");
-
 		const stealthAddressOn = localStorage.getItem('stealthAddressAlwaysOn');
 			if (stealthAddressOn === 'true') {
 				console.log('stealthAddressAlwaysOn is on')

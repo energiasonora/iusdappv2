@@ -1,846 +1,874 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STEALTH ADDRESSES</title>
-
-    <style>
-        body {
-            /* background-color: rgb(0, 72, 105)!important; */
-            color: green;
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>STEALTH ADDRESSES</title>
+    
+        <style>
+            /* body {
+                color: green;
+            }
+    
+            #result {
+                word-wrap: break-word;
+    
+            }
+            */
+    
+        </style> 
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+        <script src="js/sweetalert2.all.min.js"></script>
+    
+        <style>
+            body {
+                background-color: black;
+                color: green;
+            }
+    
+            input {
+                font-size: x-small;
+            }
+    
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+    
+            .container {
+                width: 100%;
+            }
+    
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+                margin-bottom: 20px;
+            }
+    
+            .col {
+                flex: 1;
+                min-width: 300px;
+                padding: 10px;
+            }
+    
+            .form-group {
+                margin-bottom: 15px;
+            }
+    
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+            }
+    
+            .form-group input {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+    
+            .addresses {
+                width: 350px !important;
+            }
+    
+            button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+    
+            button:hover {
+                background-color: #0056b3;
+            }
+    
+            .half-width {
+                width: 50%;
+            }
+    
+            .addr {
+                font-size: x-small;
+            }
+    
+            #result {
+                font-size: xx-small;
+                word-wrap: break-word;
+    
+            }
+    
+            /* COLORED TOAST */
+            .colored-toast.swal2-icon-success {
+                background-color: #45bb00 !important;
+            }
+    
+            .colored-toast.swal2-icon-error {
+                background-color: #f27474 !important;
+            }
+    
+            .colored-toast.swal2-icon-warning {
+                background-color: #f8bb86 !important;
+            }
+    
+            .colored-toast.swal2-icon-info {
+                background-color: #3fc3ee !important;
+            }
+    
+            .colored-toast.swal2-icon-question {
+                background-color: #87adbd !important;
+            }
+    
+            .colored-toast .swal2-title {
+                color: white;
+            }
+    
+            .colored-toast .swal2-close {
+                color: white;
+            }
+    
+            .colored-toast .swal2-html-container {
+                color: white;
+            }
+    
+            .alert {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem;
+          border: 1px solid var(--primary);
+          background-color: var(--pico-del-color);
+          /* var(--pico-del-color); */
+          border-radius: 0.5rem;
         }
-
-        #result {
-            word-wrap: break-word;
-
+        .alert strong {
+          color: var(--primary);
         }
-    </style>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
-    <script src="js/sweetalert2.all.min.js"></script>
-
-    <style>
-        body {
-            background-color: black;
-            color: green;
+        .alert button {
+          margin-left: 1rem;
         }
-
-        input {
-            font-size: x-small;
+        del{
+            text-decoration: none;
         }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        .container {
-            width: 100%;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .col {
-            flex: 1;
-            min-width: 300px;
-            padding: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        .addresses {
-            width: 350px !important;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .half-width {
-            width: 50%;
-        }
-
-        .addr {
-            font-size: x-small;
-        }
-
-        #result {
-            font-size: xx-small;
-        }
-
-        /* COLORED TOAST */
-        .colored-toast.swal2-icon-success {
-            background-color: #45bb00 !important;
-        }
-
-        .colored-toast.swal2-icon-error {
-            background-color: #f27474 !important;
-        }
-
-        .colored-toast.swal2-icon-warning {
-            background-color: #f8bb86 !important;
-        }
-
-        .colored-toast.swal2-icon-info {
-            background-color: #3fc3ee !important;
-        }
-
-        .colored-toast.swal2-icon-question {
-            background-color: #87adbd !important;
-        }
-
-        .colored-toast .swal2-title {
-            color: white;
-        }
-
-        .colored-toast .swal2-close {
-            color: white;
-        }
-
-        .colored-toast .swal2-html-container {
-            color: white;
-        }
-    </style>
-</head>
-
-<body>
-    <h1>STEALTH ADDRESSES **G**</h1>
-    <!-- <p></p> -->
-    <section >
+        </style>
+    </head>
+    
+    <body>
+        <h1>STEALTH ADDRESS **G**</h1>
+        <!-- <p></p> -->
+        <section>
         <h2>using Stealth Addresses between peers</h2>
 
-        <details>
-            <summary>How it works</summary>
-         
-    <p>1. Fund Alice wallet (ETH Arbitrum sepolia)</p>
-    <p>2. Send to bob's stealth address</p>
-    <p>3. Bob claims the funds to his address</p>
-
-    </details>
-    <details>
-        <summary>The formula</summary>
-<pre>
-    hs * G + B  = (b + hs) * G
-
-</pre>
-
-        <p>Alice sends to bob's stealth address. She computes bob's stealth address with her priv  key (a) and bob's pub key (B).</p>
-
-        <pre>
-            s= a *B
-            hs= hash(s)
-            stPk= hs * G +B
-            stAddr= Addr(stPk)
-        </pre>
+            <details>
+                <summary>How it works</summary>
     
-        <p>Bob claims the  his stealth address fund to his current address.To compute the priv key of the stealth address bob does </p>
-        <pre>
-            b + hs
-        </pre>
-
-        
-      </details>
-
-      </section>
-
-
-
-    <!-- Segunda fila con dos columnas -->
-    <div class="row">
-        <!-- Columna A - ALICE -->
-        <div class="col">
-            <h3>ALICE</h3>
-            <span id="aliceAddress" class="addr"></span>
-            <br>
-            <span id="aliceSharedSecret" class="addr"></span>
-            <span id="aliceBalance" class="balance"></span>
-            <span id="aliceGas" class="balance"></span>
-
-
-            <fieldset role="group">
-                <input type="number" id="aliceAmount" placeholder="Amount to send" step="0.01" min="0" required>
-                <input type="button" id="sendAliceButton" value="Send 2 bob StAddr" />
-            </fieldset>
-
-            <span id="aliceTx" class="balance"></span>
-
-
+                <p>1. Fund Alice wallet (ETH Arbitrum sepolia)</p>
+                <p>2. Send to bob's stealth address</p>
+                <p>3. Bob claims the funds to his address</p>
+    
+            </details>
+            <details>
+                <summary>The formula</summary>
+                <pre>
+        hs * G + B  = (b + hs) * G
+    
+    </pre>
+    
+                <p>Alice sends to bob's stealth address. She computes bob's stealth address with her priv key (a) and bob's
+                    pub key (B).</p>
+    
+                <pre>
+                s= a *B
+                hs= hash(s)
+                stPk= hs * G +B
+                stAddr= Addr(stPk)
+            </pre>
+    
+                <p>Bob claims the his stealth address fund to his current address.To compute the priv key of the stealth
+                    address bob does </p>
+                <pre>
+                b + hs
+            </pre>
+    
+    
+            </details>
+    
+        </section>
+    
+    
+    
+        <!-- Segunda fila con dos columnas -->
+        <div class="row">
+            <!-- Columna A - ALICE -->
+            <div class="col">
+                <h3>ALICE</h3>
+                <span id="aliceAddress" class="addr"></span>
+                <br>
+                <span id="aliceSharedSecret" class="addr"></span>
+                <span id="aliceBalance" class="balance"></span>
+                <span id="aliceGas" class="balance"></span>
+    
+    
+                <fieldset role="group">
+                    <input type="number" id="aliceAmount" placeholder="Amount to send" step="0.01" min="0" required>
+                    <input type="button" id="sendAliceButton" value="Send to bob StAddr" />
+                </fieldset>
+    
+                <span id="aliceTx" class="balance"></span>
+    
+    
+            </div>
+    
+            <!-- Columna B - BOB -->
+            <div class="col">
+                <h3>BOB</h3>
+                <span id="bobAddress" class="addr"></span><br>
+                <span id="bobSharedSecret" class="addr"></span>
+                <span id="bobBalance" class="balance"></span>
+                <span id="bobGas" class="balance"></span>
+    
+                <fieldset role="group">
+                    <input type="number" id="bobAmount" placeholder="Amount to send" step="0.01" min="0" required>
+                    <input type="button" id="senBobButton" value="Send to alice StAddr" />
+                </fieldset>
+    
+                <span id="bobTx" class="balance"></span>
+    
+                <div id="bobNotifications"></div>
+            </div>
+    
+    
+    
+    
         </div>
-
-        <!-- Columna B - BOB -->
-        <div class="col">
-            <h3>BOB</h3>
-            <span id="bobAddress" class="addr"></span><br>
-
-            <span id="bobSharedSecret" class="addr"></span>
-
-            <span id="bobBalance" class="balance"></span>
-            <span id="bobGas" class="balance"></span>
-
-            <fieldset role="group">
-                <input type="number" id="bobAmount" placeholder="Amount to send" step="0.01" min="0" required>
-                <!-- <input type="submit" value="Send to himself" /> -->
-                <input type="button" id="senBobButton" value="Send 2 alice StAddr" />
-
-            </fieldset>
-
-            <span id="bobTx" class="balance"></span>
-
-
+    
+        <!-- ------------ -->
+    
+        <div id="messagesResult"></div>
+        <div class="col" id="result">
+            <h3>RESULT:</h3>
+    
         </div>
-
-
-
-
-    </div>
-
-    <!-- ------------ -->
-
-    <div id="messagesResult"></div>
-    <div class="col" id="result">
-        <h3>RESULT:</h3>
-
-    </div>
-
-    <br><br>
-    <div id="resultAddress"></div>
-    <script src="js/ethers-6.13.2.umd.min.js"></script>
-
-
-    <script type="module">
-
-        import { getPublicKey, utils } from '@noble/secp256k1';
-        window.getPublicKey = getPublicKey;
-        window.utils = utils;
-        import * as secp from '@noble/secp256k1';
-        window.secp = secp;
-
-    </script>
-
-
-    <script>
-
-
-        // --------------------------------------------------------
-        // "API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
-        optionsList = [
-            {
-                "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
-                "TOKEN_CHAINID": '421614',
-                "ERC20_TOKEN_CONTRACT": "0xFb1cb5a6dADDcE008d86f72057265A3afC82d539",
-                "ERC20_TOKEN_NAME": "PDTROK",
-                "ERC20_TOKEN_ABI": 'PermitDeadlineTokenv2',
-                "EXPLORER": 'https://sepolia.arbiscan.io/',
-                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
-                "ABI": ' [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AccessControlBadConfirmation", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" } ], "name": "AccessControlUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" } ], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [ { "internalType": "string", "name": "str", "type": "string" } ], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" } ], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleRevoked", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_MINT_AMOUNT", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "VALIDATOR_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "nonce", "type": "uint256" } ], "name": "getPermitDeadline", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" } ], "name": "getRoleAdmin", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "hasRole", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "lastMintTimestamp", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "nonces", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "callerConfirmation", "type": "address" } ], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ] '
-
-            },
-            {
-                "TOKEN_CHAIN_NAME": 'Sepolia',
-                "TOKEN_CHAINID": '11155111',
-                "ERC20_TOKEN_CONTRACT": "0x247c1382D702A33a15E1d79e884A6e6eAB94CfbC",
-                "ERC20_TOKEN_NAME": "MyTokenwidhDeadline",
-                "ERC20_TOKEN_ABI": 'MyTokenwidhDeadline',
-                "EXPLORER": 'https://sepolia.etherscan.io/',
-                "API": 'https://ethereum-sepolia.publicnode.com',
-                "ABI": ' [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" } ], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [ { "internalType": "string", "name": "str", "type": "string" } ], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "INFINITEallowanceLOCAL", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "nonce", "type": "uint256" } ], "name": "getPermitDeadline", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "nonces", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ] '
-
-            }
-        ]
-
-
-        erc20Abi = [
-            "function totalSupply() view returns (uint256)",
-            "function balanceOf(address account) view returns (uint256)",
-            "function transfer(address recipient, uint256 amount) returns (bool)",
-            "function transferFrom(address sender, address recipient, uint256 amount) returns (bool)",
-            "function approve(address spender, uint256 amount) returns (bool)",
-            "function allowance(address owner, address spender) view returns (uint256)",
-            "function symbol() view returns (string)",
-            "function decimals() view returns (uint8)"  // Added the decimals function
-        ];
-
-
-        const toHexString = (bytes) => {
-            return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
-        };
-
-
-
-
-        async function init() {
-            console.log('init()')
-
-
-            /**********************
-             .) ALICE
-            ************************/
-            // Alice generates her one-time private key
-            let alicewallet = await aliceWallet()
-            const alicePrivateKeyA = alicewallet.privateKey;
-            let alicePrivateKey = ethers.getBytes(alicePrivateKeyA);
-            document.getElementById('aliceAddress').innerHTML = alicewallet.address
-
-            let aliceGasBalance = await checkGasBalance(alicewallet.address)
-            console.log('Alice GAS Balance:', aliceGasBalance)
-            document.getElementById('aliceGas').innerHTML = `<br>Balance: ` + aliceGasBalance
-
-            document.getElementById('aliceAmount').value = 0.01;
-            document.getElementById('bobAmount').value = 0.01;
-
-            // with @noble/secp256k1
-             alicePublicKey = getPublicKey(alicePrivateKey);
-             alicePublicKeyHex = `0x${toHexString(alicePublicKey)}`;
-
-            // console.log('alicePublicKey (with @noble/secp256k1):',alicePublicKey)
-
-            // with ethers
-            let alicePublicKeyB = ethers.getBytes(alicewallet.publicKey);
-            // console.log('alicePublicKey (with ethers ):',alicePublicKeyB)
-
-            /**********************
-             .) BOB
-            ************************/
-            // Bob's public key (can be retrieved or shared)
-            let bobwallet = await bobWallet()
-            const bobPrivKey = bobwallet.privateKey;
-            let bobPrivateKey = ethers.getBytes(bobPrivKey);
-            document.getElementById('bobAddress').innerHTML = bobwallet.address
-
-            let bobGasBalance = await checkGasBalance(bobwallet.address)
-            console.log('Bob GAS Balance:', bobGasBalance)
-            document.getElementById('bobGas').innerHTML = `<br>Balance : ` + bobGasBalance
-
-             bobPublicKey = getPublicKey(bobPrivateKey);
-             bobPublicKeyHex = `0x${toHexString(bobPrivateKey)}`;
-
-
-            /**********************
-             .) calculate stealth address
-             ************************/
-         
-            //////////////////////////
-            // ALICE GENERATES THE STEALTH ADDRESS TO PAY BOB
-            //////////////////////////
-
-            let stealthAddress = await generateStealthAddress(alicePrivateKey, bobPublicKey)
-            result.innerHTML += `<br>👩👻Stealth address (generated by Alice to Bob): ${stealthAddress.stealthAddress}
-            <br>👫sharedSecret: ${stealthAddress.sharedSecret}`
-
-            //////////////////////////
-            // BOB GENERATES THE STEALTH ADDRESS TO PAY ALICE
-            //////////////////////////
-            let bobstealthAddress = await generateStealthAddress(bobPrivateKey, alicePublicKey)
-            result.innerHTML += `<br><br>🧔👻Stealth address (generated by Bob to Alice): ${bobstealthAddress.stealthAddress} <br>👫sharedSecret: ${bobstealthAddress.sharedSecret}`
-
-
-            let bobstWallet = await createStealthWallet(bobwallet.privateKey, alicewallet.publicKey)
-            stw = bobstWallet
-            result.innerHTML += `<br><br>👻🧔💳 BOB'S STEALTH WALLET ==>  ADDRESS 💳🧔👻  (to receive from Alice)  : ${bobstWallet.address}`
-
-
-
-            let alicestWallet = await createStealthWallet(alicewallet.privateKey, bobwallet.publicKey)
-            astw = alicestWallet
-            result.innerHTML += `<br><br>👻👩💳 ALICE'S STEALTH WALLET ==> ADDRESS 💳👩👻  (to receive from Bob)  : ${alicestWallet.address}`
-
-
-            
-            /**********************
-             .) claim?
-             ************************/
-            // Example: Bob checks and claims the transaction
-            const checkResult = await checkStealthTransaction(bobPrivKey, stealthAddress.stealthAddress);
-
-            // Assuming checkResult returns a balance value
-            if (checkResult === 0) {
-                // Action to take if balance is 0
-                console.log("Balance is 0, no funds available.");
-                console.log("⛔⛔⛔💸No funds available or no action was taken.");
-                result.innerHTML +=" <br><br>⛔⛔⛔💸No funds available or no action was taken.";
-                // You can add any other logic here for when the balance is 0
-            } else if (checkResult > 0) {
-                // Action to take if there is a balance
-                console.log(`Balance is ${checkResult}, funds available.`);
-                console.warn("💰💰💰 Funds are ready to be claimed from the stealth address.");
-                result.innerHTML +=`<br><br> <ins>${checkResult}💰💰💰 Funds are ready to be claimed from the stealth address.</ins>`
-                document.getElementById('bobTx').innerHTML +=`<br><button class="button-primary" type="button" onclick="claimBob('${bobPrivKey}', '${stealthAddress.stealthAddress}')">Claim ${checkResult}</button>`;
-                // You can add any other logic here for when there's a positive balance
-            } else {
-                console.log("Unexpected balance value.");
-            }
-
- 
-
-        }
-
-        init()
-
-
-
-
-        // -----------------------------------------
-        // CHECK STEALTH TX
-        // -----------------------------------------
-
-
-
-        async function checkStealthTransaction(bobPrivateKeyHex, stealthAddress) {
-
-            let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
-            const bobWallet = new ethers.Wallet(bobPrivateKeyHex, provider);
-            console.warn('bobWallet.address:', bobWallet.address)
-            const balance = await provider.getBalance(stealthAddress);
-            let formatedBalance = ethers.formatEther(balance)
-            console.log(`⛄ Stealth address (${stealthAddress})balance:`, ethers.formatEther(balance));
-            if (balance > 0) {
-                console.log("Stealth address has received funds!");
-                const tx = {
-                    to: bobWallet.address, // Bob's actual address
-                    value: balance
-                };
-                try {
-                    gasEstimate = await provider.estimateGas(tx);
-                    console.log("Claiming fund gas estimation:", gasEstimate);
-                } catch (error) {
-                    console.error("Error simultating claiming funds:", error);
+    
+        <br><br>
+        <div id="resultAddress"></div>
+        <script src="js/ethers-6.13.2.umd.min.js"></script>
+    
+    
+        <script type="module">
+    
+            import { getPublicKey, utils } from '@noble/secp256k1';
+            window.getPublicKey = getPublicKey;
+            window.utils = utils;
+            import * as secp from '@noble/secp256k1';
+            window.secp = secp;
+    
+        </script>
+    
+    
+        <script>
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'center',
+      iconColor: 'white',
+      customClass: {
+        popup: 'colored-toast',
+      },
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    })
+    
+            // --------------------------------------------------------
+            // "API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+            optionsList = [
+                {
+                    "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
+                    "TOKEN_CHAINID": '421614',
+                    "ERC20_TOKEN_CONTRACT": "0xFb1cb5a6dADDcE008d86f72057265A3afC82d539",
+                    "ERC20_TOKEN_NAME": "PDTROK",
+                    "ERC20_TOKEN_ABI": 'PermitDeadlineTokenv2',
+                    "EXPLORER": 'https://sepolia.arbiscan.io/',
+                    "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+                    "ABI": ' [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AccessControlBadConfirmation", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" } ], "name": "AccessControlUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" } ], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [ { "internalType": "string", "name": "str", "type": "string" } ], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" }, { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" } ], "name": "RoleAdminChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleGranted", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "account", "type": "address" }, { "indexed": true, "internalType": "address", "name": "sender", "type": "address" } ], "name": "RoleRevoked", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DEFAULT_ADMIN_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "MAX_MINT_AMOUNT", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "VALIDATOR_ROLE", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "nonce", "type": "uint256" } ], "name": "getPermitDeadline", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" } ], "name": "getRoleAdmin", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "grantRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "hasRole", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "lastMintTimestamp", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "nonces", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "callerConfirmation", "type": "address" } ], "name": "renounceRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes32", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" } ], "name": "revokeRole", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ] '
+    
+                },
+                {
+                    "TOKEN_CHAIN_NAME": 'Sepolia',
+                    "TOKEN_CHAINID": '11155111',
+                    "ERC20_TOKEN_CONTRACT": "0x247c1382D702A33a15E1d79e884A6e6eAB94CfbC",
+                    "ERC20_TOKEN_NAME": "MyTokenwidhDeadline",
+                    "ERC20_TOKEN_ABI": 'MyTokenwidhDeadline',
+                    "EXPLORER": 'https://sepolia.etherscan.io/',
+                    "API": 'https://ethereum-sepolia.publicnode.com',
+                    "ABI": ' [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "ECDSAInvalidSignature", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "length", "type": "uint256" } ], "name": "ECDSAInvalidSignatureLength", "type": "error" }, { "inputs": [ { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "ECDSAInvalidSignatureS", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "allowance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientAllowance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "balance", "type": "uint256" }, { "internalType": "uint256", "name": "needed", "type": "uint256" } ], "name": "ERC20InsufficientBalance", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC20InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC20InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC20InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "ERC20InvalidSpender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "ERC2612ExpiredSignature", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "signer", "type": "address" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC2612InvalidSigner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" }, { "internalType": "uint256", "name": "currentNonce", "type": "uint256" } ], "name": "InvalidAccountNonce", "type": "error" }, { "inputs": [], "name": "InvalidShortString", "type": "error" }, { "inputs": [ { "internalType": "string", "name": "str", "type": "string" } ], "name": "StringTooLong", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [], "name": "EIP712DomainChanged", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [], "name": "DOMAIN_SEPARATOR", "outputs": [ { "internalType": "bytes32", "name": "", "type": "bytes32" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" } ], "name": "INFINITEallowanceLOCAL", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" } ], "name": "allowance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "approve", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [ { "internalType": "uint8", "name": "", "type": "uint8" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "eip712Domain", "outputs": [ { "internalType": "bytes1", "name": "fields", "type": "bytes1" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "string", "name": "version", "type": "string" }, { "internalType": "uint256", "name": "chainId", "type": "uint256" }, { "internalType": "address", "name": "verifyingContract", "type": "address" }, { "internalType": "bytes32", "name": "salt", "type": "bytes32" }, { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "nonce", "type": "uint256" } ], "name": "getPermitDeadline", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "mint", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "nonces", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint8", "name": "v", "type": "uint8" }, { "internalType": "bytes32", "name": "r", "type": "bytes32" }, { "internalType": "bytes32", "name": "s", "type": "bytes32" } ], "name": "permit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transfer", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "value", "type": "uint256" } ], "name": "transferFrom", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "nonpayable", "type": "function" } ] '
+    
                 }
-                console.warn(`Estimated Gas needed : ${gasEstimate.toString()}`);
-                result.innerHTML += `<br><br><ins>Estimated Gas needed to claim : ${gasEstimate.toString()}</ins>`
-                // return {true,formatedBalance }
-                return formatedBalance
-            } else {
-                console.log("No funds available in the stealth address.");
-                // return {false, 0}
-                return 0
-            }
-
-
-        }
-
-
-
-
-
-
-
-
-        // -----------------------------------------
-        // NEW STEALTH ADDRESS FUNCTIONS
-        // -----------------------------------------
+            ]
     
-
-        async function generateStealthAddress(privateKey, publicKey) {
-            // privkey sender, pubkey recipient
-            console.warn('🏰 generateStealthAddress()',privateKey, publicKey)
-            const privateKeyHex = `0x${toHexString(privateKey)}`;
-            a = privateKeyHex
-            b=publicKey
-            c= privateKey
-            const pubPoint = secp.ProjectivePoint.fromHex(publicKey);
-            ppoint= pubPoint
-            const sharedSecret = pubPoint.multiply(BigInt(privateKeyHex)).toHex();
-            console.log('👫sharedSecret( at generateStealthAddress):', sharedSecret);
-            const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
-
-            // 1.Multiply hs by the curve generator point (G): You can use the secp256k1 generator point (which is a constant) to compute the point hs * G.
-            const G = secp.ProjectivePoint.BASE;  // Generator point G
-            const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
-            const hsPoint = G.multiply(hsBigInt);  // hs * G
-            hsp = hsPoint
-
-            // 2.Add Bob’s public key: You now add Bob’s public key as an elliptic curve point to hs * G. Ensure Bob's public key is in the correct format for the addition.
-            const point = secp.ProjectivePoint.fromHex(publicKey);  // Bob's public key point
-            const stealthPubPoint = hsPoint.add(point);  // hs * G + Bob's public key
-            p1 = point
-            p2 = stealthPubPoint
-
-            // 3.Convert the resulting point to an Ethereum address: Finally, you convert the resulting elliptic curve point to an Ethereum address. This is typically done by compressing the point to its x-coordinate, hashing it, and then converting it to an Ethereum address.
-            const stealthPubKey = stealthPubPoint.toHex();  // Convert to hex
-            const stealthAddress = ethers.computeAddress('0x' + stealthPubKey);  // Convert to Ethereum address
-            console.log('👻Stealth Address:', stealthAddress);
-            return { stealthAddress, sharedSecret }
-        }
-
-        function removeHexPrefix(hexString) {
-            // Check if the hex string starts with '0x' and remove it
-            if (hexString.startsWith('0x')) {
-                return hexString.slice(2);
+    
+            erc20Abi = [
+                "function totalSupply() view returns (uint256)",
+                "function balanceOf(address account) view returns (uint256)",
+                "function transfer(address recipient, uint256 amount) returns (bool)",
+                "function transferFrom(address sender, address recipient, uint256 amount) returns (bool)",
+                "function approve(address spender, uint256 amount) returns (bool)",
+                "function allowance(address owner, address spender) view returns (uint256)",
+                "function symbol() view returns (string)",
+                "function decimals() view returns (uint8)"  // Added the decimals function
+            ];
+    
+    
+            const toHexString = (bytes) => {
+                return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+            };
+    
+    
+    
+    
+            async function init() {
+                console.log('init()')
+    
+    
+                /**********************
+                 .) ALICE
+                ************************/
+                // Alice generates her one-time private key
+                let alicewallet = await aliceWallet()
+                const alicePrivateKeyA = alicewallet.privateKey;
+                let alicePrivateKey = ethers.getBytes(alicePrivateKeyA);
+    
+                let aliceAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${alicewallet.address}" target="_blank">${alicewallet.address}</a>`
+                document.getElementById('aliceAddress').innerHTML = aliceAddresslink
+                // document.getElementById('aliceAddress').innerHTML = alicewallet.address
+    
+                let aliceGasBalance = await checkGasBalance(alicewallet.address)
+                console.log('Alice GAS Balance:', aliceGasBalance)
+                document.getElementById('aliceGas').innerHTML = `<br>Balance: ` + aliceGasBalance
+    
+                document.getElementById('aliceAmount').value = 0.01;
+                document.getElementById('bobAmount').value = 0.01;
+    
+                // with @noble/secp256k1
+                alicePublicKey = getPublicKey(alicePrivateKey);
+                alicePublicKeyHex = `0x${toHexString(alicePublicKey)}`;
+    
+                // console.log('alicePublicKey (with @noble/secp256k1):',alicePublicKey)
+    
+                // with ethers
+                let alicePublicKeyB = ethers.getBytes(alicewallet.publicKey);
+                // console.log('alicePublicKey (with ethers ):',alicePublicKeyB)
+    
+                /**********************
+                 .) BOB
+                ************************/
+                // Bob's public key (can be retrieved or shared)
+                let bobwallet = await bobWallet()
+                const bobPrivKey = bobwallet.privateKey;
+                let bobPrivateKey = ethers.getBytes(bobPrivKey);
+    
+                let bobAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${bobwallet.address}" target="_blank">${bobwallet.address}</a>`
+                document.getElementById('bobAddress').innerHTML = bobAddresslink
+                // document.getElementById('bobAddress').innerHTML = bobwallet.address
+    
+    
+                let bobGasBalance = await checkGasBalance(bobwallet.address)
+                console.log('Bob GAS Balance:', bobGasBalance)
+                document.getElementById('bobGas').innerHTML = `<br>Balance : ` + bobGasBalance
+    
+                bobPublicKey = getPublicKey(bobPrivateKey);
+                bobPublicKeyHex = `0x${toHexString(bobPrivateKey)}`;
+    
+    
+                /**********************
+                 .) calculate stealth address
+                 ************************/
+    
+                //////////////////////////
+                // ALICE GENERATES THE STEALTH ADDRESS TO PAY BOB
+                //////////////////////////
+                
+                let stealthAddress = await generateStealthAddress(alicePrivateKey, bobPublicKey)
+    
+                let boblink = ` <a href="${optionsList[0].EXPLORER}/address/${stealthAddress.stealthAddress}" target="_blank">${stealthAddress.stealthAddress}</a>`
+                result.innerHTML += `<br>👩👻Stealth address (generated by Alice to pay Bob): ${boblink}
+                <br>👫sharedSecret: ${stealthAddress.sharedSecret}`
+    
+                //////////////////////////
+                // BOB GENERATES THE STEALTH ADDRESS TO PAY ALICE
+                //////////////////////////
+                let bobstealthAddress = await generateStealthAddress(bobPrivateKey, alicePublicKey)
+                let alicelink = ` <a href="${optionsList[0].EXPLORER}/address/${bobstealthAddress.stealthAddress}" target="_blank">${bobstealthAddress.stealthAddress}</a>`
+    
+                result.innerHTML += `<br><br>🧔👻Stealth address (generated by Bob to pay Alice): ${alicelink} <br>👫sharedSecret: ${bobstealthAddress.sharedSecret}`
+    
+    
+                let bobstWallet = await createStealthWallet(bobwallet.privateKey, alicewallet.publicKey)
+                stw = bobstWallet
+                result.innerHTML += `<br><br>👻🧔💳 BOB'S STEALTH WALLET ==>  ADDRESS 💳🧔👻  (to receive from Alice)  : ${bobstWallet.address}`
+    
+    
+    
+                let alicestWallet = await createStealthWallet(alicewallet.privateKey, bobwallet.publicKey)
+                astw = alicestWallet
+                result.innerHTML += `<br><br>👻👩💳 ALICE'S STEALTH WALLET ==> ADDRESS 💳👩👻  (to receive from Bob)  : ${alicestWallet.address}`
+    
+    
+    
+                /**********************
+                 .) claim?
+                 ************************/
+                // Example: Bob checks and claims the transaction
+                const checkResult = await checkStealthTransaction(bobPrivKey, stealthAddress.stealthAddress);
+    
+                // Assuming checkResult returns a balance value
+                if (checkResult === 0) {
+                    // Action to take if balance is 0
+                    console.log("Balance is 0, no funds available.");
+                    console.log("⛔⛔⛔💸No funds available or no action was taken.");
+                    result.innerHTML += " <br><br>⛔⛔⛔💸No funds available or no action was taken.";
+    
+                } else if (checkResult > 0) {
+                    // Action to take if there is a balance
+                    console.log(`Balance is ${checkResult}, funds available.`);
+                    console.warn("💰💰💰 Funds are ready to be claimed from the stealth address.");
+                    result.innerHTML += `<br><br> <ins>${checkResult}💰💰💰 Funds are ready to be claimed from the stealth address.</ins>`
+                    document.getElementById('bobTx').innerHTML += `<br><button class="button-primary" type="button" onclick="claimBob('${bobPrivKey}', '${stealthAddress.stealthAddress}', this)">Claim ${checkResult}</button>`;
+    
+    
+                } else {
+                    console.log("Unexpected balance value.");
+                }
+    
+    
+    
             }
-            return hexString;
-        }
-
-
-
-        // -----------------------------------------
-        // STEALTH ADDRESS FUNCTIONS
-        // -----------------------------------------
-
-
-        // async function computePrivKey(bobprivateKey, alicepublicKey) {
+    
+            init()
+    
+    
+    
+    
+            // -----------------------------------------
+            // CHECK STEALTH TX
+            // -----------------------------------------
+    
+    
+    
+            async function checkStealthTransaction(bobPrivateKeyHex, stealthAddress) {
+    
+                let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
+                const bobWallet = new ethers.Wallet(bobPrivateKeyHex, provider);
+                console.warn('bobWallet.address:', bobWallet.address)
+                const balance = await provider.getBalance(stealthAddress);
+                let formatedBalance = ethers.formatEther(balance)
+                console.log(`⛄ Stealth address (${stealthAddress})balance:`, ethers.formatEther(balance));
+                if (balance > 0) {
+                    console.log("Stealth address has received funds!");
+                    const tx = {
+                        to: bobWallet.address, // Bob's actual address
+                        value: balance
+                    };
+                    try {
+                        gasEstimate = await provider.estimateGas(tx);
+                        console.log("Claiming fund gas estimation:", gasEstimate);
+                    } catch (error) {
+                        console.error("Error simultating claiming funds:", error);
+                    }
+                    console.warn(`Estimated Gas needed : ${gasEstimate.toString()}`);
+                    // result.innerHTML += `<br><br><ins>Estimated Gas needed to claim : ${gasEstimate.toString()}</ins>`
+                    result.innerHTML += `<br><br><ins>Estimated Gas needed to claim : ${ethers.formatEther(gasEstimate)}</ins>`
+                    return formatedBalance
+                } else {
+                    console.log("No funds available in the stealth address.");
+                    return 0
+                }
+    
+    
+            }
+    
+            // -----------------------------------------
+            // NEW STEALTH ADDRESS FUNCTIONS
+            // -----------------------------------------
+            async function generateStealthAddress(privateKey, publicKey) {
+                // privkey sender, pubkey recipient
+                console.warn('🏰 generateStealthAddress()', privateKey, publicKey)
+                const privateKeyHex = `0x${toHexString(privateKey)}`;
+                a = privateKeyHex
+                b = publicKey
+                c = privateKey
+                const pubPoint = secp.ProjectivePoint.fromHex(publicKey);
+                ppoint = pubPoint
+                const sharedSecret = pubPoint.multiply(BigInt(privateKeyHex)).toHex();
+                console.log('👫sharedSecret( at generateStealthAddress):', sharedSecret);
+                const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
+    
+                // 1.Multiply hs by the curve generator point (G): You can use the secp256k1 generator point (which is a constant) to compute the point hs * G.
+                const G = secp.ProjectivePoint.BASE;  // Generator point G
+                const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
+                const hsPoint = G.multiply(hsBigInt);  // hs * G
+                hsp = hsPoint
+    
+                // 2.Add Bob’s public key: You now add Bob’s public key as an elliptic curve point to hs * G. Ensure Bob's public key is in the correct format for the addition.
+                const point = secp.ProjectivePoint.fromHex(publicKey);  // Bob's public key point
+                const stealthPubPoint = hsPoint.add(point);  // hs * G + Bob's public key
+                p1 = point
+                p2 = stealthPubPoint
+    
+                // 3.Convert the resulting point to an Ethereum address: Finally, you convert the resulting elliptic curve point to an Ethereum address. This is typically done by compressing the point to its x-coordinate, hashing it, and then converting it to an Ethereum address.
+                const stealthPubKey = stealthPubPoint.toHex();  // Convert to hex
+                const stealthAddress = ethers.computeAddress('0x' + stealthPubKey);  // Convert to Ethereum address
+                console.log('👻Stealth Address:', stealthAddress);
+                return { stealthAddress, sharedSecret }
+            }
+    
+            function removeHexPrefix(hexString) {
+                // Check if the hex string starts with '0x' and remove it
+                if (hexString.startsWith('0x')) {
+                    return hexString.slice(2);
+                }
+                return hexString;
+            }
+    
+    
+    
+            // -----------------------------------------
+            // STEALTH ADDRESS FUNCTIONS
+            // -----------------------------------------
+    
+    
+            // async function computePrivKey(bobprivateKey, alicepublicKey) {
             async function computePrivKey(privateKey, publicKey) {
-
+    
                 console.warn('computePrivKey()', privateKey, publicKey)
                 const publicKeyHexWithoutPrefix = removeHexPrefix(publicKey);
                 const pubPoint = secp.ProjectivePoint.fromHex(publicKeyHexWithoutPrefix);
                 const sharedSecret = pubPoint.multiply(BigInt(privateKey)).toHex();
                 console.log('👫sharedSecret  (at createStealthWallet ):', sharedSecret);
                 const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
-
-
+    
+    
                 // BOB can comput the private key to the stealth addres
                 // b +hs
                 const hprivkeyBigInt = BigInt(privateKey);  // hs should already be in hex or BigInt format
                 b = hprivkeyBigInt
-
+    
                 const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
                 hs = hsBigInt
-
+    
                 computedPrivKey = hprivkeyBigInt + hsBigInt
-
+    
                 console.warn('🛰️ computedPrivKey: ', computedPrivKey)
                 return computedPrivKey
-        }
-
-
-
-        //  createStealthWallet(privateKey, publicKey) 
-            async function createStealthWallet(privateKey, publicKey) {
-
-            console.warn('🦸‍♂️createStealthWallet()', privateKey, publicKey)
-            const publicKeyHexWithoutPrefix = removeHexPrefix(publicKey);
-            const pubPoint = secp.ProjectivePoint.fromHex(publicKeyHexWithoutPrefix);
-            const sharedSecret = pubPoint.multiply(BigInt(privateKey)).toHex();
-            console.log('👫sharedSecret  (at createStealthWallet ):', sharedSecret);
-            const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
-
-
-            // BOB can comput the private key to the stealth addres
-            // b +hs
-            const hprivkeyBigInt = BigInt(privateKey);  // hs should already be in hex or BigInt format
-            b = hprivkeyBigInt
-
-            const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
-            hs = hsBigInt
-
-            computedPrivKey = hprivkeyBigInt + hsBigInt
-
-            console.warn('🛰️ computedPrivKey: ', computedPrivKey)
-
-
-            eth2bigint = ethers.toBigInt(computedPrivKey)
-
-            const stealthPrivateKey = ethers.zeroPadValue(ethers.toBeHex(computedPrivKey), 32);
-            console.warn(' 🚁 stealthPrivateKey: ', stealthPrivateKey)
-            const stealthwallet = new ethers.Wallet(stealthPrivateKey);
-            const derivedStealthPubKey = stealthwallet.publicKey;
-            console.warn(' 🪂🦹‍♂️ stealthPrivateKey: ', stealthPrivateKey)
-            console.warn(' 🪂 stealthAddress: ', stealthwallet.address)
-
-
-            return stealthwallet
- 
-        }
-
-
-
-
-
-        async function claimFundsFromStealthAddress(bobPrivateKeyHex, alicePublicKeyHex, bobMainAddr) {
-            console.log('claimFundsFromStealthAddress()')
-            let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
-
-            let stealthPrivateKey = computePrivateKey(bobPrivateKeyHex,alicePublicKeyHex)
-
-
-            // Create a wallet for the stealth address
-            const stealthWallet = new ethers.Wallet(stealthPrivateKey, provider);
-            console.log(`👻👻👻Stealth Wallet Address: ${stealthWallet.address}`);
-
-
-
-            return
-
-
-            // The stealth wallet address should match the stealth address Bob calculated earlier
-            if (bobStealthWallet.address.toLowerCase() === stealthAddressBob.toLowerCase()) {
-                console.log("✅ Stealth addresses match!");
-            } else {
-                console.error("❌ Stealth addresses do not match!");
             }
-            return
-
-
-
-
-            // Bob's main address where he wants to send the funds
-            const bobMainAddress = bobMainAddr; // Bob's regular address
-
-            // Check the balance of the stealth address
-            const balance = await provider.getBalance(bobStealthWallet.address);
-            console.log(`BOB sStealth address(${bobStealthWallet.address}) balance:`, ethers.formatEther(balance));//esta mal
-
-            return
-            // If there are funds in the stealth address, send them to Bob's main address
-            if (balance > 0) {
-                console.log("Stealth address has received funds!");
-
-                // Define the transaction to send the funds to Bob's main address
-                const tx = {
-                    to: bobMainAddress, // Bob's main address
-                    value: balance.sub(ethers.parseUnits("0.001", "ether")), // Subtracting gas fee for the transaction
-                    gasLimit: 21000, // Standard gas limit for ETH transfer
-                };
-
+    
+    
+    
+            //  createStealthWallet(privateKey, publicKey) 
+            async function createStealthWallet(privateKey, publicKey) {
+    
+                console.warn('🦸‍♂️createStealthWallet()', privateKey, publicKey)
+                const publicKeyHexWithoutPrefix = removeHexPrefix(publicKey);
+                const pubPoint = secp.ProjectivePoint.fromHex(publicKeyHexWithoutPrefix);
+                const sharedSecret = pubPoint.multiply(BigInt(privateKey)).toHex();
+                console.log('👫sharedSecret  (at createStealthWallet ):', sharedSecret);
+                const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
+    
+    
+                // BOB can comput the private key to the stealth addres
+                // b +hs
+                const hprivkeyBigInt = BigInt(privateKey);  // hs should already be in hex or BigInt format
+                b = hprivkeyBigInt
+    
+                const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
+                hs = hsBigInt
+    
+                computedPrivKey = hprivkeyBigInt + hsBigInt
+    
+                console.warn('🛰️ computedPrivKey: ', computedPrivKey)
+    
+    
+                eth2bigint = ethers.toBigInt(computedPrivKey)
+    
+                const stealthPrivateKey = ethers.zeroPadValue(ethers.toBeHex(computedPrivKey), 32);
+                console.warn(' 🚁 stealthPrivateKey: ', stealthPrivateKey)
+                const stealthwallet = new ethers.Wallet(stealthPrivateKey);
+                const derivedStealthPubKey = stealthwallet.publicKey;
+                console.warn(' 🪂🦹‍♂️ stealthPrivateKey: ', stealthPrivateKey)
+                console.warn(' 🪂 stealthAddress: ', stealthwallet.address)
+    
+    
+                return stealthwallet
+    
+            }
+    
+    
+    
+    
+    
+            async function claimFundsFromStealthAddress(bobPrivateKeyHex, alicePublicKeyHex, bobMainAddr) {
+                console.log('claimFundsFromStealthAddress()')
+                let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
+    
+                let stealthPrivateKey = computePrivateKey(bobPrivateKeyHex, alicePublicKeyHex)
+    
+                // Create a wallet for the stealth address
+                const stealthWallet = new ethers.Wallet(stealthPrivateKey, provider);
+                console.log(`👻👻👻Stealth Wallet Address: ${stealthWallet.address}`);
+    
+    
+    
+                return
+    
+    
+                // The stealth wallet address should match the stealth address Bob calculated earlier
+                if (bobStealthWallet.address.toLowerCase() === stealthAddressBob.toLowerCase()) {
+                    console.log("✅ Stealth addresses match!");
+                } else {
+                    console.error("❌ Stealth addresses do not match!");
+                }
+                return
+    
+    
+    
+    
+                // Bob's main address where he wants to send the funds
+                const bobMainAddress = bobMainAddr; // Bob's regular address
+    
+                // Check the balance of the stealth address
+                const balance = await provider.getBalance(bobStealthWallet.address);
+                console.log(`BOB sStealth address(${bobStealthWallet.address}) balance:`, ethers.formatEther(balance));//esta mal
+    
+                return
+                // If there are funds in the stealth address, send them to Bob's main address
+                if (balance > 0) {
+                    console.log("Stealth address has received funds!");
+    
+                    // Define the transaction to send the funds to Bob's main address
+                    const tx = {
+                        to: bobMainAddress, // Bob's main address
+                        value: balance.sub(ethers.parseUnits("0.001", "ether")), // Subtracting gas fee for the transaction
+                        gasLimit: 21000, // Standard gas limit for ETH transfer
+                    };
+    
+                    try {
+                        // Bob sends the funds to his main address from the stealth address
+                        const txResponse = await bobStealthWallet.sendTransaction(tx);
+                        console.log("Transaction sent:", txResponse.hash);
+    
+                        // Wait for the transaction to be confirmed
+                        const receipt = await txResponse.wait();
+                        console.log("Transaction confirmed:", receipt);
+                    } catch (error) {
+                        console.error("Transaction error:", error);
+                    }
+                } else {
+                    console.log("No funds available in the stealth address.");
+                }
+            }
+    
+    
+    
+    
+    
+            // -----------------------------------------
+            // BALANCE FUNCTIONS
+            // -----------------------------------------
+    
+            async function checkGasBalance(userAddress) {
+                console.log('checkGasBalance() of ', userAddress)
+                let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
+    
                 try {
-                    // Bob sends the funds to his main address from the stealth address
-                    const txResponse = await bobStealthWallet.sendTransaction(tx);
+                    const balance = await provider.getBalance(userAddress);
+                    const gasBalance = ethers.formatEther(balance);
+                    console.log(`GAS Balance: ${gasBalance} `);
+    
+                    return gasBalance;
+                } catch (error) {
+                    console.error('Error checking balance:', error.reason);
+                    return null;
+                }
+            }
+    
+            // -----------------------------------------
+            // WALLET FUNCTIONS
+            // -----------------------------------------
+    
+    
+            // Function to derive an address on demand
+            async function deriveAddressWallet(mnemonic, index) {
+                const basePath = "m/44'/60'/0'/0/";
+                const path = `${basePath}${index}`;
+                const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+                return derivedNode
+            }
+    
+            async function aliceWallet() {
+                let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+                if (!aliceMnemonic) {
+                    console.error('NO aliceMnemonic  in localStorage!');
+    
+                    const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                    aliceMnemonic = randmnemonic.mnemonic.phrase;
+                    localStorage.setItem('aliceMnemonic', aliceMnemonic);
+    
+                } else {
+                    console.log('aliceMnemonic is in localStorage!');
+    
+                }
+                let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+                return aliceWall
+            }
+    
+            // 1- GET  PRIV KEY(IF not CREATE IT)
+            async function bobWallet() {
+                let bobMnemonic = localStorage.getItem('bobMnemonic');
+                if (!bobMnemonic) {
+                    console.error('NO bobMnemonic  in localStorage!');
+    
+                    const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                    bobMnemonic = randmnemonic.mnemonic.phrase;
+                    console.log(bobMnemonic)
+                    localStorage.setItem('bobMnemonic', bobMnemonic);
+    
+                } else {
+                    console.log('bobMnemonic is in localStorage!');
+    
+                }
+    
+                let bobWall = deriveAddressWallet(bobMnemonic, 0)
+                return bobWall
+    
+            }
+    
+    
+            // -----------------------------------------
+            // SEND TX FUNCTIONS
+            // -----------------------------------------
+    
+    
+    
+            // Listen for button click
+            document.getElementById("sendAliceButton").addEventListener("click", async () => {
+                // await connectWallet();  // Connect to MetaMask
+                await sendAliceTx(); // Send the transaction
+            });
+    
+    
+            async function sendBobTx() {
+                console.log('BOB SENDS TO ALICE STEALTH ADDRESS')
+    
+                let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
+                let bobwallet = await bobWallet()
+                const bobWalletWithProvider = bobwallet.connect(provider);
+                bobi = bobWalletWithProvider
+                const bobPrivateKeyA = bobwallet.privateKey;
+                let alicePrivateKey = ethers.getBytes(bobPrivateKeyA);
+                const amountToSend = document.getElementById("bobAmount").value;
+    
+                let stealthAddress = await generateStealthAddress(bobPrivateKey, alicePublicKey)
+    
+                console.log("BOB WILL SEND TO THIS STEALTH ADDRESS: ", stealthAddress.stealthAddress)
+    
+                if (!amountToSend || amountToSend <= 0) {
+                    alert("Please enter a valid amount.");
+                    return;
+                }
+    
+                const tx = {
+                    to: stealthAddress.stealthAddress,
+                    value: ethers.parseEther(amountToSend), // Amount in ETH
+                };
+    
+                console.log('about to send ', tx)
+                try {
+                    const txResponse = await bobWalletWithProvider.sendTransaction(tx);
                     console.log("Transaction sent:", txResponse.hash);
-
-                    // Wait for the transaction to be confirmed
                     const receipt = await txResponse.wait();
+                    let txLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
                     console.log("Transaction confirmed:", receipt);
+    
+                    document.getElementById('bobTx').innerHTML = `✅ TRANSACTION SUCCESSFULL  <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
+    
                 } catch (error) {
                     console.error("Transaction error:", error);
                 }
-            } else {
-                console.log("No funds available in the stealth address.");
             }
-        }
-
-
-
-
-
-        // -----------------------------------------
-        // BALANCE FUNCTIONS
-        // -----------------------------------------
-
-        async function checkGasBalance(userAddress) {
-            console.log('checkGasBalance() of ', userAddress)
-            let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
-
-            try {
-                const balance = await provider.getBalance(userAddress);
-                const gasBalance = ethers.formatEther(balance);
-                console.log(`GAS Balance: ${gasBalance} `);
-
-                return gasBalance;
-            } catch (error) {
-                console.error('Error checking balance:', error.reason);
-                return null;
+    
+    
+            async function sendAliceTx() {
+                console.log('ALICE SENDS TO BOB STEALTH ADDRESS')
+    
+                let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
+                let alicewallet = await aliceWallet()
+                const aliceWalletWithProvider = alicewallet.connect(provider);
+                ali = aliceWalletWithProvider
+                const alicePrivateKeyA = alicewallet.privateKey;
+                let alicePrivateKey = ethers.getBytes(alicePrivateKeyA);
+                const amountToSend = document.getElementById("aliceAmount").value;
+    
+                let stealthAddress = await generateStealthAddress(alicePrivateKey, bobPublicKey)
+    
+                console.log("ALICE WILL SEND TO THIS STEALTH ADDRESS: ", stealthAddress.stealthAddress)
+    
+                if (!amountToSend || amountToSend <= 0) {
+                    alert("Please enter a valid amount.");
+                    return;
+                }
+    
+                const tx = {
+                    to: stealthAddress.stealthAddress,
+                    value: ethers.parseEther(amountToSend), // Amount in ETH
+                };
+    
+                console.log('about to send ', tx)
+                try {
+                    const txResponse = await aliceWalletWithProvider.sendTransaction(tx);
+                    console.log("Transaction sent:", txResponse.hash);
+                    const receipt = await txResponse.wait();
+                    let txLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
+                    console.log("Transaction confirmed:", receipt);
+    
+                    document.getElementById('aliceTx').innerHTML = `✅ TRANSACTION SUCCESSFULL  <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
+    
+                } catch (error) {
+                    console.error("Transaction error:", error);
+                }
             }
-        }
-
-        // -----------------------------------------
-        // WALLET FUNCTIONS
-        // -----------------------------------------
-
-
-        // Function to derive an address on demand
-        async function deriveAddressWallet(mnemonic, index) {
-            const basePath = "m/44'/60'/0'/0/";
-            const path = `${basePath}${index}`;
-            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
-            return derivedNode
-        }
-
-        async function aliceWallet() {
-            let aliceMnemonic = localStorage.getItem('aliceMnemonic');
-            if (!aliceMnemonic) {
-                console.error('NO aliceMnemonic  in localStorage!');
-
-                const randmnemonic = await ethers.HDNodeWallet.createRandom()
-                aliceMnemonic = randmnemonic.mnemonic.phrase;
-                localStorage.setItem('aliceMnemonic', aliceMnemonic);
-
-            } else {
-                console.log('aliceMnemonic is in localStorage!');
-
-            }
-            let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
-            return aliceWall
-        }
-
-        // 1- GET  PRIV KEY(IF not CREATE IT)
-        async function bobWallet() {
-            let bobMnemonic = localStorage.getItem('bobMnemonic');
-            if (!bobMnemonic) {
-                console.error('NO bobMnemonic  in localStorage!');
-
-                const randmnemonic = await ethers.HDNodeWallet.createRandom()
-                bobMnemonic = randmnemonic.mnemonic.phrase;
-                console.log(bobMnemonic)
-                localStorage.setItem('bobMnemonic', bobMnemonic);
-
-            } else {
-                console.log('bobMnemonic is in localStorage!');
-
-            }
-
-            let bobWall = deriveAddressWallet(bobMnemonic, 0)
-            return bobWall
-
-        }
-
-
-        // -----------------------------------------
-        // SEND TX FUNCTIONS
-        // -----------------------------------------
-
-
-
-        // Listen for button click
-        document.getElementById("sendAliceButton").addEventListener("click", async () => {
-            // await connectWallet();  // Connect to MetaMask
-            await sendAliceTx(); // Send the transaction
-        });
-
-
-        async function sendBobTx() {
-            console.log('BOB SENDS TO ALICE STEALTH ADDRESS')
-
-            let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
-            let bobwallet = await bobWallet()
-            const bobWalletWithProvider = bobwallet.connect(provider);
-            bobi= bobWalletWithProvider
-            const bobPrivateKeyA = bobwallet.privateKey;
-            let alicePrivateKey = ethers.getBytes(bobPrivateKeyA);
-            const amountToSend = document.getElementById("bobAmount").value;
-            
-            let stealthAddress = await generateStealthAddress(bobPrivateKey, alicePublicKey)
-
-            console.log("BOB WILL SEND TO THIS STEALTH ADDRESS: ",stealthAddress.stealthAddress)
-
-            if (!amountToSend || amountToSend <= 0) {
-                alert("Please enter a valid amount.");
-                return;
-            }
-
-            const tx = {
-                to: stealthAddress.stealthAddress,
-                value: ethers.parseEther(amountToSend), // Amount in ETH
-            };
-
-            console.log('about to send ', tx)
-            try {
-                const txResponse = await bobWalletWithProvider.sendTransaction(tx);
-                console.log("Transaction sent:", txResponse.hash);
-                const receipt = await txResponse.wait();
-                let txLink= `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
-                console.log("Transaction confirmed:", receipt);
-
-                document.getElementById('bobTx').innerHTML =`✅ TRANSACTION SUCCESSFULL  <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
-
-            } catch (error) {
-                console.error("Transaction error:", error);
-            }
-        }
-
-
-        async function sendAliceTx() {
-            console.log('ALICE SENDS TO BOB STEALTH ADDRESS')
-
-            let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
-            let alicewallet = await aliceWallet()
-            const aliceWalletWithProvider = alicewallet.connect(provider);
-            ali= aliceWalletWithProvider
-            const alicePrivateKeyA = alicewallet.privateKey;
-            let alicePrivateKey = ethers.getBytes(alicePrivateKeyA);
-            const amountToSend = document.getElementById("aliceAmount").value;
-            
-            let stealthAddress = await generateStealthAddress(alicePrivateKey, bobPublicKey)
-
-            console.log("ALICE WILL SEND TO THIS STEALTH ADDRESS: ",stealthAddress.stealthAddress)
-
-            if (!amountToSend || amountToSend <= 0) {
-                alert("Please enter a valid amount.");
-                return;
-            }
-
-            const tx = {
-                to: stealthAddress.stealthAddress,
-                value: ethers.parseEther(amountToSend), // Amount in ETH
-            };
-
-            console.log('about to send ', tx)
-            try {
-                const txResponse = await aliceWalletWithProvider.sendTransaction(tx);
-                console.log("Transaction sent:", txResponse.hash);
-                const receipt = await txResponse.wait();
-                let txLink= `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
-                console.log("Transaction confirmed:", receipt);
-
-                document.getElementById('aliceTx').innerHTML =`✅ TRANSACTION SUCCESSFULL  <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`
-
-            } catch (error) {
-                console.error("Transaction error:", error);
-            }
-        }
-
-
-        // -----------------------------------------
-        // CLAIMS
-        // -----------------------------------------
-
-        async function claimBob(bobPrivateKeyHex, stealthAddress) {
-            console.log('claimBob():', bobPrivateKeyHex, stealthAddress)
-            
-            // 1 generate bob stealthWallet
-            // alicePublicKeyHex
-            let bobStealthWallet = await createStealthWallet(bobPrivateKeyHex, alicePublicKeyHex)
-            bobstw= bobStealthWallet;
-
-            // 2. move funds to bob original wallet
-                // Assuming aliceStealthWallet is already derived from the stealth address
-                // let aliceStealthWallet = await ethers.Wallet.fromPrivateKey(stealthPrivateKey);
-
-                // Attach a provider to the stealth wallet so it can interact with the network
-            let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
-				// const provider = new ethers.JsonRpcProvider(optionsList[0].API);
-
-            let bobStealthWalletwithProvider = bobStealthWallet.connect(provider);
-            bobstwithp= bobStealthWalletwithProvider
-
-            // Bob's current addrbobStealthWalletwithProvideress (destination)
+    
+    
+            // -----------------------------------------
+            // CLAIMS
+            // -----------------------------------------
+    
+            async function claimBob(bobPrivateKeyHex, stealthAddress,button) {
+                console.log('claimBob():', bobPrivateKeyHex, stealthAddress)
+                button.setAttribute('aria-busy', 'true');
+    
+                // 1 generate bob stealthWallet
+                let bobStealthWallet = await createStealthWallet(bobPrivateKeyHex, alicePublicKeyHex)
+                bobstw = bobStealthWallet;
+    
+                // 2. move funds to bob original wallet
+    
+                //2a. Attach a provider to the stealth wallet so it can interact with the network
+                let provider = await new ethers.JsonRpcProvider(optionsList[0].API);
+                let bobStealthWalletwithProvider = bobStealthWallet.connect(provider);
+                bobstwithp = bobStealthWalletwithProvider
+    
+                // 2b. current Bob's wallet (destination)
                 let bobwallet = await bobWallet()
                 const bobAddress = bobwallet.address; // Replace with Bob's actual address
                 console.log(`CLAIM TO SEND to ${bobAddress}  `);
-
-                 balance = await provider.getBalance(stealthAddress);
+    
+                balance = await provider.getBalance(stealthAddress);
                 console.log("Stealth wallet balance:", ethers.formatEther(balance));
                 let formatedBalance = ethers.formatEther(balance)
-
-
-               
-
+    
+    
+    
+    
                 // SEND MAXIMUM MINUS ESTIMATED GAS
                 // Create transaction object
                 const pretx = {
@@ -848,13 +876,13 @@
                     value: balance,          // Amount of ETH to send (here it's all balance)SEND MAXIMUM MINUS ESTIMATED GAS
                     gasLimit: undefined      // Will be estimated next
                 };
-
-            // pppppppppp
-
+    
+                // pppppppppp
+    
                 // Estimate gas required for the transaction
                 const gasLimit = await provider.estimateGas(pretx);
                 console.log("⛽ Estimated gas:", gasLimit.toString());
-
+    
                 // Get the current gas price
                 const feeData = await provider.getFeeData();
                 let gasPrice = feeData.gasPrice;
@@ -862,64 +890,71 @@
                     throw new Error('Gas price is not available');
                 }
                 console.log(`⛽ Gas Price: ${ethers.formatUnits(gasPrice, 'gwei')} gwei`);
-
-                
+    
+    
                 // Convert gasLimit and gasPrice to BigInt for arithmetic
                 const gasLimitBigInt = BigInt(gasLimit);
                 const gasPriceBigInt = BigInt(gasPrice);
-
+    
                 // 5. Calculate the gas fee in wei (gas limit * gas price)
                 const gasFee = gasLimitBigInt * gasPriceBigInt;
                 console.log("⛽ Gas Fee (wei):", gasFee.toString());
-
+    
                 // 6. Calculate the maximum amount of ETH to send after deducting gas fees
-                 maxAmountToSend = BigInt(balance) - gasFee;
+                maxAmountToSend = BigInt(balance) - gasFee;
                 if (maxAmountToSend <= 0) {
                     console.log("Not enough funds to cover gas fees.");
                     return;
                 }
                 console.log(`💸 Max amount to send: ${ethers.formatEther(maxAmountToSend)} ETH`);
-
-
-                   // 6b. Apply a margin to the maxAmountToSend (e.g., reduce by 2%)
-                const marginPercentage = 0.02; // 2% margin
+    
+    
+                // 6b. Apply a margin to the maxAmountToSend (e.g., reduce by 2%)
+                // const marginPercentage = 0.02; // 2% margin
+                const marginPercentage = 0.2; // 2% margin
                 const marginAmount = maxAmountToSend * BigInt(marginPercentage * 100) / 100n;
                 const adjustedAmountToSend = maxAmountToSend - marginAmount;
-
+    
                 console.log(`💸 Max amount to send with margin: ${ethers.formatEther(adjustedAmountToSend)} ETH`);
-
-
+    
+    
                 // 7. Update the transaction object with the correct amount
                 const tx = {
                     to: bobAddress,
                     value: adjustedAmountToSend, // Maximum ETH we can send
                     gasLimit: gasLimit // Use the estimated gas limit
                 };
-
+    
                 console.log('Sending transaction:', tx);
                 try {
                     // 8. Send the transaction
                     const txResponse = await bobStealthWalletwithProvider.sendTransaction(tx);
                     console.log("Transaction sent:", txResponse.hash);
-
+    
                     // 9. Wait for the transaction to be mined
                     const receipt = await txResponse.wait();
                     let txLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`;
                     console.log("Transaction confirmed:", receipt);
-
+    
                     document.getElementById('bobTx').innerHTML = `✅ TRANSACTION SUCCESSFUL <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txResponse.hash}">Tx link</a>`;
+                    button.setAttribute('aria-busy', 'false');
                 } catch (error) {
                     console.error("Transaction error:", error);
+                    e=error;
+                    bobNotifications.innerHTML=`<del>${error.shortMessage}</del>`
+                    // await Toast.fire({ icon: 'error', title: error.shortMessage })
+                    button.setAttribute('aria-busy', 'false');
+    
                 }
-
-
-        }
-
-  
-
-
-
-    </script>
-</body>
-
-</html>
+    // 
+    
+            }
+    
+    
+    
+    
+    
+        </script>
+    </body>
+    
+    </html>
