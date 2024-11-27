@@ -1,9 +1,6 @@
  #  CRIPTO PARA PRINCIPIANTES
- by xunorus
 
-IusNaturalis
-
-## QUÉ SON LAS CRIPTO?
+## PREAMBULO - QUÉ SON LAS CRIPTO?
 
 Las criptomonedas, comúnmente llamadas "cripto", son monedas digitales o virtuales que utilizan criptografía para asegurar las transacciones y controlar la creación de nuevas unidades. A diferencia del dinero tradicional emitido por los gobiernos (fiat), las criptomonedas son descentralizadas y suelen operar en redes de blockchain, una tecnología de libro mayor distribuido que asegura la transparencia y la seguridad.
 
@@ -52,7 +49,8 @@ Pero esta es solo la primer función de las cripto…
 
 
 
-## TODO COMIENZA CON UNA ADDRESS
+## 0 -LA AUTO CUSTODIA
+## 1- TODO COMIENZA CON UNA ADDRESS
 
 Para comenzar nuestro recorrido en el mundo cripto, solo necesitamos  address.
  Una "address" es una dirección alfanumérica única que representa una ubicación específica en la blockchain a la que se pueden enviar y recibir criptomonedas. Esta dirección funciona de manera similar a una dirección de correo electrónico para las transacciones de criptomonedas.
@@ -69,7 +67,10 @@ Para tener tu primera wallet accede a este link o escanea el código QR
 https://iusnaturalis.web.app
 
 
-## LA AUTO CUSTODIA
+
+
+
+##  -LA WALLET
 
 **BRAVO!** 
 Ya tienes tu primer  address. Para aclararlo, la address es eso que comienza con '0x' seguido de 40 caracteres hexadecimales. 
@@ -92,13 +93,18 @@ Adelante, comienza el respaldo de tu billetera.
 
 
 
-#### La Frase Mnemotécnica
+#### 2-  La Frase Mnemotécnica
+Ahora nos toca lidiar con la frase mnemotecnica. 
+Para guardar nuestras cripto y tener la capacidad de restaurarlas para acceder a sus recursos y funciones, la forma quizas mas conveniente es guardando un grupo de 12 (24,25 o mas) palabras.
+Esto tiene varias ventajas, pues como sabemos una clave privada es mas dificil de verificar por nosotros, pues es mas sencillo lidiar con palabras que con numeros hexagesimales largos.
 
-Una frase mnemotécnica es una serie de palabras, generalmente de 12, 18 o 24 palabras, que se utilizan para generar una semilla criptográfica. Estas palabras son elegidas de una lista predefinida, como la lista BIP-39, que contiene 2048 palabras únicas. La razón de usar palabras en lugar de una cadena de números y letras es que las palabras son más fáciles de recordar y menos propensas a errores de transcripción.
+Entocnes, una frase mnemotécnica es una serie de palabras, generalmente de 12, 18 o 24 palabras, que se utilizan para generar una semilla criptográfica. Estas palabras son elegidas de una lista predefinida, como lo es la lista BIP-39, que contiene 2048 palabras únicas. 
 
-#### Creación de la Semilla
 
-A partir de la frase mnemotécnica, se genera una semilla utilizando un algoritmo de derivación de claves. Esta semilla es una cadena larga de números y letras (normalmente en formato hexadecimal) que actúa como la raíz de todas las claves y direcciones que se derivarán de ella. La seguridad de la semilla es crucial, ya que cualquiera que tenga acceso a esta semilla puede acceder a todos los fondos y datos asociados a las direcciones generadas por ella.
+#### 3- Creación de la Semilla
+
+A partir de la frase mnemotécnica, matematicamente se deduce una *seed* (semilla). 
+Esta semilla es una cadena larga de números y letras (normalmente en formato hexadecimal) que actúa como la raíz de todas las claves y direcciones que se derivarán de ella. La seguridad de la semilla es crucial, ya que cualquiera que tenga acceso a esta semilla puede acceder a todos los fondos y datos asociados a las direcciones generadas por ella.
 
 #### Derivación de Múltiples Direcciones
 
@@ -332,6 +338,26 @@ Cuando envías una transacción, la firmas con tu clave privada. Los nodos de la
 
 En resumen, la firma ECDSA es una manera segura y confiable de confirmar que un mensaje o transacción realmente proviene de quien dice ser y no ha sido alterado, utilizando un par de claves (privada y pública).
 
+## STEALTH ADDRESES (direcciones futivas.)
+Las stealth addresses (o direcciones sigilosas) son una tecnología diseñada para aumentar la privacidad en las transacciones de criptomonedas. Básicamente, permiten que el destinatario reciba fondos en una dirección única y diferente para cada transacción, sin necesidad de compartir públicamente su dirección principal. Esto dificulta que observadores externos rastreen o vinculen las transacciones con una sola identidad o billetera.
+
+![steath address](stealthaddress.png)
+### ¿Cómo funcionan las stealth addresses?
+Claves públicas y privadas: Utilizan criptografía de curva elíptica para generar direcciones únicas a partir de una clave pública compartida y algún dato adicional que el remitente incluye en la transacción.
+
+### Remitente y destinatario:
+
+El destinatario genera una clave pública "meta" que comparte con otros (por ejemplo, en un perfil público o con un conocido).
+El remitente usa esta clave pública junto con un elemento aleatorio para calcular una dirección única (la stealth address) para la transacción.
+Solo el destinatario, con su clave privada, puede recuperar los fondos en esta dirección.
+Privacidad:
+
+Cada transacción parece ir a una dirección diferente, incluso si todas están destinadas al mismo usuario.
+Esto hace que sea más difícil para los observadores externos rastrear patrones o identificar a las partes involucradas.
+Ventajas
+Anonimato: Protege tanto al remitente como al destinatario de ser identificados en la blockchain.
+Rastreo complicado: Incluso si alguien sabe que un usuario usa stealth addresses, no puede determinar cuántas transacciones o cuántos fondos ha recibido.
+Uso flexible: Compatible con varios casos de uso, como donaciones, pagos privados, o cualquier escenario donde se necesite privacidad.
 
 
 ## CRIPTO Y MÁS ALLÁ

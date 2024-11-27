@@ -31,14 +31,16 @@ var dictionary = {
     gitrepository: "Git repository",
     whitepaper: "White paper",
     contributors: "Participants",
-    tutorials: "- Tutorials",
+    tutorials: "Tutorials",
     howtocontribute: "How to contribute?(PDF)",
     receptor:"Receptor",
     period:"Period",
     donations:"Donations",
     raised:"Raised",
     donatehere:"Donate to this address",
-    donateherechain:"to this chain"
+    donateherechain:"to this chain",
+    close:'close',
+    donate:"donate"
   },
   fr: {
     crowdfundingdapp: "DApp de financement participatif",
@@ -62,14 +64,16 @@ var dictionary = {
     gitrepository: "Dépôt git",
     whitepaper: "livre blanc",
     contributors: "Participants",
-    tutorials: "- Tutoriels",
+    tutorials: "Tutoriels",
     howtocontribute: "Comment contribuer?(PDF)",
     receptor:"Receptor",
     period:"Period",
     donations:"Donations",
     raised:"Soulevé",
     donatehere:"Faites vos don dans cette adress",
-    donateherechain:"dans ce chaine"
+    donateherechain:"dans ce chaine",
+    close:'fermer',
+    donate:"participer"
   },
   es: {
     crowdfundingdapp: "DApp de financiación colectiva ",
@@ -94,14 +98,16 @@ var dictionary = {
     gitrepository: "Repositorio git",
     whitepaper: "Proyecto",
     contributors: "Participantes",
-    tutorials: "- Tutoriales",
+    tutorials: "Tutoriales",
     howtocontribute: "¿Cómo contribuir?(PDF)",
     receptor:"Receptor",
     period:"Periodo",
     donations:"Donations",
     raised:"Colectado",
     donatehere:"Donar en esta address",
-    donateherechain:"en esta red"
+    donateherechain:"en esta red",
+    close:'cerrar',
+    donate:"donar"
   },
 };
 

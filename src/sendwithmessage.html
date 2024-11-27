@@ -9,7 +9,39 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
   <script src="js/sweetalert2.all.min.js"></script>
   <script src="js/ethers-6.13.2.umd.min.js"></script>
+  <style>
+       body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            /* background-color: #f4f4f9; */
+        }
 
+        h1 {
+            text-align: center;
+            /* color: #333; */
+        }
+
+        /* .blog-entry {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        } */
+    #messageList {
+      margin-top: 20px;
+    }
+    .message-item {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .message-item p {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
   <h1>Send ETH with a Message</h1>
@@ -26,6 +58,13 @@
     <button type="submit">Send</button>
   </form>
 
+
+  <h2>Messages:</h2>
+  <div id="messageList">
+    <!-- Messages will be displayed here -->
+  </div>
+
+
   <p id="status"></p>
 
   <script>
@@ -35,17 +74,8 @@
       "event SentWithMessage(address indexed from, address indexed to, uint256 amount, string message)"
     ];
 
-    // let token = await getPreferredToken()
-    // let selectedProvider = await selectRandomProvider(token.rpcs)
     let selectedProvider = 'https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I'
     let provider;
-    // try { provider =  new ethers.JsonRpcProvider(selectedProvider); } 
-    // catch (error) { 
-	// 	console.warn("🤬Failed to initialize provider:", error.message || error);
-	//  Toast.fire('Error', error.message, "error");
-
-	//  }
-
 
     document.getElementById("sendForm").addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -90,28 +120,62 @@
     });
 
 
-    async function getMessages() {
-        try { provider =  await new ethers.JsonRpcProvider(selectedProvider); } 
-    catch (error) { 
-		console.warn("🤬Failed to initialize provider:", error.message || error);
-	 Toast.fire('Error', error.message, "error");
+//     async function getMessages() {
+//       try { provider =  await new ethers.JsonRpcProvider(selectedProvider); } 
+//       catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); Toast.fire('Error', error.message, "error"); }
+//   const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
-	 }
+//   // Fetch past events
+//   const filter = contract.filters.SentWithMessage();
+//   const events = await contract.queryFilter(filter);
+
+//   events.forEach(event => {
+//     console.log(`From: ${event.args.from}`);
+//     console.log(`To: ${event.args.to}`);
+//     console.log(`Amount: ${ethers.formatEther(event.args.amount)} ETH`);
+//     console.log(`Message: ${event.args.message}`);
+//   });
+// }
+
+// getMessages().catch(console.error);
+
+async function loadMessages() {
+      const messageList = document.getElementById("messageList");
+      messageList.innerHTML = "Loading messages...";
+      
+      try { provider =  await new ethers.JsonRpcProvider(selectedProvider); } 
+      catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); Toast.fire('Error', error.message, "error"); }
   const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
-  // Fetch past events
-  const filter = contract.filters.SentWithMessage();
-  const events = await contract.queryFilter(filter);
+      try {
 
-  events.forEach(event => {
-    console.log(`From: ${event.args.from}`);
-    console.log(`To: ${event.args.to}`);
-    console.log(`Amount: ${ethers.formatEther(event.args.amount)} ETH`);
-    console.log(`Message: ${event.args.message}`);
-  });
-}
+        // Fetch past SentWithMessage events
+        const filter = contract.filters.SentWithMessage();
+        const events = await contract.queryFilter(filter);
 
-getMessages().catch(console.error);
+        if (events.length === 0) {
+          messageList.innerHTML = "No messages found.";
+          return;
+        }
+
+        // Display the messages in the UI
+        messageList.innerHTML = ""; // Clear loading text
+        events.forEach(event => {
+          const messageItem = document.createElement("div");
+          messageItem.className = "message-item";
+          messageItem.innerHTML = `
+            <p><strong>Message:</strong> ${event.args.message}</p>
+            <p><strong>Address:</strong> ${event.args.from}</p>
+          `;
+          messageList.appendChild(messageItem);
+        });
+      } catch (error) {
+        console.error(error);
+        messageList.innerHTML = `Error loading messages: ${error.message}`;
+      }
+    }
+        // Load messages on page load
+        window.addEventListener("load", loadMessages);
 
   </script>
 </body>

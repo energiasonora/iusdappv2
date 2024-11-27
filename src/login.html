@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Message Example</title>
+    <!-- <script src="https://cdn.ethers.org/lib/ethers-6.5.min.js"></script> -->
+    <link rel="stylesheet" href="css/pico.min.css" />
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+	<script src="js/qr-code-styling.js"></script>
+
+    <!-- <script type="module">
+
+        import { getPublicKey, utils } from '@noble/secp256k1';
+        window.getPublicKey = getPublicKey;
+        window.utils = utils;
+        import * as secp from '@noble/secp256k1';
+        window.secp = secp;
+
+    </script> -->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+</style>
+</head>
+<body>
+
+			<div class=" responsive-svg" id="canvas"></div>
+
+    <button id="signInButton">Log in to IusNaturalis</button>
+
+
+    <p>method 1: using xmtp</p>
+    <p>
+        The sign qr has an address where we listen to signatures receibed.
+        Then the donation page can have its own xmtp address to listen as an api.
+
+    </p>
+    <script>
+    // -----------------------------------------
+        //  ONLOAD
+        // -----------------------------------------
+        // Load messages on page load
+        window.addEventListener("load", init);
+
+
+        async function init (){
+            const message = "I'm logging into IusNaturalis";
+
+            displayQR(message) 
+            // if localTest wallet
+            // let alicewallet = await aliceWallet()
+            // document.getElementById('yourAddress').innerText= ` ${alicewallet.address}`
+
+        }
+
+
+    
+    const signMessage = async () => {
+            try {
+                // Connect to the Ethereum provider (e.g., MetaMask)
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send("eth_requestAccounts", []); // Request accounts
+
+                // Get the signer (connected wallet)
+                const signer = await provider.getSigner();
+
+                // Define the message
+                const message = "I'm logging into IusNaturalis";
+
+                // Ask the signer to sign the message
+                const signature = await signer.signMessage(message);
+
+                // Recover the address of the signer
+                const recoveredAddress = ethers.verifyMessage(message, signature);
+
+                // Store the address in localStorage
+                localStorage.setItem("IusNaturalisAddress", recoveredAddress);
+
+                alert(`Logged in as: ${recoveredAddress}`);
+            } catch (error) {
+                console.error("Error signing message:", error);
+                alert("An error occurred while signing the message. Please try again.");
+            }
+        };
+
+        // Attach the event listener to the button
+        document.getElementById("signInButton").addEventListener("click", signMessage);
+
+
+
+        function displayQR(data) {
+			console.log('displayQR(data)')
+			const qrCode = new QRCodeStyling({
+				width: 200, height: 200, type: "png", data: data, 
+				dotsOptions: { color: "#1568B0", type: "extra-rounded" },
+				backgroundOptions: { color: "var(--qrbackground)", },
+				imageOptions: { crossOrigin: "anonymous", margin: 3 }
+			});
+			qrCode.append(document.getElementById("canvas"));
+		}
+    </script>
+</body>
+</html>

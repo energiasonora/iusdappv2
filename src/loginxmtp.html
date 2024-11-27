@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign using xmtp</title>
+    <!-- <script src="https://cdn.ethers.org/lib/ethers-6.5.min.js"></script> -->
+    <link rel="stylesheet" href="css/pico.min.css" />
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+    <script src="js/qr-code-styling.js"></script>
+
+    <!-- <script type="module">
+
+        import { getPublicKey, utils } from '@noble/secp256k1';
+        window.getPublicKey = getPublicKey;
+        window.utils = utils;
+        import * as secp from '@noble/secp256k1';
+        window.secp = secp;
+
+    </script> -->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .connect-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .wallet-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- <header class="connect-btn">
+        <button class="primary connect-btn" id="signInButton">Connect </button>
+    </header> -->
+    
+    <!-- document.getElementById("signInButton").innerText = 'Disconnect'; -->
+    
+    <div class=" responsive-svg" id="canvas"></div>
+    <div id="result">
+        <h1>Scan and sign this message to Log in to IusNaturalis</h1>
+
+        <p>
+            The sign qr has an address where we listen to signatures receibed.
+            Then the donation page can have its own xmtp address to listen as an api.
+            
+        </p>
+    </div>
+
+
+    <script type="module">
+
+
+        import { Client } from '@xmtp/xmtp-js'
+		window.Client = Client;
+
+        </script>
+
+    <script>
+
+ 
+
+        // -----------------------------------------
+        //  ONLOAD
+        // -----------------------------------------
+        // Load messages on page load
+        window.addEventListener("load", init);
+
+
+        async function init() {
+   
+
+
+            // CHAT
+            let smartcontractwallet = await contractWallet()
+            scwallet= smartcontractwallet
+            const iusnaturalisxmtp = await Client.create(smartcontractwallet)
+            console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
+            console.warn(' 🔵🔵🔵Smart contract address:  ',smartcontractwallet.address)
+
+            const conversations = iusnaturalisxmtp.conversations
+			window.iusnaturalisxmtp = iusnaturalisxmtp;// make GLOBAL
+			window.chats= iusnaturalisxmtp.conversations
+
+            // MESSAGE TO SIGN
+            const messageToSign = "I'm logging into IusNaturalis";
+            const message = `${smartcontractwallet.address},${messageToSign}`;
+            // const message = `${smartcontractwallet.address},I'm logging into IusNaturalis `;
+            console.log(message)
+            displayQR(message)
+            
+            let messageInput= messageToSign;
+            for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
+                console.log(`New message from ${message.senderAddress}: ${message.content}`)
+
+
+                
+                let signature = message.content;
+                let recoveredAddress = ethers.verifyMessage(messageInput, signature);
+                console.warn(`Logged in as: ${recoveredAddress}`);
+                
+                // document.getElementById("signInButton").innerText = 'Disconnect';
+                document.getElementById('result').innerHTML = `✅✅✅ SIGNED: ${recoveredAddress} `
+                document.getElementById("canvas").innerText = '';
+
+
+            }
+        }
+
+
+
+        const signMessage = async () => {
+            try {
+                // Connect to the Ethereum provider (e.g., MetaMask)
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send("eth_requestAccounts", []); // Request accounts
+
+                // Get the signer (connected wallet)
+                const signer = await provider.getSigner();
+
+                // Define the message
+                const message = "I'm logging into IusNaturalis";
+
+                // Ask the signer to sign the message
+                const signature = await signer.signMessage(message);
+
+                // Recover the address of the signer
+                const recoveredAddress = ethers.verifyMessage(message, signature);
+
+                // Store the address in localStorage
+                localStorage.setItem("IusNaturalisAddress", recoveredAddress);
+
+                alert(`Logged in as: ${recoveredAddress}`);
+            } catch (error) {
+                console.error("Error signing message:", error);
+                alert("An error occurred while signing the message. Please try again.");
+            }
+        };
+
+        // Attach the event listener to the button
+        document.getElementById("signInButton").addEventListener("click", signMessage);
+
+
+
+        function displayQR(data) {
+            console.log('displayQR(data)')
+            const qrCode = new QRCodeStyling({
+                width: 200, height: 200, type: "png", data: data,
+                dotsOptions: { color: "#1568B0", type: "extra-rounded" },
+                backgroundOptions: { color: "var(--qrbackground)", },
+                imageOptions: { crossOrigin: "anonymous", margin: 3 }
+            });
+            qrCode.append(document.getElementById("canvas"));
+        }
+
+
+
+        // -----------------------------------------
+        // WALLET FUNCTIONS
+        // -----------------------------------------
+
+
+        // Function to derive an address on demand
+        async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+
+        async function contractWallet() {
+            let contractMnemonic = localStorage.getItem('contractMnemonic');
+            if (!contractMnemonic) {
+                console.error('NO contractMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                contractMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('contractMnemonic', contractMnemonic);
+
+            } else {
+                console.log('contractMnemonic is in localStorage!');
+
+            }
+            let contractWall = deriveAddressWallet(contractMnemonic, 0)
+            return contractWall
+        }
+    </script>
+</body>
+
+</html>

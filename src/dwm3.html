@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate with message 3(stealth donations)</title>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" /> -->
+    <link rel="stylesheet" href="css/pico.min.css" />
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+
+    <script type="module">
+
+        import { getPublicKey, utils } from '@noble/secp256k1';
+        window.getPublicKey = getPublicKey;
+        window.utils = utils;
+        import * as secp from '@noble/secp256k1';
+        window.secp = secp;
+
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #messageList {
+            margin-top: 20px;
+        }
+
+        .message-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .message-item p {
+            margin: 0;
+        }
+        .settings-icon {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+    }
+.copy2clipboard{
+    cursor: pointer;
+}
+
+.connect-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .wallet-info {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .wallet-info span {
+            margin-right: 10px;
+        }
+        .logout-btn {
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        
+            <div class="settings-icon" onclick="openSettings()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 .92 1.65 1.65 0 0 1-3 0 1.65 1.65 0 0 0-1-.92 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-.92-1 1.65 1.65 0 0 1 0-3 1.65 1.65 0 0 0 .92-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-.92 1.65 1.65 0 0 1 3 0 1.65 1.65 0 0 0 1 .92h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 .92 1 1.65 1.65 0 0 1 0 3 1.65 1.65 0 0 0-.92 1z"></path>
+                </svg>
+              </div>
+    </header>
+    <h1>Donate with message 3(stealth donations) <a href="https://localhost:4343/docs/index.html#/?id=stealth-addreses-direcciones-futivas" target="_blank" title="Learn more about the mnemonic phrase"> ? </a> </h1>
+
+    <p>Donate using stealth addresses and leave a message!</p>
+
+    <!-- <button class="primary " id="connectButton">Connect</button> -->
+
+<p id="info"></p>
+    <form id="donateForm">
+        <label for="amount">Amount (ETH):</label><br>
+        <input type="number" id="amount" step="0.001" placeholder="0.001" required><br><br>
+
+        <label for="message">Message:</label><br>
+        <textarea id="message" rows="4" placeholder="Type your message here..." required></textarea><br><br>
+
+        <!-- <button type="submit">Send Stealth Donation</button> -->
+        <button   onclick="sendDonation(event)">Send Stealth Donation</button>
+
+        
+    </form>
+
+    <h2>Messages:</h2>
+    <div id="messageList">
+        <!-- Messages will be displayed here -->
+    </div>
+
+    <p id="status"></p>
+
+
+
+<!-- --------------------------------------- -->
+  <!-- Settings Modal -->
+  <dialog id="settingsModal">
+    <article>
+      <header>
+        <h3>Settings</h3>
+        <a href="#" aria-label="Close" class="close" data-target="settingsModal"></a>
+      </header>
+      <p>Here you can manage your settings.</p>
+  
+      <!-- Wallet Selector -->
+      <label for="walletSelector">Choose your wallet:</label>
+      <select id="walletSelector" onchange="handleWalletChange()">
+        <option value="metamask" selected>Metamask</option>
+        <option value="iusNaturalis">Ius Naturalis</option>
+        <option value="localTest">Local Test</option>
+      </select>
+  
+      <!-- Dynamic Feedback -->
+      <p id="walletFeedback" style="margin-top: 1rem;">Currently selected: Metamask</p>
+    </article>
+  </dialog>
+
+  
+  <!-- <dialog id="settingsModal">
+    <article>
+      <header>
+        <h3>Settings</h3>
+        <a href="#" aria-label="Close" class="close" data-target="settingsModal"></a>
+      </header>
+      <p>Here you can manage your settings.</p>
+    </article>
+  </dialog> -->
+
+
+    <!-- ------------------------------- -->
+    <script>
+
+optionsList = [
+            {
+                "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
+                "TOKEN_CHAINID": '421614',
+                "EXPLORER": 'https://sepolia.arbiscan.io/',
+                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a'
+
+            }
+        ]
+
+
+
+        const alchemyKey = "X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"; // Replace with your deployed contract address
+        const contractAddress = "0x97618a023B7748be9d6f7B4d8D8bFe04f6528D65"; // Replace with your deployed contract address
+        const contractABI = [
+            "function donate(address stealthAddress, string message) payable",
+            "function recipientPublicKey() public view returns (bytes)",
+            "event DonationReceived(address indexed stealthAddress, uint256 amount, string message)"
+        ];
+
+        // const recipientPublicKey = "0x55Ca2D7146dA5a400F214007F01EDde12C660819"; // Replace with the recipient's public key
+
+   // -----------------------------------------
+        //  HELPER  FUNCTIONS
+        // -----------------------------------------
+        async function getRecipientPublicKey() {
+    // Connect to a provider
+    const provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+
+    // Connect to the contract
+    const contract = new ethers.Contract(contractAddress, contractABI, provider);
+
+    try {
+        // Fetch the public key
+        const recipientPublicKey = await contract.recipientPublicKey();
+        // console.log("Recipient's Public Key:", recipientPublicKey);
+
+        return recipientPublicKey;
+    } catch (error) {
+        console.error("Error fetching recipient public key:", error);
+    }
+}
+
+
+const toHexString = (bytes) => {
+            return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+        };
+
+
+
+async function aliceWallet() {
+            let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+            if (!aliceMnemonic) {
+                console.error('NO aliceMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                aliceMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('aliceMnemonic', aliceMnemonic);
+
+            } else {
+                console.log('aliceMnemonic is in localStorage!');
+
+            }
+            let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+            return aliceWall
+        }
+
+
+
+async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+        // -----------------------------------------
+        //  STEALTH ADDRESS FUNCTIONS
+        // -----------------------------------------
+        async function generateStealthAddress(privateKeyA, publicKeyB) {
+            console.warn('🏰 generateStealthAddress()', privateKeyA, publicKeyB)
+            const privateKeyHex = `0x${toHexString(privateKeyA)}`;
+
+            // convert publicKeyB into public point  
+            const pubPoint = secp.ProjectivePoint.fromHex(publicKeyB);
+            console.log('pubPoint created!:', pubPoint);
+
+            // create shared secret (by multiplying  privKeyA by BpubkeyB)
+            const sharedSecret = pubPoint.multiply(BigInt(privateKeyHex)).toHex();
+            console.log('👫sharedSecret( at generateStealthAddress):', sharedSecret);
+            const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
+
+            // 1.Multiply hs by the curve generator point (G): You can use the secp256k1 generator point (which is a constant) to compute the point hs * G.
+            const G = secp.ProjectivePoint.BASE;  // Generator point G
+            const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
+            const hsPoint = G.multiply(hsBigInt);  // hs * G
+            // hsp = hsPoint
+
+            // 2.Add Bob’s public key: You now add Bob’s public key as an elliptic curve point to hs * G. Ensure Bob's public key is in the correct format for the addition.
+            const point = secp.ProjectivePoint.fromHex(publicKeyB);  // Bob's public key point
+            const stealthPubPoint = hsPoint.add(point);  // hs * G + Bob's public key
+
+            // 3.Convert the resulting point to an Ethereum address: Finally, you convert the resulting elliptic curve point to an Ethereum address. This is typically done by compressing the point to its x-coordinate, hashing it, and then converting it to an Ethereum address.
+            const stealthPubKey = stealthPubPoint.toHex();  // Convert to hex
+            const stealthAddress = ethers.computeAddress('0x' + stealthPubKey);  // Convert to Ethereum address
+            console.log('👻Stealth Address:', stealthAddress);
+            return { stealthAddress, sharedSecret }
+        }
+
+
+        // -----------------------------------------
+        //  SEND
+        // -----------------------------------------
+async function sendDonation(event) {
+            // event.preventDefault();
+            const status = document.getElementById("status");
+            status.textContent = "Connecting to wallet...";
+
+                      // Get form data
+            const amount = document.getElementById("amount").value;
+                const message = document.getElementById("message").value;
+                event.preventDefault();
+
+                
+
+
+            // conditional metamask/ iusnaturalis
+            const savedWallet = localStorage.getItem('preferredWallet');
+            // const walletSelector = document.getElementById('walletSelector');
+            const feedback = document.getElementById('walletFeedback');
+
+            if (savedWallet ==='metamask') {
+                console.warn('Currently selected: METAMASK')
+                // console.warn('Currently selected: Ius Naturalis?????')
+
+
+
+            try {
+                // ..............................
+                //if  METAMASK (signer y provider)
+                if (!window.ethereum) throw new Error("MetaMask is not loaded or installed!");
+                await window.ethereum.request({ method: "eth_requestAccounts" });
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const signer = await provider.getSigner();
+                console.log('signer:',signer)
+                s=signer
+
+
+                // ..............................
+                // Connect to the contract
+                const contract = new ethers.Contract(contractAddress, contractABI, signer);
+                console.log('contract:',contract)
+
+
+
+                // Get form data
+                // const amount = document.getElementById("amount").value;
+                // const message = document.getElementById("message").value;
+
+
+                // Get recipient publicKey from smart contract
+                let recipientPublicKey = await getRecipientPublicKey();
+                console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
+                let publicKeyB =ethers.getBytes(recipientPublicKey);
+                
+                // ..................
+                // Generate a stealth address with ethers for iusnaturalis?
+
+                // let privateKeyA;
+                let alicewallet = await aliceWallet()
+                let alicePrivateKeyA = alicewallet.privateKey;
+                let privateKeyA = ethers.getBytes(alicePrivateKeyA);
+                console.log('GOT privKeyA 💎💎💎 !!!', privateKeyA)
+
+                // stealth address where we are going to send funds
+                // arguments: donor privateKey and recipient's publicKey
+                let steathAddress =  await generateStealthAddress(privateKeyA, publicKeyB)
+                console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
+                
+                
+                return
+               
+                // ..................
+                // Send the transaction
+                status.textContent = "Sending transaction...";
+                const tx = await contract.donate(stealthAddress, message, {
+                    value: ethers.parseEther(amount),
+                });
+
+                status.textContent = `Transaction sent! Hash: ${tx.hash}`;
+
+                // Wait for confirmation
+                await tx.wait();
+                status.textContent = "Transaction confirmed!";
+            } catch (error) {
+                console.error(error);
+                status.textContent = `Error: ${error.message}`;
+            }
+
+
+        } 
+       
+            else if (savedWallet ==='iusNaturalis') {
+            // IF IUS NATURALIS
+                console.warn('Currently selected: iusNaturalis 👥 💮 ')
+                requestLoginFromWallet()
+               
+               
+                // // Get form data
+                // const amount = document.getElementById("amount").value;
+                // const message = document.getElementById("message").value;
+                // event.preventDefault();
+
+
+                await createIusNaturalisTosignMessage(amount, message)
+                
+            
+            }    
+            else if (savedWallet ==='localTest'){
+                console.warn('Currently selected: localTest🐥🐥🐥')
+
+                // 0. amount and message
+                const amount = document.getElementById("amount").value;
+                const message = document.getElementById("message").value;
+                console.log('amount:', amount)
+                console.log('message:', message)
+
+                // 1.Get recipient publicKey from smart contract
+                let recipientPublicKey = await getRecipientPublicKey();
+                console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
+                let publicKeyB =ethers.getBytes(recipientPublicKey);
+                
+                
+                // 2. get privateKeyA
+                let alicewallet = await aliceWallet()
+                let alicePrivateKeyA = alicewallet.privateKey;
+                let privateKeyA = ethers.getBytes(alicePrivateKeyA);
+                console.log('GOT privKeyA 🚀🚀🚀 !!!')
+
+                // 3. stealth address where we are going to send funds
+                // arguments: donor privateKey and recipient's publicKey
+                let steathAddress =  await generateStealthAddress(privateKeyA, publicKeyB)
+                console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
+                document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`; 
+                // document.getElementById('info').innerHTML += "pay to:" +steathAddress.stealthAddress; 
+                
+                // 4. create tx to sign
+                console.log( 'createIusNaturalisTosignMessage', amount, steathAddress.stealthAddress, message)
+            //    let txToSign=  await createIusNaturalisTosignMessage(amount,steathAddress.stealthAddress, message)
+            //    console.log('🏊‍♂️🏊‍♂️🏊‍♂️ txToSign', txToSign)
+                
+
+
+            let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+                // ---
+
+                // const feeData = await provider.getFeeData();
+                // console.log('FEEDATA:', feeData)
+                const abi = [ "function donate(address stealthAddress, string message) payable", ];
+                const contractInterface = new ethers.Interface(abi);
+
+
+
+
+// -----------------
+const pretx = {
+                to: contractAddress,
+                    value: ethers.parseUnits(amount.toString(), "ether"), // Value in ETH
+                    data: contractInterface.encodeFunctionData("donate", [steathAddress.stealthAddress, message]),
+                    chainId: 421614, // Ensure this matches your target network
+				gasLimit: undefined      // Will be estimated next
+			};
+
+                // Estimate gas required for the transaction
+			const gasLimit = await provider.estimateGas(pretx);
+			console.log("⛽ Estimated gas:", gasLimit.toString());
+
+			// Get the current gas price
+			const feeData = await provider.getFeeData();
+			let gasPrice = feeData.gasPrice;
+			if (!gasPrice) {
+				throw new Error('Gas price is not available');
+			}
+			console.log(`⛽ Gas Price: ${ethers.formatUnits(gasPrice, 'gwei')} gwei`);
+
+			// Convert gasLimit and gasPrice to BigInt for arithmetic
+			const gasLimitBigInt = BigInt(gasLimit);
+			const gasPriceBigInt = BigInt(gasPrice);
+
+			// 5. Calculate the gas fee in wei (gas limit * gas price)
+			const gasFee = gasLimitBigInt * gasPriceBigInt;
+            console.log('gasFee:', gasFee)
+
+            const nonce = await provider.getTransactionCount(alicewallet.address, "latest");
+
+                const txToSign = {
+                    to: contractAddress,
+                    value: ethers.parseUnits(amount.toString(), "ether"), // Value in ETH
+                    data: contractInterface.encodeFunctionData("donate", [steathAddress.stealthAddress, message]),
+                    chainId: 421614, // Ensure this matches your target network
+                    nonce, // Correct nonce fetched dynamically
+                    maxFeePerGas: feeData.maxFeePerGas, // Dynamically fetched base + priority fee
+                    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas, // Dynamically fetched priority fee
+                    gasLimit: gasLimit // Use the estimated gas limit
+                };
+                console.log(" txToSign:", txToSign);
+
+
+                // ---
+// -----------------
+// SIGN TX
+// -----------------
+
+               let signedTransaction = await signTransaction(txToSign, alicewallet.privateKey)
+               console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
+
+
+
+// -----------------
+// BROADCAST
+// -----------------
+            // 5. now the contract should publish and check the tx
+          let txHash
+            try {
+                 txHash = await provider.broadcastTransaction(signedTransaction);
+                console.log("Broadcasted!!! Transaction Hash:", txHash);
+            } catch (error) {
+                e=error;
+                status.innerText = error.shortMessage;
+                if (error.code === -32000 && error.message.includes("intrinsic gas too low")) {
+                    console.error("Error: Gas limit too low. Increase the gas limit for the transaction.");
+                } else {
+                    console.error("Transaction failed:", error.message);
+                }
+                return
+            }
+
+
+
+            const receipt = await txHash.wait();
+				let txLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txHash.hash}">Tx link</a>`;
+				console.log("Transaction confirmed:", receipt);
+
+				document.getElementById('status').innerHTML += `✅ TRANSACTION SUCCESSFUL <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txHash.hash}">Tx link</a>`;
+                loadMessages() 
+                
+
+               return 
+               // Sign the transaction offline
+                // signTransaction(txToSign, alicewallet.privateKey).then((signedTransaction) => {
+                //             console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
+                //         });
+
+
+
+            } 
+
+        }
+    // });
+
+
+       // -----------------------------------------
+        //  BLOCKCHAIN FUNCTIONS
+        // -----------------------------------------
+        async function loadMessages() {
+            const messageList = document.getElementById("messageList");
+            messageList.innerHTML = "Loading messages...";
+
+            try {
+
+                let provider = new ethers.JsonRpcProvider("https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I");
+                const contract = new ethers.Contract(contractAddress, contractABI, provider);
+
+                // Fetch past DonationReceived events
+                const filter = contract.filters.DonationReceived();
+                const events = await contract.queryFilter(filter);
+
+                if (events.length === 0) {
+                    messageList.innerHTML = "No messages found.";
+                    return;
+                }
+
+                // Display the messages in the UI
+                messageList.innerHTML = ""; // Clear loading text
+                events.forEach(event => {
+                    const messageItem = document.createElement("div");
+                    messageItem.className = "message-item";
+                    messageItem.innerHTML = `
+                        <p><strong>Message:</strong> ${event.args.message}</p>
+                        <p><strong>Stealth Address:</strong> ${event.args.stealthAddress}</p>
+                        <p><strong>Amount:</strong> ${ethers.formatEther(event.args.amount)} ETH</p>
+                    `;
+                    messageList.appendChild(messageItem);
+                });
+            } catch (error) {
+                console.error(error);
+                messageList.innerHTML = `Error loading messages: ${error.message}`;
+            }
+        }
+
+
+
+        // -----------------------------------------
+        //  ONLOAD
+        // -----------------------------------------
+        // Load messages on page load
+        window.addEventListener("load", init);
+
+
+        async function init (){
+            loadMessages()
+            
+            initializeWalletPreference()
+
+            // if localTest wallet
+        //     let alicewallet = await aliceWallet()
+        //     let aliceAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${alicewallet.address}" target="_blank">${alicewallet.address}</a>`
+        //     document.getElementById('info').innerHTML += `<br>ADDRESS: ${aliceAddresslink} 
+        //    <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${alicewallet.address}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
+        //     </svg> 
+        //     `;
+
+        //     let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+        //     const gasBalance = await provider.getBalance(alicewallet.address);
+        //     console.log('gasBalance:',gasBalance)
+        //     document.getElementById('info').innerHTML += `<br>GAS BALANCE: ${gasBalance}`; 
+
+
+        }
+
+	/*********************************************************************************************
+		.) sweetalert2
+		// position: "top-right",
+		**********************************************************************************************/
+
+		const ToastTop = Swal.mixin({
+			toast: true,
+			position: "bottom-end",
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener("mouseenter", Swal.stopTimer);
+				toast.addEventListener("mouseleave", Swal.resumeTimer);
+			},
+			iconColor: "white",
+			customClass: {
+				popup: "colored-toast",
+			},
+		});
+
+
+		function copy2clipboard(text) {
+			// let text = `${ipfsGateway}${cid}`;
+			console.log('COPIED!', text)
+			let textLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${text}">${text}</a>`;
+
+			if (window.clipboardData && window.clipboardData.setData) {
+				ToastTop.fire('Copied to Clipboard', textLink, "success");
+				return window.clipboardData.setData("Text", text);
+			}
+			else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+				var textarea = document.createElement("textarea");
+				textarea.textContent = text;
+				textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+				document.body.appendChild(textarea);
+				textarea.select();
+				try {
+					ToastTop.fire('Copied to Clipboard!', textLink, "success");
+					return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+				}
+				catch (ex) {
+					console.warn("Copy to clipboard failed.", ex);
+					return prompt("Copy to clipboard: Ctrl+C, Enter", text);
+				}
+				finally {
+					document.body.removeChild(textarea);
+				}
+			}
+		}
+
+        function openSettings() {
+      const settingsModal = document.getElementById('settingsModal');
+      settingsModal.showModal();
+    }
+
+    document.querySelectorAll('.close').forEach((closeButton) => {
+      closeButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        const targetModal = event.currentTarget.getAttribute('data-target');
+        document.getElementById(targetModal).close();
+      });
+    });
+
+
+// Retrieve the preferred wallet from localStorage and initialize
+function initializeWalletPreference() {
+    console.log('initializeWalletPreference()')
+    const savedWallet = localStorage.getItem('preferredWallet');
+    const walletSelector = document.getElementById('walletSelector');
+    const feedback = document.getElementById('walletFeedback');
+
+    if (savedWallet) {
+    // Set the saved preference
+    walletSelector.value = savedWallet;
+    feedback.textContent = `Currently selected: ${ savedWallet === 'metamask' ? 'Metamask' : savedWallet === 'iusNaturalis' ? 'Ius Naturalis' : 'Local Test' }`; // Modal
+    info.innerHTML = `<br>Wallet selected: ${ savedWallet === 'metamask' ? 'Metamask' : savedWallet === 'iusNaturalis' ? 'Ius Naturalis' : 'Local Test' }`; // Main page
+    // Trigger the appropriate function based on the selected wallet
+
+    if (savedWallet === 'metamask') {
+            initMetamask();
+        } else if (savedWallet === 'iusNaturalis') {
+            initIusNaturalis();
+        } else {
+            initLocalTest();
+        }
+
+    } else {
+    // Default to Local Test if no preference is saved
+    const defaultWallet = 'localTest';
+    localStorage.setItem('preferredWallet', defaultWallet);
+    walletSelector.value = defaultWallet;
+    feedback.textContent = 'Currently selected: Local  by default'; // Modal
+    info.innerHTML += " Currently selected: Local Test by default"; // Main page
+    initLocalTest();
+
+    }
+}
+
+
+// Define initialization functions for each wallet type
+function initMetamask() {
+    console.log("Initializing Metamask...");
+    // Add your Metamask-specific logic here
+}
+
+function initIusNaturalis() {
+    console.log("Initializing Ius Naturalis...");
+    // Add your Ius Naturalis-specific logic here
+
+    
+    return
+    // let loggienIntoIus = 
+    if(loggedIntoIus){
+
+        document.getElementById('info').innerHTML += `<br>ADDRESS: ${iusAddresslink} 
+               <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${iusaddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
+                </svg> 
+            `;
+        } else{
+  document.getElementById('info').innerHTML = `
+            <button class="primary " id="connectButton">Connect</button>`
+        }
+    // <button class="primary " id="connectButton">Connect</button>
+
+    // 1. check if logged: means the the iusnaturalis address is in localstorage, probably ith a signature
+    // so the log proces is basically a signature, and what sets the address is the decodification of the signer
+    
+    // if not logged: displays a codeqr and/or the text to manually(copy-paste) to sign
+    
+}
+
+async function initLocalTest() {
+    console.log("Initializing Local Test...");
+    // Add your Local Test-specific logic here
+
+    let alicewallet = await aliceWallet()
+            let aliceAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${alicewallet.address}" target="_blank">${alicewallet.address}</a>`
+            document.getElementById('info').innerHTML += `<br>ADDRESS: ${aliceAddresslink} 
+           <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${alicewallet.address}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
+            </svg> 
+            `;
+
+            let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+            const gasBalance = await provider.getBalance(alicewallet.address);
+            console.log('gasBalance:',gasBalance)
+            document.getElementById('info').innerHTML += `<br>GAS BALANCE: ${gasBalance}`; 
+}
+
+
+// Save the preferred wallet to localStorage when changed
+function handleWalletChange() {
+  const walletSelector = document.getElementById('walletSelector');
+  const feedback = document.getElementById('walletFeedback');
+  const selectedWallet = walletSelector.value;
+
+  // Update feedback
+  feedback.textContent = `Currently selected: ${selectedWallet === 'metamask' ? 'Metamask' : 'Ius Naturalis'}`;
+
+  // Save preference to localStorage
+  localStorage.setItem('preferredWallet', selectedWallet);
+
+  // Perform wallet-specific actions if needed
+//   if (selectedWallet === 'metamask') {
+//     console.log('Metamask selected');
+//     // Add logic to initialize or switch to Metamask
+//   } else if (selectedWallet === 'iusNaturalis') {
+//     console.log('Ius Naturalis selected');
+//     // Add logic to initialize or switch to Ius Naturalis
+//   }
+//   else if (selectedWallet ==='localTest'){
+//     console.log('LocalTEst selected');
+
+//   }
+
+  initializeWalletPreference()
+}
+
+// Initialize wallet preference when modal is opened
+document.getElementById('settingsModal').addEventListener('show', initializeWalletPreference);
+
+
+
+
+
+
+        // -----------------------------------------
+        //  OFFCHAN SIGN AND IUSNATURALIS WALLET HELPERS
+        // -----------------------------------------
+        
+        // function createIusNaturalisTosignMessage(amount, message,pubkeyB){
+    async function createIusNaturalisTosignMessage(amount,stealthAddress, message){
+
+        const abi = [ "function donate(address stealthAddress, string message) payable", ];
+        const functionName = "donate"; // Replace with the function name in your contract
+        const value = amount; // Amount of ETH to send
+        // const params = message; // Replace with the parameters for your function
+        const params = [stealthAddress, message]; // Replace with your parameters
+
+        const chainId = 421614; // arbitrum sepolia
+
+
+        
+        // Create the transaction
+        // const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    //    console.log('🌤️🌤️🌤️ createTransaction:', contractAddress, abi, functionName, params, value, chainId);
+        let transaction = await createTransaction(contractAddress, abi, functionName, params, value, chainId);
+
+        // console.log('transaction: ',transaction)
+        
+                return transaction
+        // Sign the transaction offline
+        // signTransaction(transaction, privateKey).then((signedTransaction) => {
+        //     console.log("Signed Transaction:", signedTransaction);
+        // });
+    }
+
+
+        // 1. Creating the Transaction
+
+
+        function createTransaction(contractAddress, abi, functionName, params, value, chainId) {
+            // Create an instance of the contract
+            const contractInterface = new ethers.Interface(abi);
+
+            // Encode the function call
+            const data = contractInterface.encodeFunctionData(functionName, params);
+
+            // Build the transaction object
+            const transaction = {
+                to: contractAddress, // Smart contract address
+                value: ethers.parseUnits(value.toString(), "ether"), // Value in ETH
+                data: data, // Encoded function call
+                chainId: chainId // Chain ID
+            };
+            console.log("🚕🚕🚕Transaction:", transaction);
+
+
+
+            // const feeData = await provider.getFeeData();
+
+            // const transaction = {
+            //     to: contractAddress,
+            //     value: ethers.parseUnits(value.toString(), "ether"), // Value in ETH
+            //     data: contractInterface.encodeFunctionData("donate", [stealthAddress, message]),
+            //     gasLimit: ethers.parseUnits("100000"), // Estimate or set manually
+            //     maxFeePerGas: feeData.maxFeePerGas, // Dynamically fetched
+            //     maxPriorityFeePerGas: feeData.maxPriorityFeePerGas, // Dynamically fetched
+            // };
+
+            return transaction;
+        }
+
+
+        // 2. Signing the Transaction Offline
+
+        async function signTransaction(transaction, privateKey) {
+            const wallet = new ethers.Wallet(privateKey); // Load wallet from private key
+
+            // Sign the transaction
+            const signedTransaction = await wallet.signTransaction(transaction);
+
+            return signedTransaction; // Return signed transaction
+        }
+
+
+
+
+        // IUSNATURALIS HELPERS
+
+        // 1. Request Login Details
+        async function requestLoginFromWallet() {
+            // Replace with the mechanism to interact with iusNaturalis
+            const loginResponse = await fetch('https://localhost:4343/sign-in'); // Example for a hosted local endpoint
+            const { address, signature, nonce } = await loginResponse.json();
+
+            return { address, signature, nonce };
+        }
+
+
+    </script>
+</body>
+
+</html>

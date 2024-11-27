@@ -339,7 +339,8 @@ const Toast = Swal.mixin({
             let alicePrivateKey = ethers.getBytes(alicePrivateKeyA);
 
             let aliceAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${alicewallet.address}" target="_blank">${alicewallet.address}</a>`
-            document.getElementById('aliceAddress').innerHTML = aliceAddresslink
+            document.getElementById('aliceAddress').innerHTML = "ADRESS:" +aliceAddresslink
+            document.getElementById('aliceAddress').innerHTML += "<br>PUBLIC KEY:" +alicewallet.publicKey;
             // document.getElementById('aliceAddress').innerHTML = alicewallet.address
 
             let aliceGasBalance = await checkGasBalance(alicewallet.address)
@@ -353,11 +354,8 @@ const Toast = Swal.mixin({
             alicePublicKey = getPublicKey(alicePrivateKey);
             alicePublicKeyHex = `0x${toHexString(alicePublicKey)}`;
 
-            // console.log('alicePublicKey (with @noble/secp256k1):',alicePublicKey)
-
             // with ethers
             let alicePublicKeyB = ethers.getBytes(alicewallet.publicKey);
-            // console.log('alicePublicKey (with ethers ):',alicePublicKeyB)
 
             /**********************
              .) BOB
@@ -434,7 +432,6 @@ const Toast = Swal.mixin({
                 console.warn("💰💰💰 Funds are ready to be claimed from the stealth address.");
                 result.innerHTML += `<br><br> <ins>${checkResult}💰💰💰 Funds are ready to be claimed from the stealth address.</ins>`
                 document.getElementById('bobTx').innerHTML += `<br><button class="button-primary" type="button" onclick="claimBob('${bobPrivKey}', '${stealthAddress.stealthAddress}', this)">Claim ${checkResult}</button>`;
-
 
             } else {
                 console.log("Unexpected balance value.");

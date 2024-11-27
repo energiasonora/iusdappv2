@@ -143,6 +143,9 @@
 
 #stealthSection{
   width: 100%;
+  border: 1px solid var(--bs-purple);
+  background: transparent;
+
 }
 
 
@@ -158,4 +161,20 @@
   cursor: pointer;
   font-family: Exo, sans-serif;
 
+}
+
+
+
+/* FIXES */
+#yourAddress{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#yourAddress svg {
+  margin-left: 8px; /* Adjust the spacing between the items */
+  cursor: pointer;  /* Optional: make the cursor a pointer for better UX */
+}
+.alert-dismissible{
+  border: 1px solid;
 }

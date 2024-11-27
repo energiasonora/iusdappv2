@@ -57,6 +57,7 @@ yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html
 rm -rf .parcel-cache
 nvm use 20
 yarn parcel src/index.html --dist-dir public  --public-url ./
+yarn parcel src/index.html src/crowdfunding.html  --dist-dir public  --public-url ./
 firebase deploy --only hosting:iusnaturalis
 ```
 
@@ -65,6 +66,7 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+- v5.13 fixed qrScanner inversion mode.
 - v5.12 ui fixes, wallet button reposition
 - v5.11a pufix balances display
 - v5.11 public
