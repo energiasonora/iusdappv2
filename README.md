@@ -20,10 +20,12 @@ xmtp chat docs https://docs.xmtp.org/get-started/developer-quickstart
 
 xmtp docs: https://docs.xmtp.org/perf-ux/optimistic-sending
 
+xmtp v3 https://docs.xmtp.org/upgrade-to-v3
+
 gitcoin grants g22: https://grants.gitcoin.co/?utm_source=gitcoinco&utm_medium=nav&utm_campaign=v2
 
 
-demo local: https://192.168.1.52:4343/
+demo local: https://192.168.1.52localhost:4343/
 
 encrypted chat:
 alice https://192.168.1.52:4343/p2pAlice.html
@@ -66,6 +68,10 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+- v5.14 
+* improved loading time by loading tokens and address from localstorage.
+* added preloader for chat history
+* minimal send button for simple external txs
 - v5.13 fixed qrScanner inversion mode.
 - v5.12 ui fixes, wallet button reposition
 - v5.11a pufix balances display

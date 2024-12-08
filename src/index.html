@@ -231,7 +231,7 @@
 		<!-- ADD PUBLIC DOCUMENTS -->
 		<div class="bottom-nav">
 			<nav class="codrops-demos">
-				<span>v5.13</span>
+				<span>v5.14</span>
 			</nav>
 		</div>
 
@@ -834,6 +834,7 @@
 		data-bs-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
+				
 				<div class="modal-header">
 					<h5 class="modal-title" id="walletReceiveLabel">ReceiveTransaction</h5>
 					<button type="button" id="walletReceiveXClose" class="btn-close" data-bs-dismiss="modal"
@@ -844,13 +845,75 @@
 				<div class="modal-body">
 
 
-					<div id="qrtreceive" class="">
+
+
+					<!-- ------------------------------------ -->
+
+					<form id="transactionForm">
+						<div class="input-group mb-3">
+							<span class="input-group-text iusbutton">Token</span>
+							<select class="form-select token-selector" id=""> </select>
+							<span id="" style="display: none;"> </span>
+						</div>
+
+						<!-- <div class="mb-3 fullwith">
+							<span class="input-group-text iusbutton" for="yourReceiptAddress">Recipient
+								Address</span>
+							<input type="text" class="form-control" id="yourReceiptAddress" placeholder="0x..."
+								required readonly>
+						</div> -->
+
+						<div id="stealthSection" class=" mb-3 list-group-item list-group-item-warning">
+							<input class="form-check-input" type="checkbox" id="" name="stealthAddress">
+							<label for="sarecipientAddress" class="form-label">🦹‍♂️ Stealth Address 🦹‍♀️ </label>
+								<div id="">
+
+									<div id="" class="wwrap"></div>
+								</div>
+							<div id="" class=""></div>
+						</div>
+
+
+						<div class="input-group mb-3" id="">
+							<input type="number" class="form-control amountsendgroup amount" id="" placeholder="0.00" step="0.01"
+								min="0" required="">
+							<!-- <span class="input-group-text iusbutton">Amount to receive</span> -->
+							<span class="input-group-text iusbutton" style="display: block; text-align: center;">
+								<span>Amount to receive</span>
+								<span class="tokenConversor" id="tokenConversorSend"></span>
+							  </span>
+							<div class="invalid-feedback">
+								Please enter a valid amount.
+							</div>
+						</div>
+
+						<div id="" class="mb-3 d-none">
+							<label for="erc20ContractAddress" class="form-label">ERC-20 Contract Address</label>
+							<input type="text" class="form-control" id=""
+								placeholder="0x...">
+						</div>
+						<button type="button" class="btn btn-primary fullwidth" id="">
+							<svg xmlns="http://www.w3.org/2000/svg" height="16" width="20"
+								viewBox="0 0 512 512">
+								<path fill="currentColor"
+									d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z">
+								</path>
+							</svg>Send payment Request</button>
+					</form>
+
+
+
+
+
+
+					<!-- ------------------------------------ -->
+					<!-- <div id="qrtreceive" class="">
 						<div class="responsive-svg" id="receivecanvas"></div>
 					</div>
 
 
 
-					<ul class="nav nav-tabs" id="myReceiveTab" role="tablist" style="display: none;">
+					<ul class="nav nav-tabs" id="myReceiveTab" role="tablist" style="display: block;">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="Receiveform-tab" data-bs-toggle="tab"
 								data-bs-target="#form" type="button" role="tab" aria-controls="form"
@@ -888,7 +951,8 @@
 							</form>
 						</div>
 
-						<!-- Confirmation Screen -->
+
+
 						<div class="tab-pane fade" id="Receiveconfirmation" role="tabpanel"
 							aria-labelledby="confirmation-tab">
 							<h5>Confirm Transaction</h5>
@@ -899,14 +963,16 @@
 								id="confirmReceiveTransactionBtn">Confirm</button>
 						</div>
 
-						<!-- Result Screen -->
+
+
+
 						<div class="tab-pane fade" id="Receiveresult" role="tabpanel" aria-labelledby="result-tab">
 							<h5>Receive Transaction Result</h5>
 							<p id="ReceiveresultMessage"></p>
 							<button type="button" class="btn btn-primary" data-bs-dismiss="modal"
 								id="walletReceiveClose">Close</button>
 						</div>
-					</div>
+					</div> -->
 
 
 
@@ -917,8 +983,6 @@
 
 
 	<!-- fin RECEIVE WALLET-->
-
-
 
 
 
@@ -944,7 +1008,6 @@
 
 
 				<div class="modal-body">
-					<!-- Navigation for Screens -->
 					<ul class="nav nav-tabs" id="myTab" role="tablist" style="display: none;">
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="preparetx-tab" data-bs-toggle="tab"
@@ -965,19 +1028,14 @@
 
 
 					<div class="tab-content" id="walletSendContent">
-						<!-- Form Screen -->
 						<div class="tab-pane fade show active" id="preparetx" role="tabpanel"
 							aria-labelledby="preparetx-tab">
-
 							<form id="transactionForm">
-
-
 								<div class="input-group mb-3">
 									<span class="input-group-text iusbutton">Token</span>
 									<select class="form-select token-selector" id="tokenType"> </select>
 									<span id="fixedtokenType" style="display: none;"> </span>
 								</div>
-
 
 								<div class="mb-3 fullwith">
 									<span class="input-group-text iusbutton" for="recipientAddress">Recipient
@@ -985,9 +1043,6 @@
 									<input type="text" class="form-control" id="recipientAddress" placeholder="0x..."
 										required readonly>
 								</div>
-
-
-								<!-- <div id="stealthInfo" class=" mb-3 list-group-item list-group-item-warning"> -->
 
 								<div id="stealthSection" class=" mb-3 list-group-item list-group-item-warning">
 									<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
@@ -1000,19 +1055,18 @@
 								</div>
 
 
-								<div class="input-group mb-3" id="amountsendgroup">
-									<input type="number" class="form-control" id="amount" placeholder="0.00" step="0.01"
+								<div class="input-group mb-3 amountsendgroup" id="amountsendgroup">
+									<input type="number" class="form-control amount" id="amount" placeholder="0.00" step="0.01"
 										min="0" required="">
-									<span class="input-group-text iusbutton">Amount</span>
-
+									<!-- <span class="input-group-text iusbutton">Amount to send</span> -->
+									<span class="input-group-text iusbutton" style="display: block; text-align: center;">
+										<span>Amount to send</span>
+										<span class="tokenConversor" id="tokenConversorSend"></span>
+									  </span>
 									<div class="invalid-feedback">
 										Please enter a valid amount.
 									</div>
 								</div>
-
-
-
-
 
 								<div id="erc20Details" class="mb-3 d-none">
 									<label for="erc20ContractAddress" class="form-label">ERC-20 Contract Address</label>
@@ -1029,7 +1083,6 @@
 							</form>
 						</div>
 
-						<!-- Confirmation Screen -->
 						<div class="tab-pane fade" id="confirmation" role="tabpanel" aria-labelledby="confirmation-tab">
 							<h5>Confirm Transaction</h5>
 							<p id="transactionDetails"></p>
@@ -1037,7 +1090,6 @@
 							<button type="button" class="btn btn-primary" id="confirmTransactionBtn">Confirm</button>
 						</div>
 
-						<!-- Result Screen -->
 						<div class="tab-pane fade" id="result" role="tabpanel" aria-labelledby="result-tab">
 							<h5>Transaction Result</h5>
 							<p id="resultMessage"></p>
@@ -1438,6 +1490,79 @@
 
 
 
+
+		// UX LOAD IMPROVERS
+
+		// function saveLastUXInfo(data) {
+		// 	const { chainName, chainId, tokenName, explorer, addr, gasBalance, formatedBalance, contractAddr } = data;
+
+		// 	// Create the object to store in localStorage
+		// 	const lastUXInfo = {
+		// 		chainName,
+		// 		chainId,
+		// 		tokenName,
+		// 		explorer,
+		// 		addr,
+		// 		gasBalance,
+		// 		formatedBalance: formatedBalance || null, // Include only if provided
+		// 		contractAddr: contractAddr || null,       // Include only if provided
+		// 	};
+
+		// 	// Save to localStorage as a JSON string
+		// 	localStorage.setItem("lastUXInfo", JSON.stringify(lastUXInfo));
+		// 	}
+		function saveLastUXInfo(data) {
+  const {
+    chainName,
+    chainId,
+    tokenName,
+    explorer,
+    addr,
+    gasBalance,
+    formatedBalance,
+    contractAddr,
+  } = data;
+
+  // Create an object and only include keys with defined values
+  const lastUXInfo = {
+    chainName,
+    chainId,
+    tokenName,
+    explorer,
+    addr,
+    gasBalance,
+  };
+
+  if (formatedBalance) {
+    lastUXInfo.formatedBalance = formatedBalance;
+  }
+
+  if (contractAddr) {
+    lastUXInfo.contractAddr = contractAddr;
+  }
+
+  // Save to localStorage as a JSON string
+  localStorage.setItem("lastUXInfo", JSON.stringify(lastUXInfo));
+}
+
+
+
+			function getLastUXInfo() {
+				const savedInfo = localStorage.getItem("lastUXInfo");
+				if (savedInfo) {
+				try {
+					return JSON.parse(savedInfo);
+				} catch (error) {
+					console.error("Error parsing lastUXInfo from localStorage:", error);
+					return null;
+				}
+				}
+				return null;
+			}
+
+
+
+
 		async function init(signer) {
 
 
@@ -1464,6 +1589,20 @@
 `);
 			console.log('init()')
 
+			// IMPROVING LOAD TIME v5.14
+			const lastUXInfo = getLastUXInfo();
+
+if (lastUXInfo) {
+  console.log("⏱️Preloaded data:", lastUXInfo);
+  // Example: Preload UI with saved data
+		setAddress(lastUXInfo.addr)
+		populateBalances(lastUXInfo.chainName,lastUXInfo.chainId, lastUXInfo.tokenName, lastUXInfo.explorer, lastUXInfo.addr, lastUXInfo.gasBalance, lastUXInfo.formatedBalance, lastUXInfo.contractAddr) 
+}
+
+// return
+// setAddress('0xc3Ed8A9cdd26e39f57D885D94223d14572BF5646')
+
+// return
 			reloadTranslations()
 			
 			// PARA QUE CARGUE MAS RAPIDO///
@@ -1485,10 +1624,7 @@
 				console.warn('No signer passed at init()');
 
 				signer = await getSigner();
-				if (signer === false) {
-					console.log("The function returned false.");
-					return;
-				}
+				if (signer === false) { console.log("The function returned false."); return; }
 			} else {
 				console.warn("SIGNER:", signer);
 			}
@@ -1499,6 +1635,7 @@
 			// SET ADDRESS
 			console.warn('EVM ADDRESS (getSigner): ', signer.address)
 			setAddress(signer.address)
+			// return
 			getPreferredToken()
 
 			// CREATE CHAT
@@ -1825,23 +1962,7 @@
 		.) SOUNDS
 		**********************************************************************************************/
 
-		function playBeep() {
-			var AudioContext = window.AudioContext || window.webkitAudioContext;
-			var audioCtx = new AudioContext();
-
-			var oscillator = audioCtx.createOscillator();
-			oscillator.type = "sine"; // Set the waveform type
-			oscillator.frequency.value = 864; // Set the frequency (Hz)
-
-			oscillator.connect(audioCtx.destination);
-			oscillator.start();
-
-			// Stop the oscillator after 100 milliseconds
-			setTimeout(function () {
-				oscillator.stop();
-			}, 100);
-		}
-
+	
 
 		// Initialize Tone.js
 		Tone.start();
@@ -1858,6 +1979,57 @@
 				release: 0.5,
 			},
 		}).toDestination();
+
+		function playincomingCall() {
+  // Create a synth
+  const synth = new Tone.Synth().toDestination();
+
+  // Define a sequence of notes for the success sound
+  const now = Tone.now();
+  synth.triggerAttackRelease("C4", "8n", now);         // Middle C
+  synth.triggerAttackRelease("E4", "8n", now + 0.2);  // E note
+  synth.triggerAttackRelease("G4", "8n", now + 0.4);  // G note
+  synth.triggerAttackRelease("C5", "8n", now + 0.6);  // High C
+}
+
+function playtxReceived() {
+  // Create a synth with a smooth, bell-like tone
+  const synth = new Tone.Synth({
+    oscillator: { type: "triangle" },
+    envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 }
+  }).toDestination();
+
+  // Play a longer, faster ascending arpeggio
+  const now = Tone.now();
+  const notes = ["C4", "D4", "E4", "G4", "A4", "B4", "C5", "E5"]; // Ascending scale
+  notes.forEach((note, index) => {
+    synth.triggerAttackRelease(note, "16n", now + index * 0.05); // Faster timing
+  });
+
+  // Add a final "chime" for emphasis
+  synth.triggerAttackRelease("G5", "8n", now + notes.length * 0.05); // After the arpeggio
+}
+
+// Test the sound
+// playDynamicSuccessSound();
+
+// playQRscanned
+		function playQRscanned() {
+			var AudioContext = window.AudioContext || window.webkitAudioContext;
+			var audioCtx = new AudioContext();
+
+			var oscillator = audioCtx.createOscillator();
+			oscillator.type = "sine"; // Set the waveform type
+			oscillator.frequency.value = 864; // Set the frequency (Hz)
+
+			oscillator.connect(audioCtx.destination);
+			oscillator.start();
+
+			// Stop the oscillator after 100 milliseconds
+			setTimeout(function () {
+				oscillator.stop();
+			}, 100);
+		}
 
 		function playButtonClickSound() {
 			// Trigger the synth to produce a short click sound
@@ -2690,7 +2862,7 @@ Wallet encrypted and saved into localstorage
 			qrScanner.stop();
 			qrScanner.destroy();
 			qrScanner = null;
-			playBeep();
+			playQRscanned();
 			await setTimeout(() => {
 				closeModalId('#scanModal')
 			}, 1500);
@@ -2947,6 +3119,7 @@ Wallet encrypted and saved into localstorage
 		achs = activeChats
 
 function preloadChatUI(toAddr){
+	console.warn('preloadChatUI() LOADING PRECHAT UI')
 	// <!-- EASY PRE LOAD UI CHAT WITH PEER -->
 
 
@@ -2959,24 +3132,7 @@ chatAddress.innerHTML = `<div class="" id="peerAddr" data-address="${toAddr}" >
 	<strong onclick="event.stopPropagation();openCard('${toAddr}','${avatar}')">  (${toAddr.substring(38, 42)})</strong>
 	</div>`;
 
-
-	// <svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
-	// 			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
-	// 			</svg>
-	
-	// <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
-	// <path fill="currentColor"
-	// d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/>
-	// </svg>
-	
-	// <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
-	//   <path fill="currentColor"
-	// 	   d="m 500.32774,4.5983885 c 8.47915,5.8766415 12.92861,16.0348375 11.33352,26.1930325 l -53.7293,349.240439 c -1.25928,8.14335 -6.21245,15.27927 -13.43232,19.30897 -7.21988,4.0297 -15.86693,4.53341 -23.50657,1.34323 L 320.58645,358.9599 263.07931,421.16836 c -7.47174,8.14334 -19.22502,10.82981 -29.55112,6.80011 -10.3261,-4.0297 -17.04226,-14.01999 -17.04226,-25.10166 v -70.18389 c 0,-3.35808 1.25928,-6.54826 3.52598,-9.06682 l 140.7036,-153.46431 c 4.86922,-5.28898 4.70132,-13.43232 -0.3358,-18.46945 -5.03712,-5.03712 -13.18047,-5.37293 -18.46945,-0.58766 L 171.15183,302.796 97.022193,265.6892 C 88.123278,261.23974 82.41454,252.34083 82.162684,242.43449 81.910828,232.52815 87.115854,223.29342 95.67896,218.34025 L 471.78405,3.4230601 c 8.98287,-5.1210737 20.06453,-4.6173616 28.54369,1.1753284 z"
-	// 	   style="stroke-width:0.83952" />
-	// 	<path fill="currentColor"
-	// 	   d="m 96.141605,280 v 10.5 c 6.399995,1.2 12.599995,2.7 18.199995,4.2 12.8,3.4 20.4,16.6 17,29.4 -3.4,12.8 -16.6,20.4 -29.4,17 -10.899995,-2.9 -21.099995,-4.9 -30.199995,-5 -7.3,-0.1 -14.7,1.7 -19.4,4.4 -2.1,1.3 -3.1,2.4 -3.5,3 -0.3,0.5 -0.7,1.2 -0.7,2.8 v 0.6 c 0.2,0.2 0.9,1.2 3.3,2.6 5.8,3.5 14.4,6.2 27.4,10.1 l 0.9,0.3 v 0 c 11.1,3.3 25.899995,7.8 37.899995,15.3 13.7,8.6 26.1,22.9 26.4,44.9 0.3,22.5 -11.4,38.9 -26.7,48.5 -6.7,4.1 -13.9,7 -21.299995,8.8 V 488 c 0,13.3 -10.7,24 -24,24 -13.3,0 -24,-10.7 -24,-24 v -11.4 c -9.5,-2.3 -18.2,-5.3 -25.6,-7.8 -2.1,-0.7 -4.1,-1.4 -6,-2 C 3.8416048,462.6 -2.9583952,449 1.2416048,436.4 c 4.2,-12.6 17.8000002,-19.4 30.4000002,-15.2 2.6,0.9 5,1.7 7.3,2.5 13.6,4.6 23.4,7.9 33.9,8.3 8,0.3 15.1,-1.6 19.2,-4.1 1.9,-1.2 2.8,-2.2 3.2,-2.9 0.4,-0.6 0.9,-1.8 0.8,-4.1 v -0.2 c 0,-1 0,-2.1 -4,-4.6 -5.7,-3.6 -14.3,-6.4 -27.1,-10.3 l -1.9,-0.6 c -10.8,-3.2 -25,-7.5 -36.4,-14.4 -13.5,-8.1 -26.50000018,-22 -26.60000018,-44.1 -0.1,-22.9 12.90000018,-38.6 27.70000018,-47.4 6.4,-3.8 13.3,-6.4 20.2,-8.2 l 0.2,-11.1 c 0,-13.3 10.7,-24 24,-24 13.3,0 24,10.7 24,24 z"
-	// 	   />
-	// </svg>
+ 
 actionButtons.innerHTML = `
 <button type="button" id="peerSend" class="btn btn-approve item" style="display: none;"
 onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" >
@@ -3039,6 +3195,20 @@ peerReceive.style.display = 'inline'
 
 document.getElementById("chatBox").innerHTML = '';//clear chat window
 
+// --------
+// document.getElementById("chatBox").innerHTML = `
+//   <div class="loader-banner">
+//     <div class="spinner"></div>
+//     <p>Loading chat history...</p>
+//   </div>
+// `;
+
+
+
+// --------
+
+
+
 headerNotes.innerHTML = ``
 
 }
@@ -3047,7 +3217,20 @@ headerNotes.innerHTML = ``
 			console.log('chatWith(): ESTABLISHING NEW CHAT WITH', toAddr)
 			preloadChatUI(toAddr)
 			headerNotes.innerHTML = ``
-			document.getElementById("chatBox").innerHTML = '';//clear chat window
+			
+			// document.getElementById("chatBox").innerHTML = '';//clear chat window
+// --------
+document.getElementById("chatBox").innerHTML = `
+  <div class="loader-banner">
+    <div class="spinner"></div>
+    <p>Loading chat history...</p>
+  </div>
+`;
+
+
+
+// --------
+			
 			console.log('clear chatBox window')
 			let userAddress = document.getElementById('yourAddress').getAttribute('address');
 
@@ -3127,39 +3310,40 @@ headerNotes.innerHTML = ``
 
 
 			// -------------------
-			actionButtons.innerHTML = `
-                <button type="button" id="peerSend" class="btn btn-approve item" style="display: none;"
-        onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" >
-		<svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
-			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
-			</svg>
+			// just dont update ui....
+		// 	actionButtons.innerHTML = `
+        //         <button type="button" id="peerSend" class="btn btn-approve item" style="display: none;"
+        // onclick="event.stopPropagation(); openSend('${toAddr.toString()}')" >
+		// <svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
+		// 	<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
+		// 	</svg>
 
-        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
-            <path fill="currentColor"
-                d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/>
-        </svg>
-        <span>SEND</span>
-		</button>
+        // <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 512 512">
+        //     <path fill="currentColor"
+        //         d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/>
+        // </svg>
+        // <span>SEND</span>
+		// </button>
 
-		<button type="button" id="peerReceive" class="btn btn-reject item" style="display: none;"
-				onclick="event.stopPropagation(); openReceive('${toAddr.toString()}')"  >
-				<svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
-			<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
-			</svg>
-				<svg height="16" width="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-					<path fill="currentColor"
-						d="m 506.43491,498.16358 c -7,10.1 -19.1,15.4 -31.2,13.5 l -416.000001,-64 c -9.7,-1.5 -18.2,-7.4 -23,-16 -4.8,-8.6 -5.4,-18.9 -1.6,-28 l 49.7,-119.6 -74.1,-68.5 c -9.70000029,-8.9 -12.9000003,-22.9 -8.1000003,-35.2 4.8,-12.3 16.7000003,-20.3 29.9000003,-20.3 h 83.600001 c 4,0 7.8,1.5 10.7,4.2 l 182.9,167.6 c 6.3,5.8 16,5.6 22,-0.4 6,-6 6.4,-15.7 0.7,-22 l -180.7,-203.4 44.2,-88.300001 c 5.3,-10.5999996 15.9,-17.39999965 27.7,-17.69999965 11.8,-0.3 22.8,5.90000005 28.7,16.09999965 l 256,448.000001 c 6.1,10.7 5.5,23.9 -1.4,34 z"/>
-				</svg>
-				<span>RECEIVE</span>
-		</button>
+		// <button type="button" id="peerReceive" class="btn btn-reject item" style="display: none;"
+		// 		onclick="event.stopPropagation(); openReceive('${toAddr.toString()}')"  >
+		// 		<svg xmlns="http://www.w3.org/2000/svg"    height="16" width="20" viewBox="0 0 512 512">
+		// 	<path fill="currentColor" d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
+		// 	</svg>
+		// 		<svg height="16" width="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+		// 			<path fill="currentColor"
+		// 				d="m 506.43491,498.16358 c -7,10.1 -19.1,15.4 -31.2,13.5 l -416.000001,-64 c -9.7,-1.5 -18.2,-7.4 -23,-16 -4.8,-8.6 -5.4,-18.9 -1.6,-28 l 49.7,-119.6 -74.1,-68.5 c -9.70000029,-8.9 -12.9000003,-22.9 -8.1000003,-35.2 4.8,-12.3 16.7000003,-20.3 29.9000003,-20.3 h 83.600001 c 4,0 7.8,1.5 10.7,4.2 l 182.9,167.6 c 6.3,5.8 16,5.6 22,-0.4 6,-6 6.4,-15.7 0.7,-22 l -180.7,-203.4 44.2,-88.300001 c 5.3,-10.5999996 15.9,-17.39999965 27.7,-17.69999965 11.8,-0.3 22.8,5.90000005 28.7,16.09999965 l 256,448.000001 c 6.1,10.7 5.5,23.9 -1.4,34 z"/>
+		// 		</svg>
+		// 		<span>RECEIVE</span>
+		// </button>
 
-		<button id="btn-search-close" class="btn  item" aria-label="Close search form"
-				onclick="event.stopPropagation(); deleteChat('${toAddr.toString()}')">
-				<svg class="icon icon--cross">
-					<use xlink:href="#icon-cross"></use>
-				</svg>
-		</button>
-		`
+		// <button id="btn-search-close" class="btn  item" aria-label="Close search form"
+		// 		onclick="event.stopPropagation(); deleteChat('${toAddr.toString()}')">
+		// 		<svg class="icon icon--cross">
+		// 			<use xlink:href="#icon-cross"></use>
+		// 		</svg>
+		// </button>
+		// `
 
 
 			// activate buttons
@@ -3189,7 +3373,19 @@ headerNotes.innerHTML = ``
 			if (addressExists) {
 				console.warn(`YOU DO HAVE A CHAT HISTORY WITH ${customAddressToCheck} `);
 				console.log('USER: ', userAddress)
+
+				// document.getElementById("chatBox").innerHTML = `
+				// <div class="loader-banner">
+				// 	<div class="spinner"></div>
+				// 	<p>Loading chat history...</p>
+				// </div>
+				// `;
+
+
+
 				let h = await cc.messages()
+
+				document.getElementById("chatBox").innerHTML = ``
 
 				// CREATE THIS FUNCTON ==> loadChatHistory(h)
 				for (let i = 0; i < h.length; i++) {
@@ -3220,6 +3416,12 @@ headerNotes.innerHTML = ``
 			} else {
 				console.warn(`YOU DONT HAVE A CHAT HISTORY WITH ${customAddressToCheck} `);
 
+				document.getElementById("chatBox").innerHTML = `
+				<div class="loader-banner">
+					<p>YOU DONT HAVE A CHAT HISTORY WITH ${customAddressToCheck}.</p>
+					<p>Send a message!</p>
+				</div>
+				`;
 			}
 			// FIN AVOID REOPENING COMS WITH ADDRESESS
 			// ------------------------------------
@@ -6336,12 +6538,12 @@ initChatClient()
 		.)  NATIVE 
 		**********************************************************************************************/
 		if (storedTokenType === 'native') {
-			console.warn('💛💛💛 LOADING NATIVE  ')
+			console.warn('💛💛💛 RE-LOADING NATIVE  ')
 			populateBalances(gasBalance)
 
 		}
 		if (storedTokenType === 'erc20') {
-			console.warn('💚💚💚 LOADING ERC20')
+			console.warn('💚💚💚 RE-LOADING ERC20')
 			populateBalances(gasBalance,balance)
 
 		}
@@ -6350,26 +6552,28 @@ initChatClient()
 
 }
 
-async function checkGasBalance(address) {
-    console.warn('checkGasBalance()')
-    let token = await getPreferredToken()
-    let selectedProvider = await selectRandomProvider(token.rpcs)
-    let provider
-    try {
-        provider = await new ethers.JsonRpcProvider(selectedProvider);
-        console.log("🤓Provider initialized successfully:", provider);
-    } catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); }
-    
-    // let balance = await provider.getBalance(address);
 
-    let balance
-	try { balance = await provider.getBalance(address); } 
-    catch (error) { console.error('Error checking balance:', error.reason); return null; }
-    const gasBalance = ethers.formatEther(balance);
-    console.log(`GAS Balance: ${gasBalance} `);
-    return gasBalance
 
-}
+		async function checkGasBalance(address) {
+			console.warn('checkGasBalance()')
+			let token = await getPreferredToken()
+			let selectedProvider = await selectRandomProvider(token.rpcs)
+			let provider
+			try {
+				provider = await new ethers.JsonRpcProvider(selectedProvider);
+				console.log("🤓Provider initialized successfully:", provider);
+			} catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); }
+			
+			// let balance = await provider.getBalance(address);
+
+			let balance
+			try { balance = await provider.getBalance(address); } 
+			catch (error) { console.error('Error checking balance:', error.reason); return null; }
+			const gasBalance = ethers.formatEther(balance);
+			console.log(`GAS Balance: ${gasBalance} `);
+			return gasBalance
+
+		}
 
 
 		async function checkERC20Balance(userAddress) {
@@ -6484,6 +6688,78 @@ async function checkGasBalance(address) {
         }
 	       
 
+// #####################
+// NEW FUNCIONS
+
+// 		async function fetchBalance(addr,provider) {
+//     try {
+//         const balance = await provider.getBalance(addr); // Use Ethers.js native function
+//         return balance; // Returns a BigNumber
+//     } catch (error) {
+//         console.error('Error checking balance:', error.reason);
+//         return null;
+//     }
+// }
+
+async function fetchBalance(addr,provider,chainId) {
+    const localStorageKey = `balance_${addr}_${chainId}`;
+    const staleTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+    // Load balance from localStorage
+    const cachedData = localStorage.getItem(localStorageKey);
+    if (cachedData) {
+        const { balance, timestamp } = JSON.parse(cachedData);
+
+        // Check if cached data is still fresh
+        if (Date.now() - timestamp < staleTime) {
+            return ethers.toBigInt(balance); // Return cached balance as BigNumber
+        }
+    }
+
+    // Fetch fresh balance from provider
+    try {
+        const freshBalance = await provider.getBalance(addr);
+
+        // Save the fresh balance to localStorage
+        const dataToCache = {
+            balance: freshBalance.toString(), // Convert BigNumber to string
+            timestamp: Date.now(),
+        };
+        localStorage.setItem(localStorageKey, JSON.stringify(dataToCache));
+
+        return freshBalance;
+    } catch (error) {
+        console.error('Error checking balance:', error.reason);
+        return null;
+    }
+}
+
+function saveBalanceToLocalStorage(addr, balance) {
+    const data = {
+        balance: balance.toString(), // Convert BigNumber to string for storage
+        timestamp: Date.now(),      // Save the timestamp to track freshness
+    };
+    localStorage.setItem(`balance_${addr}`, JSON.stringify(data));
+}
+
+function loadBalanceFromLocalStorage(addr) {
+    const data = localStorage.getItem(`balance_${addr}`);
+    if (data) {
+        return JSON.parse(data);
+    }
+    return null;
+}
+
+async function updateBalance(addr) {
+    const balance = await fetchBalance(addr);
+    if (balance !== null) {
+        saveBalanceToLocalStorage(addr, balance);
+        updateUIWithBalance(ethers.formatEther(balance)); // Update UI with new balance
+    }
+}
+
+
+// #####################
 
 
 async function loadToken(addr) {
@@ -6494,49 +6770,37 @@ async function loadToken(addr) {
         addr = userAddress
     }
 
-
     let token = await getPreferredToken()
+	te = token
     let selectedProvider = await selectRandomProvider(token.rpcs)
-    let provider
+    let provider;
     try { provider = await new ethers.JsonRpcProvider(selectedProvider); } 
-    catch (error) { 
-		console.warn("🤬Failed to initialize provider:", error.message || error);
-	 Toast.fire('Error', error.message, "error");
-
-	 }
+    catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); Toast.fire('Error', error.message, "error"); }
     console.log("🤓Provider initialized successfully:", provider);
 	 document.querySelectorAll('.eth').innerHTML= `<span class="bottom">🤓Provider initialized <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div>`
 
-	//  return
-	// Toast.fire('token loaded!','', "success");
-
-    let balance
-	try { balance = await provider.getBalance(addr); } 
-    catch (error) { console.error('Error checking balance:', error.reason); return null; }
+	let balance = await fetchBalance(addr, provider);
     const gasBalance = ethers.formatEther(balance);
     console.log(`💛💛💛 GAS Balance: ${gasBalance} `);
 
     let chainName = token.chainName
     let chainId = token.chainId
-    
     let tokenName = token.tokenName
-    
-    // EXPLORER - LINK
     let explorerLengh = token.explorers.length;
     let randomExplorer = Math.floor(Math.random() * explorerLengh);
     let explorer = token.explorers[randomExplorer].url;
     console.log('explorer:', explorer)
 
-
-	
 	if(token.contractAddr ==='' || token.contractAddr ==='nativeToken'){
-		console.warn('💛💛💛💛 IS NATIVE ')
+		// console.warn('💛💛💛💛 IS NATIVE ')
+		console.log('populateBalances(💛💛💛💛NATIVE):',chainName,chainId, tokenName, explorer, addr, gasBalance) 
 		populateBalances(chainName,chainId, tokenName, explorer,addr, gasBalance) 
+		saveLastUXInfo({ chainName: chainName, chainId: chainId, tokenName: tokenName, explorer: explorer, addr:addr, gasBalance: gasBalance});
 
 	}
 	if( token.contractAddr !='nativeToken'){
 
-		console.warn('💛💛💛💛 IS ERC20 ')
+		// console.warn('💛💛💛💛 IS ERC20 ')
 		let contractAddr = token.contractAddr
 		let tokenContract;
 		try { tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider); } 
@@ -6546,16 +6810,23 @@ async function loadToken(addr) {
 		try { erc20balance = await tokenContract.balanceOf(addr); }
 		catch (error) { console.warn("🤬Failed to get ERC20 Balance:", error.message || error); }
 
-// 999
 				const decimals = await tokenContract.decimals();
 				console.log('decimals:', decimals);
 				let formatedBalance = ethers.formatUnits(erc20balance, decimals);
-// 99999
 
-		console.log("ERC20 Balance gotten successfully:", erc20balance);
-		console.log('populateBalances():',chainName,chainId, tokenName, explorer, addr, gasBalance, erc20balance, contractAddr) 
+		// console.log("ERC20 Balance gotten successfully:", erc20balance);
+		console.log('populateBalances(💛💛💛💛 ERC20):',chainName,chainId, tokenName, explorer, addr, gasBalance, erc20balance, contractAddr) 
 		populateBalances(chainName,chainId, tokenName, explorer, addr, gasBalance, formatedBalance, contractAddr) 
-		// populateBalances(chainName,chainId, tokenName, explorer, addr, gasBalance, erc20balance, contractAddr) 
+		saveLastUXInfo({
+  chainName: chainName,
+  chainId: chainId,
+  tokenName: tokenName,
+  explorer: explorer,
+  addr:addr,
+  gasBalance: gasBalance,
+  formatedBalance: formatedBalance,
+  contractAddr: contractAddr
+});
 
 	}
 
@@ -7562,15 +7833,109 @@ async function loadToken(addr) {
 		}
 
 
+		function isValidEvmAddress(address) {
+  return ethers.isAddress(address);
+}
+
+
+
+
+
+
 		async function simpleSend(){
 			console.warn('simpleSend')
 
 			openModalId('#walletSend')
 			let recipientAddressInput = document.getElementById('recipientAddress');
+			let stealthAddressCheckbox = document.getElementById("stealthAddressCheckbox");
+
+			stealthAddressCheckbox.checked = false; // Uncheck if previously checked
+			stealthAddressCheckbox.disabled = true; // Disable checkbox
+
 			recipientAddressInput.removeAttribute('readonly');
 			recipientAddressInput.value ='';
 
+			// listen to onchange en recipientAddressInput
+			// Add event listener to the recipientAddress field
+		recipientAddressInput.addEventListener('input', function () {
+			const recipientAddress = this.value.trim(); // Get the input value
+			// const stealthAddressCheckbox = document.getElementById("stealthAddressCheckbox");
+			
+			if (recipientAddress === "" || !isValidEvmAddress(recipientAddress)) {
+				// Disable the checkbox if the address is invalid or empty
+				stealthAddressCheckbox.checked = false; // Uncheck if previously checked
+				stealthAddressCheckbox.disabled = true; // Disable checkbox
+				this.removeAttribute("data-address"); // Remove data-address attribute if invalid
+				// document.getElementById('peerAddr').removeAttribute("data-address"); // Remove data-address attribute if invalid
+				
+			} else {
+				// Enable the checkbox if the address is valid
+				stealthAddressCheckbox.disabled = false;
+				this.setAttribute("data-address", recipientAddress); // Set data-address attribute
+				// document.getElementById('peerAddr').setAttribute("data-address", recipientAddress); // Set data-address attribute
+			}
+
+			// if (recipientAddress === "" || !isValidEvmAddress(recipientAddress)) {
+			// 	// Disable the checkbox if the address is invalid or empty
+			// 	stealthAddressCheckbox.checked = false; // Uncheck if previously checked
+			// 	stealthAddressCheckbox.disabled = true; // Disable checkbox
+			// } else {
+			// 	// Enable the checkbox if the address is valid
+			// 	stealthAddressCheckbox.disabled = false;
+			// }
+
+
+			});
 		}
+
+
+
+		async function openReceive() {
+			console.warn('openReceive')
+
+						// open modal
+						openModalId('#walletReceive')
+
+						return
+			// if 🦹‍♂️↔️🦹‍♀️ Stealth addresses always on
+			const checkbox = document.getElementById("stealthAddressCheckbox");
+
+			const stealthAddressOn = localStorage.getItem('stealthAddressAlwaysOn');
+			if (stealthAddressOn === 'true') {
+				console.log('stealthAddressAlwaysOn is on')
+				checkbox.checked = true;
+				localStorage.setItem('stealthAddressActive', true)
+
+				prepareStealthAddr()
+
+
+			} else {
+				console.log('stealthAddressAlwaysOn is off')
+				checkbox.checked = false;
+				localStorage.setItem('stealthAddressActive', false)
+
+			}
+
+			if (addr) {
+				console.log('there is address', addr)
+			}
+			else {
+				console.log('there is not addr')
+			}
+
+
+			// // open modal
+			// openModalId('#walletReceive')
+
+			// get recipient address
+			// document.getElementById("recipientAddress").value = addr;
+
+		 
+
+		}
+
+
+
 
 		async function openSend(addr) {
 			console.warn('openSend', addr)
@@ -7672,7 +8037,49 @@ let preferredToken
 			const tab = new bootstrap.Tab(document.getElementById('confirmation-tab'));
 			tab.show();
 			let addr = document.getElementById('yourAddress').getAttribute('address');
-			let toAddress = document.getElementById('peerAddr').getAttribute('data-address')
+			// let toAddress = document.getElementById('peerAddr').getAttribute('data-address')
+
+			let toAddress; // Declare the variable outside the block for broader scope
+			let peerElement = document.getElementById('peerAddr');
+
+			if (peerElement) {
+			toAddress = peerElement.getAttribute('data-address');
+			console.log(toAddress); // Element exists, and the value is logged
+			} else {
+			console.error('Element with id "peerAddr" not found'); // Handle missing element gracefully
+				 toAddress = document.getElementById('recipientAddress').value
+				console.log('recipien address:', toAddress);
+
+			}
+
+			// You can now use toAddress here if it was set
+			// if (toAddress) {
+			// // Do something with toAddress
+			// console.log(`Address: ${toAddress}`);
+
+			// } else {
+			// console.log('No address found, unable to proceed.');
+			// }
+
+			// if (toAddress) {
+			// 	 toAddress = peerAddrElement.getAttribute('data-address');
+			// 	console.log("Address:", toAddress);
+			//   } else {
+			// 	console.error("Element with id 'peerAddr' not found!");
+			// 	 toAddress = document.getElementById('recipientAddress').value
+
+			// }
+
+				// let toAddr;
+				// const peerElement = document.getElementById('peerAddr');
+				// if (peerElement) {
+				// const toAddress = peerElement.getAttribute('data-address');
+				// console.log(toAddress);
+				// } else {
+				// console.error('Element with id "peerAddr" not found');
+				// }
+
+
 
 		// ................................
 		// GET TOKEN
@@ -7994,14 +8401,23 @@ let preferredToken
 					});
 
 					// ------------------------------
-					// send tx information via chat
-					const conversation = await iusnaturalisxmtp.conversations.newConversation(toAddress)
-					let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
-					await conversation.send(`${message}`, {})
-					// await loadToken(addr)// UPDATE BALANCE
+					// check if address is in the xmtp
+								// CAN CHAT?
+					// 		const canChat = await iusnaturalisxmtp.canMessage(toAddress);
+					// 		console.log("Can message?: " + canChat);
+						
+					// 		if (canChat) {
+					// 		  // Perform the action if the address can chat
+					// 		  console.log("The address can chat. Proceeding...");
+					// 		const conversation = await iusnaturalisxmtp.conversations.newConversation(toAddress)
+					// 		let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
+					// 		await conversation.send(`${message}`, {})
+					// 		} else {
+					// 		  console.log("The address cannot chat. Displaying a message...");
+					// 		}
+							
 
-					// ??
-					await loadToken(userAddress)// UPDATE BALANCE
+					// await loadToken(userAddress)// UPDATE BALANCE
 
 				} 
 // ...............................................................
@@ -8096,22 +8512,42 @@ let preferredToken
 
 						// ------------------------------
 						// send tx information via chat
-						const conversation = await iusnaturalisxmtp.conversations.newConversation(toAddress)
+						// const conversation = await iusnaturalisxmtp.conversations.newConversation(toAddress)
 
-						let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
-						await conversation.send(`${message}`, {})
-						await loadToken(userAddress)// UPDATE BALANCE
+						// let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
+						// await conversation.send(`${message}`, {})
+
+
+						// await loadToken(userAddress)// UPDATE BALANCE
 
 
 						// -------------------------------
 					// -----
 
-					return
+					// return
 
 
 
 				}
 
+							// CAN CHAT?
+							const canChat = await iusnaturalisxmtp.canMessage(toAddress);
+							console.log("Can message?: " + canChat);
+						
+							if (canChat) {
+							  // Perform the action if the address can chat
+							  console.log("The address can chat. Proceeding...");
+							const conversation = await iusnaturalisxmtp.conversations.newConversation(toAddress)
+							let message = `sent you ${amount} ${tokenName} <a href="${txLink}" target="_blank">Link</a> <pre style="display: none;" txLink="${txLink}" preferredToken="${JSON.stringify(preferredToken)}" >paymentReceived0x21</pre> `
+							await conversation.send(`${message}`, {})
+							} else {
+							  console.log("The address cannot chat. Displaying a message...");
+							}
+							
+
+							await loadToken(userAddress)// UPDATE BALANCE
+
+							playtxReceived()
 
 
 

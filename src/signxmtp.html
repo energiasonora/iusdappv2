@@ -85,6 +85,7 @@
     <!-- Script to handle modal -->
     <script>
 
+const alchemyKey = "X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"; // Replace with your deployed contract address
 
    // -----------------------------------------
         // WALLET FUNCTIONS
@@ -171,8 +172,8 @@ async function aliceWallet() {
                 });
 
                 // qrScanner.setInversionMode('invert');
-                qrScanner.start();
                 qrScanner.setInversionMode('both');
+                qrScanner.start();
 
             }, 1000);
 
@@ -186,9 +187,7 @@ async function aliceWallet() {
             qrScanner = null;
             x1 = result.data;
 
-            // const str = "0xA9367ccD386356F6114542483bfA31c7091c2442,I'm logging into IusNaturalis";
-
-            const str = result.data
+            let str = result.data
                 // Regular expression to extract the address-like part
                 const regex = /0x[a-fA-F0-9]{40}/;
 
@@ -209,31 +208,35 @@ async function aliceWallet() {
                     console.log("Rest of the message:", restOfMessage);
                     document.getElementById('scanResult').innerHTML = ` <h1 class="success-message__title">✅✅✅ SCANED!</h1> <div class="success-message__content"> <p>${result.data}</p> </div> </div> `
 
-                      // Show SweetAlert2 modal
-    Swal.fire({
-      title: 'Sign',
-      text: restOfMessage, // Display the rest of the message
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sign?',
-      cancelButtonText: 'Refuse',
-    }).then(async(result) => {
-      if (result.isConfirmed) {
-        console.log("User chose to sign the message.");
+            
+                    Swal.fire({
+                    title: 'Sign',
+                    text: restOfMessage, // Display the rest of the message
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sign?',
+                    cancelButtonText: 'Refuse',
+                    }).then(async(result) => {
+                    if (result.isConfirmed) {
+                        console.log("User chose to sign the message.");
 
-      
-       // -----------------
-        // GET SIGNER
-        // -----------------
-        let alicewallet = await aliceWallet();
-        let signer = await new ethers.Wallet(alicewallet.privateKey)
-        console.log('signer:', signer)
+            
+            // -----------------
+                // GET SIGNER
+                // -----------------
+                let alicewallet = await aliceWallet();
+                let signer = await new ethers.Wallet(alicewallet.privateKey)
+                console.log('signer:', signer)
 
-        // -----------------
-        // SIGN TX
-        // -----------------
-        const signature = await signer.signMessage(restOfMessage);
+                // -----------------
+                // SIGN TX
+                // -----------------
+                const signature = await signer.signMessage(restOfMessage);
                 console.log('signature:', signature)
+            //     let signedTransaction = await signTransaction(txToSign, alicewallet.privateKey)
+            //    console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
+
+
                 // document.getElementById('signedMessage').innerHTML += `<br> <h1 class="success-message__title">SIGNATURE</h1> <div class="success-message__content"> <p>${signature}</p> </div> </div> `
 
                 // Display the signature to the user
@@ -295,6 +298,13 @@ async function aliceWallet() {
             // if localTest wallet
             let alicewallet = await aliceWallet()
             document.getElementById('yourAddress').innerText = ` ${alicewallet.address}`
+
+
+            // balance
+            let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+            const gasBalance = await provider.getBalance(alicewallet.address);
+			let balance = ethers.formatEther(gasBalance));
+            document.getElementById('yourAddress').innerHTML += ` <br>Your balance: ${balance}`
 
              iusnaturalisxmtp = await Client.create(alicewallet)
             console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
@@ -441,8 +451,14 @@ async function aliceWallet() {
                 // Define the message to sign, including the nonce
                 const message = `I'm logging into IusNaturalis\nNonce: ${nonce}`;
 
+                // ---------------------------
+                // Message or transaction??
                 // Ask the user to sign the message
                 const signature = await signer.signMessage(message);
+                // signTransaction
+            //    let signedTransaction = await signTransaction(txToSign, alicewallet.privateKey)
+                // ---------------------------
+
 
                 // Send the signature and nonce back to the backend for verification
                 const verificationResponse = await fetch('https://originating-dapp.com/verify-signature', {

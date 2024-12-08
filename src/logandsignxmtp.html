@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Message from Other dApp</title>
+    <link rel="stylesheet" href="css/pico.min.css" />
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #qrScanVideo {
+            width: 100%;
+        }
+
+        .sig {
+            font-size: x-small;
+        }
+           /* COLORED TOASTS */
+
+           .colored-toast.swal2-icon-success {
+            background-color: #45bb00 !important;
+        }
+
+        .colored-toast.swal2-icon-error {
+            background-color: #f27474 !important;
+        }
+
+        .colored-toast.swal2-icon-warning {
+            background-color: #f8bb86 !important;
+        }
+
+        .colored-toast.swal2-icon-info {
+            background-color: #3fc3ee !important;
+        }
+
+        .colored-toast.swal2-icon-question {
+            background-color: #87adbd !important;
+        }
+
+        .colored-toast .swal2-title {
+            color: white;
+        }
+
+        .colored-toast .swal2-close {
+            color: white;
+        }
+
+        .colored-toast .swal2-html-container {
+            color: white;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+    <h1>log and Sign a Tx (xmtp)</h1>
+    <br>
+    your address: <span id="yourAddress"></span>
+    <div id="result">
+
+        <!-- <label for="messageInput">Paste the message you want to sign:</label>
+    <textarea id="messageInput" placeholder="Paste your message here..."></textarea> -->
+    </div>
+
+    <div id="signedMessage"></div>
+
+
+
+
+
+    <button type="button" id="" class="btn btn-danger" onclick="event.stopPropagation(); scanAddress()">
+        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+            <path
+                d="M0 80C0 53.5 21.5 32 48 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V80zM64 96v64h64V96H64zM0 336c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V336zm64 16v64h64V352H64zM304 32h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H304c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48zm80 64H320v64h64V96zM256 304c0-8.8 7.2-16 16-16h64c8.8 0 16 7.2 16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16v96c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16v64c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V304zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z" />
+        </svg>
+    </button>
+
+    <div id="messages"></div>
+
+
+
+
+
+    <!-- SCAN MODAL -->
+    <dialog id="scanModal" class="modal" data-backdrop="static">
+        <article>
+            <header>
+                <h5 data-translate="scanqr">Scan QR</h5>
+            </header>
+            <section>
+                <div>
+                    <div class="responsive-svg" id="qrcanvas"></div>
+                    <video id="qrScanVideo" width="300" height="300"></video>
+                    <div id="scanResult"></div>
+                </div>
+            </section>
+            <footer>
+                <button type="button" class="secondary" id="closeScanModal" data-translate="close">Close</button>
+            </footer>
+        </article>
+    </dialog>
+
+
+
+    <script type="module">
+        // XMTP
+        import { Client } from '@xmtp/xmtp-js'
+        window.Client = Client;
+
+        import QrScanner from "qr-scanner/qr-scanner.min.js";
+        window.QrScanner = QrScanner; //make global
+        QrScanner.hasCamera(); // test
+
+
+
+        // import { ContentTypeId } from "@xmtp/xmtp-js";
+    // import { ContentTypeId } from "@xmtp/content-type-primitives";
+    //     window.ContentTypeId = ContentTypeId;
+
+        
+    //     const ContentTypeTxRequest = new ContentTypeId(
+    //         'localhost:4343',  // Replace with your own domain
+    //         'tx-signing-request',
+    //         1,  // Major version
+    //         0   // Minor version
+    //         );
+    //         window.ContentTypeTxRequest = ContentTypeTxRequest;
+
+
+
+    </script>
+    <!-- Script to handle modal -->
+    <script>
+
+        const explorer = "https://sepolia.arbiscan.io/"; // Replace with your deployed contract address
+        const alchemyKey = "X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"; // Replace with your deployed contract address
+
+         /*********************************************************************************************
+        .) sweetalert2
+        // position: "top-right",
+        **********************************************************************************************/
+
+		const ToastTop = Swal.mixin({
+			toast: true,
+			position: "bottom-end",
+			showConfirmButton: false,
+			timer: 3000,
+			timerProgressBar: true,
+			didOpen: (toast) => {
+				toast.addEventListener("mouseenter", Swal.stopTimer);
+				toast.addEventListener("mouseleave", Swal.resumeTimer);
+			},
+			iconColor: "white",
+			customClass: {
+				popup: "colored-toast",
+			},
+		});
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top",
+            // position: "bottom-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: toast => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast'
+            },
+        });
+        // -----------------------------------------
+        // WALLET FUNCTIONS
+        // -----------------------------------------
+
+
+        // Function to derive an address on demand
+        async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+
+        async function contractWallet() {
+            let contractMnemonic = localStorage.getItem('contractMnemonic');
+            if (!contractMnemonic) {
+                console.error('NO contractMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                contractMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('contractMnemonic', contractMnemonic);
+
+            } else {
+                console.log('contractMnemonic is in localStorage!');
+
+            }
+            let contractWall = deriveAddressWallet(contractMnemonic, 0)
+            return contractWall
+        }
+
+        async function aliceWallet() {
+            let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+            if (!aliceMnemonic) {
+                console.error('NO aliceMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                aliceMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('aliceMnemonic', aliceMnemonic);
+
+            } else {
+                console.log('aliceMnemonic is in localStorage!');
+
+            }
+            let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+            return aliceWall
+        }
+
+
+
+
+
+        // ----------
+        const scanModal = document.getElementById('scanModal');
+        const closeScanModalButton = document.getElementById('closeScanModal');
+
+        // // Open modal (example)
+        // function openScanModal() {
+        //     scanModal.showModal();
+        // }
+
+        // // Close modal
+        closeScanModalButton.addEventListener('click', () => {
+            qrScanner.stop();
+            qrScanner.destroy();
+            qrScanner = null;
+            scanModal.close();
+        });
+
+        async function scanAddress() {
+            console.log('SCANNING FOR A NEW USER ADDRESS')
+            Swal.close(); // Close the modal
+            // var audioContext = new AudioContext();
+
+            // open modal
+            scanModal.showModal();
+
+            document.getElementById('scanResult').innerHTML = ''
+            setTimeout(() => {
+                var videoElem = document.getElementById("qrScanVideo");
+                window.qrScanner = new QrScanner(videoElem, result => qrscanned(result), {
+                    highlightScanRegion: true,
+                    highlightCodeOutline: true,
+                });
+
+                // qrScanner.setInversionMode('invert');
+                qrScanner.setInversionMode('both');
+                qrScanner.start();
+
+            }, 1000);
+
+        }
+
+
+        async function qrscanned(result) {
+            console.log('🔎 🔰 💬scanned decoded qr code:', result.data)
+            qrScanner.stop();
+            qrScanner.destroy();
+            qrScanner = null;
+            x1 = result.data;
+
+            let str = result.data
+            // Regular expression to extract the address-like part
+            const regex = /0x[a-fA-F0-9]{40}/;
+
+            // Find the match
+            const match = str.match(regex);
+
+            if (match) {
+                const potentialAddress = match[0];
+
+                // Validate the address using Ethers.js
+                if (ethers.isAddress(potentialAddress)) {
+                    const address = potentialAddress;
+
+                    // Extract the rest of the message by removing the address from the string
+                    const restOfMessage = str.replace(address, '').trim().replace(/^,/, '').trim();
+
+                    console.log("Extracted address:", address);
+                    console.log("Rest of the message:", restOfMessage);
+                    document.getElementById('scanResult').innerHTML = ` <h1 class="success-message__title">✅✅✅ SCANED!</h1> <div class="success-message__content"> <p>${result.data}</p> </div> </div> `
+
+
+                    Swal.fire({
+                        title: 'Sign',
+                        text: restOfMessage, // Display the rest of the message
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sign?',
+                        cancelButtonText: 'Refuse',
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            console.log("User chose to sign the message.");
+
+
+                            // -----------------
+                            // GET SIGNER
+                            // -----------------
+                            let alicewallet = await aliceWallet();
+                            let signer = await new ethers.Wallet(alicewallet.privateKey)
+                            console.log('signer:', signer)
+
+                            // -----------------
+                            // SIGN TX
+                            // -----------------
+                            const signature = await signer.signMessage(restOfMessage);
+                            console.log('signature:', signature)
+                            //    console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
+                            // Display the signature to the user
+                            console.log("Message:", restOfMessage);
+                            console.log("Signature:", signature);
+                            document.getElementById('result').innerHTML = `✅ signed!
+                                <br>Message:<span class='sig'> ${restOfMessage}</span>
+                                <br>Signature:<span class='sig'> ${signature}</span>`;
+                            // -----------------
+                            // TRANSMIT SIGNATURE THROUGH XMTP
+                            // -----------------    
+                        
+                            await sendMessage(iusnaturalisxmtp, address, signature)
+
+
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            console.log("User refused.");
+                        }
+                    });
+
+
+
+                } else {
+                    console.log("Invalid address format.");
+                }
+
+            } else {
+                console.log("No address found.");
+            }
+
+            // playBeep();
+
+            await setTimeout(() => {
+                // closeModalId('#scanModal')
+                scanModal.close();
+
+            }, 1500);
+
+
+
+
+        }
+
+
+
+
+        // ---------------------------------------------
+        // Handle Individual Chat Streams
+        // ---------------------------------------------
+            
+            // Define encoding and decoding logic
+            const TxRequestCodec = {
+                encode: (txRequest) => {
+                    // Serialize the transaction request to a JSON string
+                    return new TextEncoder().encode(JSON.stringify(txRequest));
+                },
+                decode: (bytes) => {
+                    // Deserialize the transaction request from a JSON string
+                    return JSON.parse(new TextDecoder().decode(bytes));
+                },
+            };
+
+
+        // 3. Send a Transaction Signing Request
+        async function sendTxSigningRequest(xmtpClient, recipientAddress, txToSign) {
+            const conversation = await xmtpClient.conversations.newConversation(recipientAddress);
+
+            // Send the transaction signing request
+            await conversation.send(txToSign, { contentType: ContentTypeTxRequest });
+        }
+
+
+
+        // 4. Receive and Handle the Request
+        async function listenForTxSigningRequests(xmtpClient) {
+            for await (const conversation of xmtpClient.conversations.stream()) {
+                for await (const message of conversation.streamMessages()) {
+                if (message.contentType.sameAs(ContentTypeTxRequest)) {
+                    const txToSign = message.content;
+                    console.log('Received transaction signing request:', txToSign);
+
+                    // Handle the request (e.g., prompt user to sign it)
+                    // const wallet = ...; // User's wallet
+                    const signedTx = await wallet.signTransaction(txToSign);
+
+                    // Optionally send the signed transaction back
+                    await conversation.send(signedTx, { contentType: ContentTypeTxRequest });
+                }
+                }
+            }
+        }
+
+
+
+
+        async function signTransaction(transaction, privateKey) {
+            const wallet = new ethers.Wallet(privateKey); // Load wallet from private key
+
+            // Sign the transaction
+            const signedTransaction = await wallet.signTransaction(transaction);
+
+            return signedTransaction; // Return signed transaction
+        }
+
+        // ---------------------------------------------
+        // Start Listening to All Messages
+        // ---------------------------------------------
+        function isValidJSON(str) {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+
+        function parseBigInts(json) {
+  return JSON.parse(json, (_, value) =>
+    typeof value === 'string' && /^[0-9]+$/.test(value) ? BigInt(value) : value
+  );
+
+        }
+
+
+    // Function to listen to all messages and filter based on messageStore
+async function listenToAllowedPeers( ) {
+// Initialize XMTP client
+// const xmtp = await Client.create(wallet);
+let alicewallet = await aliceWallet()
+let thisUserAddress = alicewallet.address;
+// Stream all messages
+for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
+    const address = message.conversation.peerAddress;
+
+
+    if (message.senderAddress === thisUserAddress) {
+            console.log(`📣 conversation from yourself`,thisUserAddress,message.content);
+            continue;
+        }
+
+
+    // Check if the message is from an address in messageStore
+    if (messageStore[address]) {
+        console.log(`New message from ${address}:`, message.content);
+
+
+        if (isValidJSON(message.content)) {
+            let receivedMessage = JSON.parse(message.content);
+        console.warn(" JSON message:", receivedMessage);
+
+        if (receivedMessage.type === "tx-signing-request") {
+            
+            // ----------------------------------------------
+            // const txToSign = receivedMessage.payload;
+            // console.log("Transaction to sign:", txToSign);
+            // ----------------------------------------------
+            
+            // 2. Parse the string and convert strings back to BigInt on the receiver's side
+            const receivedTransaction = parseBigInts(receivedMessage.payload);
+            console.log('receivedTransaction:', receivedTransaction);
+            rtx = receivedTransaction
+
+            
+                    // You can now validate or display this transaction to the user for signing
+                    Swal.fire({
+                        title: "<strong>New tx-signing-request</strong>",
+                        icon: "info",
+                        html: `
+                            <code>${message.content}</code>
+                        `,
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        focusConfirm: false,
+                        confirmButtonText: ` <i class="fa fa-sign"></i> Sign tx! `,
+                        confirmButtonAriaLabel: "Sign!",
+                        cancelButtonText: ` <i class="fa fa-thumbs-down">Decline</i> `,
+                        cancelButtonAriaLabel: "Thumbs down"
+                        }).then(async (result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+
+
+                                // -----------------
+                                // SIGN TX
+                                // -----------------
+                                let signedTransaction 
+                                try {
+                                    let alicewallet = await aliceWallet()
+                                        signedTransaction = await signTransaction(receivedTransaction, alicewallet.privateKey)
+                                        // signedTransaction = await signTransaction(txToSign, alicewallet.privateKey)
+                                } catch (error) {
+                                    console.warn('errorr:',error)
+                                }
+
+                                console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
+
+                                stx = signedTransaction;
+                                    // -----------------
+                                    // BROADCAST  (if online)
+                                    // -----------------
+                                    if (navigator.onLine) {
+                                        console.log("The device is online.");
+                                        } else {
+                                        console.log("The device is offline.");
+                                    }
+                                    // -----------------
+                                    // 5. now the contract should publish and check the tx
+                                    let txHash
+                                    try {
+                                    let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+                                         txHash = await provider.broadcastTransaction(signedTransaction);
+                                        console.log('Transaction broadcasted successfully:', txHash);
+                                        let msg= `Transaction broadcasted successfully. Tx hash: ${txHash.hash}`
+                                        await sendMessage(iusnaturalisxmtp, address, msg)
+
+
+                                    } catch (error) {
+                                        if (error.code === 'CALL_EXCEPTION') {
+                                            console.error('Transaction execution reverted:', error);
+                                            console.error('Reason:', error.reason || 'No reason provided');
+                                            console.error('Revert Details:', error.revert || 'No revert details available');
+                                            console.error('Transaction Data:', error.transaction || 'No transaction data');
+                                            console.error('Receipt:', error.receipt || 'No receipt available');
+                                        } else {
+                                            console.error('An unexpected error occurred:', error);
+                                        }
+
+                                            Toast.fire('Error', error   , "error");
+
+                                        return
+                                    }
+                               
+                                    // --------------------------
+                                    const abi = ["function contribute(string memory _pseudonym) public payable",];
+                                    const iface = new ethers.Interface(abi);
+                                    const decoded = iface.parseTransaction({ data: stx });
+                                    console.log('decoded: ',decoded);
+                                    // ------------------------------
+                                    
+                                    // display receipt of tx
+                                    let receipt = await txHash.wait();
+                                    
+                                    // SHARE LINK TO ExpLORER
+                                    let link =`<a target="_blank" rel="noopener noreferrer" href="${explorer}/tx/${receipt.hash}">Tx link</a>`
+                                    
+                                // -----------------
+                                // TRANSMIT RESPONSE THROUGH XMTP
+                                // -----------------    
+                            
+                                await sendMessage(iusnaturalisxmtp, address, link)
+
+                                        Swal.fire({
+                                                icon: "success",
+                                                title: "Done",
+                                                text: "Tx succesfull!",
+                                                footer: `${link}`
+                                            });
+
+
+
+
+                                } else if (result.isDenied) {
+                                    Swal.fire("Transaction Declined", "", "info");
+                                }
+                            });
+
+
+
+                    } else{
+                        
+                        ToastTop.fire({ title: "New JSON message!", text: receivedMessage, icon: "warning" });
+                        
+                    }
+            // Process the message
+            } else {
+            console.warn("Invalid JSON message:", message.content);
+            ToastTop.fire({ title: "New message!", text: message.content, icon: "success" });
+            updateChatWindow(address, message.content);
+            }
+            // -----------------
+            // Save the message to messageStore
+            saveMessage(address, message.content, 'peer', message.sent);
+
+
+
+            
+        }
+    }
+}
+
+// Function to save messages to messageStore and localStorage
+function saveMessage(address, content, sender, timestamp = new Date()) {
+    if (!messageStore[address]) {
+        messageStore[address] = [];
+    }
+    messageStore[address].push({ content, sender, timestamp });
+
+    // Save the updated messageStore to localStorage
+    localStorage.setItem('messageStore', JSON.stringify(messageStore));
+}
+
+
+// -.-.-.-.-.-.-.---.-.
+        // Global State to Track Conversations
+        const activeChats = new Map(); // Tracks open chat streams
+        //  messageStore = {}; // Stores all messages grouped by address
+          messageStore = JSON.parse(localStorage.getItem('messageStore')) || {};
+        //  let messageStore = JSON.parse(localStorage.getItem('messageStore')) || {};
+        // let messageStore = {}; // Stores all messages grouped by address
+        function saveToLocalStorage() {
+            localStorage.setItem('messageStore', JSON.stringify(messageStore));
+        }
+
+// Wrap messageStore with a Proxy to intercept changes
+messageStore = new Proxy(messageStore, {
+    set(target, property, value) {
+        target[property] = value; // Update the property
+        saveToLocalStorage(); // Save to localStorage
+        return true; // Indicate success
+    }
+});
+
+
+        let abortController;
+ 
+
+        async function openChat(xmtpClient, address) {
+            // Check if a stream for this address is already active
+            if (activeChats.has(address)) {
+                console.log(`Chat with ${address} is already open.`);
+                return activeChats.get(address).conversation; // Return the existing conversation
+            }
+
+            console.log(`Opening chat with ${address}...`);
+
+            // Get or start the conversation
+            const conversation = await xmtpClient.conversations.newConversation(address);
+
+            // Set up the message stream in the background
+            const abortController = new AbortController();
+            const { signal } = abortController;
+            activeChats.set(address, { conversation, abortController });
+
+            (async () => {
+                try {
+                    for await (const message of await conversation.streamMessages({ signal })) {
+                        console.log(`[${message.senderAddress}]: ${message.content}`);
+                        updateChatWindow(message.senderAddress, message.content);
+
+
+                        // Add message to the global store
+                        // if (!messageStore[address]) {
+                        //   messageStore[address] = [];
+                        // }
+                        // messageStore[address].push({
+                        //   content: message.content,
+                        //   timestamp: message.sent,
+                        // });
+
+                        // Notify the UI to update the chat window
+                        // updateChatWindow(address, message.content);
+                    }
+                } catch (err) {
+                    if (err.name === 'AbortError') {
+                        console.log(`Chat stream with ${address} stopped.`);
+                    } else {
+                        console.error(`Error in chat stream with ${address}:`, err);
+                    }
+                }
+            })(); // Run the message stream setup asynchronously
+
+            return conversation; // Return the conversation object immediately
+        }
+
+        async function sendMessage(xmtpClient, address, messageContent) {
+            try {
+                // Open the chat and get the conversation
+                const conversation = await openChat(xmtpClient, address);
+
+                console.log('sendMessage(conversation):', conversation)
+                // Send the message
+                await conversation.send(messageContent);
+                console.log(`Message sent to ${address}: ${messageContent}`);
+
+                // Optionally, add the sent message to the message store
+                if (!messageStore[address]) {
+                messageStore[address] = [];
+                }
+                messageStore[address].push({
+                content: messageContent,
+                timestamp: new Date(),
+                sender: 'self', // Mark it as sent by the user
+                });
+
+                // Update the chat window
+                // updateChatWindow(address, messageContent);
+            } catch (err) {
+                console.error(`Failed to send message to ${address}:`, err);
+            }
+        }
+
+
+        // Chat Window Updates
+        // Ensure the chat window shows new messages dynamically:
+        function updateChatWindow(address, message) {
+            // console.log(`updateChatWindow() ${address}: ${message}`);
+            // Add the message to the UI (e.g., append to chat window)
+            document.getElementById('messages').innerHTML += `${message}<br>`
+        }
+
+
+        function closeChat(address) {
+            // Check if the chat is active
+            const abortController = activeChats.get(address);
+            if (abortController) {
+                abortController.abort(); // Stop the stream
+                activeChats.delete(address); // Remove from active chats
+                console.log(`Closed chat with ${address}.`);
+            } else {
+                console.log(`No active chat with ${address} to close.`);
+            }
+        }
+
+
+
+
+
+        // -----------------------------------------
+        //  ONLOAD
+        // -----------------------------------------
+        // Load messages on page load
+        window.addEventListener("load", init);
+
+
+        async function init() {
+
+            // if localTest wallet
+            let alicewallet = await aliceWallet()
+            document.getElementById('yourAddress').innerText = ` ${alicewallet.address}`
+
+
+            // balance
+            let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+            const gasBalance = await provider.getBalance(alicewallet.address);
+            let balance = ethers.formatEther(gasBalance));
+            document.getElementById('yourAddress').innerHTML += ` <br>Your balance: ${balance}`
+
+            iusnaturalisxmtp = await Client.create(alicewallet)
+            console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
+            console.warn(' Alice address:  ', alicewallet.address)
+
+
+            // Register the custom codec
+            // iusnaturalisxmtp.registerCodec({
+            //     contentType: ContentTypeTxRequest,
+            //     codec: TxRequestCodec,
+            // });
+            // console.warn(' 🟠🟠🟠CODEC REGISTERED🟠🟠🟠 ')
+
+
+            
+            // get smart contract to which i signed
+            listenToAllowedPeers()
+
+            // openchat with connected smart contract/
+            // await openChat(iusnaturalisxmtp, address) 
+
+            
+
+
+        }
+
+
+
+
+        const toHexString = (bytes) => {
+            return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+        };
+
+
+
+        async function aliceWallet() {
+            let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+            if (!aliceMnemonic) {
+                console.error('NO aliceMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                aliceMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('aliceMnemonic', aliceMnemonic);
+
+            } else {
+                console.log('aliceMnemonic is in localStorage!');
+
+            }
+            let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+            return aliceWall
+        }
+
+
+
+        async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+
+
+        const signCustomMessage = async () => {
+            try {
+                // -----------------
+                // create TX
+                // -----------------
+                // Get the user-provided message
+                const messageInput = document.getElementById("messageInput").value.trim();
+                if (!messageInput) {
+                    alert("Please paste a message to sign.");
+                    return;
+                }
+
+
+                // ------------
+                // localTest
+                let alicewallet = await aliceWallet();
+                let signer = await new ethers.Wallet(alicewallet.privateKey)
+
+                // -----------------
+                // SIGN TX
+                // -----------------
+                const signature = await signer.signMessage(messageInput);
+                console.log('signature:', signature)
+                // result.innerHTML = `<span id='sig'>${signature}</span>`
+                result.innerText = signature
+
+
+
+                // Display the signature to the user
+                console.log("Message:", messageInput);
+                console.log("Signature:", signature);
+                alert("Message signed successfully!\n\n" +
+                    `Message: ${messageInput}\n` +
+                    `Signature: ${signature}`);
+
+
+
+
+                // ------------
+                // Recover the address of the signer
+                let recoveredAddress = ethers.verifyMessage(messageInput, signature);
+                r= recoveredAddress
+                // Store the address in localStorage
+                // localStorage.setItem("IusNaturalisAddress", recoveredAddress);
+
+                alert(`Logged in as: ${recoveredAddress}`);
+
+
+            } catch (error) {
+                console.error("Error signing message:", error);
+                alert("An error occurred while signing the message. Please try again.");
+            }
+        };
+
+      
+
+        
+
+        
+    </script>
+</body>
+
+</html>

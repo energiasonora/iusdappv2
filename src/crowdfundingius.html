@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crowdfunding DApp</title>
- 
+
     <link rel="stylesheet" href="css/pico.min.css" />
     <script src="js/sweetalert2.all.min.js"></script>
     <script src="js/ethers-6.13.2.umd.min.js"></script>
     <script src="js/qr-code-styling.js"></script>
 
-    
+
     <style>
         :root {
             --c0b: #222;
@@ -249,26 +249,35 @@
         .w3-hover-green:hover {
             background-color: transparent !important;
         }
-        .head{
+
+        .head {
             display: flex;
         }
 
         .settings-icon {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      cursor: pointer;
-    }
-.copy2clipboard{
-    cursor: pointer;
-}
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+        }
 
-#iusConnect{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .copy2clipboard {
+            cursor: pointer;
+        }
 
+        #iusConnect {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #resultSign {
+            word-break: break-all;
+            padding: 1em;
+        }
+        .tx{
+            font-size: xx-small;
+        }
     </style>
     <link rel="stylesheet" href="skin.css">
 </head>
@@ -276,217 +285,217 @@
 <body class="">
 
     <header>
-        
-                <h1 data-translate="crowdfundingdapp">Crowdfunding DApp
-                </h1>
-                <span id="mini">V2.0</span>
-        
+
+        <h1 data-translate="crowdfundingdapp">Crowdfunding DApp
+        </h1>
+        <span id="mini">V2.0</span>
+
         <div class="settings-icon" onclick="openSettings()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 .92 1.65 1.65 0 0 1-3 0 1.65 1.65 0 0 0-1-.92 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-.92-1 1.65 1.65 0 0 1 0-3 1.65 1.65 0 0 0 .92-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-.92 1.65 1.65 0 0 1 3 0 1.65 1.65 0 0 0 1 .92h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 .92 1 1.65 1.65 0 0 1 0 3 1.65 1.65 0 0 0-.92 1z"></path>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 .92 1.65 1.65 0 0 1-3 0 1.65 1.65 0 0 0-1-.92 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-.92-1 1.65 1.65 0 0 1 0-3 1.65 1.65 0 0 0 .92-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-.92 1.65 1.65 0 0 1 3 0 1.65 1.65 0 0 0 1 .92h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 .92 1 1.65 1.65 0 0 1 0 3 1.65 1.65 0 0 0-.92 1z">
+                </path>
             </svg>
-          </div>
-</header>
-  
-            <!-- <button   id="connection" class="">CONNECT</button> -->
-            <button onclick="connection()" id="connection" class="">CONNECT</button>
-            <button onclick="disconnection()" id="disconnection" class="disconnected" style="display: none;">DISCONNECT</button>
+        </div>
+    </header>
+
+    <!-- <button   id="connection" class="">CONNECT</button> -->
+    <button onclick="connection()" id="connection" class="">CONNECT</button>
+    <button onclick="disconnection()" id="disconnection" class="disconnected" style="display: none;">DISCONNECT</button>
 
 
 
-<p id="info"></p>
+    <p id="info"></p>
 
 
 
-        <h2><span data-translate="project">Project: </span> IUS NATURALIS</h2>
+    <h2><span data-translate="project">Project: </span> IUS NATURALIS</h2>
 
-        <button onclick="accordion('donateSection')" class="w3-button w3-block w3-left-align " data-translate="donate"   > Prticipate</button>
-    
-        <div id="donateSection" class="w3-hide w3-container w3-green">
+    <button onclick="accordion('donateSection')" class="w3-button w3-block w3-left-align " data-translate="donate">
+        Prticipate</button>
 
-            <article>
-                <!-- <header> -->
-                    <h3>Send Stealth Donation</h3>
-                    <!-- <a href="#" aria-label="Close" class="close"></a> -->
+    <div id="donateSection" class="w3-hide w3-container w3-green">
 
-
-                      <fieldset>
-                        <label for="stealthswitch">
-                          <input type="checkbox" id="stealthswitch" name="stealthswitch" role="switch" />
-                          Stealth Donation
-                        </label>
-                      </fieldset>
-
-                <!-- </header> -->
-        
-                <form id="donateForm" onsubmit="handleFormSubmit(event)">
+        <article>
+            <!-- <header> -->
+            <h3>Send Donation</h3>
+            <!-- <a href="#" aria-label="Close" class="close"></a> -->
 
 
-                    <label for="amount">Amount (ETH) 
-                        <span>aprox <span id="fiatValue"></span> USD</span>
-                    </label>
-                    <input 
-                        type="number" 
-                        step="0.001" 
-                        placeholder="0.001" 
-                        id="cryptoValue"
-                        required
-                    />
-                
-                    <label for="message">Message:</label>
-                    <textarea 
-                        id="message" 
-                        rows="4" 
-                        placeholder="Type your message here..." 
-                        required
-                    ></textarea>
-                
-                    <footer>
-                        <button type="submit">Send Donation</button>
-                        <a href="#" role="button" class="secondary">Cancel</a>
-                    </footer>
-                </form>
-                
-            </article>
+            <fieldset>
+                <label for="stealthswitch">
+                    <input type="checkbox" id="stealthswitch" name="stealthswitch" role="switch" />
+                    Stealth Donation
+                </label>
+            </fieldset>
+
+            <!-- </header> -->
+
+            <form id="donateForm" onsubmit="handleFormSubmit(event)">
+
+
+                <label for="amount">Amount (ETH)
+                    <span>aprox <span id="fiatValue"></span> USD</span>
+                </label>
+                <!-- <input type="number" step="0.001" placeholder="0.001" id="cryptoValue" required /> -->
+                <input type="number" step="0.0001" min="0.0001" placeholder="0.001" id="cryptoValue" required />
+
+                <label for="message">Message:</label>
+                <textarea id="message" rows="4" placeholder="Type your message here..." required></textarea>
+
+                <footer>
+                    <button type="submit" id="sendDonationButton">Send Donation</button>
+                    <!-- <a href="#" role="button" class="secondary">Cancel</a> -->
+                </footer>
+            </form>
+
+        </article>
 
 
     </div>
- 
-        <p id="userContributions" data-translate="userContributions"> Soverain and decentraliced Crowdfunding.</p>
-         
+
+    <p id="userContributions" data-translate="userContributions"> Soverain and decentraliced Crowdfunding.</p>
+
 
     <div id="headerNotes"></div>
 
 
-            <!-- COMIENZO -->
-            <div class="hero connect-page">
+    <!-- COMIENZO -->
+    <div class="hero connect-page">
 
-                <div class="container" id="countdownClock">
-                    <div class="hero-body">
-                        <div id="campaign" class="campaign campaign-0">
-                            <div class="counter timer">
-                                <strong data-translate="timeleft">Time Left:</strong>
-                                <div id="campaignEnded" style="display: none;">
-                                    <h1>CAMPAING ENDED</h1>
-                                </div>
-                                <div id="counterBox" class="counter-boxes">
-                                    <div class="count-box">
-                                        <h1 class="value day" id="days">0</h1>
-                                        <span data-translate="days">Days</span>
-                                    </div>
-                                    <div class="count-box">
-                                        <h1 class="value hour" id="hours">0</h1>
-                                        <span data-translate="hours">Hours</span>
-                                    </div>
-                                    <div class="count-box">
-                                        <h1 class="value minute" id="minutes">0</h1>
-                                        <span data-translate="minutes">Minutes</span>
-                                    </div>
-                                    <div class="count-box">
-                                        <h1 class="value second" id="seconds">0</h1>
-                                        <span data-translate="seconds">Seconds</span>
-                                    </div>
-                                </div>
+        <div class="container" id="countdownClock">
+            <div class="hero-body">
+                <div id="campaign" class="campaign campaign-0">
+                    <div class="counter timer">
+                        <strong data-translate="timeleft">Time Left:</strong>
+                        <div id="campaignEnded" style="display: none;">
+                            <h1>CAMPAING ENDED</h1>
+                        </div>
+                        <div id="counterBox" class="counter-boxes">
+                            <div class="count-box">
+                                <h1 class="value day" id="days">0</h1>
+                                <span data-translate="days">Days</span>
+                            </div>
+                            <div class="count-box">
+                                <h1 class="value hour" id="hours">0</h1>
+                                <span data-translate="hours">Hours</span>
+                            </div>
+                            <div class="count-box">
+                                <h1 class="value minute" id="minutes">0</h1>
+                                <span data-translate="minutes">Minutes</span>
+                            </div>
+                            <div class="count-box">
+                                <h1 class="value second" id="seconds">0</h1>
+                                <span data-translate="seconds">Seconds</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-                 <progress id="myBar" value="0" max="100"  >0%</progress>
-          
+    <progress id="myBar" value="0" max="100">0%</progress>
 
-            <p id="yourContrib" style="display: none;"><strong data-translate="yourcontribution">Your
-                    Contribution:</strong>
-                <span id="userContribution"></span>
-                <button onclick="withdrawFunds()" style="display: none;">Withdraw Funds</button>
+
+    <p id="yourContrib" style="display: none;"><strong data-translate="yourcontribution">Your
+            Contribution:</strong>
+        <span id="userContribution"></span>
+        <button onclick="withdrawFunds()" style="display: none;">Withdraw Funds</button>
+    </p>
+
+    <br>
+    <!-- <p classa="  w3-center	"> -->
+    <!-- <button class=" w3-red  w3-button w3-center w3-border w3-border-green  w3-round-large  	"
+                    onclick="enterAmount()" data-translate="contribute">Contribute</button> -->
+    <!-- </p> -->
+
+    <!-- <br> -->
+
+
+    <!-- ACCORDIONS -->
+    <section id="accordions">
+        <h2>Info:</h2>
+
+
+
+        <details open>
+            <summary>Project: IUS NATURALIS </summary>
+
+            <ul>
+                <li><strong data-translate="donatehere">Donate here:</strong> <span id="donatehere"></span></li>
+                <li><strong data-translate="donateherechain">in this chain:</strong> <span id="donateherechain"></span>.
+                </li>
+                <li><strong data-translate="goal">Goal:</strong> <span id="goal"></span></li>
+                <li> <strong data-translate="period">Period:</strong> 11-11-2024 / 13-12-2024<span id="period"></span>
+                </li>
+                <li> <strong data-translate="receptor">Address</strong> <span id="receptor"></span> </li>
+                <li> <strong data-translate="donations">Donations</strong> <span id="donations"></span> </li>
+                <li> <strong data-translate="raised">Raised</strong> <span id="raised"></span> </li>
+            </ul>
+
+        </details>
+
+
+        <details>
+            <summary>Smart contract details</summary>
+            <p><strong data-translate="contract">Contract:</strong> <span id="contract" class="w3-tag"></span> </p>
+            <p><strong data-translate="chain">Chain:</strong> <span class="w3-tag" id="chain"></span></p>
+            <div id="chainAlert"></div>
+            <p><strong data-translate="raisedamount">Raised Amount:</strong> <span id="raisedAmount"
+                    class="w3-tag"></span>
             </p>
 
-            <br>
-            <!-- <p classa="  w3-center	"> -->
-                <!-- <button class=" w3-red  w3-button w3-center w3-border w3-border-green  w3-round-large  	"
-                    onclick="enterAmount()" data-translate="contribute">Contribute</button> -->
-            <!-- </p> -->
-          
-            <!-- <br> -->
-
-
-            <!-- ACCORDIONS -->
-            <section id="accordions">
-                <h2>Info:</h2>
-               
-
-
-                <details open>
-                    <summary >Project: IUS NATURALIS  </summary>
-               
-                <ul>
-                  <li><strong data-translate="donatehere">Donate here:</strong> <span id="donatehere"></span></li>
-                  <li><strong data-translate="donateherechain">in this chain:</strong> <span id="donateherechain"></span>.</li>
-                  <li><strong data-translate="goal">Goal:</strong> <span id="goal"></span></li>
-                <li> <strong data-translate="period">Period:</strong> 11-11-2024 / 13-12-2024<span id="period"></span> </li>
-    <li> <strong data-translate="receptor">Address</strong> <span id="receptor"></span> </li>
-     <li> <strong data-translate="donations">Donations</strong> <span id="donations"></span> </li>
-    <li> <strong data-translate="raised">Raised</strong> <span id="raised"></span> </li>
-                </ul>
-
-            </details>
-
-
-                <details>
-                  <summary>Smart contract details</summary>
-                    <p><strong data-translate="contract">Contract:</strong> <span id="contract" class="w3-tag"></span> </p>
-                    <p><strong data-translate="chain">Chain:</strong> <span class="w3-tag" id="chain"></span></p>
-                    <div id="chainAlert"></div>
-                    <p><strong data-translate="raisedamount">Raised Amount:</strong> <span id="raisedAmount" class="w3-tag"></span>
-                    </p>
-
-                    <p><strong data-translate="status">Status:</strong>
-                        <span class="w3-tag" id="status">Ongoing!</span>
-                    </p>
-                </details>
+            <p><strong data-translate="status">Status:</strong>
+                <span class="w3-tag" id="status">Ongoing!</span>
+            </p>
+        </details>
 
 
 
-                <details >
-                    <summary >Project details</summary>
-                    <div id="projectAlert"></div>
+        <details>
+            <summary>Project details</summary>
+            <div id="projectAlert"></div>
 
-                    <p>Web: <span class="w3-tag" id="website">
-                            <a href="https://iusnaturalis.web.app/" target="_blank" rel="noopener noreferrer">
-                                iusnaturalis.web.app</a>
-                        </span></p>
-                    <p> <strong data-translate="gitrepository">Git repository:</strong> <span class="w3-tag" id="git"> <a
-                                href="https://github.com/energiasonora/iusdappv2" target="_blank" rel="noopener noreferrer">
-                                https://github.com/energiasonora/iusdappv2</a></span></p>
-                    <p> <strong data-translate="whitepaper">Whitepaper:</strong>
-                        <a href="https://gateway.lighthouse.storage/ipfs/QmXDvZZNdi1AHbVYwmHduCwDu2AAXZi3rmK5ZSKFwccrDe" target="_blank" rel="noopener noreferrer"> FR v4</a>
-                        <a href="https://gateway.lighthouse.storage/ipfs/QmcuahnLzwQrcnQo6JzPCu9Dg4PRNmNBAxYhtySdiHCLmN" target="_blank" rel="noopener noreferrer"> EN v4</a>
-                        <a href="https://gateway.lighthouse.storage/ipfs/QmT3sGPGrmtGcGiuEf5WqK4YyxviRNtozG42m9ezAGpcLS" target="_blank" rel="noopener noreferrer"> ES v7</a>
-                    </p>
-                </details>
-
-
-                <details>
-                    <summary data-translate="tutorials">Tutorials</summary>
-                    <p> <strong data-translate="howtocontribute">How to Contribute (PDF):</strong>
-                        <a href="https://gateway.lighthouse.storage/ipfs/QmcuXAFVfL11V3yeXK4VYTV7QmtAjT6v9uotVQxQMLCTEe"
-                            target="_blank" rel="noopener noreferrer"> FR </a>
-                        <a href="https://gateway.lighthouse.storage/ipfs/QmSJ2NDRG4UntxpjVRebQNRU7fNx6bYqPcWhTrUX2Nf24B"
-                            target="_blank" rel="noopener noreferrer"> EN </a>
-                        <a href="https://gateway.lighthouse.storage/ipfs/QmcrsHUKGuXA8hvAByZc5ygGRLbzkC32UxcBqdBkDusWN6"
-                            target="_blank" rel="noopener noreferrer"> ES</a>
-                    </p>
-                  </details>
+            <p>Web: <span class="w3-tag" id="website">
+                    <a href="https://iusnaturalis.web.app/" target="_blank" rel="noopener noreferrer">
+                        iusnaturalis.web.app</a>
+                </span></p>
+            <p> <strong data-translate="gitrepository">Git repository:</strong> <span class="w3-tag" id="git"> <a
+                        href="https://github.com/energiasonora/iusdappv2" target="_blank" rel="noopener noreferrer">
+                        https://github.com/energiasonora/iusdappv2</a></span></p>
+            <p> <strong data-translate="whitepaper">Whitepaper:</strong>
+                <a href="https://gateway.lighthouse.storage/ipfs/QmXDvZZNdi1AHbVYwmHduCwDu2AAXZi3rmK5ZSKFwccrDe"
+                    target="_blank" rel="noopener noreferrer"> FR v4</a>
+                <a href="https://gateway.lighthouse.storage/ipfs/QmcuahnLzwQrcnQo6JzPCu9Dg4PRNmNBAxYhtySdiHCLmN"
+                    target="_blank" rel="noopener noreferrer"> EN v4</a>
+                <a href="https://gateway.lighthouse.storage/ipfs/QmT3sGPGrmtGcGiuEf5WqK4YyxviRNtozG42m9ezAGpcLS"
+                    target="_blank" rel="noopener noreferrer"> ES v7</a>
+            </p>
+        </details>
 
 
-                </section>
+        <details>
+            <summary data-translate="tutorials">Tutorials</summary>
+            <p> <strong data-translate="howtocontribute">How to Contribute (PDF):</strong>
+                <a href="https://gateway.lighthouse.storage/ipfs/QmcuXAFVfL11V3yeXK4VYTV7QmtAjT6v9uotVQxQMLCTEe"
+                    target="_blank" rel="noopener noreferrer"> FR </a>
+                <a href="https://gateway.lighthouse.storage/ipfs/QmSJ2NDRG4UntxpjVRebQNRU7fNx6bYqPcWhTrUX2Nf24B"
+                    target="_blank" rel="noopener noreferrer"> EN </a>
+                <a href="https://gateway.lighthouse.storage/ipfs/QmcrsHUKGuXA8hvAByZc5ygGRLbzkC32UxcBqdBkDusWN6"
+                    target="_blank" rel="noopener noreferrer"> ES</a>
+            </p>
+        </details>
 
-              <!-- ----- -->
- 
- 
- 
+
+    </section>
+
+    <!-- ----- -->
+
+
+
 
     <hr>
 
@@ -498,14 +507,14 @@
     </div>
 
 
-  <!-- --------------------------------------- -->
+    <!-- --------------------------------------- -->
     <!-- walletModal -->
-  <dialog id="walletModal">
-    <form method="dialog">
-      <header>
-        <h2>Connect</h2>
-      </header>
-      <section>
+    <dialog id="walletModal">
+        <form method="dialog">
+            <header>
+                <h2>Connect</h2>
+            </header>
+            <!-- <section>
 
         <label for="walletSelector">Choose your wallet:</label>
         <select id="walletSelector" onchange="handleWalletChange()">
@@ -515,94 +524,114 @@
         </select>
 
     
-      </section>
+      </section> -->
 
-      <section id="iusConnect"></section>
-      <footer>
-        <button class="secondary" data-translate="close">Close</button>
-        <!-- <button type="button" class="secondary" id="closeConnectModal" data-translate="close">Close</button> -->
-        
-        <!-- <a href="#" role="button" onclick="closeModal()">Close</a> -->
+            <section id="iusConnect"></section>
+            <footer>
+                <button class="secondary" data-translate="close">Close</button>
+                <!-- <button type="button" class="secondary" id="closeConnectModal" data-translate="close">Close</button> -->
 
-      </footer>
-    </form>
-  </dialog>
+                <!-- <a href="#" role="button" onclick="closeModal()">Close</a> -->
 
-  <!-- --------------------------------------- -->
+            </footer>
+        </form>
+    </dialog>
+
+    <!-- --------------------------------------- -->
     <!-- signModal -->
     <dialog id="signModal">
         <form method="dialog">
-          <header>
-            <h2>Sign</h2>
-          </header>
-  
-          
-    
-          <section id="iusSign"></section>
+            <header>
+                <h2>Sign</h2>
+            </header>
 
 
-          <footer>
-            <button class="secondary" data-translate="close">Close</button>
-          </footer>
+
+            <section id="iusSign"></section>
+
+
+            <footer>
+                <button class="secondary" data-translate="close">Close</button>
+            </footer>
         </form>
-      </dialog>
-    
-
-  <!-- --------------------------------------- -->
-<!-- ius connect Modal -->
-<!-- document.getElementById('iusconnectmodal').showModal(); -->
-
-<dialog id="iusconnectmodal">
-    <article>
-      <header>
-        <h2>Scan and Sign</h2>
-        <a href="#close" aria-label="Close" class="close" onclick="closeModal()"></a>
-      </header>
-      <div>
-        <div class="responsive-svg" id="canvas"></div>
-        <div id="result">
-          <p>Scan and sign this message to Log in to IusNaturalis</p>
-         
-        </div>
-      </div>
-      <footer>
-        <a href="#" role="button" onclick="closeModal()">Close</a>
-      </footer>
-    </article>
-  </dialog>
+    </dialog>
 
 
+    <!-- --------------------------------------- -->
+    <!-- ius connect Modal -->
+    <!-- document.getElementById('iusconnectmodal').showModal(); -->
 
-  <!-- --------------------------------------- -->
-  <!-- Settings Modal -->
-  <dialog id="settingsModal">
-    <article>
-      <header>
-        <h3>Settings</h3>
-        <a href="#" aria-label="Close" class="close" data-target="settingsModal"></a>
-      </header>
-      <p>Here you can manage your settings.</p>
-  
-      <label for="langswitch">Language:</label>
-      <select class="right translation" id="langswitch">
-        <option value="en">en</option>
-        <option value="fr">fr</option>
-        <option value="es">es</option>
-    </select>
+    <dialog id="iusconnectmodal">
+        <article>
+            <header>
+                <h2>Scan and Sign</h2>
+                <a href="#close" aria-label="Close" class="close" onclick="closeModal()"></a>
+            </header>
+            <div>
+                <div class="responsive-svg" id="canvas"></div>
+                <div id="result">
+                    <p>Scan and sign this message to Log in to IusNaturalis</p>
 
-    <label for="networkPreference">Network:</label>
-    <select class="right translation" id="networkPreference">
-        <option value="mainnet">Mainnet</option>
-        <option value="testnet">Testnet</option>
-    </select>
-
-    </article>
-  </dialog>
+                </div>
+            </div>
+            <footer>
+                <a href="#" role="button" onclick="closeModal()">Close</a>
+            </footer>
+        </article>
+    </dialog>
 
 
 
-  <!-- --------------------------------------- -->
+    <!-- --------------------------------------- -->
+    <!-- Settings Modal -->
+    <dialog id="settingsModal">
+        <article>
+            <header>
+                <h3>Settings</h3>
+                <a href="#" aria-label="Close" class="close" data-target="settingsModal"></a>
+            </header>
+            <p>Here you can manage your settings.</p>
  
+              <label for="themeSelector" class="secondary">Theme:</label>
+              <select id="themeSelector" class="secondary">
+                <option value="auto">Auto</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+
+              
+            <label for="walletSelector">Choose your wallet:</label>
+            <select id="walletSelector" onchange="handleWalletChange()">
+                <option value="metamask" selected>Metamask</option>
+                <option value="iusNaturalis">Ius Naturalis</option>
+                <option value="localTest">Local Test</option>
+            </select>
+
+
+            <label for="langswitch">Language:</label>
+            <select class="right translation" id="langswitch">
+                <option value="en">en</option>
+                <option value="fr">fr</option>
+                <option value="es">es</option>
+            </select>
+
+            <label for="networkPreference">Network:</label>
+            <select class="right translation" id="networkPreference">
+                <option value="mainnet">Mainnet</option>
+                <option value="testnet">Testnet</option>
+            </select>
+
+
+
+          
+
+        </article>
+    </dialog>
+
+
+
+    <!-- --------------------------------------- -->
+
 
     <script src="js/dictionaryCrowdfunding.js"></script>
 
@@ -612,12 +641,56 @@
 
 
         import { Client } from '@xmtp/xmtp-js'
-		window.Client = Client;
+        window.Client = Client;
 
-        </script>
+
+        import { getPublicKey, utils } from '@noble/secp256k1';
+        window.getPublicKey = getPublicKey;
+        window.utils = utils;
+        import * as secp from '@noble/secp256k1';
+        window.secp = secp;
+
+
+    // import { ContentTypeId } from "@xmtp/content-type-primitives";
+    //     window.ContentTypeId = ContentTypeId;
+
+
+    //     // Define the custom content type
+    //     const ContentTypeTxRequest = new ContentTypeId(
+    //     'localhost:4343',  // Replace with your own domain
+    //     'tx-signing-request',
+    //     1,  // Major version
+    //     0   // Minor version
+    //     );
+    //         window.ContentTypeTxRequest = ContentTypeTxRequest;
+
+    </script>
 
     <script type="text/javascript">
 
+
+        /*********************************************************************************************
+         // THEME
+        **********************************************************************************************/
+        const themeSelector = document.getElementById('themeSelector');
+        const themeKey = 'preferredTheme';
+
+        // Function to apply the theme
+        const applyTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', theme);
+            themeSelector.value = theme; // Set the select value
+        };
+
+        // Load the saved theme from localStorage (if available)
+        const savedTheme = localStorage.getItem(themeKey) || 'auto'; // Default to 'auto' if not set
+        applyTheme(savedTheme);
+
+        // Event listener to handle theme changes
+        themeSelector.addEventListener('change', (event) => {
+            const selectedTheme = event.target.value;
+            localStorage.setItem(themeKey, selectedTheme); // Save the theme to localStorage
+            applyTheme(selectedTheme); // Apply the selected theme
+        });
         /*********************************************************************************************
         .) sweetalert2
         // position: "top-right",
@@ -716,13 +789,13 @@
             //    1-  TESTNET
             {
                 "TOKEN_CHAIN_NAME": 'Arbitrum Sepolia',
-                "TOKEN_NAME": 'ETH Sepolia',
+                "TOKEN_NAME": 'ETH ARB Sepolia',
                 "TOKEN_SYMBOL": 'ETHsep',
                 "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
                 "ORACLEAPI": "https://ethereum-sepolia.publicnode.com",
-                "CONTRACT": "0xB95dD22fe4f5478835d3Ef4D59eB61bA56bb3293",
+                "CONTRACT": "0xE59fd4a07514E7C485545F5acC99299111fd22c6",
                 "CONTRACT_CHAINID": '421614',
-                "CONTRACT_ABI": 'crowdfundingv3',
+                "CONTRACT_ABI": 'crowdfundingv5',
                 "CCIP_EXPLORER": "https://ccip.chain.link/",
                 "EXPLORER": "https://sepolia.arbiscan.io",
                 "CHAINLINK_CONTRACT": "",
@@ -753,85 +826,114 @@
                 }
 
             },
+            // {
+            //     "TOKEN_CHAIN_NAME": 'Arbitrum Sepolia',
+            //     "TOKEN_NAME": 'ETH ARB Sepolia',
+            //     "TOKEN_SYMBOL": 'ETHsep',
+            //     "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+            //     "ORACLEAPI": "https://ethereum-sepolia.publicnode.com",
+            //     "CONTRACT": "0xB95dD22fe4f5478835d3Ef4D59eB61bA56bb3293",
+            //     "CONTRACT_CHAINID": '421614',
+            //     "CONTRACT_ABI": 'crowdfundingv3',
+            //     "CCIP_EXPLORER": "https://ccip.chain.link/",
+            //     "EXPLORER": "https://sepolia.arbiscan.io",
+            //     "CHAINLINK_CONTRACT": "",
+            //     "NATIVEUSD_ORACLE_CONTRACT": [{
+            //         'oracleContract': "0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165",
+            //         'assetSymbol': 'ETH / USD',
+            //         'chainid': "421614",
+            //     }],
+            //     "EURUSD_ORACLE_CONTRACT": [{
+            //         'oracleContract': "",
+            //         'assetSymbol': 'EUR / USD',
+            //         'chainid': "421614",
+            //     }],
+            //     "CHAIN_CONFIG":
+            //     {
+            //         chainId: '0x66eee', // 421614 in hexadecimal format
+            //         // chainId: '0x66e5a', // 421614 in hexadecimal format
+            //         chainName: 'Arbitrum Sepolia',
+            //         rpcUrls: ['https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a'],
+            //         // rpcUrls: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   
+            //         nativeCurrency: {
+            //             name: 'ETH',
+            //             symbol: 'ETH',
+            //             decimals: 18
+            //         },
+            //         blockExplorerUrls: ["https://sepolia.etherscan.io/"]
+
+            //     }
+
+            // },
 
 
 
 
 
             //2-  ANTERIOR EN NPOLYGON
-            {
-                "TOKEN_CHAIN_NAME": 'Polygon',
-                "TOKEN_NAME": 'Matic',
-                "TOKEN_SYMBOL": 'MATIC',
-                "API": 'https://polygon-bor.publicnode.com',
-                "CONTRACT": "0x691E71Ff60cF56d4f6417b203b25A683afE9a9B6",
-                "CONTRACT_CHAINID": '137',
-                "CONTRACT_ABI": 'crowdfundingv3',
-                "CCIP_EXPLORER": "https://ccip.chain.link/",
-                "EXPLORER": "https://polygonscan.com/",
-                "CHAINLINK_CONTRACT": "",
-                "NATIVEUSD_ORACLE_CONTRACT": [
+            // {
+            //     "TOKEN_CHAIN_NAME": 'Polygon',
+            //     "TOKEN_NAME": 'Matic',
+            //     "TOKEN_SYMBOL": 'MATIC',
+            //     "API": 'https://polygon-bor.publicnode.com',
+            //     "CONTRACT": "0x691E71Ff60cF56d4f6417b203b25A683afE9a9B6",
+            //     "CONTRACT_CHAINID": '137',
+            //     "CONTRACT_ABI": 'crowdfundingv3',
+            //     "CCIP_EXPLORER": "https://ccip.chain.link/",
+            //     "EXPLORER": "https://polygonscan.com/",
+            //     "CHAINLINK_CONTRACT": "",
+            //     "NATIVEUSD_ORACLE_CONTRACT": [
 
-                    {
-                        'oracleContract': "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0",
-                        'assetSymbol': 'MATIC / USD',
-                        'chainid': "137",
-                    }
-                ],
-                "EURUSD_ORACLE_CONTRACT": [
-                    {
-                        'oracleContract': "0x73366Fe0AA0Ded304479862808e02506FE556a98",
-                        'assetSymbol': 'EUR / USD',
-                        'chainid': "137",
-                    }
-                ],
-                "CHAIN_CONFIG":
-                {
-                    chainId: "0x89",
-                    rpcUrls: ['https://polygon-rpc.com/'],
-                    chainName: 'Polygon Mainnet',
-                    nativeCurrency: {
-                        name: 'MATIC',
-                        symbol: 'MATIC',
-                        decimals: 18
-                    },
-                    blockExplorerUrls: ["https://polygonscan.com/"]
-                }
-            },
-
-
-
+            //         {
+            //             'oracleContract': "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0",
+            //             'assetSymbol': 'MATIC / USD',
+            //             'chainid': "137",
+            //         }
+            //     ],
+            //     "EURUSD_ORACLE_CONTRACT": [
+            //         {
+            //             'oracleContract': "0x73366Fe0AA0Ded304479862808e02506FE556a98",
+            //             'assetSymbol': 'EUR / USD',
+            //             'chainid': "137",
+            //         }
+            //     ],
+            //     "CHAIN_CONFIG":
+            //     {
+            //         chainId: "0x89",
+            //         rpcUrls: ['https://polygon-rpc.com/'],
+            //         chainName: 'Polygon Mainnet',
+            //         nativeCurrency: {
+            //             name: 'MATIC',
+            //             symbol: 'MATIC',
+            //             decimals: 18
+            //         },
+            //         blockExplorerUrls: ["https://polygonscan.com/"]
+            //     }
+            // },
 
         ];
 
         ABIs = {
+            crowdfundingv5: [ { "inputs": [ { "internalType": "address", "name": "_recipient", "type": "address" }, { "internalType": "bytes", "name": "_recipientPublicKey", "type": "bytes" }, { "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" } ], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "ContributionMade", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "FundsWithdrawn", "type": "event" }, { "inputs": [ { "internalType": "string", "name": "_pseudonym", "type": "string" } ], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "stealthAddress", "type": "address" }, { "internalType": "string", "name": "_pseudonym", "type": "string" } ], "name": "contributestealth", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "contributions", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "contributors", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContractBalance", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "index", "type": "uint256" } ], "name": "getContributorByIndex", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "contributor", "type": "address" } ], "name": "getContributorPseudonym", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "pseudonyms", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "recipient", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "recipientPublicKey", "outputs": [ { "internalType": "bytes", "name": "", "type": "bytes" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "stealthBalances", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "withdrawAllFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_amount", "type": "uint256" } ], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "stateMutability": "payable", "type": "receive" } ],
             crowdfundingv3: [{ "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "FundsWithdrawn", "type": "event" }, { "inputs": [{ "internalType": "string", "name": "_pseudonym", "type": "string" }], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContractBalance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "contributor", "type": "address" }], "name": "getContributorPseudonym", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "pseudonyms", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "withdrawAllFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "stateMutability": "payable", "type": "receive" }],
-            crowfounding: [{ "inputs": [], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "inputs": [], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }],
-            crowfundingv2: [{ "inputs": [{ "internalType": "string", "name": "_pseudonym", "type": "string" }], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "inputs": [], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "contributor", "type": "address" }], "name": "getContributorPseudonym", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "pseudonyms", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
+            // crowfounding: [{ "inputs": [], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "inputs": [], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }],
+            // crowfundingv2: [{ "inputs": [{ "internalType": "string", "name": "_pseudonym", "type": "string" }], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "ContributionMade", "type": "event" }, { "inputs": [], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "contributions", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "contributors", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "deadline", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "getContributorByIndex", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "contributor", "type": "address" }], "name": "getContributorPseudonym", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getContributorsCount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "goal", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "hasGoalReached", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "pseudonyms", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "raisedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "timeLeft", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
         };
         // Update these values with your smart contract address and ABI
 
         let contract;
         let userAddress;
 
-        // optionsList = [
-        //     {
-        //         "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
-        //         "TOKEN_CHAINID": '421614',
-        //         "EXPLORER": 'https://sepolia.arbiscan.io/',
-        //         "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a'
-
-        //     }
-        // ]
-
-
 
         const alchemyKey = "X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"; // Replace with your deployed contract address
-        const contractAddress = "0x97618a023B7748be9d6f7B4d8D8bFe04f6528D65"; // Replace with your deployed contract address
+        const contractAddress = "0xE59fd4a07514E7C485545F5acC99299111fd22c6"; // Replace with your deployed contract address
+        // const contractAddress = "0x97618a023B7748be9d6f7B4d8D8bFe04f6528D65"; // Replace with your deployed contract address
         const contractABI = [
-            "function donate(address stealthAddress, string message) payable",
+            // "function donate(address stealthAddress, string message) payable",
             "function recipientPublicKey() public view returns (bytes)",
-            "event DonationReceived(address indexed stealthAddress, uint256 amount, string message)"
+            "function contribute(string memory _pseudonym) public payable",
+            "function contributestealth(address stealthAddress, string memory _pseudonym) external payable"
+            // "event DonationReceived(address indexed stealthAddress, uint256 amount, string message)"
         ];
 
         /*********************************************************************************************
@@ -869,35 +971,47 @@
         /*******************************************************************************************
          .) ONLOAD INIT
         *********************************************************************************************/
-     // Initialize the DApp when the page is loaded
-     window.onload = async () => {
-    
-    // STEALSWITH
-    let checkbox = document.getElementById('stealthswitch');
+        // Initialize the DApp when the page is loaded
+        window.onload = async () => {
+
+            // STEALSWITH
+            let checkbox = document.getElementById('stealthswitch');
             let savedState = localStorage.getItem('stealthswitch');
-        if (savedState !== null) {
-            checkbox.checked = JSON.parse(savedState); // Convert back from string to boolean
-        }
+            if (savedState !== null) {
+                checkbox.checked = JSON.parse(savedState); // Convert back from string to boolean
+            } else {
+                // set default stealth off in localstorage
+                localStorage.setItem('stealthswitch', false);
+            }
 
 
-  // Save state to localStorage on change
-  checkbox.addEventListener('change', () => {
-        localStorage.setItem('stealthswitch', checkbox.checked);
-    });
+            // Save state to localStorage on change
+            checkbox.addEventListener('change', () => {
+                localStorage.setItem('stealthswitch', checkbox.checked);
+            });
 
 
             initializeWalletPreference()
             reloadTranslations()
             loadNetworkPreference();
-            let globchain = localStorage.getItem("GLOBALCHAIN");
-            // uiInit();
 
+            let globchain = localStorage.getItem("GLOBALCHAIN");
             loadContract(globchain)
 
-          
+
 
             // ORACLE
-            let oracleResult =     await getOraclePricefromContract();
+            let oracleResult 
+            try {
+                 oracleResult = await getOraclePricefromContract();
+                
+            } catch (error) {
+                console.log('ERROR loading getOraclePricefromContract(), loading from localstorage?... ')
+                ToastTop.fire('error', 'ERROR loading getOraclePricefromContract()', "error");
+
+                return
+            }
+
             let currencyValueInUSD = Number(oracleResult).toFixed(2)
             const inputCrypto = document.getElementById('cryptoValue')
 
@@ -1032,7 +1146,7 @@
             displayContractInfo(contract);
         }
 
-   
+
 
 
 
@@ -1051,7 +1165,6 @@
             document.getElementById('raised').innerHTML = ethers.formatUnits(amoutRaised) + "ETH";
 
 
-
             let contributorsList = [];
             contributors.innerHTML = ''
 
@@ -1064,8 +1177,6 @@
             for (let i = 0; i < contributorsCount; i++) {
                 const contributorAddress = await contract.contributors(i);
                 const pseudonym = await contract.getContributorPseudonym(contributorAddress);
-
-                // contributors.innerHTML += ` <li><span class="w3-tag w3-xlarge w3-padding w3-red" style="transform:rotate(-5deg)"> CONTRIBUTOR </span> ${pseudonym},${contributorAddress} </li>`
                 contributors.innerHTML += ` <li>${pseudonym},${contributorAddress} </li>`
 
                 contributorsList.push({
@@ -1117,9 +1228,9 @@
             // myBar.style.width = `${progressValue}%`
             // Set the width of the progress bar
 
-            
+
             // myBar.style.width = `${progressValue}%`;
-            console.warn('progressValue:',progressValue)
+            console.warn('progressValue:', progressValue)
             myBar.value = Number(progressValue);
             myBar.innerHTML = `${Number(progressValue).toFixed(2)}%`;
 
@@ -1179,177 +1290,505 @@
 
 
 
-// 0000-0-0-0-0-0-0
 
-// Retrieve the preferred wallet from localStorage and initialize
-function initializeWalletPreference() {
-    console.log('initializeWalletPreference()')
-    const savedWallet = localStorage.getItem('preferredWallet');
-    const walletSelector = document.getElementById('walletSelector');
+        // Retrieve the preferred wallet from localStorage and initialize
+        function initializeWalletPreference() {
+            console.log('initializeWalletPreference()')
+            const savedWallet = localStorage.getItem('preferredWallet');
+            const walletSelector = document.getElementById('walletSelector');
 
-    if (savedWallet) {
-    walletSelector.value = savedWallet;
-    info.innerHTML = `<br>Wallet selected: ${ savedWallet === 'metamask' ? 'Metamask' : savedWallet === 'iusNaturalis' ? 'Ius Naturalis' : 'Local Test' }`; // Main page
-    // Trigger the appropriate function based on the selected wallet
+            if (savedWallet) {
+                walletSelector.value = savedWallet;
+                info.innerHTML = `<br>Wallet selected: ${savedWallet === 'metamask' ? 'Metamask' : savedWallet === 'iusNaturalis' ? 'Ius Naturalis' : 'Local Test'}`; // Main page
+                // Trigger the appropriate function based on the selected wallet
 
-    if (savedWallet === 'metamask') {
-            initMetamask();
-        } else if (savedWallet === 'iusNaturalis') {
-            initIusNaturalis();
-        } else {
-            initLocalTest();
+                if (savedWallet === 'metamask') {
+                    initMetamask();
+                } else if (savedWallet === 'iusNaturalis') {
+                    initIusNaturalis();
+                } else {
+                    initLocalTest();
+                }
+
+            } else {
+                // Default to Local Test if no preference is saved
+                const defaultWallet = 'localTest';
+                localStorage.setItem('preferredWallet', defaultWallet);
+                walletSelector.value = defaultWallet;
+                // feedback.textContent = 'Currently selected: Local  by default'; // Modal
+                info.innerHTML += " Currently selected: Local Test by default"; // Main page
+                initLocalTest();
+
+            }
         }
 
-    } else {
-    // Default to Local Test if no preference is saved
-    const defaultWallet = 'localTest';
-    localStorage.setItem('preferredWallet', defaultWallet);
-    walletSelector.value = defaultWallet;
-    // feedback.textContent = 'Currently selected: Local  by default'; // Modal
-    info.innerHTML += " Currently selected: Local Test by default"; // Main page
-    initLocalTest();
 
+        // Define initialization functions for each wallet type
+        async function initMetamask() {
+            console.log("Initializing Metamask...");
+
+            try {
+                    // ..............................
+                    //if  METAMASK (signer y provider)
+                    if (!window.ethereum) throw new Error("MetaMask is not loaded or installed!");
+                    await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    const signer = await provider.getSigner();
+                    console.log('signer:', signer)
+                    s = signer
+
+                    // check if signature is still valid
+                    let recoveredAddress = signer.address;
+                    if (recoveredAddress) {
+                        console.log('isConnected!')
+                        console.warn(`Logged in as: ${recoveredAddress}`);
+
+                        // document.getElementById('iusConnect').innerHTML = ` <div class=" responsive-svg" id="canvas"></div> <div id="result"> <p>Already conneted!</p> </div> `
+                        document.getElementById('result').innerHTML = `✅ SIGNED: ${recoveredAddress} `
+                        document.getElementById("canvas").innerText = '';
+                        document.getElementById('connection').style.display = 'none'
+                        document.getElementById('disconnection').style.display = 'block'
+
+                        let signerAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${recoveredAddress}" target="_blank">${recoveredAddress}</a>`
+                        document.getElementById('info').innerHTML = `<br>YOUR ADDRESS (Metamask): ${signerAddresslink} <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${recoveredAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/> </svg> `;
+
+                        // get balance
+                        const balance = await provider.getBalance(recoveredAddress);
+                        console.log(`Balance for account ${recoveredAddress}: ${ethers.formatEther(balance)} ETH`);
+                        document.getElementById('info').innerHTML += `<br>GAS BALANCE: ${ethers.formatEther(balance)} ETH`;
+
+
+
+
+                    }
+                    else {
+                        console.log('isNOTConnected!')
+                    }
+
+                    return
+                    // ..............................
+                    // Connect to the contract
+                    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+                    console.log('contract:', contract)
+
+
+                    return
+
+                    // ..................
+                    // Send the transaction
+                    status.textContent = "Sending transaction...";
+                    const tx = await contract.donate(stealthAddress, message, {
+                        value: ethers.parseEther(amount),
+                    });
+
+                    status.textContent = `Transaction sent! Hash: ${tx.hash}`;
+
+                    // Wait for confirmation
+                    await tx.wait();
+                    status.textContent = "Transaction confirmed!";
+                } catch (error) {
+                    console.error(error);
+                    status.textContent = `Error: ${error.message}`;
+                }
+
+
+
+
+
+        }
+
+
+        async function createXMTPClient(wallet) {
+          
+            const iusnaturalisxmtp = await Client.create(wallet)
+                console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
+                console.warn(' 🔵🔵🔵This page address:  ', wallet.address)
+
+            return iusnaturalisxmtp;
+        }
+
+// ---------------------------------------------
+// INIT IUS NATURALIS
+// ---------------------------------------------
+        async function initIusNaturalis() {
+            console.log("💢💫🙃 Initializing Ius Naturalis...");
+
+            // Create  address for this site to chat with the user
+                let smartcontractwallet = await contractWallet()
+                const iusnaturalisxmtp = await createXMTPClient(smartcontractwallet);
+                window.iusnaturalisxmtp = iusnaturalisxmtp;// make GLOBAL
+                
+            // check if signature is still valid
+            let recoveredAddress = localStorage.getItem('recoveredAddress')
+
+            if (recoveredAddress) {
+                console.log('isConnected!')
+
+                console.warn(`Logged in as: ${recoveredAddress}`);
+
+                document.getElementById('iusConnect').innerHTML = ` <div class=" responsive-svg" id="canvas"></div> <div id="result"> <p>Already conneted!</p> </div> `
+                document.getElementById('result').innerHTML = `✅ SIGNED: ${recoveredAddress} `
+                document.getElementById("canvas").innerText = '';
+                document.getElementById('connection').style.display = 'none'
+                document.getElementById('disconnection').style.display = 'block'
+
+                let signerAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${recoveredAddress}" target="_blank">${recoveredAddress}</a>`
+                document.getElementById('info').innerHTML = `<br>YOUR ADDRESS (IusNaturalis): ${signerAddresslink} <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${recoveredAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/> </svg> `;
+
+
+                let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+            let balance = await provider.getBalance(recoveredAddress);
+            let gasBalance = ethers.formatEther(balance);
+            console.log('gasBalance:', gasBalance)
+            document.getElementById('info').innerHTML += `<br>GAS BALANCE: ${gasBalance}`;
+
+            // startxmtp with custom address
+            console.log('🙅‍♂️ 🙅‍♂️ 🙅‍♂️sending message to recoveredAddress!')
+
+            let timestamp= new Date();
+
+            let msg = `test: ALREADY CONNECTED!${timestamp}`
+            await sendMessage(iusnaturalisxmtp, recoveredAddress, msg) 
+
+
+            }
+            else {
+                console.log('isNOTConnected!')
+                // 0. listen to ALL addresses : streamAllMessages()
+                // 1.make the user sign
+                // 2. close ALL addresses listener and open a single listener with conversation.streamMessages()
+document.getElementById('connection').style.display = 'block'
+document.getElementById('disconnection').style.display = 'none'
+
+                document.getElementById('info').innerHTML = `<br>Not connected`;
+                
+                
+                
+                // MESSAGE TO SIGN
+                const messageToSign = "I am logging with IusNaturalis";
+                const m = `${smartcontractwallet.address},${messageToSign}`;
+                // console.log(message)
+                document.getElementById('iusConnect').innerHTML = ` <div class=" responsive-svg" id="canvas"></div> 
+                <div id="result"> <p>Scan and sign this message tosign the tx in your iusNaturalis walletLog in to IusNaturalis</p> 
+                    <p>or copy, paste and sign this message from your IusNaturalis wallet <svg class='copy2clipboard' id='' onclick="event.stopPropagation();copy2clipboard('${m}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
+                        </svg>  </p>  </div> `
+                        displayQR(m)
+
+                let messageInput = messageToSign;
+
+                await listenToAllMessages(iusnaturalisxmtp,messageInput)
+              
+
+            // 1. check if logged: means the the iusnaturalis address is in localstorage, probably ith a signature
+            // so the log proces is basically a signature, and what sets the address is the decodification of the signer
+            // if not logged: displays a codeqr and/or the text to manually(copy-paste) to sign
+
+        }
     }
-}
 
+            // ---------------------------------------------
+            // Start Listening to All Messages
+            // ---------------------------------------------
 
-// Define initialization functions for each wallet type
-async function initMetamask() {
-    console.log("Initializing Metamask...");
-    // Add your Metamask-specific logic here
-}
+            // Global State to Track Conversations
+            const activeChats = new Map(); // Tracks open chat streams
+            let messageStore = {}; // Stores all messages grouped by address
 
-async function initIusNaturalis() {
-    console.log("Initializing Ius Naturalis...");
-    // Add your Ius Naturalis-specific logic here
+            let abortController;
 
+                async function listenToAllMessages(xmtpClient,messageInput) {
 
-// check if signature is still valid
-let recoveredAddress = localStorage.getItem('recoveredAddress' )
+                console.log('listenToAllMessages()')
 
-if(recoveredAddress){
-    console.log('isConnected!')
-
-    // let signature = message.content;
-                // let recoveredAddress = ethers.verifyMessage(messageInput, signature);
-                console.warn(`Logged in as: ${recoveredAddress}`);
-                
-                // document.getElementById("signInButton").innerText = 'Disconnect';
-    document.getElementById('iusConnect').innerHTML=   ` <div class=" responsive-svg" id="canvas"></div> <div id="result"> <p>Scan and sign this message to Log in to IusNaturalis</p> </p> </div> `
-
-                document.getElementById('result').innerHTML = `✅ SIGNED: ${recoveredAddress} `
-                document.getElementById("canvas").innerText = '';
-
-                document.getElementById('connection').style.display ='none'
-                document.getElementById('disconnection').style.display ='block'
-                
-                // save address in localstorage
-                // localStorage.setItem('recoveredAddress',recoveredAddress )
-
-                let signerAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${recoveredAddress}" target="_blank">${recoveredAddress}</a>`
-            document.getElementById('info').innerHTML = `<br>ADDRESS: ${signerAddresslink} 
-           <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${recoveredAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
-            </svg> 
-            `;
-
-}
-else{
-    console.log('isNOTConnected!')
-
-            document.getElementById('info').innerHTML = `<br>Not connected`
-
-    document.getElementById('iusConnect').innerHTML=   ` <div class=" responsive-svg" id="canvas"></div> <div id="result"> <p>Scan and sign this message to Log in to IusNaturalis</p> </p> </div> `
-
-
- 
-
-            // CHAT
+                // Create an AbortController to manage the stream
+                abortController = new AbortController();
+                const { signal } = abortController;
+                // check address sender is not this page
             let smartcontractwallet = await contractWallet()
-            scwallet= smartcontractwallet
-            const iusnaturalisxmtp = await Client.create(smartcontractwallet)
-            console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
-            console.warn(' 🔵🔵🔵Smart contract address:  ',smartcontractwallet.address)
+            let smartcontractAddr = smartcontractwallet.address;
 
-            const conversations = iusnaturalisxmtp.conversations
-			window.iusnaturalisxmtp = iusnaturalisxmtp;// make GLOBAL
-			window.chats= iusnaturalisxmtp.conversations
-
-            // MESSAGE TO SIGN
-            const messageToSign = "I'm logging into IusNaturalis";
-            const message = `${smartcontractwallet.address},${messageToSign}`;
-            // const message = `${smartcontractwallet.address},I'm logging into IusNaturalis `;
-            console.log(message)
-            displayQR(message)
-// return
+                try {
+                    for await (const message of await xmtpClient.conversations.streamAllMessages({ signal })) {
             
-            let messageInput= messageToSign;
-            for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
-                console.log(`New message from ${message.senderAddress}: ${message.content}`)
+
+            if (message.senderAddress === smartcontractAddr) {
+					console.log(`📣 conversation from yourself`,smartcontractAddr,message.content);
+
+					continue;
+				}
+
+                  
+                        console.log(`🎃 New message from [${message.senderAddress}]: ${message.content}`);
+
+                    // Add message to the global message store
+                    if (!messageStore[message.senderAddress]) {
+                        messageStore[message.senderAddress] = [];
+                    }
+                    messageStore[message.senderAddress].push({
+                        content: message.content,
+                        timestamp: message.sent,
+                    });
 
 
-                
-                let signature = message.content;
+
+                    // Notify the UI or state manager
+                    updateConversationList(message.senderAddress, message.content,messageInput);
+
+
+                    // ....................
+                    }
+                } catch (err) {
+                    if (err.name === 'AbortError') {
+                    console.log('Stopped listening to all messages.');
+                    } else {
+                    console.warn('Error in streamAllMessages:', err);
+                    }
+                }
+            }
+
+
+// ---------------------------------------------
+// UPDATE CONVERSATIONS
+// ---------------------------------------------
+            // Conversation List UI Updates
+            // Maintain a list of conversations with their last message and timestamps:
+        async function updateConversationList(address, lastMessage,messageInput) {
+            console.log(`🙆‍♂️ 🙆‍♂️ 🙆‍♂️Updated conversation with ${address}: ${lastMessage}`);
+            // Update the UI or state with the latest conversation data
+
+            let signature = lastMessage;
+            sig = lastMessage;
                 let recoveredAddress = ethers.verifyMessage(messageInput, signature);
+                rx = recoveredAddress
                 console.warn(`Logged in as: ${recoveredAddress}`);
-                
+
                 // document.getElementById("signInButton").innerText = 'Disconnect';
                 document.getElementById('result').innerHTML = `✅ SIGNED: ${recoveredAddress} `
                 document.getElementById("canvas").innerText = '';
 
-                document.getElementById('connection').style.display ='none'
-                document.getElementById('disconnection').style.display ='block'
-                
+                document.getElementById('connection').style.display = 'none'
+                document.getElementById('disconnection').style.display = 'block'
+
                 // save address in localstorage
-                localStorage.setItem('recoveredAddress',recoveredAddress )
+                localStorage.setItem('recoveredAddress', recoveredAddress)
 
                 let signerAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${recoveredAddress}" target="_blank">${recoveredAddress}</a>`
-            document.getElementById('info').innerHTML = `<br>ADDRESS: ${signerAddresslink} 
-           <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${recoveredAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
-            </svg> 
-            `;
+                document.getElementById('info').innerHTML = `<br>ADDRESS: ${signerAddresslink} <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${recoveredAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/> </svg> `;
+
+                // 3. stopListeningToAllMessages(), then start streaming messages for that particular conversation using conversation.streamMessages().
+                console.log('stopListeningToAllMessages')
+           await stopListeningToAllMessages(recoveredAddress)
+
+        // SEND TX TO SIGN
+          await sendMessage(iusnaturalisxmtp, recoveredAddress, '1: CONNECT!')
+
 
             }
 
+
+            // Chat Window Updates
+            // Ensure the chat window shows new messages dynamically:
+            function updateChatWindow(address, message) {
+            console.log(`New message in chat with ${address}: ${message}`);
+            // Add the message to the UI (e.g., append to chat window)
+            }
+
+
+
+                    // Stop the all-messages listener
+          async function stopListeningToAllMessages() {
+                if (abortController) {
+                    abortController.abort();
+                    abortController = null;
+                    console.log('Stopped listening to all conversations.');
+                }
+            }
+
+
+
+
+        // ---------------------------------------------
+        // Handle Individual Chat Streams
+        // ---------------------------------------------
+
+        // Define the custom codec
+            const TxRequestCodec = {
+            encode: (txRequest) => {
+                return new TextEncoder().encode(
+                JSON.stringify(txRequest, (key, value) =>
+                    typeof value === 'bigint' ? value.toString() : value
+                )
+                );
+            },
+
+            decode: (bytes) => {
+                return JSON.parse(new TextDecoder().decode(bytes), (key, value) =>
+                /^\d+$/.test(value) && key !== 'data' ? BigInt(value) : value
+                );
+            }
+            };
+
+
+        // 3. Send a Transaction Signing Request
+        // async function sendTxSigningRequest(xmtpClient, recipientAddress, txToSign) {
+        //     const conversation = await openChat(xmtpClient, recipientAddress);
+        //     await conversation.send(txToSign, { contentType: ContentTypeTxRequest });
+
+        // }
+
+
+
+        // 4. Receive and Handle the Request
+        async function listenForTxSigningRequests(xmtpClient) {
+
+            console.log('listenForTxSigningRequests()')
+
+            return
+            for await (const conversation of xmtpClient.conversations.stream()) {
+                for await (const message of conversation.streamMessages()) {
+               
+                    // ContentTypeTxRequest
+                    if (message.contentType.sameAs(ContentTypeTxRequest)) {
+                    const txToSign = message.content;
+                    console.log('Received transaction signing request:', txToSign);
+                    const signedTx = await wallet.signTransaction(txToSign);
+                    await conversation.send(signedTx, { contentType: ContentTypeTxRequest });
+                }
+
+
+
+
+
+
+                }
+            }
         }
 
+        
+            // ---------------------------------------------
+            // Handle Individual Chat Streams
+            // ---------------------------------------------
+       
+
+
+            async function openChat(xmtpClient, address) {
+                // Check if a stream for this address is already active
+                if (activeChats.has(address)) {
+                    console.log(`Chat with ${address} is already open.`);
+                    return activeChats.get(address).conversation; // Return the existing conversation
+                }
+
+                console.log(`Opening chat with ${address}...`);
+
+                // Get or start the conversation
+                const conversation = await xmtpClient.conversations.newConversation(address);
+
+                // Set up the message stream in the background
+                const abortController = new AbortController();
+                const { signal } = abortController;
+                activeChats.set(address, { conversation, abortController });
+
+                (async () => {
+                    try {
+                    for await (const message of await conversation.streamMessages({ signal })) {
+                        console.warn(`[${message.senderAddress}]: ${message.content}`);
+
+                        // Add message to the global store
+                        if (!messageStore[address]) {
+                        messageStore[address] = [];
+                        }
+                        messageStore[address].push({
+                        content: message.content,
+                        timestamp: message.sent,
+                        });
+
+                        // Notify the UI to update the chat window
+                        // updateChatWindow(address, message.content);
+                    }
+                    } catch (err) {
+                    if (err.name === 'AbortError') {
+                        console.log(`Chat stream with ${address} stopped.`);
+                    } else {
+                        console.error(`Error in chat stream with ${address}:`, err);
+                    }
+                    }
+                })(); // Run the message stream setup asynchronously
+
+                return conversation; // Return the conversation object immediately
+            }
+
+            async function sendMessage(xmtpClient, address, messageContent) {
+                try {
+                    // Open the chat and get the conversation
+                    const conversation = await openChat(xmtpClient, address);
+
+                    // Send the message
+                    await conversation.send(messageContent);
+                    console.log(`Message sent to ${address}: ${messageContent}`);
+
+                    // Optionally, add the sent message to the message store
+                    if (!messageStore[address]) {
+                    messageStore[address] = [];
+                    }
+                    messageStore[address].push({
+                    content: messageContent,
+                    timestamp: new Date(),
+                    sender: 'self', // Mark it as sent by the user
+                    });
+
+                    // Update the chat window
+                    // updateChatWindow(address, messageContent);
+                } catch (err) {
+                    console.error(`Failed to send message to ${address}:`, err);
+                }
+            }
  
+            function closeChat(address) {
+            // Check if the chat is active
+            const abortController = activeChats.get(address);
+            if (abortController) {
+                abortController.abort(); // Stop the stream
+                activeChats.delete(address); // Remove from active chats
+                console.log(`Closed chat with ${address}.`);
+            } else {
+                console.log(`No active chat with ${address} to close.`);
+            }
+            }
 
-    // 1. check if logged: means the the iusnaturalis address is in localstorage, probably ith a signature
-    // so the log proces is basically a signature, and what sets the address is the decodification of the signer
-    
-    // if not logged: displays a codeqr and/or the text to manually(copy-paste) to sign
-    
-}
 
 
-async function initLocalTest() {
-    console.log("Initializing Local Test...");
-    // Add your Local Test-specific logic here
+// ---------------------------------------------
+// INIT LOCAL TEST
+// ---------------------------------------------
 
-    let alicewallet = await aliceWallet()
+        async function initLocalTest() {
+            console.log("Initializing Local Test...");
+            // Add your Local Test-specific logic here
+
+            let alicewallet = await aliceWallet()
             let aliceAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${alicewallet.address}" target="_blank">${alicewallet.address}</a>`
-            document.getElementById('info').innerHTML = `<br>ADDRESS: ${aliceAddresslink} 
+            document.getElementById('info').innerHTML = `<br>ADDRESS (LocalTest): ${aliceAddresslink} 
            <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${alicewallet.address}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
             </svg> 
             `;
 
             let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
             let balance = await provider.getBalance(alicewallet.address);
-        let gasBalance = ethers.formatEther(balance);
+            let gasBalance = ethers.formatEther(balance);
 
-            console.log('gasBalance:',gasBalance)
-            document.getElementById('info').innerHTML += `<br>GAS BALANCE: ${gasBalance}`; 
-}
-
-
+            console.log('gasBalance:', gasBalance)
+            document.getElementById('info').innerHTML += `<br>GAS BALANCE: ${gasBalance}`;
+        }
 
 
 
-  // -----------------------------------------
+
+
+        // -----------------------------------------
         // QR FUNCTIONS
         // -----------------------------------------
 
-function displayQR(data) {
+        function displayQR(data) {
             console.log('displayQR(data)')
             const qrCode = new QRCodeStyling({
                 width: 200, height: 200, type: "png", data: data,
@@ -1361,7 +1800,7 @@ function displayQR(data) {
         }
 
         function displayQRtosign(data) {
-            console.log('displayQR(data)')
+            console.log('displayQRtosign(data)')
             const qrCode = new QRCodeStyling({
                 width: 200, height: 200, type: "png", data: data,
                 dotsOptions: { color: "#1568B0", type: "extra-rounded" },
@@ -1372,9 +1811,12 @@ function displayQR(data) {
         }
 
 
-  // -----------------------------------------
+        // -----------------------------------------
         // WALLET FUNCTIONS
         // -----------------------------------------
+        const toHexString = (bytes) => {
+            return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+        };
 
 
         // Function to derive an address on demand
@@ -1424,26 +1866,26 @@ function displayQR(data) {
 
 
 
-// Save the preferred wallet to localStorage when changed
-function handleWalletChange() {
-  const walletSelector = document.getElementById('walletSelector');
-//   const feedback = document.getElementById('walletFeedback');
-  const selectedWallet = walletSelector.value;
+        // Save the preferred wallet to localStorage when changed
+        function handleWalletChange() {
+            const walletSelector = document.getElementById('walletSelector');
+            //   const feedback = document.getElementById('walletFeedback');
+            const selectedWallet = walletSelector.value;
 
-  // Update feedback
-//   feedback.textContent = `Currently selected: ${selectedWallet === 'metamask' ? 'Metamask' : 'Ius Naturalis'}`;
+            // Update feedback
+            //   feedback.textContent = `Currently selected: ${selectedWallet === 'metamask' ? 'Metamask' : 'Ius Naturalis'}`;
 
-// remove recoverAddress(iusNaturalis)
-localStorage.removeItem('recoveredAddress');
-
-
-
-  // Save preference to localStorage
-  localStorage.setItem('preferredWallet', selectedWallet);
+            // remove recoverAddress(iusNaturalis)
+            localStorage.removeItem('recoveredAddress');
 
 
-  initializeWalletPreference()
-}
+
+            // Save preference to localStorage
+            localStorage.setItem('preferredWallet', selectedWallet);
+
+
+            initializeWalletPreference()
+        }
 
 
 
@@ -1452,7 +1894,7 @@ localStorage.removeItem('recoveredAddress');
             console.log('connection()')
             document.getElementById('walletModal').showModal();
 
-         
+
 
         }
 
@@ -1460,43 +1902,47 @@ localStorage.removeItem('recoveredAddress');
         async function disconnection() {
             console.log('disconnection()')
 
+            document.getElementById('info').innerHTML = `<br>Not connected`;
+            
+   // CHANGE BUTTON
+   document.getElementById("disconnection").style.display = "none";
+   document.getElementById('connection').style.display = "block"; // boton CONNECT
 
             const savedWallet = localStorage.getItem('preferredWallet');
 
-    if (savedWallet) {
+            if (savedWallet) {
 
-    if (savedWallet === 'metamask') {
-            initMetamask();
-        } else if (savedWallet === 'iusNaturalis') {
+                if (savedWallet === 'metamask') {
+                    // initMetamask();
+                } else if (savedWallet === 'iusNaturalis') {
 
-            localStorage.removeItem('recoveredAddress');
+                    localStorage.removeItem('recoveredAddress');
+
+                    initIusNaturalis();
+                } else {
+                    initLocalTest();
+                }
 
 
-            initIusNaturalis();
-        } else {
-            initLocalTest();
+
+
+                // CHANGE BUTTON
+                // document.getElementById('connection').style.display = "block"; // boton CONNECT
+                // document.getElementById("disconnection").style.display = "none";
+                // document.getElementById('yourContrib').style.display = 'none'
+
+                // DELETE WALLET CHOICE FROM LOCALSTORAGE
+                localStorage.removeItem("wallet");
+                // hide your participation
+                // document.getElementById("attesttionUI").setAttribute("style", "display:none !important");
+                // DELETE ADDRESS RESTORE  BANNER
+                // usrAddr.innerHTML = "";
+                document.getElementById('disconnection').innerHTML = ""
+                userAddress = "";
+            }
+
+
         }
-
-
-        
-
-            // CHANGE BUTTON
-            document.getElementById('connection').style.display = "block"; // boton CONNECT
-            document.getElementById("disconnection").style.display = "none";
-            document.getElementById('yourContrib').style.display = 'none'
-
-            // DELETE WALLET CHOICE FROM LOCALSTORAGE
-            localStorage.removeItem("wallet");
-            // hide your participation
-            // document.getElementById("attesttionUI").setAttribute("style", "display:none !important");
-            // DELETE ADDRESS RESTORE  BANNER
-            // usrAddr.innerHTML = "";
-            document.getElementById('disconnection').innerHTML = ""
-            userAddress = "";
-        }
-
-
-    }
 
         async function metamaskConnection() {
             console.log('metamaskConnection()')
@@ -1866,15 +2312,10 @@ localStorage.removeItem('recoveredAddress');
             }
             else { console.log('YES, YOU ARE IN THE CORRECT CHAIN') }
 
-
-
             //    GET GAS PRICE AND GAS  ESTIMATION
-            // let gasPrice = await providerMetamask.getGasPrice(); no longer compatible in v6
-            // console.log('gasPrice:', gasPrice)
             let feeData = await providerMetamask.getFeeData();
             let gasPrice = feeData.gasPrice; // This gives the gas price
             console.log(`⛽ Gas Price: ${gasPrice.toString()}`);
-
 
             // ENCODE DATA
             const amountToSend = ethers.parseEther(amount); // 1 ETH
@@ -1886,17 +2327,8 @@ localStorage.removeItem('recoveredAddress');
             let contributorPseudonym = contributor.toString();
             console.log('contributor:', contributorPseudonym)
 
-            try {
-                tx = await contractz.connect(signer).contribute(contributorPseudonym, { value: amountToSend });
-            }
-
-            catch (error) {
-                e = error
-                console.log('error line 888:', error);
-                fixedToast.fire("", error.shortMessage, "error");
-                return;
-
-            }
+            try { tx = await contractz.connect(signer).contribute(contributorPseudonym, { value: amountToSend }); }
+            catch (error) { e = error; console.log('error line 888:', error); fixedToast.fire("", error.shortMessage, "error"); return; }
 
 
             console.log('Function executed!', tx);
@@ -1905,26 +2337,15 @@ localStorage.removeItem('recoveredAddress');
             // CLOSE MODAL
             Swal.close();
 
-
-
-
-
             // MESSAGE WITH TX
-
-            headerNotes.innerHTML = ` <div class="w3-panel w3-green"> <h3>Success!</h3>
-                <strong>Transaction success!</strong> <a href="${optionsList[GLOBALCHAIN].EXPLORER + '/tx/' + tx.hash}" target="_blank" rel="noopener noreferrer">${tx.hash}</a>
-                </div> `
-
+            headerNotes.innerHTML = ` <div class="w3-panel w3-green"> <h3>Success!</h3> <strong>Transaction success!</strong> <a href="${optionsList[GLOBALCHAIN].EXPLORER + '/tx/' + tx.hash}" target="_blank" rel="noopener noreferrer">${tx.hash}</a> </div> `
 
             // LAUNCH FANCY CONFETTI
             setTimeout(shoot, 0);
             setTimeout(shoot, 100);
             setTimeout(shoot, 200);
-
             console.log('transaction link', optionsList[GLOBALCHAIN].EXPLORER + '/tx/' + tx.hash);
 
-
-            // let providerLocal = await new ethers.providers.JsonRpcProvider(`${optionsList[GLOBALCHAIN].API}`);
             let providerLocal = await new ethers.JsonRpcProvider(optionsList[GLOBALCHAIN].API);
 
             let contract = new ethers.Contract(contractAddress, contractABI, providerLocal);
@@ -2068,31 +2489,34 @@ localStorage.removeItem('recoveredAddress');
                 return price
             } catch (error) {
                 console.warn("Error retrieving Chainlink price in contract:", error);
+                const price =localStorage.getItem('lastOraclePrice')
+                return price
+
             }
 
         }
- 
 
 
-// DONATE
-function openDonate() {
-      const donateModal = document.getElementById('donateModal');
-      donateModal.showModal();
-    }
+
+        // DONATE
+        function openDonate() {
+            const donateModal = document.getElementById('donateModal');
+            donateModal.showModal();
+        }
 
         // SETTINGS
         function openSettings() {
-      const settingsModal = document.getElementById('settingsModal');
-      settingsModal.showModal();
-    }
+            const settingsModal = document.getElementById('settingsModal');
+            settingsModal.showModal();
+        }
 
-    document.querySelectorAll('.close').forEach((closeButton) => {
-      closeButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        const targetModal = event.currentTarget.getAttribute('data-target');
-        document.getElementById(targetModal).close();
-      });
-    });
+        document.querySelectorAll('.close').forEach((closeButton) => {
+            closeButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetModal = event.currentTarget.getAttribute('data-target');
+                document.getElementById(targetModal).close();
+            });
+        });
 
         // const walletModal = document.getElementById('walletModal');
 
@@ -2104,100 +2528,114 @@ function openDonate() {
         // });
 
 
-        
+
         // -----------------------------------------
         //  SEND
         // -----------------------------------------
 
-        function handleFormSubmit(event) {
-    event.preventDefault(); // Prevent the form from actually submitting
+        async function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent the form from actually submitting
 
-    // You can access the form data here
-    const cryptoValue = document.getElementById("cryptoValue").value;
-    const message = document.getElementById("message").value;
+            // You can access the form data here
+            const cryptoValue = document.getElementById("cryptoValue").value;
+            const message = document.getElementById("message").value;
 
-    // Example: Log values or trigger your donation logic
-    console.log("Crypto Value:", cryptoValue);
-    console.log("Message:", message);
+            // Example: Log values or trigger your donation logic
+            console.log("Crypto Value:", cryptoValue);
+            console.log("Message:", message);
 
-    // Trigger your sendDonation logic
-    sendDonation(cryptoValue, message);
-}
+            // Trigger your sendDonation logic
+            await sendDonation(cryptoValue, message);
+        }
+
+ 
+        function stringifyBigInts(obj) {
+                                return JSON.stringify(obj, (_, value) =>
+                                    typeof value === 'bigint' ? value.toString() : value
+                                );
+                                }
 
 
-async function sendDonation(amount,message) {
-      
-    //stealth address on?
+        async function sendDonation(amount, message) {
+            console.warn('sendDonation() ', amount, message)
+            
+            document.getElementById('signModal').showModal();
+            document.getElementById('iusSign').innerHTML = `<div id="resultSign" aria-busy="true">creating the transation... </div>`
+
+
+
+            const button = document.getElementById('sendDonationButton');
+            button.setAttribute('aria-busy', 'true');
+            button.textContent = 'sing the tx in your wallet...';
+
+            //stealth address on?
 
             // conditional metamask/ iusnaturalis
             const savedWallet = localStorage.getItem('preferredWallet');
             // const feedback = document.getElementById('walletFeedback');
 
-            if (savedWallet ==='metamask') {
+            if (savedWallet === 'metamask') {
                 console.warn('Currently selected: METAMASK')
                 // console.warn('Currently selected: Ius Naturalis?????')
 
-            try {
-                // ..............................
-                //if  METAMASK (signer y provider)
-                if (!window.ethereum) throw new Error("MetaMask is not loaded or installed!");
-                await window.ethereum.request({ method: "eth_requestAccounts" });
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const signer = await provider.getSigner();
-                console.log('signer:',signer)
-                s=signer
+                try {
+                    // ..............................
+                    //if  METAMASK (signer y provider)
+                    if (!window.ethereum) throw new Error("MetaMask is not loaded or installed!");
+                    await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    const signer = await provider.getSigner();
+                    console.log('signer:', signer)
+                    s = signer
+
+                    // ..............................
+                    // Connect to the contract
+                    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+                    console.log('contract:', contract)
+
+                    // Get recipient publicKey from smart contract
+                    let recipientPublicKey = await getRecipientPublicKey();
+                    console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
+                    let publicKeyB = ethers.getBytes(recipientPublicKey);
+
+                    // ..................
+                    // Generate a stealth address with ethers for iusnaturalis?
+
+                    // let privateKeyA;
+                    let alicewallet = await aliceWallet()
+                    let alicePrivateKeyA = alicewallet.privateKey;
+                    let privateKeyA = ethers.getBytes(alicePrivateKeyA);
+                    console.log('GOT privKeyA 💎💎💎 !!!', privateKeyA)
+
+                    // stealth address where we are going to send funds
+                    // arguments: donor privateKey and recipient's publicKey
+                    let steathAddress = await generateStealthAddress(privateKeyA, publicKeyB)
+                    console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
 
 
-                // ..............................
-                // Connect to the contract
-                const contract = new ethers.Contract(contractAddress, contractABI, signer);
-                console.log('contract:',contract)
+                    return
 
-                // Get recipient publicKey from smart contract
-                let recipientPublicKey = await getRecipientPublicKey();
-                console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
-                let publicKeyB =ethers.getBytes(recipientPublicKey);
-                
-                // ..................
-                // Generate a stealth address with ethers for iusnaturalis?
+                    // ..................
+                    // Send the transaction
+                    status.textContent = "Sending transaction...";
+                    const tx = await contract.donate(stealthAddress, message, {
+                        value: ethers.parseEther(amount),
+                    });
 
-                // let privateKeyA;
-                let alicewallet = await aliceWallet()
-                let alicePrivateKeyA = alicewallet.privateKey;
-                let privateKeyA = ethers.getBytes(alicePrivateKeyA);
-                console.log('GOT privKeyA 💎💎💎 !!!', privateKeyA)
+                    status.textContent = `Transaction sent! Hash: ${tx.hash}`;
 
-                // stealth address where we are going to send funds
-                // arguments: donor privateKey and recipient's publicKey
-                let steathAddress =  await generateStealthAddress(privateKeyA, publicKeyB)
-                console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
-                
-                
-                return
-               
-                // ..................
-                // Send the transaction
-                status.textContent = "Sending transaction...";
-                const tx = await contract.donate(stealthAddress, message, {
-                    value: ethers.parseEther(amount),
-                });
-
-                status.textContent = `Transaction sent! Hash: ${tx.hash}`;
-
-                // Wait for confirmation
-                await tx.wait();
-                status.textContent = "Transaction confirmed!";
-            } catch (error) {
-                console.error(error);
-                status.textContent = `Error: ${error.message}`;
+                    // Wait for confirmation
+                    await tx.wait();
+                    status.textContent = "Transaction confirmed!";
+                } catch (error) {
+                    console.error(error);
+                    status.textContent = `Error: ${error.message}`;
+                }
             }
 
 
-        } 
-       
 
-         
-        else if (savedWallet ==='localTest'){
+            else if (savedWallet === 'localTest') {
                 console.warn('Currently selected: localTest🐥🐥🐥')
 
                 // 0. amount and message
@@ -2209,9 +2647,9 @@ async function sendDonation(amount,message) {
                 // 1.Get recipient publicKey from smart contract
                 let recipientPublicKey = await getRecipientPublicKey();
                 console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
-                let publicKeyB =ethers.getBytes(recipientPublicKey);
-                
-                
+                let publicKeyB = ethers.getBytes(recipientPublicKey);
+
+
                 // 2. get privateKeyA
                 let alicewallet = await aliceWallet()
                 let alicePrivateKeyA = alicewallet.privateKey;
@@ -2220,61 +2658,68 @@ async function sendDonation(amount,message) {
 
                 // 3. stealth address where we are going to send funds
                 // arguments: donor privateKey and recipient's publicKey
-                let steathAddress =  await generateStealthAddress(privateKeyA, publicKeyB)
+                let steathAddress = await generateStealthAddress(privateKeyA, publicKeyB)
                 console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
-                document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`; 
+                document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`;
                 // document.getElementById('info').innerHTML += "pay to:" +steathAddress.stealthAddress; 
-                
+
                 // 4. create tx to sign
-                console.log( 'createIusNaturalisTosignMessage', amount, steathAddress.stealthAddress, message)
-            //    let txToSign=  await createIusNaturalisTosignMessage(amount,steathAddress.stealthAddress, message)
-            //    console.log('🏊‍♂️🏊‍♂️🏊‍♂️ txToSign', txToSign)
-                
+                console.log('createIusNaturalisTosignMessage', amount, steathAddress.stealthAddress, message)
+                //    let txToSign=  await createIusNaturalisTosignMessage(amount,steathAddress.stealthAddress, message)
+                //    console.log('🏊‍♂️🏊‍♂️🏊‍♂️ txToSign', txToSign)
 
-            
-            // -----------------
-            //  TX TO SIGN
-            // -----------------
 
-            let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
-                const abi = [ "function donate(address stealthAddress, string message) payable", ];
+
+                // -----------------
+                //  TX TO SIGN
+                // -----------------
+
+                let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+                const abi = ["function contribute(string memory _pseudonym) public payable",];
+                // const abi = ["function donate(address stealthAddress, string message) payable",];
+
+                // const abi = ["function donate(address stealthAddress, string message) payable",];
                 const contractInterface = new ethers.Interface(abi);
 
 
-const pretx = {
-                to: contractAddress,
+                const pretx = {
+                    to: contractAddress,
                     value: ethers.parseUnits(amount.toString(), "ether"), // Value in ETH
-                    data: contractInterface.encodeFunctionData("donate", [steathAddress.stealthAddress, message]),
+                    data: contractInterface.encodeFunctionData("contribute", message),
+                    // data: contractInterface.encodeFunctionData("contribute", [message]),
                     chainId: 421614, // Ensure this matches your target network
-				gasLimit: undefined      // Will be estimated next
-			};
+                    gasLimit: undefined      // Will be estimated next
+                };
 
                 // Estimate gas required for the transaction
-			const gasLimit = await provider.estimateGas(pretx);
-			console.log("⛽ Estimated gas:", gasLimit.toString());
+                const gasLimit = await provider.estimateGas(pretx);
+                console.log("⛽ Estimated gas:", gasLimit.toString());
 
-			// Get the current gas price
-			const feeData = await provider.getFeeData();
-			let gasPrice = feeData.gasPrice;
-			if (!gasPrice) {
-				throw new Error('Gas price is not available');
-			}
-			console.log(`⛽ Gas Price: ${ethers.formatUnits(gasPrice, 'gwei')} gwei`);
+                // Get the current gas price
+                const feeData = await provider.getFeeData();
+                let gasPrice = feeData.gasPrice;
+                if (!gasPrice) {
+                    throw new Error('Gas price is not available');
+                }
+                console.log(`⛽ Gas Price: ${ethers.formatUnits(gasPrice, 'gwei')} gwei`);
 
-			// Convert gasLimit and gasPrice to BigInt for arithmetic
-			const gasLimitBigInt = BigInt(gasLimit);
-			const gasPriceBigInt = BigInt(gasPrice);
+                // Convert gasLimit and gasPrice to BigInt for arithmetic
+                const gasLimitBigInt = BigInt(gasLimit);
+                const gasPriceBigInt = BigInt(gasPrice);
 
-			// 5. Calculate the gas fee in wei (gas limit * gas price)
-			const gasFee = gasLimitBigInt * gasPriceBigInt;
-            console.log('gasFee:', gasFee)
+                // 5. Calculate the gas fee in wei (gas limit * gas price)
+                const gasFee = gasLimitBigInt * gasPriceBigInt;
+                console.log('gasFee:', gasFee)
 
-            const nonce = await provider.getTransactionCount(alicewallet.address, "latest");
+                const nonce = await provider.getTransactionCount(alicewallet.address, "latest");
 
                 const txToSign = {
                     to: contractAddress,
                     value: ethers.parseUnits(amount.toString(), "ether"), // Value in ETH
-                    data: contractInterface.encodeFunctionData("donate", [steathAddress.stealthAddress, message]),
+                    // data: contractInterface.encodeFunctionData("donate", [steathAddress.stealthAddress, message]),
+                    // data: contractInterface.encodeFunctionData("contribute", [message]),
+                    data: contractInterface.encodeFunctionData("contribute", message),
+                    // data: contractInterface.encodeFunctionData("donate", [steathAddress.stealthAddress, message]),
                     chainId: 421614, // Ensure this matches your target network
                     nonce, // Correct nonce fetched dynamically
                     maxFeePerGas: feeData.maxFeePerGas, // Dynamically fetched base + priority fee
@@ -2285,239 +2730,224 @@ const pretx = {
 
 
                 // ---
-// -----------------
-// SIGN TX
-// -----------------
+                // -----------------
+                // SIGN TX
+                // -----------------
 
-               let signedTransaction = await signTransaction(txToSign, alicewallet.privateKey)
-               console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
+                let signedTransaction = await signTransaction(txToSign, alicewallet.privateKey)
+                console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
 
 
 
-// -----------------
-// BROADCAST
-// -----------------
-            // 5. now the contract should publish and check the tx
-          let txHash
-            try {
-                 txHash = await provider.broadcastTransaction(signedTransaction);
-                console.log("Broadcasted!!! Transaction Hash:", txHash);
-            } catch (error) {
-                e=error;
-                status.innerText = error.shortMessage;
-                if (error.code === -32000 && error.message.includes("intrinsic gas too low")) {
-                    console.error("Error: Gas limit too low. Increase the gas limit for the transaction.");
-                } else {
-                    console.error("Transaction failed:", error.message);
+                // -----------------
+                // BROADCAST
+                // -----------------
+                // 5. now the contract should publish and check the tx
+                let txHash
+                try {
+                    txHash = await provider.broadcastTransaction(signedTransaction);
+                    console.log("Broadcasted!!! Transaction Hash:", txHash);
+                } catch (error) {
+                    e = error;
+                    status.innerText = error.shortMessage;
+                    if (error.code === -32000 && error.message.includes("intrinsic gas too low")) {
+                        console.error("Error: Gas limit too low. Increase the gas limit for the transaction.");
+                    } else {
+                        console.error("Transaction failed:", error.message);
+                    }
+                    return
                 }
+
+
+
+                const receipt = await txHash.wait();
+                let txLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txHash.hash}">Tx link</a>`;
+                console.log("Transaction confirmed:", receipt);
+
+                document.getElementById('status').innerHTML += `✅ TRANSACTION SUCCESSFUL <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txHash.hash}">Tx link</a>`;
+                loadMessages()
+
+
                 return
-            }
-
-
-
-            const receipt = await txHash.wait();
-				let txLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txHash.hash}">Tx link</a>`;
-				console.log("Transaction confirmed:", receipt);
-
-				document.getElementById('status').innerHTML += `✅ TRANSACTION SUCCESSFUL <a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/tx/${txHash.hash}">Tx link</a>`;
-                loadMessages() 
-                
-
-               return 
-               // Sign the transaction offline
+                // Sign the transaction offline
                 // signTransaction(txToSign, alicewallet.privateKey).then((signedTransaction) => {
                 //             console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
                 //         });
 
 
 
-            } 
+            }
 
-            else if (savedWallet ==='iusNaturalis') {
-            // IF IUS NATURALIS
+            else if (savedWallet === 'iusNaturalis') {
+                // IF IUS NATURALIS
                 console.warn('Currently selected: iusNaturalis 👥 💮 ')
 
                 // check its connected
-                let recaddr = localStorage.getItem('recoveredAddress' )
+                let recaddr = localStorage.getItem('recoveredAddress')
 
-                if(recaddr){
+                if (recaddr) {
                     console.log('YES isConnected!')
 
                     console.log('amount:', amount)
-                    console.log('message:', message)
+                    console.log('MEssage:', message)
                     //stealth address on?
-                    
-                let checkbox = document.getElementById('stealthswitch');
-                let savedState = localStorage.getItem('stealthswitch');
 
-                if (savedState !== null) {
-                    if (savedState === "true") {
-                        checkbox.checked = true; // Set checkbox as checked
-                        console.log('use stealth address TRUE')
-                        
-                        // return
-                        let recipientPublicKey = await getRecipientPublicKey();
-                        console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
-                        let publicKeyB =ethers.getBytes(recipientPublicKey);
-                        
-                        await stealthGenAndSendTx( publicKeyB, amount, message)
-                        // await createIusNaturalisTosignMessage(amount, message)
-                    } else {
-                        checkbox.checked = false; // Set checkbox as unchecked
-                        console.log(' use stealth address FALSE')
+                    let checkbox = document.getElementById('stealthswitch');
+                    let savedState = localStorage.getItem('stealthswitch');
 
-                               // -----------------
-                               // TX TO SIGN
-                               // -----------------
-                            //    const abi = [ "function donate(address stealthAddress, string message) payable", ];
-        // const functionName = "donate"; // Replace with the function name in your contract
-        // const value = amount; // Amount of ETH to send
-        // const params = message; // Replace with the parameters for your function
-        // const params = [stealthAddress, message]; // Replace with your parameters
+                    if (savedState !== null) {
+                        console.log('savedState not null ', savedState)
 
-        // const chainId = 421614; // arbitrum sepolia
+                        if (savedState === "true") {
+                            // STEALTH ON
+                            console.log('STEALTH TRUE')
 
+                            let recipientPublicKey = await getRecipientPublicKey();
+                            console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
+                            let publicKeyB = ethers.getBytes(recipientPublicKey);
 
-                               let provider = new
-                               ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); 
-                               const abi = [ "function donate(address stealthAddress, string message) payable", ];
-                               const contractInterface = new ethers.Interface(abi);
-                // let recaddr = localStorage.getItem('recoveredAddress' )
-                                let yourAddress = recaddr
+                            await stealthGenAndSendTx(publicKeyB, amount, message)
+                            // await createIusNaturalisTosignMessage(amount, message)
+                        }
+                        else {
+                            // STEALTH OFF
+                            console.warn(' STEALTH FALSE')
 
-                               const pretx = {
-                               to: contractAddress,
-                               value: ethers.parseUnits(amount.toString(), "ether"), // Value in ETH
-                               data: contractInterface.encodeFunctionData("donate", [yourAddress, message]),
-                            //    data: contractInterface.encodeFunctionData("donate", [steathAddress.stealthAddress, message]),
-                               chainId: 421614, // Ensure this matches your target network
-                               gasLimit: undefined // Will be estimated next
-                               };
+                            // -----------------
+                            // TX TO SIGN
+                            // -----------------
+                            // 0xE59fd4a07514E7C485545F5acC99299111fd22c6
+                            let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`);
+                            const abi = ["function contribute(string memory _pseudonym) public payable",];
 
-                               // Estimate gas required for the transaction
-                               const gasLimit = await provider.estimateGas(pretx);
-                               console.log("⛽ Estimated gas:", gasLimit.toString());
+                            const contractInterface = new ethers.Interface(abi);
+                            let yourAddress = recaddr
 
-                               // Get the current gas price
-                               const feeData = await provider.getFeeData();
-                               let gasPrice = feeData.gasPrice;
-                               if (!gasPrice) {
-                               throw new Error('Gas price is not available');
-                               }
-                               console.log(`⛽ Gas Price: ${ethers.formatUnits(gasPrice, 'gwei')} gwei`);
+                            const pretx = {
+                                to: contractAddress,
+                                value: ethers.parseUnits(amount.toString(), "ether"), // Value in ETH
+                                data: contractInterface.encodeFunctionData("contribute", [ message]),
+                                chainId: 421614, // Ensure this matches your target network
+                                gasLimit: undefined // Will be estimated next
+                            };
 
-                               // Convert gasLimit and gasPrice to BigInt for arithmetic
-                               const gasLimitBigInt = BigInt(gasLimit);
-                               const gasPriceBigInt = BigInt(gasPrice);
+                            console.log("⛽⛽⛽ PRETX:", pretx);
 
-                               // 5. Calculate the gas fee in wei (gas limit * gas price)
-                               const gasFee = gasLimitBigInt * gasPriceBigInt;
-                               console.log('gasFee:', gasFee)
-
-                               const nonce = await provider.getTransactionCount(yourAddress, "latest");
-
-                               const txToSign = {
-                               to: contractAddress,
-                               value: ethers.parseUnits(amount.toString(), "ether"), // Value in ETH
-                               data: contractInterface.encodeFunctionData("donate", [yourAddress, message]),
-                               chainId: 421614, // Ensure this matches your target network
-                               nonce, // Correct nonce fetched dynamically
-                               maxFeePerGas: feeData.maxFeePerGas, // Dynamically fetched base + priority fee
-                               maxPriorityFeePerGas: feeData.maxPriorityFeePerGas, // Dynamically fetched priority fee
-                               gasLimit: gasLimit // Use the estimated gas limit
-                               };
-                               console.log(" txToSign:", txToSign);
+                            // Estimate gas required for the transaction
+                            let gasLimit = await provider.estimateGas(pretx);
+                            console.log("⛽ Estimated gas (pre buffer):", gasLimit.toString());
+                            gasLimit = gasLimit + 100000n; // Add a buffer of 100,000 gas
+                            console.log("⛽ Estimated gas (post buffer):", gasLimit.toString());
 
 
 
-                            //    display message to sign
-                            document.getElementById('signModal').showModal();
+                            // Get the current gas price
+                            const feeData = await provider.getFeeData();
+                            ff=feeData
+                            let gasPrice = feeData.gasPrice;
+                            if (!gasPrice) { throw new Error('Gas price is not available'); }
+                            console.log(`⛽ Gas Price: ${ethers.formatUnits(gasPrice, 'gwei')} gwei`);
 
-                               document.getElementById('iusSign').innerHTML=   ` 
-                               <div class=" responsive-svg" id="canvasSign">
-                                </div> 
-                                <div id="resultSign"> <p>Scan and sign this message to make the transation</p> </p> 
-                                    </div> `
+                            // Convert gasLimit and gasPrice to BigInt for arithmetic
+                            const gasLimitBigInt = BigInt(gasLimit);
+                            const gasPriceBigInt = BigInt(gasPrice);
 
+                            // 5. Calculate the gas fee in wei (gas limit * gas price)
+                            const gasFee = gasLimitBigInt * gasPriceBigInt;
+                            console.log('gasFee:', gasFee)
 
-                                    return
+                            const nonce = await provider.getTransactionCount(yourAddress, "latest");
+                            let correctedValue = ethers.parseUnits(amount.toString(), "ether");
+                            let correctedData = contractInterface.encodeFunctionData("contribute", [ message]);
 
-            // CHAT
-            let smartcontractwallet = await contractWallet()
-            scwallet= smartcontractwallet
-            const iusnaturalisxmtp = await Client.create(smartcontractwallet)
-            console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
-            console.warn(' 🔵🔵🔵Smart contract address:  ',smartcontractwallet.address)
+                            let txToSign = {
+                                to: contractAddress,
+                                value: correctedValue, // Value in ETH
+                                data: correctedData,
+                                chainId: 421614, // Ensure this matches your target network
+                                nonce, // Correct nonce fetched dynamically
+                                maxFeePerGas: feeData.maxFeePerGas, // Dynamically fetched base + priority fee
+                                maxPriorityFeePerGas: feeData.maxPriorityFeePerGas, // Dynamically fetched priority fee
+                                gasLimit: gasLimit // Use the estimated gas limit
+                            };
 
-            const conversations = iusnaturalisxmtp.conversations
-			window.iusnaturalisxmtp = iusnaturalisxmtp;// make GLOBAL
-			window.chats= iusnaturalisxmtp.conversations
-
-            // MESSAGE TO SIGN
-            // const messageToSign = "I'm logging into IusNaturalis";
-            const messageToSign = txToSign;
-            const message = `${smartcontractwallet.address},${txToSign}`;
-            // const message = `${smartcontractwallet.address},I'm logging into IusNaturalis `;
-            console.log(txToSign)
-            displayQRtosign(txToSign)
-// return
-            
-            let messageInput= txToSign;
-            for await (const message of await iusnaturalisxmtp.conversations.streamAllMessages()) {
-                console.log(`New message from ${message.senderAddress}: ${message.content}`)
-
-
-                
-                let signature = message.content;
-                let recoveredAddress = ethers.verifyMessage(messageInput, signature);
-                console.warn(`Logged in as: ${recoveredAddress}`);
-                
-                // document.getElementById("signInButton").innerText = 'Disconnect';
-                document.getElementById('result').innerHTML = `✅ SIGNED: ${recoveredAddress} `
-                document.getElementById("canvas").innerText = '';
-
-                document.getElementById('connection').style.display ='none'
-                document.getElementById('disconnection').style.display ='block'
-                
-                // save address in localstorage
-                localStorage.setItem('recoveredAddress',recoveredAddress )
-
-                let signerAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${recoveredAddress}" target="_blank">${recoveredAddress}</a>`
-            document.getElementById('info').innerHTML = `<br>ADDRESS: ${signerAddresslink} 
-           <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${recoveredAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
-            </svg> 
-            `;
-
-            }
+                            
+                            t2s = txToSign
+                            
+                                // const result = await provider.call(txToSign);
+                                // console.warn('If it reverts, the reason will appear here', result); // If it reverts, the reason will appear here
 
 
+                                // order: 1. serialize 2. stringify, 3 .send, then Parse the string and convert strings back to BigInt on the receiver's side
+                                const serializedTransaction = stringifyBigInts(txToSign);
+                                console.log(serializedTransaction);
+                              
+                                let txToSignMessage = {
+                                type: "tx-signing-request",
+                                payload: serializedTransaction,
+                            };
+
+                            // ---------------- 00000000
+
+                            // convert to json before send...
+                            let txToSignMessageJSON = JSON.stringify(txToSignMessage);
+                            sendMessage(iusnaturalisxmtp, recaddr, txToSignMessageJSON)
+                            // Uncaught (in promise) TypeError: Do not know how to serialize a BigInt
+
+                            // ---------------- 00000000
+                            
+                //   MEJORAR ESTA PARTE
+                                    // Replacer function to handle BigInt serialization
+                                    let replacer = (key, value) => (typeof value === 'bigint' ? value.toString() : value);
+                                    
+                                    // Convert the object to JSON with BigInt handled
+                                    let txToSignJSON = JSON.stringify(txToSignMessage, replacer);
+                                    console.log('txToSignMessage', txToSignMessage)
+                                    console.log('txToSignJSON', txToSignJSON)
+                                    
+                                    // -----------------
+                                    // DISPLAY MSG IN UX
+                                    // -----------------
+                                    let txToSignJSONv1 = JSON.stringify(txToSign, replacer);
+                            document.getElementById('iusSign').innerHTML = `<div id="resultSign">sign the tx in your iusNaturalis wallet: <span class='tx'> ${txToSignJSONv1} </span> </div>`
+                            return
+         
+
+
+                        }
 
 
 
 
                     }
+                    else {
+                        console.log('savedState is null!')
+
+                    }
+
                 }
 
 
 
+            }
 
-                }
-
-                
-            
-            }    
-
-           
         }
-    // });
- // -----------------------------------------
+
+        
+        // -----------------------------------------
+        //  CUSTOM CONTENT TYPES XMTP
+        // -----------------------------------------
+
+
+
+        // -----------------------------------------
         //  OFFCHAN SIGN AND IUSNATURALIS WALLET HELPERS
         // -----------------------------------------
-        
-        // function createIusNaturalisTosignMessage(amount, message,pubkeyB){
-            async function createIusNaturalisTosignMessage(amount,stealthAddress, message){
 
-            const abi = [ "function donate(address stealthAddress, string message) payable", ];
+        // function createIusNaturalisTosignMessage(amount, message,pubkeyB){
+        async function createIusNaturalisTosignMessage(amount, stealthAddress, message) {
+
+            const abi = ["function donate(address stealthAddress, string message) payable",];
             const functionName = "donate"; // Replace with the function name in your contract
             const value = amount; // Amount of ETH to send
             const params = [stealthAddress, message]; // Replace with your parameters
@@ -2526,48 +2956,48 @@ const pretx = {
             // Create the transaction
             let transaction = await createTransaction(contractAddress, abi, functionName, params, value, chainId);
 
-        return transaction
+            return transaction
 
-}
-
-
-// 1. Creating the Transaction
+        }
 
 
-function createTransaction(contractAddress, abi, functionName, params, value, chainId) {
-    // Create an instance of the contract
-    const contractInterface = new ethers.Interface(abi);
-
-    // Encode the function call
-    const data = contractInterface.encodeFunctionData(functionName, params);
-
-    // Build the transaction object
-    const transaction = {
-        to: contractAddress, // Smart contract address
-        value: ethers.parseUnits(value.toString(), "ether"), // Value in ETH
-        data: data, // Encoded function call
-        chainId: chainId // Chain ID
-    };
-    console.log("🚕🚕🚕Transaction:", transaction);
-
-    return transaction;
-}
+        // 1. Creating the Transaction
 
 
+        function createTransaction(contractAddress, abi, functionName, params, value, chainId) {
+            // Create an instance of the contract
+            const contractInterface = new ethers.Interface(abi);
+
+            // Encode the function call
+            const data = contractInterface.encodeFunctionData(functionName, params);
+
+            // Build the transaction object
+            const transaction = {
+                to: contractAddress, // Smart contract address
+                value: ethers.parseUnits(value.toString(), "ether"), // Value in ETH
+                data: data, // Encoded function call
+                chainId: chainId // Chain ID
+            };
+            console.log("🚕🚕🚕Transaction:", transaction);
+
+            return transaction;
+        }
 
 
 
-async function stealthGenAndSendTx( publicKeyB, amount, message) {
 
-console.log('amount:', amount)
+
+        async function stealthGenAndSendTx(publicKeyB, amount, message) {
+
+            console.log('amount:', amount)
             console.log('message:', message)
 
-// 1.Get recipient publicKey from smart contract
-// let recipientPublicKey = await getRecipientPublicKey();
-//             console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
-//             let publicKeyB =ethers.getBytes(recipientPublicKey);
-            
-            
+            // 1.Get recipient publicKey from smart contract
+            // let recipientPublicKey = await getRecipientPublicKey();
+            //             console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
+            //             let publicKeyB =ethers.getBytes(recipientPublicKey);
+
+
             // 2. get privateKeyA
             // let alicewallet = await aliceWallet()
             // let alicePrivateKeyA = alicewallet.privateKey;
@@ -2576,81 +3006,81 @@ console.log('amount:', amount)
 
             // 3. stealth address where we are going to send funds
             // arguments: donor privateKey and recipient's publicKey
-            let steathAddress =  await generateStealthAddress(privateKeyA, publicKeyB)
+            let steathAddress = await generateStealthAddress(privateKeyA, publicKeyB)
             console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
-            document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`; 
+            document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`;
 
-}
+        }
 
 
 
-async function createIusNaturalisTosignMessage(amount, message){
-    console.log('amount:', amount)
-                console.log('message:', message)
+        async function createIusNaturalisTosignMessage(amount, message) {
+            console.log('amount:', amount)
+            console.log('message:', message)
 
-    // 1.Get recipient publicKey from smart contract
-    let recipientPublicKey = await getRecipientPublicKey();
-                console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
-                let publicKeyB =ethers.getBytes(recipientPublicKey);
-                
-                
-                // 2. get privateKeyA
-                // let alicewallet = await aliceWallet()
-                // let alicePrivateKeyA = alicewallet.privateKey;
-                // let privateKeyA = ethers.getBytes(alicePrivateKeyA);
-                // console.log('GOT privKeyA 🚀🚀🚀 !!!')
+            // 1.Get recipient publicKey from smart contract
+            let recipientPublicKey = await getRecipientPublicKey();
+            console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
+            let publicKeyB = ethers.getBytes(recipientPublicKey);
 
-                // 3. stealth address where we are going to send funds
-                // arguments: donor privateKey and recipient's publicKey
-                let steathAddress =  await generateStealthAddress(privateKeyA, publicKeyB)
-                console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
-                document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`; 
-                // document.getElementById('info').innerHTML += "pay to:" +steathAddress.stealthAddress; 
-                
-                // 4. create tx to sign
-                console.log( 'createIusNaturalisTosignMessage', amount, steathAddress.stealthAddress, message)
+
+            // 2. get privateKeyA
+            // let alicewallet = await aliceWallet()
+            // let alicePrivateKeyA = alicewallet.privateKey;
+            // let privateKeyA = ethers.getBytes(alicePrivateKeyA);
+            // console.log('GOT privKeyA 🚀🚀🚀 !!!')
+
+            // 3. stealth address where we are going to send funds
+            // arguments: donor privateKey and recipient's publicKey
+            let steathAddress = await generateStealthAddress(privateKeyA, publicKeyB)
+            console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
+            document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`;
+            // document.getElementById('info').innerHTML += "pay to:" +steathAddress.stealthAddress; 
+
+            // 4. create tx to sign
+            console.log('createIusNaturalisTosignMessage', amount, steathAddress.stealthAddress, message)
             //    let txToSign=  await createIusNaturalisTosignMessage(amount,steathAddress.stealthAddress, message)
             //    console.log('🏊‍♂️🏊‍♂️🏊‍♂️ txToSign', txToSign)
-                
+
 
 
             let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
-                // ---
+            // ---
 
-                // const feeData = await provider.getFeeData();
-                // console.log('FEEDATA:', feeData)
-                const abi = [ "function donate(address stealthAddress, string message) payable", ];
-                const contractInterface = new ethers.Interface(abi);
-
-
-
-// -----------------
-//  TX TO SIGN
-// -----------------
-}
+            // const feeData = await provider.getFeeData();
+            // console.log('FEEDATA:', feeData)
+            const abi = ["function donate(address stealthAddress, string message) payable",];
+            const contractInterface = new ethers.Interface(abi);
 
 
 
-   // -----------------------------------------
+            // -----------------
+            //  TX TO SIGN
+            // -----------------
+        }
+
+
+
+        // -----------------------------------------
         //  HELPER  FUNCTIONS
         // -----------------------------------------
         async function getRecipientPublicKey() {
-    // Connect to a provider
-    const provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+            // Connect to a provider
+            const provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
 
-    // Connect to the contract
-    const contract = new ethers.Contract(contractAddress, contractABI, provider);
+            // Connect to the contract
+            const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
-    try {
-        // Fetch the public key
-        const recipientPublicKey = await contract.recipientPublicKey();
-        // console.log("Recipient's Public Key:", recipientPublicKey);
+            try {
+                // Fetch the public key
+                const recipientPublicKey = await contract.recipientPublicKey();
+                // console.log("Recipient's Public Key:", recipientPublicKey);
 
-        return recipientPublicKey;
-    } catch (error) {
-        console.error("Error fetching recipient public key:", error);
-    }
-}
+                return recipientPublicKey;
+            } catch (error) {
+                console.error("Error fetching recipient public key:", error);
+            }
+        }
 
 
 

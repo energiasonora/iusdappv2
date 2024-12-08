@@ -88,13 +88,14 @@
   
   .iusbutton{
     background-color: #d17c781f!important;
+    /* word-break: break-all; */
     /* background-color: var(--c2)!important; */
     /* iusbutton */
     /* #d17c781f */
   }
 
 
-  #amount{
+  .amount{
     font-size: xxx-large;
 
     background-color: transparent;
@@ -105,7 +106,7 @@
   }
 
 
-  #amountsendgroup{
+  .amountsendgroup{
     height: 130px;
     /* width: 212px; */
   }

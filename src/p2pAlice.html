@@ -352,7 +352,7 @@
                 if (preferedWallet) { const values = preferedWallet.split(',').map(item => item.trim()); userAddress = values[1]; }
                 if (message.senderAddress === userAddress) {
                     console.log('YOU')
-                    chatBox.innerHTML += `<div><strong class='who'>You:</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
+                    chatBox.innerHTML += `<div><strong class='who'>You(encrypted):</strong> ${message.content}<span class="timestamp">  ${timestamp} &check; </span></div>`;
                 }
                 if (message.senderAddress == toAddr) {
                     console.log('OTHER', shortTo)
