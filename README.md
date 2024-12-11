@@ -68,6 +68,9 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+- 5.15
+* fix removeTokens funcitonality(wip)
+* improved load time with base64imgs and localstorage defaults
 - v5.14 
 * improved loading time by loading tokens and address from localstorage.
 * added preloader for chat history
