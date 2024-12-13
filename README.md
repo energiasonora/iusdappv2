@@ -59,7 +59,7 @@ yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html
 rm -rf .parcel-cache
 nvm use 20
 yarn parcel src/index.html --dist-dir public  --public-url ./
-yarn parcel src/index.html src/crowdfunding.html  --dist-dir public  --public-url ./
+yarn parcel src/index.html src/crowdfundingius.html src/crowdfunding.html  --dist-dir public  --public-url ./
 firebase deploy --only hosting:iusnaturalis
 ```
 
@@ -68,7 +68,7 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
-- 5.15
+- 5.15 fix avatar img
 * fix removeTokens funcitonality(wip)
 * improved load time with base64imgs and localstorage defaults
 - v5.14 

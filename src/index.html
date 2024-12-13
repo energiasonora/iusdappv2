@@ -231,7 +231,7 @@
 		<!-- ADD PUBLIC DOCUMENTS -->
 		<div class="bottom-nav">
 			<nav class="codrops-demos">
-				<span>v5.15</span>
+				<span>v5.16</span>
 			</nav>
 		</div>
 
@@ -1563,14 +1563,15 @@ if (lastUXInfo) {
             let parsedAvatar = JSON.parse(avatar); // If stored as JSON
             document.getElementById('avatarIMG').src = parsedAvatar;
             document.getElementById('aliasAvatar').src = parsedAvatar;
-            console.log('Avatar loaded from localStorage.');
+            console.log('👩‍🍳👩‍🍳👩‍🍳 Avatar loaded from localStorage.');
         } catch {
             document.getElementById('avatarIMG').src = avatar;
             document.getElementById('aliasAvatar').src = avatar;
-            console.log('Avatar loaded from localStorage (raw).');
+            console.log('👨‍🍳👨‍🍳👨‍🍳Avatar loaded from localStorage (raw).');
         }
     } else {
-        console.log('No avatar found in localStorage.');
+        console.log(' 👨‍🎤👨‍🎤👨‍🎤No avatar found in localStorage.');
+		// load avatar later from did if available
     }
 	
 // ONLINE OFFLINE
@@ -3262,7 +3263,12 @@ document.getElementById("chatBox").innerHTML = `
 				}
 
 			} else {
-				let did = `did:ius:${toAddr}`;
+
+			 
+				let did = toAddr.startsWith("did:ius:") ? toAddr : `did:ius:${toAddr}`;
+
+				console.log('💝💝💝💝💝',did); // Outputs the DID with the correct prefix
+
 				const didresult = await readDIDRecord(did);
 				const avtr = didresult.data.avatar;
 				const alias = didresult.data.alias;  // Check for alias
@@ -3715,7 +3721,9 @@ document.getElementById("chatBox").innerHTML = `
 						contactInfo = `<span>${shortAddr} <span>`;
 					}
 
-					let did = `did:ius:${el.address}`;
+					// let did = `did:ius:${el.address}`;
+				let did = el.address.startsWith("did:ius:") ? el.address : `did:ius:${el.address}`;
+
 					// Add each asynchronous operation to the promises array
 					promises.push(
 						new Promise((resolve, reject) => {
@@ -3741,10 +3749,10 @@ document.getElementById("chatBox").innerHTML = `
 
 											// check alias is not an eth address
 											if (isNotEthereumAddress(alias)) {
-												console.log("🥐🥐 This is not an Ethereum address.", alias);
+												console.log("🥐🥐🥐 This is not an Ethereum address: ", alias);
 											} else {
 												alias = shortAddressETH(alias)
-												console.log(" 🍔🍔 This is a valid Ethereum address.", alias);
+												console.log(" 🍔🍔🍔 This is a valid Ethereum address: ", alias);
 												// a=alias
 											}
 
@@ -3753,7 +3761,7 @@ document.getElementById("chatBox").innerHTML = `
 										<path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z"/>
 										</svg>`;
 										} else {
-											console.log('No alias found 🍿🍿');
+											console.log('No alias found 🍿🍿🍿');
 
 										}
 										// ---
@@ -5774,10 +5782,11 @@ initChatClient()
 		// cid: string; 
 		// publicKey: PublicKey;
 		async function loadDID(signer) {
+			console.warn(' 💒💒💒💒 loadDID()',signer)
     let did = `did:ius:${signer.address}`;
 
     // IF. READ DID 
-    console.log('💬 READ YOUR DID:', did);
+    console.log('💬💬💬 READ YOUR DID:', did);
     let rdid = await readDIDRecord(did);
     rd = rdid;
 
@@ -5801,7 +5810,9 @@ initChatClient()
         console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
 
         // Avatar logic only if not already loaded
-        if (!document.getElementById('avatarIMG').src || document.getElementById('avatarIMG').src.endsWith('default.png')) {
+        // if (!document.getElementById('avatarIMG').src || document.getElementById('avatarIMG').src.endsWith('default.png')) {
+
+			if (!document.getElementById('avatarIMG').src.startsWith("data:image/")){
             let avtr = rdid.data.avatar;
             if (avtr) {
                 let avatar = avtr; // Use the raw avatar string
@@ -5817,7 +5828,45 @@ initChatClient()
             } else {
                 console.log('Avatar data is empty.');
             }
+			
         }
+
+       // CHECK if avatar
+	//    let avtr = rdid.data.avatar;
+    //             if (avtr) {
+    //                 let avatar = JSON.parse(avtr);
+    //                 document.getElementById('avatarIMG').src = avatar;
+    //                 document.getElementById('aliasAvatar').src = avatar;
+    //             } else {
+    //                 console.log('Avatar data is empty');
+    //             }
+
+
+
+
+
+
+// 		// CHECK if avatar
+		// 		let avtr = rdid.data.avatar;
+		// 		if (avtr) {
+		// 			let avatar = JSON.parse(avtr);
+		// 			document.getElementById('avatarIMG').src = avatar;
+		// 			document.getElementById('aliasAvatar').src = avatar;
+		// 		} else {
+		// 			console.log('Avatar data is empty');
+		// 		}		// 			
+
+
+
+
+
+
+
+
+
+
+
+
 
         // localAlias or userName?
         let alias = rdid.data.alias;
@@ -5832,73 +5881,7 @@ initChatClient()
         document.getElementById('mintOrUpdate').disabled = false;
     }
 }
-
-// 		async function loadDID(signer) {
-//     let did = `did:ius:${signer.address}`;
-
-//     // IF. READ DID 
-//     console.log('💬 READ YOUR DID:', did);
-//     let rdid = await readDIDRecord(did);
-//     rd = rdid;
-
-//     if (rdid.data == null) {
-//         console.warn('DID NULL, create ONE');
-//         let avatar = '';
-//         let alias = signer.address;
-//         let privData = '';
-//         let cid = '';
-//         try {
-//             const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
-//             if (result) {
-//                 console.log('The DID record was created successfully.');
-//             } else {
-//                 console.warn('Failed to create the DID record.');
-//             }
-//         } catch (error) {
-//             console.error('An error occurred while creating the DID record:', error);
-//         }
-//     } else {
-//         console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
-
-//         // CHECK if avatar
-//         let avatar = localStorage.getItem('userAvatar'); // Check localStorage first
-//         if (!avatar) {
-//             let avtr = rdid.data.avatar;
-//             if (avtr) {
-//                 avatar = avtr; // Use the raw avatar string
-//                 localStorage.setItem('userAvatar', avatar); // Store the raw string in localStorage
-//             } else {
-//                 console.log('Avatar data is empty');
-//             }
-//         }
-
-//         if (avatar) {
-//             try {
-//                 // Parse avatar if it is JSON formatted
-//                 let parsedAvatar = JSON.parse(avatar);
-//                 document.getElementById('avatarIMG').src = parsedAvatar;
-//                 document.getElementById('aliasAvatar').src = parsedAvatar;
-//             } catch {
-//                 // Use the raw avatar if it's not JSON formatted
-//                 document.getElementById('avatarIMG').src = avatar;
-//                 document.getElementById('aliasAvatar').src = avatar;
-//             }
-//         }
-
-//         // localAlias or userName?
-//         let alias = rdid.data.alias;
-//         if (alias) {
-//             document.getElementById('aliasName').value = alias;
-//             document.getElementById('userAlias').innerText = alias;
-//         } else {
-//             console.log('aliasName data is empty');
-//         }
-
-//         // ACTIVATE BUTTON TO MINT OR UPDATE
-//         document.getElementById('mintOrUpdate').disabled = false;
-//     }
-// }
-
+ 
 
 		// async function loadDID(signer) {
 		// 	let did = `did:ius:${signer.address}`
@@ -6674,7 +6657,7 @@ initChatClient()
 
 
 		async function checkGasBalance(address) {
-			console.warn('checkGasBalance()')
+			console.warn('💐💐💐checkGasBalance()')
 			let token = await getPreferredToken()
 			let selectedProvider = await selectRandomProvider(token.rpcs)
 			let provider
@@ -9726,7 +9709,10 @@ window.onload = () => {
         statusMessage.textContent = 'You are back online!';
         statusMessage.className = 'online';
         statusMessage.style.display = 'flex';
-        setTimeout(() => statusMessage.style.display = 'none!important', 3000);
+        setTimeout(() =>
+        statusMessage.textContent = ''
+		//  statusMessage.style.display = 'none!important'
+		 , 3000);
       } else {
         statusMessage.textContent = 'You are offline. Please check your connection.';
         statusMessage.className = 'offline';
