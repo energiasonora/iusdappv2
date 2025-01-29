@@ -2022,3 +2022,39 @@ margin: .44em;
 	font-weight: 500;
   }
   
+/* loader for .token-selector */
+
+@keyframes loading-dots {
+    0% {
+      content: "Loading tokens.";
+    }
+    33% {
+      content: "Loading tokens..";
+    }
+    66% {
+      content: "Loading tokens...";
+    }
+    100% {
+      content: "Loading tokens.";
+    }
+  }
+
+  .loading-option::after {
+    animation: loading-dots 1.5s infinite steps(3, end);
+    content: "Loading tokens.";
+    display: inline-block;
+  }
+  
+/* .spinner .loading {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #333;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  } */

@@ -61,16 +61,53 @@
         }
 
         .mini{
-            font-size: x-small;
+            /* font-size: x-small; */
+            cursor: pointer;
         }
+
+
+  :root {
+    --primary: #4caf50; /* Change to a green shade */
+    --secondary: #ff5722; /* Change to an orange shade */
+  }
+
+
+
+    
+
+        #swal2-content a {
+            color: var(--c3);
+        }
+
+        .settings-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+        }
+ 
+        pre{
+            white-space: break-spaces;
+        }
+        .codeToSign{
+    word-wrap: break-word;
+    white-space: break-spaces;
+    padding: 2em;
+
+  }
     </style>
 
 
 </head>
 
 <body>
+
+
+    
+    
     <h1>PSEUDO WALLET</h1>
     <h2>log and Sign a Tx (xmtp)</h2>
+    <div class="settings-icon" onclick="openSettings()"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="3"></circle> <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 .92 1.65 1.65 0 0 1-3 0 1.65 1.65 0 0 0-1-.92 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-.92-1 1.65 1.65 0 0 1 0-3 1.65 1.65 0 0 0 .92-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-.92 1.65 1.65 0 0 1 3 0 1.65 1.65 0 0 0 1 .92h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 .92 1 1.65 1.65 0 0 1 0 3 1.65 1.65 0 0 0-.92 1z"> </path> </svg> </div>
     <br>
     <div class="mini">your address: <span id="yourAddress"></span></div> 
     <div id="result"> </div>
@@ -94,8 +131,10 @@
 
     <div id="messages"></div>
 
-
-
+    <section id="infoSection" style="border: 11px solid var(--secondary); color: var(--contrast); padding: 2rem;">
+    <div id="addressInput"></div>
+    <!-- <textarea name="" id="addressInput"></textarea> -->
+</section>
 
 
     <!-- SCAN MODAL -->
@@ -106,7 +145,7 @@
             </header>
             <section>
                 <div>
-                    <div class="responsive-svg" id="qrcanvas"></div>
+                    <div class="responsive-svg" isd="qrcanvas"></div>
                     <video id="qrScanVideo" width="300" height="300"></video>
                     <div id="scanResult"></div>
                 </div>
@@ -128,21 +167,7 @@
         window.QrScanner = QrScanner; //make global
         QrScanner.hasCamera(); // test
 
-
-
-        // import { ContentTypeId } from "@xmtp/xmtp-js";
-    // import { ContentTypeId } from "@xmtp/content-type-primitives";
-    //     window.ContentTypeId = ContentTypeId;
-
-        
-    //     const ContentTypeTxRequest = new ContentTypeId(
-    //         'localhost:4343',  // Replace with your own domain
-    //         'tx-signing-request',
-    //         1,  // Major version
-    //         0   // Minor version
-    //         );
-    //         window.ContentTypeTxRequest = ContentTypeTxRequest;
-
+ 
 
 
     </script>
@@ -202,22 +227,6 @@
             return derivedNode
         }
 
-        async function contractWallet() {
-            let contractMnemonic = localStorage.getItem('contractMnemonic');
-            if (!contractMnemonic) {
-                console.error('NO contractMnemonic  in localStorage!');
-
-                const randmnemonic = await ethers.HDNodeWallet.createRandom()
-                contractMnemonic = randmnemonic.mnemonic.phrase;
-                localStorage.setItem('contractMnemonic', contractMnemonic);
-
-            } else {
-                console.log('contractMnemonic is in localStorage!');
-
-            }
-            let contractWall = deriveAddressWallet(contractMnemonic, 0)
-            return contractWall
-        }
 
         async function aliceWallet() {
             let aliceMnemonic = localStorage.getItem('aliceMnemonic');
@@ -243,13 +252,7 @@
         // ----------
         const scanModal = document.getElementById('scanModal');
         const closeScanModalButton = document.getElementById('closeScanModal');
-
-        // // Open modal (example)
-        // function openScanModal() {
-        //     scanModal.showModal();
-        // }
-
-        // // Close modal
+ 
         closeScanModalButton.addEventListener('click', () => {
             qrScanner.stop();
             qrScanner.destroy();
@@ -261,25 +264,83 @@
         
         async function pasteAddress() {
             console.log('PASTING ADDRESS')
-            try {
+            // try {
               // Check if the Clipboard API is supported
               if (navigator.clipboard && navigator.clipboard.readText) {
-                const clipboardText = await navigator.clipboard.readText();
+                let clipboardText = await navigator.clipboard.readText();
+                // ANALIZE TEXT
+
+                // Step 1: Check if it's already a JSON string
+                let payload
+                let cleanedJson
+                if (clipboardText.startsWith('"') && clipboardText.endsWith('"')) {
+                    // Remove outer quotes
+                     cleanedJson = clipboardText.slice(1, -1).replace(/\\"/g, '"');
+                    console.log('Remove outer quotes', cleanedJson);
+                    document.getElementById('addressInput').innerHTML = cleanedJson;
                 
-                // Validate if the clipboard text looks like an Ethereum address
-                if (/^0x[a-fA-F0-9]{40}$/.test(clipboardText)) {
-                  document.getElementById('addressInput').value = clipboardText;
+                    // Step 2: Parse into an object
+                    payload = JSON.parse(cleanedJson);
+                    console.log(payload);
+                    document.getElementById('addressInput').innerHTML = cleanedJson;
+
                 } else {
-                  alert('The clipboard does not contain a valid Ethereum address.');
+                    // Directly parse
+                    payload = JSON.parse(clipboardText);
+                    console.log('Directly parse', payload);
                 }
-              } else {
-                alert('Clipboard API is not supported in this browser.');
-              }
-            } catch (err) {
-              console.error('Failed to read clipboard contents:', err);
-              alert('Failed to paste from clipboard.');
-            }
+
+                p = payload;
+
+                if (payload.action === "eth_requestAccounts") {
+                    console.warn("Received eth_requestAccounts request:", payload);
+                    
+                    // Process the request
+                    Swal.fire({
+                        title: 'Sign this request to connect with the site:',
+                        html: `<pre class='codeToSign'>${cleanedJson}</pre>`, // Display the rest of the message
+                        // text: cleanedJson, // Display the rest of the message
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sign ',
+                        cancelButtonText: 'Refuse',
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            console.log("User chose to sign the message.");
+
+
+                            // -----------------
+                            // GET SIGNER's ADDRESS
+                            // -----------------
+                            let alicewallet = await aliceWallet();
+                            let signer = await new ethers.Wallet(alicewallet.privateKey)
+                            console.log('signer:', signer)
+
+                            let address  = payload.requester;
+                            // -----------------
+                            // SIGN TX
+                            // -----------------
+                            const signature = await signer.signMessage(cleanedJson);
+                            console.log('signature:', signature)
+                            // document.getElementById('result').innerHTML = ``
+                            document.getElementById('infoSection').innerHTML =`✅ signed!
+                                <br><span class='sig'> ${signature}</span>`;
+                            // -----------------
+                            // TRANSMIT SIGNATURE THROUGH XMTP
+                            // -----------------    
+                            await sendMessage(iusnaturalisxmtp, address, signature)
+
+
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            console.log("User refused.");
+                        }
+                    });
+                } 
+
+                return
+ 
           }
+        }
             
         async function scanAddress() {
             console.log('SCANNING FOR A NEW USER ADDRESS')
@@ -305,6 +366,34 @@
 
         }
 
+
+
+        // ---------------------------------------------
+        // processEthRequestAccounts 
+        // ---------------------------------------------
+        const processEthRequestAccounts = async (xmtpClient, wallet) => {
+            const topic = "request-accounts-*"; // Wildcard or specific topic
+            const stream = await xmtpClient.conversations.streamAllMessages();
+        
+            for await (const message of stream) {
+                const payload = JSON.parse(message.content);
+        
+                if (payload.action === "eth_requestAccounts") {
+                    console.log("Received eth_requestAccounts request:", payload);
+        
+                    // Extract details
+                    const { nonce, requester } = payload;
+        
+                    // Process the request
+                    const signedResponse = await signRequest(wallet, nonce);
+                    await sendResponse(xmtpClient, payload.xmtpTopic, requester, signedResponse);
+                }
+            }
+        };
+            
+        // ---------------------------------------------
+        // qrScannned 
+        // ---------------------------------------------
 
         async function qrscanned(result) {
             console.log('🔎 🔰 💬scanned decoded qr code:', result.data)
@@ -396,11 +485,105 @@
 
             }, 1500);
 
-
-
-
         }
 
+// ------------
+// code pasted
+// --------------
+
+async function codePasted(result) {
+            console.warn('code PASTED:', result)
+
+
+
+return
+            console.warn('code PASTED:', result.data)
+            x1 = result.data;
+
+            let str = result.data
+            // Regular expression to extract the address-like part
+            const regex = /0x[a-fA-F0-9]{40}/;
+
+            // Find the match
+            const match = str.match(regex);
+
+            if (match) {
+                const potentialAddress = match[0];
+
+                // Validate the address using Ethers.js
+                if (ethers.isAddress(potentialAddress)) {
+                    const address = potentialAddress;
+
+                    // Extract the rest of the message by removing the address from the string
+                    const restOfMessage = str.replace(address, '').trim().replace(/^,/, '').trim();
+
+                    console.log("Extracted address:", address);
+                    console.log("Rest of the message:", restOfMessage);
+                    document.getElementById('scanResult').innerHTML = ` <h1 class="success-message__title">✅✅✅ SCANED!</h1> <div class="success-message__content"> <p>${result.data}</p> </div> </div> `
+
+
+                    Swal.fire({
+                        title: 'Sign',
+                        text: restOfMessage, // Display the rest of the message
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sign?',
+                        cancelButtonText: 'Refuse',
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            console.log("User chose to sign the message.");
+
+
+                            // -----------------
+                            // GET SIGNER
+                            // -----------------
+                            let alicewallet = await aliceWallet();
+                            let signer = await new ethers.Wallet(alicewallet.privateKey)
+                            console.log('signer:', signer)
+
+                            // -----------------
+                            // SIGN TX
+                            // -----------------
+                            const signature = await signer.signMessage(restOfMessage);
+                            console.log('signature:', signature)
+                            //    console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
+                            // Display the signature to the user
+                            console.log("Message:", restOfMessage);
+                            console.log("Signature:", signature);
+                            document.getElementById('result').innerHTML = `✅ signed!
+                                <br>Message:<span class='sig'> ${restOfMessage}</span>
+                                <br>Signature:<span class='sig'> ${signature}</span>`;
+                            // -----------------
+                            // TRANSMIT SIGNATURE THROUGH XMTP
+                            // -----------------    
+                        
+                            await sendMessage(iusnaturalisxmtp, address, signature)
+
+
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            console.log("User refused.");
+                        }
+                    });
+
+
+
+                } else {
+                    console.log("Invalid address format.");
+                }
+
+            } else {
+                console.log("No address found.");
+            }
+
+            // playBeep();
+
+            await setTimeout(() => {
+                // closeModalId('#scanModal')
+                scanModal.close();
+
+            }, 1500);
+
+        }
 
 
 
@@ -409,16 +592,16 @@
         // ---------------------------------------------
             
             // Define encoding and decoding logic
-            const TxRequestCodec = {
-                encode: (txRequest) => {
-                    // Serialize the transaction request to a JSON string
-                    return new TextEncoder().encode(JSON.stringify(txRequest));
-                },
-                decode: (bytes) => {
-                    // Deserialize the transaction request from a JSON string
-                    return JSON.parse(new TextDecoder().decode(bytes));
-                },
-            };
+            // const TxRequestCodec = {
+            //     encode: (txRequest) => {
+            //         // Serialize the transaction request to a JSON string
+            //         return new TextEncoder().encode(JSON.stringify(txRequest));
+            //     },
+            //     decode: (bytes) => {
+            //         // Deserialize the transaction request from a JSON string
+            //         return JSON.parse(new TextDecoder().decode(bytes));
+            //     },
+            // };
 
 
         // 3. Send a Transaction Signing Request
@@ -476,12 +659,12 @@
 
 
         function parseBigInts(json) {
-  return JSON.parse(json, (_, value) =>
-    typeof value === 'string' && /^[0-9]+$/.test(value) ? BigInt(value) : value
-  );
-
-        }
-
+            return JSON.parse(json, (_, value) =>
+              typeof value === 'string' && /^[0-9]+$/.test(value) ? BigInt(value) : value
+            );
+          
+                  }
+            
 
     // Function to listen to all messages and filter based on messageStore
 async function listenToAllowedPeers( ) {
@@ -706,6 +889,11 @@ messageStore = new Proxy(messageStore, {
                 try {
                     for await (const message of await conversation.streamMessages({ signal })) {
                         console.log(`[${message.senderAddress}]: ${message.content}`);
+                        
+                        if (message.senderAddress === ownAddress) {
+                            // Skip updating the chat window for the user's own messages
+                            continue;
+                        }
                         updateChatWindow(message.senderAddress, message.content);
 
 
@@ -789,6 +977,15 @@ messageStore = new Proxy(messageStore, {
         // -----------------------------------------
         //  ONLOAD
         // -----------------------------------------
+        optionsList = [
+            {
+                "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
+                "TOKEN_CHAINID": '421614',
+                "EXPLORER": 'https://sepolia.arbiscan.io/',
+                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a'
+
+            }
+        ]
         // Load messages on page load
         window.addEventListener("load", init);
 
@@ -797,7 +994,17 @@ messageStore = new Proxy(messageStore, {
 
             // if localTest wallet
             let alicewallet = await aliceWallet()
-            document.getElementById('yourAddress').innerText = ` ${alicewallet.address}`
+            ownAddress = alicewallet.address;
+            // document.getElementById('yourAddress').innerText = ` ${alicewallet.address}`
+
+            let aliceAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${alicewallet.address}" target="_blank">${alicewallet.address}</a>`
+            document.getElementById('yourAddress').innerHTML += `<br>ADDRESS: ${aliceAddresslink} 
+           <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${alicewallet.address}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
+            </svg> 
+            `;
+
+
+
 
 
             // balance
@@ -859,71 +1066,95 @@ messageStore = new Proxy(messageStore, {
 
 
 
-        async function deriveAddressWallet(mnemonic, index) {
-            const basePath = "m/44'/60'/0'/0/";
-            const path = `${basePath}${index}`;
-            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
-            return derivedNode
-        }
+    
 
 
-        const signCustomMessage = async () => {
-            try {
-                // -----------------
-                // create TX
-                // -----------------
-                // Get the user-provided message
-                const messageInput = document.getElementById("messageInput").value.trim();
-                if (!messageInput) {
-                    alert("Please paste a message to sign.");
-                    return;
-                }
+        // const signCustomMessage = async () => {
+        //     try {
+        //         // -----------------
+        //         // create TX
+        //         // -----------------
+        //         // Get the user-provided message
+        //         const messageInput = document.getElementById("messageInput").value.trim();
+        //         if (!messageInput) {
+        //             alert("Please paste a message to sign.");
+        //             return;
+        //         }
 
 
-                // ------------
-                // localTest
-                let alicewallet = await aliceWallet();
-                let signer = await new ethers.Wallet(alicewallet.privateKey)
+        //         // ------------
+        //         // localTest
+        //         let alicewallet = await aliceWallet();
+        //         let signer = await new ethers.Wallet(alicewallet.privateKey)
 
-                // -----------------
-                // SIGN TX
-                // -----------------
-                const signature = await signer.signMessage(messageInput);
-                console.log('signature:', signature)
-                // result.innerHTML = `<span id='sig'>${signature}</span>`
-                result.innerText = signature
+        //         // -----------------
+        //         // SIGN TX
+        //         // -----------------
+        //         const signature = await signer.signMessage(messageInput);
+        //         console.log('signature:', signature)
+        //         // result.innerHTML = `<span id='sig'>${signature}</span>`
+        //         result.innerText = signature
 
 
 
-                // Display the signature to the user
-                console.log("Message:", messageInput);
-                console.log("Signature:", signature);
-                alert("Message signed successfully!\n\n" +
-                    `Message: ${messageInput}\n` +
-                    `Signature: ${signature}`);
+        //         // Display the signature to the user
+        //         console.log("Message:", messageInput);
+        //         console.log("Signature:", signature);
+        //         alert("Message signed successfully!\n\n" +
+        //             `Message: ${messageInput}\n` +
+        //             `Signature: ${signature}`);
 
 
 
 
-                // ------------
-                // Recover the address of the signer
-                let recoveredAddress = ethers.verifyMessage(messageInput, signature);
-                r= recoveredAddress
-                // Store the address in localStorage
-                // localStorage.setItem("IusNaturalisAddress", recoveredAddress);
+        //         // ------------
+        //         // Recover the address of the signer
+        //         let recoveredAddress = ethers.verifyMessage(messageInput, signature);
+        //         r= recoveredAddress
+        //         // Store the address in localStorage
+        //         // localStorage.setItem("IusNaturalisAddress", recoveredAddress);
 
-                alert(`Logged in as: ${recoveredAddress}`);
+        //         alert(`Logged in as: ${recoveredAddress}`);
 
 
-            } catch (error) {
-                console.error("Error signing message:", error);
-                alert("An error occurred while signing the message. Please try again.");
-            }
-        };
+        //     } catch (error) {
+        //         console.error("Error signing message:", error);
+        //         alert("An error occurred while signing the message. Please try again.");
+        //     }
+        // };
 
       
 
         
+        function copy2clipboard(text) {
+            // let text = `${ipfsGateway}${cid}`;
+            console.log('COPIED!', text)
+            let textLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${text}">${text}</a>`;
+
+            if (window.clipboardData && window.clipboardData.setData) {
+                ToastTop.fire('Copied to Clipboard', textLink, "info");
+                return window.clipboardData.setData("Text", text);
+            }
+            else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+                var textarea = document.createElement("textarea");
+                textarea.textContent = text;
+                textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    ToastTop.fire('Copied to Clipboard!', textLink, "info");
+                    return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+                }
+                catch (ex) {
+                    console.warn("Copy to clipboard failed.", ex);
+                    return prompt("Copy to clipboard: Ctrl+C, Enter", text);
+                }
+                finally {
+                    document.body.removeChild(textarea);
+                }
+            }
+        }
+
 
         
     </script>

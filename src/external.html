@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>External Site</title>
+</head>
+<body>
+  <h1>External dApp</h1>
+  <button id="connectButton">Connect Wallet</button>
+  <p id="status">Status: Not Connected</p>
+  <script>
+    const connectButton = document.getElementById("connectButton");
+    const status = document.getElementById("status");
+
+    connectButton.addEventListener("click", async () => {
+      if (window.ethereum) {
+        try {
+          // Request accounts from the wallet
+          const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+          status.textContent = `Status: Connected with ${accounts[0]}`;
+        } catch (error) {
+          status.textContent = `Status: Connection Rejected (${error.message})`;
+        }
+      } else {
+        status.textContent = "Status: No Ethereum provider found.";
+      }
+    });
+  </script>
+</body>
+</html>

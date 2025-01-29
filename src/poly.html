@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polybase UI</title>
+  <link rel="stylesheet" href="css/pico2.0.6.css">
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@polybase/client@0.2.0/dist/index.umd.js"></script> -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      max-width: 600px;
+    }
+    .form-container {
+      margin-bottom: 20px;
+    }
+    button {
+      margin: 5px;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    #response {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Polybase UI</h1>
+  <!-- const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
+  "POLYBASE_DB": "https://explorer.testnet.polybase.xyz/studio/pk%2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3%2FSTARKID/collections/STARKID",
+  "ZK_PUBKEY": "2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3" -->
+
+
+  <!-- Formulario para agregar un nuevo registro -->
+  <div class="form-container">
+    <h2>Agregar Registro</h2>
+    <label>ID:</label><br>
+    <input type="text" id="id" placeholder="ID del registro"><br>
+    <label>Avatar:</label><br>
+    <input type="text" id="avatar" placeholder="URL del avatar"><br>
+    <label>Alias:</label><br>
+    <input type="text" id="alias" placeholder="Alias"><br>
+    <label>PrivData:</label><br>
+    <input type="text" id="privData" placeholder="PrivData"><br>
+    <label>CID:</label><br>
+    <input type="text" id="cid" placeholder="CID"><br><br>
+    <button onclick="createRecord()">Crear Registro</button>
+  </div>
+
+  <!-- Botones para consultar y eliminar registros -->
+  <h2>Acciones</h2>
+  <button onclick="getAllRecords()">Consultar Todos los Registros</button>
+  <button onclick="getRecord()">Consultar Registro por ID</button>
+  <button onclick="updateAlias()">Actualizar Alias</button>
+  <button onclick="deleteRecord()">Eliminar Registro</button>
+
+  <!-- Mostrar respuesta -->
+  <div id="response"></div>
+
+
+  <script type="module" >
+    		import { Polybase } from "@polybase/client";
+            window.Polybase = Polybase; //make global
+  </script>
+  <script>
+    // const { Polybase } = window["@polybase/client"];
+
+    // Conectar a la base de datos
+    // const db = new Polybase({
+    //   defaultNamespace: "tu-namespace", // Reemplaza con tu namespace
+    // });
+    const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
+
+    const collection = db.collection("STARKID");
+
+    // Función para crear un nuevo registro
+    async function createRecord() {
+      const id = document.getElementById("id").value;
+      const avatar = document.getElementById("avatar").value;
+      const alias = document.getElementById("alias").value;
+      const privData = document.getElementById("privData").value;
+      const cid = document.getElementById("cid").value;
+
+      try {
+        const record = await collection.create([id, avatar, alias, privData, cid]);
+        displayResponse("Registro creado: " + JSON.stringify(record.data));
+      } catch (error) {
+        displayResponse("Error al crear registro: " + error.message);
+      }
+    }
+
+    // Función para obtener todos los registros
+    async function getAllRecords() {
+        console.log('getAllRecords() ')
+      try {
+        const records = await collection.get();
+        displayResponse("Registros: " + JSON.stringify(records.data));
+      } catch (error) {
+        displayResponse("Error al consultar registros: " + error.message);
+      }
+    }
+
+    // Función para obtener un registro por ID
+    async function getRecord() {
+      const id = prompt("Ingresa el ID del registro a consultar:");
+      if (!id) return;
+
+      try {
+        const record = await collection.record(id).get();
+        displayResponse("Registro encontrado: " + JSON.stringify(record.data));
+      } catch (error) {
+        displayResponse("Error al consultar registro: " + error.message);
+      }
+    }
+
+    // Función para actualizar alias
+    async function updateAlias() {
+      const id = prompt("Ingresa el ID del registro a actualizar:");
+      const newAlias = prompt("Ingresa el nuevo alias:");
+      if (!id || !newAlias) return;
+
+      try {
+        const record = await collection.record(id).call("updateAlias", [newAlias]);
+        displayResponse("Alias actualizado: " + JSON.stringify(record.data));
+      } catch (error) {
+        displayResponse("Error al actualizar alias: " + error.message);
+      }
+    }
+
+    // Función para eliminar un registro
+    async function deleteRecord() {
+      const id = prompt("Ingresa el ID del registro a eliminar:");
+      if (!id) return;
+
+      try {
+        await collection.record(id).call("deleteDID");
+        displayResponse(`Registro con ID ${id} eliminado.`);
+      } catch (error) {
+        displayResponse("Error al eliminar registro: " + error.message);
+      }
+    }
+
+    // Función para mostrar respuestas
+    function displayResponse(message) {
+      const responseDiv = document.getElementById("response");
+      responseDiv.innerHTML = `<pre>${message}</pre>`;
+    }
+  </script>
+</body>
+</html>

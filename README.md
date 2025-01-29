@@ -52,6 +52,9 @@ yarn parcel src/index.html  --port 4343 --https
 <!-- 
 yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html --port 4343 --https
   -->
+  <!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/loginxmtp.html src/signxmtp.html  src/crowdfundingius.html src/logandsignxmtp.html src/stealthdonations4.html --port 4343 --https -->
+
+yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html   src/crowdfundingius.html src/pseudoWallet.html  src/stealthdonations4.html src/stealthdonations5.html src/ius.html --port 4343 --https
 
 # deploy to firebase
 
@@ -68,6 +71,7 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+- 5.17 loading optimizations. improving transactions history. export contacts in json.
 - 5.15 fix avatar img
 * fix removeTokens funcitonality(wip)
 * improved load time with base64imgs and localstorage defaults

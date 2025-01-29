@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stealth donations 4 (donate with msg)</title>
+    <title>Stealth donations 5 (donate with msg)</title>
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" /> -->
     <link rel="stylesheet" href="css/pico.min.css" />
     <script src="js/sweetalert2.all.min.js"></script>
     <script src="js/ethers-6.13.2.umd.min.js"></script>
+    <script src="js/qr-code-styling.js"></script>
 
     <script type="module">
 
@@ -79,7 +80,77 @@
             color: red;
             font-weight: bold;
         }
-    </style>
+
+        .flex {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem; /* Adjust spacing between the input and button */
+        }
+        .flex input {
+          flex: 1; /* Makes the input take up remaining space */
+        }
+        .flex button {
+          flex-shrink: 0; /* Ensures button does not shrink */
+        }
+        .custom-bg {
+    border:11px solid var(--primary); /* Use Pico's color variables */
+    /* background-color: var(--primary); Use Pico's color variables */
+    color: var(--contrast); /* Ensure the text is readable */
+    padding: 2rem; /* Add some spacing */
+    border-radius: 0.5rem; /* Optional: rounded corners */
+  }
+
+  :root {
+    --primary: #4caf50; /* Change to a green shade */
+    --secondary: #ff5722; /* Change to an orange shade */
+  }
+
+
+
+    
+
+        #swal2-content a {
+            color: var(--c3);
+        }
+
+        /* COLORED TOASTS */
+
+        .colored-toast.swal2-icon-success {
+            background-color: #45bb00 !important;
+        }
+
+        .colored-toast.swal2-icon-error {
+            background-color: #f27474 !important;
+        }
+
+        .colored-toast.swal2-icon-warning {
+            background-color: #f8bb86 !important;
+        }
+
+        .colored-toast.swal2-icon-info {
+            background-color: #3fc3ee !important;
+        }
+
+        .colored-toast.swal2-icon-question {
+            background-color: #87adbd !important;
+        }
+
+        .colored-toast .swal2-title {
+            color: white;
+        }
+
+        .colored-toast .swal2-close {
+            color: white;
+        }
+
+        .colored-toast .swal2-html-container {
+            color: white;
+        }
+
+
+
+        </style>
+        
 </head>
 
 <body>
@@ -95,22 +166,67 @@
             </svg>
         </div>
     </header>
-    <h1>Stealth donations 4 <a
-            href="https://localhost:4343/docs/index.html#/?id=stealth-addreses-direcciones-futivas" target="_blank"
-            title="Learn more about the mnemonic phrase"> ? </a> </h1>
+    <h1>Stealth donations 5 (without Xmtp)<a href="https://localhost:4343/docs/index.html#/?id=stealth-addreses-direcciones-futivas"
+            target="_blank" title="Learn more about the mnemonic phrase"> ? </a> </h1>
 
     <p>Donate using stealth addresses and leave a message!</p>
     <ul>
-        <li>select local test</li>
-        <li>fund the wallet(Arbitrum sepolia)</li>
-        <li>send the donation</li>
+        <li>select ius naturalis wallet</li>
+        <li>connect using logandsignxmtp.html  and fund the  wallet (Arbitrum sepolia)</li>
+        <li>Create the donation using form below (paste your wallet address)</li>
+        <li>Copy the tx and sign it from your wallet</li>
+        <!-- <li>You will receive a message in your Xmtp inbox to sign the transaction</li> -->
+        <li>Done!</li>
+        <li > Smart contract deployed on Arbitrum sepolia <span id="smartcontract"></span></li>
     </ul>
 
 
     <!-- <button class="primary " id="connectButton">Connect</button> -->
+    
+    <!-- <section class="custom-bg">
+        <h2>Section Title</h2>
+        <p>This is a section with a colored background.</p>
+    </section> -->
+    
+    <section id="infoSection" style="border: 11px solid var(--secondary); color: var(--contrast); padding: 2rem;">
+        <h2>INFO</h2>
+        <p id="info"></p>
+        
+            
+            <button onclick="connection()" id="connection" class="" style="display: none;">CONNECT</button>
+            <button onclick="disconnection()" id="disconnection" class="disconnected" style="display: none;">DISCONNECT</button>
+            
+      </section>
 
-    <p id="info"></p>
+      <fieldset>
+        <label for="stealthswitch">
+            <input type="checkbox" id="stealthswitch" name="stealthswitch" role="switch" />
+            Stealth Donation
+        </label>
+    </fieldset>
+
+
     <form id="donateForm">
+    
+        <label for="addressInput">Sender Address:</label><br>
+        <div class="flex">
+          <input 
+            type="text" 
+            id="addressInput" 
+            placeholder="0x..." 
+            pattern="^0x[a-fA-F0-9]{40}$" 
+            title="Please enter a valid Ethereum address (0x followed by 40 hexadecimal characters)." 
+            required>
+          <button type="button" class="btn btn-danger" onclick="event.stopPropagation(); pasteAddress()">
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+              <path d="M160 0c-23.7 0-44.4 12.9-55.4 32L48 32C21.5 32 0 53.5 0 80L0 400c0 26.5 21.5 48 48 48l144 0 0-272c0-44.2 35.8-80 80-80l48 0 0-16c0-26.5-21.5-48-48-48l-56.6 0C204.4 12.9 183.7 0 160 0zM272 128c-26.5 0-48 21.5-48 48l0 272 0 16c0 26.5 21.5 48 48 48l192 0c26.5 0 48-21.5 48-48l0-220.1c0-12.7-5.1-24.9-14.1-33.9l-67.9-67.9c-9-9-21.2-14.1-33.9-14.1L320 128l-48 0zM160 40a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
+            </svg>
+          </button>
+        </div>
+        
+ 
+
+
         <label for="amount">Amount (ETH):</label><br>
         <input type="number" id="amount" step="0.0001" placeholder="0.0001" required><br><br>
 
@@ -118,16 +234,13 @@
         <textarea id="message" rows="4" placeholder="Type your message here..." required></textarea><br><br>
 
         <!-- <button type="submit">Send Stealth Donation</button> -->
-        <button onclick="sendDonation(event)">Send Stealth Donation</button>
+        <button onclick="sendDonation(event)">Send</button>
 
 
     </form>
 
     <h2>Messages:</h2>
-    <div id="messageList">
-        <!-- Messages will be displayed here -->
-    </div>
-
+    <div id="messageList"> </div>
     <p id="status"></p>
 
 
@@ -156,18 +269,29 @@
     </dialog>
 
 
-    <!-- <dialog id="settingsModal">
-    <article>
-      <header>
-        <h3>Settings</h3>
-        <a href="#" aria-label="Close" class="close" data-target="settingsModal"></a>
-      </header>
-      <p>Here you can manage your settings.</p>
-    </article>
-  </dialog> -->
-
 
     <!-- ------------------------------- -->
+
+      <!-- --------------------------------------- -->
+    <!-- walletModal -->
+    <dialog id="walletModal">
+        <form method="dialog">
+            <header>
+                <h2>QR MODAL</h2>
+            </header>
+     
+
+            <section id="iusConnect"></section>
+            <footer>
+                <button class="secondary" data-translate="close">Close</button>
+
+            </footer>
+        </form>
+    </dialog>
+
+    <!-- --------------------------------------- -->
+
+
     <script>
 
         optionsList = [
@@ -175,7 +299,9 @@
                 "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
                 "TOKEN_CHAINID": '421614',
                 "EXPLORER": 'https://sepolia.arbiscan.io/',
-                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a'
+                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+                "CONTRACT_ADDRESS": '0x97618a023B7748be9d6f7B4d8D8bFe04f6528D65'
+
 
             }
         ]
@@ -289,6 +415,7 @@
 
             // Get form data
             const amount = document.getElementById("amount").value;
+            const address = document.getElementById("addressInput").value;
             const message = document.getElementById("message").value;
             event.preventDefault();
 
@@ -302,9 +429,6 @@
 
             if (savedWallet === 'metamask') {
                 console.warn('Currently selected: METAMASK')
-                // console.warn('Currently selected: Ius Naturalis?????')
-
-
 
                 try {
                     // ..............................
@@ -372,18 +496,66 @@
             }
 
             else if (savedWallet === 'iusNaturalis') {
+
                 // IF IUS NATURALIS
+                // ....................
                 console.warn('Currently selected: iusNaturalis 👥 💮 ')
-                requestLoginFromWallet()
+                
+                // IF STEALTH ADDRESS IS ON
+                let stealthswitch = localStorage.getItem('stealthswitch');
+                let txToSign;
+                if (stealthswitch==="true") {
+                    console.log("stealthswitch in ON",stealthswitch);
+                         // 4. create tx to sign
+                console.log('createIusNaturalisTosignMessage', amount, steathAddress.stealthAddress, message)
+                    txToSign=  await createIusNaturalisTosignMessage(amount,steathAddress.stealthAddress, message)
+                   console.log('🏊‍♂️🏊‍♂️🏊‍♂️ txToSign', txToSign)
+
+                } else {
+                    console.log("stealthswitch is OFF");
 
 
-                // // Get form data
-                // const amount = document.getElementById("amount").value;
-                // const message = document.getElementById("message").value;
-                // event.preventDefault();
+                // 4. create tx to sign
+                console.log('createIusNaturalisTosignMessage', amount, address, message)
+                    txToSign=  await createIusNaturalisTosignMessage(amount,address, message)
+                   console.log('🏊‍♂️🏊‍♂️🏊‍♂️ txToSign', txToSign)
+                }
+
+                document.getElementById('walletModal').showModal();
+
+                const jsonString = JSON.stringify(txToSign, (key, value) =>
+                typeof value === 'bigint' ? value.toString() : value
+            );
+            const escapedJsonString = JSON.stringify(jsonString)
+            .replace(/"/g, '&quot;') // Replace double quotes with HTML-escaped equivalent
+            .replace(/'/g, '&#39;'); // Replace single quotes with HTML-escaped equivalent
+            
+            let msgToSign= ` <div class=" responsive-svg" id="canvas"></div> 
+            <div id="result"> <p>Scan and sign this message tosign the tx in your iusNaturalis walletLog in to IusNaturalis</p> <br><br> <p>or copy, paste and sign this message <svg class='copy2clipboard' id='' onclick="event.stopPropagation();copy2clipboard('${escapedJsonString}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
+                    </svg>  </p>  </div> `
+
+                    document.getElementById('iusConnect').innerHTML =msgToSign
+                    document.getElementById('info').innerHTML = msgToSign
+                    
+                    console.log(jsonString);
+                    console.log('QR qith Custom replacer for BigInt:',jsonString)
+                    
+
+                        displayQR(jsonString)
+                        m = jsonString;
+                        console.log('QR content:', m)
+
+                        // CLOSE MODAL
+                        document.getElementById('walletModal').close();
+
+                        // FOCUS
+                        document.getElementById('infoSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
 
-                await createIusNaturalisTosignMessage(amount, message)
+                return
+
+
+                // await createIusNaturalisTosignMessage(amount, message)
 
 
             }
@@ -391,47 +563,45 @@
                 console.warn('Currently selected: localTest🐥🐥🐥')
 
                 // 0. amount and message
-                const amount = document.getElementById("amount").value;
-                const message = document.getElementById("message").value;
-                console.log('amount:', amount)
-                console.log('message:', message)
-
-                // 1.Get recipient publicKey from smart contract
-                let recipientPublicKey = await getRecipientPublicKey();
-                console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
-                let publicKeyB = ethers.getBytes(recipientPublicKey);
-
-
-                // 2. get privateKeyA
+                
+                // 0. get ALICE privateKeyA
                 let alicewallet = await aliceWallet()
                 let alicePrivateKeyA = alicewallet.privateKey;
                 let privateKeyA = ethers.getBytes(alicePrivateKeyA);
                 console.log('GOT privKeyA 🚀🚀🚀 !!!')
-
-                // 3. stealth address where we are going to send funds
-                // arguments: donor privateKey and recipient's publicKey
-                let steathAddress = await generateStealthAddress(privateKeyA, publicKeyB)
-                console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
-                document.getElementById('info').innerHTML += `<br>paying to: ${steathAddress.stealthAddress}`;
-                // document.getElementById('info').innerHTML += "pay to:" +steathAddress.stealthAddress; 
-
-                // 4. create tx to sign
-                console.log('createIusNaturalisTosignMessage', amount, steathAddress.stealthAddress, message)
-                //    let txToSign=  await createIusNaturalisTosignMessage(amount,steathAddress.stealthAddress, message)
-                //    console.log('🏊‍♂️🏊‍♂️🏊‍♂️ txToSign', txToSign)
-
-
-
+                
+                
+                // IF STEALTH ADDRESS IS ON
+                let stealthswitch = localStorage.getItem('stealthswitch');
+                if (stealthswitch==="true") {
+                    console.log("stealthswitch in ON",stealthswitch);
+                    
+                    // 1.Get recipient publicKey from smart contract
+                    let recipientPublicKey = await getRecipientPublicKey();
+                    console.log('GOT publicKeyB 💎💎💎 !!!', recipientPublicKey)
+                    let publicKeyB = ethers.getBytes(recipientPublicKey);
+                    
+                    // 2. create the stealth address where we are going to send funds
+                    let steathAddress = await generateStealthAddress(privateKeyA, publicKeyB)
+                    console.log('GOT STEALTH ADDRESS ⚡⚡⚡⚡⚡⚡ !!!', steathAddress)
+                    document.getElementById('info').innerHTML += `<br>paying to: <a href="${optionsList[0].EXPLORER}/address/${steathAddress.stealthAddress}" target="_blank">${steathAddress.stealthAddress}</a>`;
+                } else {
+                    console.log("stealthswitch is OFF");
+                    document.getElementById('info').innerHTML += `<br>paying to: <a href="${optionsList[0].EXPLORER}/address/${optionsList[0].CONTRACT_ADDRESS}" target="_blank">${optionsList[0].CONTRACT_ADDRESS}</a>`;
+                    
+                }
+                
+                return
+                
+                
+                
                 let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
-                // ---
-
-                // const feeData = await provider.getFeeData();
-                // console.log('FEEDATA:', feeData)
                 const abi = ["function donate(address stealthAddress, string message) payable",];
                 const contractInterface = new ethers.Interface(abi);
-
-
-
+                
+                console.log('address:', address)
+                console.log('amount:', amount)
+                console.log('message:', message)
 
                 // -----------------
                 const pretx = {
@@ -477,7 +647,6 @@
                 console.log(" txToSign:", txToSign);
 
 
-                // ---
                 // -----------------
                 // SIGN TX
                 // -----------------
@@ -517,10 +686,6 @@
 
 
                 return
-                // Sign the transaction offline
-                // signTransaction(txToSign, alicewallet.privateKey).then((signedTransaction) => {
-                //             console.log("🏂🏂🏂 Signed Transaction:", signedTransaction);
-                //         });
 
 
 
@@ -570,6 +735,7 @@
         }
 
 
+        // function 
 
         // -----------------------------------------
         //  ONLOAD
@@ -579,23 +745,37 @@
 
 
         async function init() {
+            
+            // STEALSWITH
+            let checkbox = document.getElementById('stealthswitch');
+                    let savedState = localStorage.getItem('stealthswitch');
+                    if (savedState !== null) {
+                        checkbox.checked = JSON.parse(savedState); // Convert back from string to boolean
+                        console.log("stealthswitch:",checkbox.checked);
+                    } else {
+                        // set default stealth off in localstorage
+                        localStorage.setItem('stealthswitch', false);
+                        ToastTop.fire('Stealth mode OFF by default', 'Stealth mode OFF by default', "info");
+            console.log("stealthswitch OFF by default");
+
+                    }
+        
+        
+                    // Save state to localStorage on change
+                    checkbox.addEventListener('change', () => {
+                        localStorage.setItem('stealthswitch', checkbox.checked);
+                        ToastTop.fire('Stealth mode changed', 'Stealth mode changed to: ' + checkbox.checked, "info");
+                    });
+
             loadMessages()
 
             initializeWalletPreference()
+            
+            document.getElementById('smartcontract').innerHTML = `
+            <a href="${optionsList[0].EXPLORER}/address/${contractAddress}" target="_blank">${contractAddress}</a>
+            `;
 
-            // if localTest wallet
-            //     let alicewallet = await aliceWallet()
-            //     let aliceAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${alicewallet.address}" target="_blank">${alicewallet.address}</a>`
-            //     document.getElementById('info').innerHTML += `<br>ADDRESS: ${aliceAddresslink} 
-            //    <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${alicewallet.address}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
-            //     </svg> 
-            //     `;
-
-            //     let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
-            //     const gasBalance = await provider.getBalance(alicewallet.address);
-            //     console.log('gasBalance:',gasBalance)
-            //     document.getElementById('info').innerHTML += `<br>GAS BALANCE: ${gasBalance}`; 
-
+           
 
         }
 
@@ -637,7 +817,8 @@
                 document.body.appendChild(textarea);
                 textarea.select();
                 try {
-                    ToastTop.fire('Copied to Clipboard!', textLink, "success");
+                    ToastTop.fire('Copied to Clipboard!', '', "success");
+                    // ToastTop.fire('Copied to Clipboard!', textLink, "success");
                     return document.execCommand("copy");  // Security exception may be thrown by some browsers.
                 }
                 catch (ex) {
@@ -701,12 +882,12 @@
 
         // Define initialization functions for each wallet type
         function initMetamask() {
-            console.log("Initializing Metamask...");
+            console.log("Initializing Metamask...💚");
             // Add your Metamask-specific logic here
         }
 
         function initIusNaturalis() {
-            console.log("Initializing Ius Naturalis...");
+            console.log("Initializing Ius Naturalis...🧡");
             // Add your Ius Naturalis-specific logic here
 
 
@@ -732,7 +913,7 @@
         }
 
         async function initLocalTest() {
-            console.log("Initializing Local Test...");
+            console.log("Initializing Local Test...💛");
             // Add your Local Test-specific logic here
 
             let alicewallet = await aliceWallet()
@@ -741,6 +922,9 @@
            <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${alicewallet.address}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/>
             </svg> 
             `;
+            document.getElementById('addressInput').value = alicewallet.address
+            document.getElementById('addressInput').title = alicewallet.address
+            
 
             let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
             const gasBalance = await provider.getBalance(alicewallet.address);
@@ -877,6 +1061,48 @@
             const { address, signature, nonce } = await loginResponse.json();
 
             return { address, signature, nonce };
+        }
+
+
+        async function pasteAddress() {
+            console.log('PASTING ADDRESS')
+            try {
+              // Check if the Clipboard API is supported
+              if (navigator.clipboard && navigator.clipboard.readText) {
+                const clipboardText = await navigator.clipboard.readText();
+                
+                // Validate if the clipboard text looks like an Ethereum address
+                if (/^0x[a-fA-F0-9]{40}$/.test(clipboardText)) {
+                  document.getElementById('addressInput').value = clipboardText;
+                } else {
+                  alert('The clipboard does not contain a valid Ethereum address.');
+                }
+              } else {
+                alert('Clipboard API is not supported in this browser.');
+              }
+            } catch (err) {
+              console.error('Failed to read clipboard contents:', err);
+              alert('Failed to paste from clipboard.');
+            }
+          }
+
+
+
+
+
+        // -----------------------------------------
+        // QR FUNCTIONS
+        // -----------------------------------------
+
+        function displayQR(data) {
+            console.log('displayQR(data)')
+            const qrCode = new QRCodeStyling({
+                width: 200, height: 200, type: "png", data: data,
+                dotsOptions: { color: "#1568B0", type: "extra-rounded" },
+                backgroundOptions: { color: "var(--qrbackground)", },
+                imageOptions: { crossOrigin: "anonymous", margin: 3 }
+            });
+            qrCode.append(document.getElementById("canvas"));
         }
 
 

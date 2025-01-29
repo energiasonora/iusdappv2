@@ -179,3 +179,28 @@
 .alert-dismissible{
   border: 1px solid;
 }
+
+
+
+/* TXs */
+.transaction-row {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.transaction-row:hover {
+  background-color: #f9f9f9;
+}
+
+.transaction-column {
+  font-size: 14px;
+}
+
+.transaction-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.transaction-link:hover {
+  text-decoration: underline;
+}

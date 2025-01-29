@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ius Wallet</title>
+</head>
+<body>
+  <h1>Ius Wallet</h1>
+  <p>The idea here is to request the wallet address from the user using XMTP messages, instead of having the external dApp call eth_requestAccounts directly.
+
+  </p>
+  <p>Your Wallet Address: <span id="walletAddress"></span></p>
+  <h1>External dApp</h1>
+  <button id="connectButton">Connect IUS Wallet</button>
+  <p id="status">Status: Not Connected</p>
+  <script type="module">
+    import { Wallet } from "ethers";
+
+    // Generate a new wallet (for demonstration purposes)
+    const wallet = Wallet.createRandom();
+    document.getElementById("walletAddress").textContent = wallet.address;
+
+    // Custom Ethereum provider
+    class CustomProvider {
+      constructor(wallet) {
+        this.wallet = wallet;
+      }
+
+      async request({ method, params }) {
+        switch (method) {
+          case "eth_requestAccounts":
+            return this.ethRequestAccounts();
+          case "eth_accounts":
+            return this.ethAccounts();
+          case "eth_chainId":
+            return this.ethChainId();
+          default:
+            throw new Error(`Unsupported method: ${method}`);
+        }
+      }
+
+      async ethRequestAccounts() {
+        // Simulate user approval
+        const userApproved = confirm("Do you want to connect your wallet?");
+        if (userApproved) {
+          return [this.wallet.address];
+        } else {
+          throw new Error("User rejected the connection request");
+        }
+      }
+
+      async ethAccounts() {
+        return [this.wallet.address];
+      }
+
+      async ethChainId() {
+        return "0x1"; // Ethereum Mainnet
+      }
+    }
+
+    // Expose the provider globally
+    window.ethereum = new CustomProvider(wallet);
+    console.log("Ius Wallet is now available.");
+  </script>
+
+
+
+<script>
+    const connectButton = document.getElementById("connectButton");
+    const status = document.getElementById("status");
+  
+    connectButton.addEventListener("click", async () => {
+        if (window.ethereum) {
+            try {
+                // Request accounts from the wallet
+                const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                status.textContent = `Status: Connected with ${accounts[0]}`;
+            } catch (error) {
+                status.textContent = `Status: Connection Rejected (${error.message})`;
+            }
+        } else {
+            status.textContent = "Status: No Ethereum provider found.";
+        }
+    });
+    </script>
+    </body>
+</html>
