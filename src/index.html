@@ -231,7 +231,7 @@
 		<!-- ADD PUBLIC DOCUMENTS -->
 		<div class="bottom-nav">
 			<nav class="codrops-demos">
-				<span>v5.17</span>
+				<span>v5.18</span>
 			</nav>
 		</div>
 
@@ -4391,20 +4391,19 @@ return
 		//       localStorage.setItem('documents', JSON.stringify(a));
 		//     }
 
-		async function getEncryptedContacts(encryptedContacts) {
-			console.log('getEncryptedContacts()',encryptedContacts);
+		// async function getEncryptedContacts(encryptedContacts) {
+		// 	console.log('getEncryptedContacts()',encryptedContacts);
 
 
-		}
+		// }
 
 
 		// // SAVE CONTACTS 
 		async function SaveContactsToLocalStorage(contact) {
 			console.log('SaveContactsToLocalStorage()',contact);
-			// alert('SaveContactsToLocalStorage()',contact);
 
 			// Retrieve the contacts array from localStorage, or initialize an empty array if none exist
-			var a = JSON.parse(localStorage.getItem('contacts')) || [];
+			let a = JSON.parse(localStorage.getItem('contacts')) || [];
 
 			// Check if the address already exists
 			var isDuplicate = a.some(existingContact => existingContact.address === contact.address);
@@ -4417,15 +4416,33 @@ return
 				// Save the updated contacts list to localStorage
 				localStorage.setItem('contacts', JSON.stringify(a));
 
-				// return;
 			} else {
 				console.warn('Address already exists in your contacts, skipping save...');
 
-				// return;
 			}
 
 
 				// Save the encrypted contacts to DID 
+				try{
+					await encryptContacts(a) 
+					console.warn("🎖️🎖️🎖️ encryptContacts!");
+					Toast.fire({ icon: 'success', title: 'Encrypted contacts synced and updated!', text: '' });
+
+					
+				} catch (error) {
+					console.error("🥊🥊🥊 An error occurred:", error);
+					fixedToast.fire('Error', error.message, "error");
+
+			}
+				
+
+		}
+ 
+
+
+		async function encryptContacts(contacts){
+
+			// Save the encrypted contacts to DID 
 
 				// Encrypt contacts to store in your DID
 				let signer = await getSigner();
@@ -4434,10 +4451,9 @@ return
 					alert('Handle case where signer is not obtained');
 					return;
 				}
-
 				
 				let pubkey = signer.publicKey;
-				let stringContacts = JSON.stringify(a)
+				let stringContacts = JSON.stringify(contacts)
 				stc =stringContacts;
 
 				let encryptedContacts = await encryptData(stringContacts, pubkey);
@@ -4449,18 +4465,38 @@ return
 				try{
 					await updatePrivDataDID(did, encryptedContacts, signer) 
 					console.warn("🎖️🎖️🎖️ updatePrivDataDID!");
-					Toast.fire({ icon: 'success', title: 'Encrypted contacts synced and updated!', text: '' });
+					// Toast.fire({ icon: 'success', title: 'Encrypted contacts synced and updated!', text: '' });
 
 					
 				} catch (error) {
 					console.error("🥊🥊🥊 An error occurred:", error);
-					fixedToast.fire('Error', error.message, "error");
+					// fixedToast.fire('Error', error.message, "error");
 
+			}
+		}
+
+
+		async function decryptContacts(){
+			
+				let signer = await getSigner();
+				if (!signer) {
+					console.warn('Handle case where signer is not obtained');
+					alert('Handle case where signer is not obtained');
+					return;
+				}
+				
+				let did = `did:ius:${signer.address}`
+				const didresult = await readDIDRecord(did);
+				let encryptedContacts = didresult.data.privData;
+				let privkey = signer.privateKey;
+				let decryptedContacts = await decryptData(encryptedContacts, privkey);
+				console.log('decryptedContacts: ', decryptedContacts);
+			
+				return decryptedContacts
+			 
 			}
 
 
-		}
- 
 
 		function RemoveContactFromLocalStorage(address) {
 			console.log('RemoveContactFromLocalStorage()');
@@ -6171,6 +6207,28 @@ initChatClient()
 			await loadDID(wallet)
 			reloadBalances()
 
+			// load encrypted Contacts
+			let decryptedContacts;
+			try{
+					decryptedContacts = await decryptContacts() 
+					console.warn("🎖️ decryptContacts 🎖️");
+					Toast.fire({ icon: 'success', title: 'Contacts decrypted and synced!', text: '' });
+
+					
+				} catch (error) {
+					console.error("🥊🥊🥊 An error occurred:", error);
+					fixedToast.fire('Error', error.message, "error");
+
+			}
+
+			// loadDecryptedContacts(decryptedContacts)
+
+			// let x = await decryptContacts()
+			const contacts = JSON.parse(decryptedContacts);
+			localStorage.setItem('contacts', JSON.stringify(contacts));
+			console.log('Contacts successfully loaded into localStorage.');
+			loadContactsFromLocalstorage() 
+
 
 			// remove xmtp from localstorage
 			const prefix = 'xmtp/dev/';
@@ -6185,7 +6243,78 @@ initChatClient()
 		}
 
 
+function loadDecryptedContacts(contacts){
 
+	let contct = document.getElementById('cwContacts')
+			contct.innerHTML = ''
+
+	if (contacts) {
+				console.warn('🏄‍♀️🏄‍♀️🏄‍♀️ YOU HAVE', contacts.length, 'CONTACTS in LOCALSTORAGE at loadContactsFromLocalstorage()')
+
+
+				const promises = [];
+				contacts.forEach((el, index) => {
+
+					// NAME
+					// username or contactname?
+					if (el.contactname) {
+						// If contactname exists, use it
+						contactInfo = `<span>${el.contactname} <span>`;
+						console.log('✅ contactname: ', el.contactname);
+					} else if (el.username) {
+						// If username exists but contactname is null or not present, use username
+						contactInfo = `<span>${el.username} <span>`;
+						console.log('✅ username: ', el.username);
+					} else {
+						// If both contactname and username are null/missing, fallback to a shortened address
+						console.log('❌ No username or contactname: ', el);
+						let shortAddr = `${el.address.substring(0, 6)}...${el.address.substring(38, 42)}`;
+						contactInfo = `<span>${shortAddr} <span>`;
+					}
+						
+
+
+					// AVATAR
+					let avatar= "./anonym.jpg"
+					if (el.avatar || null) {
+						avatar = el.avatar
+						console.log(' HAS AVATAR!',avatar);
+					}
+
+					// DID
+					let did = el.address.startsWith("did:ius:") ? el.address : `did:ius:${el.address}`;
+
+
+					// CREATE THE ELEMENT
+					contct.innerHTML += `<li data-address="${el.address}" id="${el.address}" class=''> 
+							<a onclick="event.stopPropagation();selectChat((this.parentElement))">  
+								<img id ="${did}" src="${avatar}" alt="Avatar" class="rounded-circle"> 
+									<span >${contactInfo}</span>
+									<svg onclick="event.stopPropagation();editContact('${el.address}')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="20" height="25" class='right'>
+										<path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z"/>
+										</svg>
+										</a> 
+										</li>`;
+
+						})
+					// );
+
+					// contct.innerHTML += `<li data-address="${el.address}" id="${el.address}" class=''> 
+					// 		<a onclick="event.stopPropagation();selectChat((this.parentElement))">  
+					// 			<img id ="${did}" src="./anonym.jpg" alt="Avatar" class="rounded-circle"> 
+					// 				<span >${contactInfo}</span>
+					// 				<svg onclick="event.stopPropagation();editContact('${el.address}')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="20" height="25" class='right'>
+					// 					<path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z"/>
+					// 					</svg>
+					// 					</a> 
+					// 					</li>`;
+					// });
+
+
+					}
+			}
+
+// }
 
 		/*********************************************************************************************
 		.)   MANAGE DID
@@ -6441,6 +6570,8 @@ initChatClient()
 			}
 			return true
 		}
+
+
 
 		async function updatePrivDataDID(did, newdata, signer) {
 			console.log('updateDID()')
@@ -9629,6 +9760,35 @@ let preferredToken
 				})
 		}
 
+
+		// async function decryptData(msg, privkey) {
+
+
+		// }
+		async function decryptData(encryptedString, privateKey) {
+    // 1. Parse the encrypted string into an object
+    const encryptedObject = EthCrypto.cipher.parse(encryptedString);
+
+    // 2. Decrypt the payload using Bob's private key
+    const decryptedPayload = await EthCrypto.decryptWithPrivateKey(
+        privateKey, // Bob's private key
+        encryptedObject
+    );
+
+    // 3. Parse the decrypted payload back into an object
+    const payload = JSON.parse(decryptedPayload);
+
+    // 4. Verify the signature
+    const signerAddress = EthCrypto.recover(
+        payload.signature,
+        EthCrypto.hash.keccak256(payload.message)
+    );
+
+    console.log("Decrypted message:", payload.message);
+    console.log("Signer address:", signerAddress);
+
+    return payload.message;
+}
 
 
 

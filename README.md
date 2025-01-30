@@ -71,6 +71,7 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+- 5.18 automatic restoration of encrypted contacts with the wallet.
 - 5.17 loading optimizations. improving transactions history. export contacts in json.
 - 5.15 fix avatar img
 * fix removeTokens funcitonality(wip)
