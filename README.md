@@ -33,7 +33,6 @@ bob https://192.168.1.52:4343/p2pBob.html
 
 xmtp status https://status.xmtp.com/
 
-
 polybase db git https://github.com/polybase/polybase-db-docs
 
 ethhack 
@@ -54,8 +53,16 @@ yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html
   -->
   <!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/loginxmtp.html src/signxmtp.html  src/crowdfundingius.html src/logandsignxmtp.html src/stealthdonations4.html --port 4343 --https -->
 
-yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html   src/crowdfundingius.html src/pseudoWallet.html  src/stealthdonations4.html src/stealthdonations5.html src/ius.html --port 4343 --https
+<!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html   src/crowdfundingius.html src/pseudoWallet.html  src/stealthdonations4.html src/stealthdonations5.html src/ius.html --port 4343 --https -->
+<!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html   src/crowdfundingius.html src/pseudoWallet.html  src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html --port 4343 --https -->
 
+
+yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html   src/crowdfundingius.html src/pseudoWallet.html  src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html   --port 4343 --https
+
+yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html  src/crowdfundingius.html src/pseudoWallet.html src/don2.html --port 4343 --https
+
+
+yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html  src/crowdfundingius.html src/pseudoWallet.html src/don2.html src/paycountdown.html --port 4343 --https
 # deploy to firebase
 
 ```
@@ -71,6 +78,8 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
+- 5.20 working on log with iusNaturalis into other sites (crowdfundingius /pseudoWallet)
+- 5.19 UI translation updates.
 - 5.18 automatic restoration of encrypted contacts with the wallet.
 - 5.17 loading optimizations. improving transactions history. export contacts in json.
 - 5.15 fix avatar img

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate to Campaign</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+     :root {
+            --font: green;
+            --bk: linear-gradient(var(--c0), var(--c0b));
+            --bckmodal: #262626;
+            --mainBk: #41307c;
+
+        }
+
+        body {
+            color: var(--font);
+            background-image: radial-gradient(circle, #5c0067 0%, var(--bckmodal) 100%);
+            background-image: radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%);
+        }
+    /* Custom Progress Bar */
+    .progress-bar {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .progress-bar-fill {
+      height: 20px;
+      background-color: #4caf50;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Wallet Modal Styles */
+    #walletModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #walletModalContent {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .wallet-option {
+      display: flex;
+      align-items: center;
+      margin: 1rem 0;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    .wallet-option:hover {
+      background: #f0f0f0;
+    }
+
+    .wallet-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 1rem;
+    }
+
+    /* Position the Connect Wallet button in the top-right corner */
+    .connect-wallet-container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+    }
+
+    .connect-wallet-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .connect-wallet-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <!-- Connect Wallet Button (Top-Right) -->
+    <div class="connect-wallet-container">
+      <button id="connectWalletBtn" class="connect-wallet-btn" onclick="openWalletModal()">Connect Wallet</button>
+      <p id="walletStatus">Not connected</p>
+    </div>
+
+    <h1>Donate to Campaign</h1>
+
+    <!-- Select Campaign -->
+    <!-- <section>
+      <h2>Select Campaign</h2>
+      <form id="selectCampaignForm">
+        <label for="tokenId">Campaign ID:</label>
+        <input type="number" id="tokenId" placeholder="Enter Campaign ID" required>
+        <button type="submit">Load Campaign</button>
+      </form>
+    </section> -->
+
+    <!-- Campaign Details -->
+    <section id="campaignDetails" style="display: none;">
+      <h2>Campaign Details</h2>
+      <p><strong>Recipient:</strong> <span id="campaignRecipient"></span></p>
+      <p><strong>Goal:</strong> <span id="campaignGoal"></span> ETH</p>
+      <p><strong>Raised:</strong> <span id="campaignRaised"></span> ETH</p>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <div id="campaignEndedBanner" style="display: none; background-color: #ffebee; color: red; padding: 1rem; border-radius: 5px; margin-top: 1rem;">
+        <strong>CAMPAIGN HAS ENDED</strong>
+      </div>
+
+      <p><strong>Time Left:</strong> <span id="campaignTimeLeft"></span> seconds</p>
+    </section>
+
+
+    <!-- Donor List -->
+<section id="donorListSection" style="display: none;">
+  <h2>Donors</h2>
+  <ul id="donorList"></ul>
+</section>
+
+
+    <!-- Donate Form -->
+    <section id="donateSection" style="display: none;">
+      <h2>Make a Donation</h2>
+      <form id="donateForm">
+        <label for="amount">Amount (in ETH):</label>
+        <input type="number" id="amount" step="0.01" placeholder="Enter Donation Amount" required>
+
+        <label for="pseudonym">Pseudonym (Optional):</label>
+        <input type="text" id="pseudonym" placeholder="Your Pseudonym">
+
+        <button type="submit">Donate</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Wallet Modal -->
+  <div id="walletModal">
+    <div id="walletModalContent">
+      <h3>Select Wallet</h3>
+      <div class="wallet-option" onclick="connectWallet('metamask')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
+        <span>MetaMask</span>
+      </div>
+      <!-- <div class="wallet-option" onclick="connectWallet('phantom')">
+        <img src="https://avatars.githubusercontent.com/u/81297455?s=200&v=4" alt="Phantom" class="wallet-icon">
+        <span>Phantom</span>
+      </div>
+      <div class="wallet-option" onclick="connectWallet('rabby')">
+        <img src="https://raw.githubusercontent.com/RabbyHub/rabby-assets/main/logo/rabby-logo.svg" alt="Rabby" class="wallet-icon">
+        <span>Rabby</span>
+      </div>
+      <div class="wallet-option" onclick="connectWallet('rainbow')">
+        <img src="https://avatars.githubusercontent.com/u/45037840?s=200&v=4" alt="Rainbow" class="wallet-icon">
+        <span>Rainbow</span>
+      </div> -->
+      <div class="wallet-option" onclick="connectWallet('iusnaturalis')">
+        <img src="img/logoius.svg" alt="iusNaturalis" class="wallet-icon">
+        <!-- <img src="img/logoIN.png" alt="iusNaturalis" class="wallet-icon"> -->
+        <span>iusNaturalis</span>
+      </div>
+      <button onclick="closeWalletModal()">Cancel</button>
+    </div>
+  </div>
+
+
+    <!--PAYMENT/SIGN Modal -->
+    <dialog id="paymentModal" class="modal">
+      <article>
+        <header>
+          <h2 id="paymentModalTitle">Scan QR Code to Pay/Sign</h2>
+        </header>
+        <div id="qrCodeContainer" style="text-align: center;"></div>
+        <section id="iusConnect"></section>
+
+        <p id="countdown" style="font-size: 1.2rem; margin-top: 1rem;">Expires in: 15:00</p>
+        <footer>
+          <button id="closeModalBtn" class="outline">Close</button>
+        </footer>
+      </article>
+    </dialog>
+    <!--fin PAYMENT/SIGN Modal -->
+
+
+
+  <!-- JavaScript -->
+	<script src="js/ethers-6.13.2.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+
+  <script type="module">
+
+    import { Client } from '@xmtp/xmtp-js'
+    window.Client = Client;
+</script>
+    
+  <script>
+        optionsList = [
+            {
+              "CONTRACT_ADDRESS": "0x23f15345392Fd2caCCaC1CE2361eA28669E8326C",
+                "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
+                "TOKEN_CHAINID": '421614',
+                "EXPLORER": 'https://sepolia.arbiscan.io/',
+                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+                "ALCHEMY_KEY": 'X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I'
+            }
+        ]
+    // Replace with your contract ABI and address
+    const CONTRACT_ABI = [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC721IncorrectOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ERC721InsufficientApproval", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC721InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" } ], "name": "ERC721InvalidOperator", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC721InvalidOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC721InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC721InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ERC721NonexistentToken", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "OwnableInvalidOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "OwnableUnauthorizedAccount", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "approved", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "ApprovalForAll", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "creator", "type": "address" }, { "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "goal", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "CampaignCreated", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newGoal", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newDeadline", "type": "uint256" } ], "name": "CampaignRenewed", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "ContributionMade", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "FundsWithdrawn", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "campaigns", "outputs": [ { "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "bytes", "name": "recipientPublicKey", "type": "bytes" }, { "internalType": "uint256", "name": "goal", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint256", "name": "raisedAmount", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "string", "name": "_pseudonym", "type": "string" } ], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "_recipient", "type": "address" }, { "internalType": "bytes", "name": "_recipientPublicKey", "type": "bytes" }, { "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" } ], "name": "createCampaign", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getApproved", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "index", "type": "uint256" } ], "name": "getContributorByIndex", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "address", "name": "contributor", "type": "address" } ], "name": "getContributorPseudonym", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "getContributorsCount", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "hasGoalReached", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "operator", "type": "address" } ], "name": "isApprovedForAll", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "nextTokenId", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ownerOf", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "_newDurationInDays", "type": "uint256" }, { "internalType": "uint256", "name": "_newGoal", "type": "uint256" } ], "name": "renewCampaign", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "bytes", "name": "data", "type": "bytes" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "timeLeft", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "tokenURI", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "withdrawAllFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "_amount", "type": "uint256" } ], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" } ];
+    const CONTRACT_ADDRESS = "0x23f15345392Fd2caCCaC1CE2361eA28669E8326C";
+
+    let provider, signer, contract;
+
+    // Open Wallet Modal
+    function openWalletModal() {
+      document.getElementById("walletModal").style.display = "flex";
+    }
+
+    // Close Wallet Modal
+    function closeWalletModal() {
+      document.getElementById("walletModal").style.display = "none";
+    }
+
+    function updateDonateButtonState() {
+  const donateButton = document.querySelector("#donateForm button");
+  if (!signer) {
+    donateButton.disabled = true;
+    donateButton.innerText = "Connect Wallet to Donate";
+  } else {
+    donateButton.disabled = false;
+    donateButton.innerText = "Donate";
+  }
+}
+
+// Call this function whenever the wallet connection status changes
+window.onload = async () => {
+  const queryParams = getQueryParams();
+  if (queryParams.tokenId) {
+    document.getElementById("tokenId").value = queryParams.tokenId; // Pre-fill the input field
+    loadCampaign(queryParams.tokenId); // Load the campaign details
+  }
+  updateDonateButtonState();
+};
+
+
+
+        /*********************************************************************************************
+        .)  COPYFadd 
+        **********************************************************************************************/
+        function copy2clipboard(text) {
+            let thisEl= event.target;
+ 
+            try {
+              // Check if Clipboard API is supported
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                  console.log('Copied to clipboard:', text);
+                  showSuccessIcon(thisEl); // Use event.target to get the clicked element
+
+                }).catch(err => {
+                  console.error('Failed to copy using Clipboard API:', err);
+                  fallbackCopy(text); // Fallback to execCommand if API fails
+                  showSuccessIcon(thisEl); // Use event.target to get the clicked element
+
+                });
+              } else {
+                  fallbackCopy(text); // Fallback for older browsers
+                  showSuccessIcon(thisEl); // Use event.target to get the clicked element
+
+              }
+            } catch (err) {
+              console.error('Copy failed:', err);
+            }
+          }
+          
+          function fallbackCopy(text) {
+            // Create a temporary, invisible textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed'; // Prevent scrolling issues
+            textarea.style.opacity = '0'; // Invisible
+            textarea.style.zIndex = '-1'; // Avoid modal interference
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              document.execCommand('copy');
+              console.log('Copied to clipboard (fallback):', text);
+            } catch (err) {
+              console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+          }
+            
+          function showSuccessIcon(element) {
+                        const svgElement = element.closest("svg");
+            if (!svgElement) return;
+
+            
+            svgElement.innerHTML = `
+                <path fill="green" d="M504 75c-9.4-9.4-24.6-9.4-33.9 0L184.4 360.7l-112-112c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l128 128c9.4 9.4 24.6 9.4 33.9 0l304-304c9.3-9.4 9.3-24.6-.1-33.9z"></path>
+            `;
+            setTimeout(() => {
+                svgElement.innerHTML = `<path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path>`
+            }, 1500);
+        }
+
+
+
+           /*********************************************************************************************
+        .)  CONNECT WALLET 
+        **********************************************************************************************/   
+// Update the button state after connecting the wallet
+async function connectWallet(walletType) {
+  try {
+    let ethereumProvider;
+
+    switch (walletType) {
+      case "metamask":
+        if (typeof window.ethereum !== "undefined") {
+          ethereumProvider = window.ethereum;
+        } else {
+          alert("MetaMask is not loaded or not installed .");
+          return;
+        }
+        break;
+
+      case "phantom":
+        if (typeof window.solana !== "undefined") {
+          ethereumProvider = window.solana; // Phantom uses Solana's API
+        } else {
+          alert("Phantom is not installed.");
+          return;
+        }
+        break;
+
+      case "rabby":
+      case "rainbow":
+        if (typeof window.ethereum !== "undefined") {
+          ethereumProvider = window.ethereum;
+        } else {
+          alert(`${walletType.charAt(0).toUpperCase() + walletType.slice(1)} is not installed.`);
+          return;
+        }
+        break;
+
+      case "iusnaturalis":
+        // alert("Connecting to iusNaturalis...");
+        await connectToIusNaturalis();
+        return;
+
+      default:
+        alert("Unsupported wallet.");
+        return;
+    }
+
+    provider = new ethers.BrowserProvider(ethereumProvider);
+    await provider.send("eth_requestAccounts", []);
+    signer = await provider.getSigner();
+    contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+    document.getElementById("walletStatus").innerText = `Connected: ${await signer.getAddress()}`;
+    closeWalletModal();
+    updateDonateButtonState(); // Update the donate button state
+  } catch (error) {
+    console.error("Error connecting wallet:", error);
+    alert("Failed to connect wallet.");
+  }
+}
+
+async function connectToIusNaturalis(){
+  console.log(' connecting connecting...')
+      // Select DOM elements
+    // const openModalBtn = document.getElementById("openModalBtn");
+const paymentModal = document.getElementById("paymentModal");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const qrCodeContainer = document.getElementById("qrCodeContainer");
+const countdownElement = document.getElementById("countdown");
+
+let countdownInterval;
+let remainingTime = 15 * 60; // 15 minutes in seconds
+  // openModal()
+  iusConnectModal()
+
+} 
+    // Function to parse query parameters from the URL
+    function getQueryParams() {
+      const params = {};
+      const queryString = window.location.search.substring(1);
+      queryString.split("&").forEach(pair => {
+        const [key, value] = pair.split("=");
+        params[decodeURIComponent(key)] = decodeURIComponent(value);
+      });
+      return params;
+    }
+// Function to load campaign details
+async function loadCampaign(tokenId) {
+  try {
+    const campaign = await contract.campaigns(tokenId);
+
+    // Check if the campaign has ended by calling `timeLeft`
+    let timeLeft;
+    try {
+      timeLeft = await contract.timeLeft(tokenId);
+    } catch (error) {
+      if (error.message.includes("Crowdfunding period has ended")) {
+        // Campaign has ended, set timeLeft to 0
+        timeLeft = 0;
+      } else {
+        throw error; // Re-throw unexpected errors
+      }
+    }
+
+    // Format goal and raised amount for display
+    const goalFormatted = ethers.formatEther(campaign.goal); // Convert goal to ETH
+    const raisedFormatted = ethers.formatEther(campaign.raisedAmount); // Convert raised amount to ETH
+
+    // Update campaign details
+    document.getElementById("campaignRecipient").innerText = campaign.recipient;
+    document.getElementById("campaignGoal").innerText = goalFormatted;
+    document.getElementById("campaignRaised").innerText = raisedFormatted;
+
+    // Show time left or indicate the campaign has ended
+    const timeLeftElement = document.getElementById("campaignTimeLeft");
+    if (timeLeft > 0) {
+      timeLeftElement.innerText = `${timeLeft} seconds`;
+      // timeLeftElement.style.color = "black"; // Normal text color
+    } else {
+      timeLeftElement.innerText = "Campaign has ended";
+      timeLeftElement.style.color = "red"; // Highlight that the campaign has ended
+    }
+
+    // Calculate progress percentage safely
+    const goalBigInt = BigInt(campaign.goal.toString()); // Ensure goal is BigInt
+    const raisedBigInt = BigInt(campaign.raisedAmount.toString()); // Ensure raised amount is BigInt
+    const progressPercent = Number((raisedBigInt * 100n) / goalBigInt); // Explicit conversion to Number
+
+    // Update progress bar
+    document.getElementById("progressBarFill").style.width = `${Math.min(progressPercent, 100)}%`;
+
+    // Show a banner if the campaign has ended
+    const campaignEndedBanner = document.getElementById("campaignEndedBanner");
+    if (timeLeft === 0) {
+      campaignEndedBanner.style.display = "block"; // Show the banner
+    } else {
+      campaignEndedBanner.style.display = "none"; // Hide the banner
+    }
+
+    // Show campaign details and donation section
+    document.getElementById("campaignDetails").style.display = "block";
+    document.getElementById("donateSection").style.display = timeLeft > 0 ? "block" : "none"; // Hide donation section if the campaign has ended
+
+    // Load and display the list of donors
+    const donorListElement = document.getElementById("donorList");
+    donorListElement.innerHTML = ""; // Clear previous donor list
+
+    const contributorCount = await contract.getContributorsCount(tokenId);
+    for (let i = 0; i < contributorCount; i++) {
+      const contributorAddress = await contract.getContributorByIndex(tokenId, i);
+      const pseudonym = await contract.getContributorPseudonym(tokenId, contributorAddress);
+
+      const listItem = document.createElement("li");
+      listItem.textContent = `${pseudonym || "Anonymous"} (${contributorAddress})`;
+      donorListElement.appendChild(listItem);
+    }
+
+    // Show the donor list section
+    document.getElementById("donorListSection").style.display = "block";
+  } catch (error) {
+    console.error(`Error loading campaign ${tokenId}:`, error);
+    alert("Failed to load campaign. Please check the Campaign ID.");
+  }
+}
+ 
+    // Handle donation form submission
+    document.getElementById("donateForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+  // Check if the wallet is connected
+  if (!signer) {
+    alert("Please connect your wallet before donating.");
+    
+    openWalletModal(); // Optionally open the wallet modal to prompt connection
+    return;
+  }
+
+      const amount = ethers.parseEther(document.getElementById("amount").value);
+      const pseudonym = document.getElementById("pseudonym").value || "Anonymous";
+
+      try {
+        const tx = await contract.contribute(getQueryParams().tokenId, pseudonym, { value: amount });
+        await tx.wait();
+        alert("Donation successful!");
+
+        // Reload campaign details after donation
+        loadCampaign(getQueryParams().tokenId);
+      } catch (error) {
+        console.error("Error donating:", error);
+        alert("Failed to donate. Please try again.");
+      }
+    });
+
+    // Automatically load campaign if tokenId is present in the URL
+    window.onload = async () => {
+      const provider = new ethers.JsonRpcProvider(optionsList[0].API);
+      contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+
+      const queryParams = getQueryParams();
+      if (queryParams.tokenId) {
+        // document.getElementById("tokenId").value = queryParams.tokenId; // Pre-fill the input field
+        loadCampaign(queryParams.tokenId); // Load the campaign details
+      }
+
+
+    // Event listeners
+    // openModalBtn.addEventListener("click", openModal);
+    closeModalBtn.addEventListener("click", closeModal);
+
+    };
+
+// ----------------------------------
+// HACK TO COMMUNICATE THROUGH XMTP
+// ----------------------------------
+    async function createXMTPClient(wallet) {
+      const iusnaturalisxmtp = await Client.create(wallet)
+      console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ COMMUNICATING WITH THIS ADDRESS: ', wallet.address)
+      return iusnaturalisxmtp;
+    }
+
+async function contractWallet() {
+    let contractMnemonic = localStorage.getItem('contractMnemonic');
+    if (!contractMnemonic) {
+        console.error('NO contractMnemonic  in localStorage!');
+
+        const randmnemonic = await ethers.HDNodeWallet.createRandom()
+        contractMnemonic = randmnemonic.mnemonic.phrase;
+        localStorage.setItem('contractMnemonic', contractMnemonic);
+
+    } else {
+        console.log('contractMnemonic is in localStorage!');
+
+    }
+    let contractWall = deriveAddressWallet(contractMnemonic, 0)
+    return contractWall
+}
+
+
+        // Function to derive an address on demand
+        async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+
+
+        // ----------------------------------
+
+
+    // Function to open the modal and generate QR code
+async function iusConnectModal() {
+
+  // modify title
+  document.getElementById('paymentModalTitle').innerText='Connect'
+
+  console.log("💢💫🙃 Initializing and connecting to Ius Naturalis wallet...");
+
+// Create  address for this site to communicate with the user
+let smartcontractwallet = await contractWallet()
+const iusnaturalisxmtp = await createXMTPClient(smartcontractwallet);
+window.iusnaturalisxmtp = iusnaturalisxmtp; // make GLOBAL
+
+
+console.log('isNOTConnected!')
+         // 0. listen to ALL addresses : streamAllMessages()
+         // 1.make the user sign
+         // 2. close ALL addresses listener and open a single listener with conversation.streamMessages()
+        //  document.getElementById('connection').style.display = 'block'
+        //  document.getElementById('disconnection').style.display = 'none'
+
+        //  document.getElementById('info').innerHTML = `<br>Not connected`;
+
+
+         // ...................................................
+         // NEW MESSAGE TO SIGN USING ETH_REQUESTACCOUNTS v2 
+         let uniqueTopic = `request-accounts-${Date.now()}`;
+
+         let requestPayload = {
+             action: 'eth_requestAccounts',
+             nonce: crypto.randomUUID(), // Unique identifier for this session
+             xmtpTopic: uniqueTopic, // Custom topic for XMTP messages
+             requester: smartcontractwallet.address // Custom topic for XMTP messages
+
+         };
+         r = requestPayload
+
+         let qrCodeData = requestPayload
+         q = qrCodeData
+
+
+         const jsonString = JSON.stringify(requestPayload, (key, value) =>
+             typeof value === 'bigint' ? value.toString() : value
+         );
+         const escapedJsonString = JSON.stringify(jsonString)
+             .replace(/"/g, '&quot;') // Replace double quotes with HTML-escaped equivalent
+             .replace(/'/g, '&#39;'); // Replace single quotes with HTML-escaped equivalent
+
+         let unescapedJsonString = JSON.stringify(jsonString)
+
+         js = escapedJsonString
+
+         // ...................................................
+         // MESSAGE TO SIGN
+         // let messageToSign = "I am logging with IusNaturalis";
+         let m = `${escapedJsonString}`;
+
+         document.getElementById('iusConnect').innerHTML = ` <div class=" responsive-svg" id="canvas"></div> 
+                <svg class='copy2clipboard' id='' onclick="event.stopPropagation();copy2clipboard('${m}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/> </svg>
+                 <div id="result"> </div> `
+
+        //  displayQR(m)
+
+         
+
+  // Simulate generating a transaction request or payment link
+  // const txRequest = "ethereum:0xYourContractAddress?value=10000000000000000"; // Example Ethereum URI
+
+  // Generate QR Code
+  QRCode.toCanvas(m, { width: 256 }, (error, canvas) => {
+    // QRCode.toCanvas(txRequest, { width: 256 }, (error, canvas) => {
+    if (error) {
+      console.error("Error generating QR code:", error);
+      return;
+    }
+    qrCodeContainer.innerHTML = ""; // Clear previous QR code
+    qrCodeContainer.appendChild(canvas); // Append new QR code
+  });
+
+  // Reset countdown
+  remainingTime = 15 * 60;
+  updateCountdown();
+
+  // Show modal
+  paymentModal.showModal();
+
+  // Start countdown
+  startCountdown();
+}
+
+function iusPayModal() {
+
+  // modify title
+  document.getElementById('paymentModalTitle').innerText='Pay'
+
+  // Simulate generating a transaction request or payment link
+  const txRequest = "ethereum:0xYourContractAddress?value=10000000000000000"; // Example Ethereum URI
+
+  // Generate QR Code
+  QRCode.toCanvas(txRequest, { width: 256 }, (error, canvas) => {
+    if (error) {
+      console.error("Error generating QR code:", error);
+      return;
+    }
+    qrCodeContainer.innerHTML = ""; // Clear previous QR code
+    qrCodeContainer.appendChild(canvas); // Append new QR code
+  });
+
+  // Reset countdown
+  remainingTime = 15 * 60;
+  updateCountdown();
+
+  // Show modal
+  paymentModal.showModal();
+
+  // Start countdown
+  startCountdown();
+}
+// Function to close the modal
+function closeModal() {
+  clearInterval(countdownInterval); // Stop countdown
+  // document.getElementById("paymentModal")
+  document.getElementById("paymentModal").close(); // Close modal
+}
+
+
+// Function to start the countdown
+function startCountdown() {
+  countdownInterval = setInterval(() => {
+    remainingTime--;
+    if (remainingTime <= 0) {
+      clearInterval(countdownInterval);
+      closeModal();
+    }
+    updateCountdown();
+  }, 1000);
+}
+
+// Function to update the countdown display
+function updateCountdown() {
+      // Select DOM elements
+    // const openModalBtn = document.getElementById("openModalBtn");
+const countdownElement = document.getElementById("countdown");
+
+
+
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+  countdownElement.textContent = `Expires in: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
+  </script>
+</body>
+</html>

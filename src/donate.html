@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate to Campaign</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    /* Custom Progress Bar */
+    .progress-bar {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .progress-bar-fill {
+      height: 20px;
+      background-color: #4caf50;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Donate to Campaign</h1>
+
+    <!-- Connect Wallet -->
+    <section>
+      <h2>Connect Wallet</h2>
+      <button id="connectWalletBtn" onclick="connectWallet()">Connect Wallet</button>
+      <p id="walletStatus">Not connected</p>
+    </section>
+
+    <!-- Select Campaign -->
+    <section>
+      <h2>Select Campaign</h2>
+      <form id="selectCampaignForm">
+        <label for="tokenId">Campaign ID:</label>
+        <input type="number" id="tokenId" placeholder="Enter Campaign ID" required>
+        <button type="submit">Load Campaign</button>
+      </form>
+    </section>
+
+    <!-- Campaign Details -->
+    <section id="campaignDetails" style="display: none;">
+      <h2>Campaign Details</h2>
+      <p><strong>Recipient:</strong> <span id="campaignRecipient"></span></p>
+      <p><strong>Goal:</strong> <span id="campaignGoal"></span> ETH</p>
+      <p><strong>Raised:</strong> <span id="campaignRaised"></span> ETH</p>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <p><strong>Time Left:</strong> <span id="campaignTimeLeft"></span> seconds</p>
+    </section>
+
+    <!-- Donate Form -->
+    <section id="donateSection" style="display: none;">
+      <h2>Make a Donation</h2>
+      <form id="donateForm">
+        <label for="amount">Amount (in ETH):</label>
+        <input type="number" id="amount" step="0.01" placeholder="Enter Donation Amount" required>
+
+        <label for="pseudonym">Pseudonym (Optional):</label>
+        <input type="text" id="pseudonym" placeholder="Your Pseudonym">
+
+        <button type="submit">Donate</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- JavaScript -->
+  <!-- <script src="https://cdn.ethers.io/lib/ethers-6.7.0.umd.min.js" type="application/javascript"></script> -->
+	<script src="js/ethers-6.13.2.umd.min.js"></script>
+
+  <script>
+    // Replace with your contract ABI and address
+    const CONTRACT_ABI = [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC721IncorrectOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ERC721InsufficientApproval", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC721InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" } ], "name": "ERC721InvalidOperator", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC721InvalidOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC721InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC721InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ERC721NonexistentToken", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "OwnableInvalidOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "OwnableUnauthorizedAccount", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "approved", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "ApprovalForAll", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "creator", "type": "address" }, { "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "goal", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "CampaignCreated", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newGoal", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newDeadline", "type": "uint256" } ], "name": "CampaignRenewed", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "ContributionMade", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "FundsWithdrawn", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "campaigns", "outputs": [ { "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "bytes", "name": "recipientPublicKey", "type": "bytes" }, { "internalType": "uint256", "name": "goal", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint256", "name": "raisedAmount", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "string", "name": "_pseudonym", "type": "string" } ], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "_recipient", "type": "address" }, { "internalType": "bytes", "name": "_recipientPublicKey", "type": "bytes" }, { "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" } ], "name": "createCampaign", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getApproved", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "index", "type": "uint256" } ], "name": "getContributorByIndex", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "address", "name": "contributor", "type": "address" } ], "name": "getContributorPseudonym", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "getContributorsCount", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "hasGoalReached", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "operator", "type": "address" } ], "name": "isApprovedForAll", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "nextTokenId", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ownerOf", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "_newDurationInDays", "type": "uint256" }, { "internalType": "uint256", "name": "_newGoal", "type": "uint256" } ], "name": "renewCampaign", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "bytes", "name": "data", "type": "bytes" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "timeLeft", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "tokenURI", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "withdrawAllFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "_amount", "type": "uint256" } ], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" } ];
+    const CONTRACT_ADDRESS = "0x23f15345392Fd2caCCaC1CE2361eA28669E8326C";
+
+    let provider, signer, contract;
+    let selectedTokenId;
+
+    async function connectWallet() {
+      if (window.ethereum) {
+        provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+  							// const provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`);
+
+        signer = await provider.getSigner();
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+        document.getElementById("walletStatus").innerText = `Connected: ${await signer.getAddress()}`;
+      } else {
+        alert("Please install MetaMask or another Ethereum wallet.");
+      }
+    }
+    document.getElementById("selectCampaignForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  selectedTokenId = document.getElementById("tokenId").value;
+
+  try {
+    const campaign = await contract.campaigns(selectedTokenId);
+    const timeLeft = await contract.timeLeft(selectedTokenId);
+
+    // Format goal and raised amount for display
+    const goalFormatted = ethers.formatEther(campaign.goal); // Convert goal to ETH
+    const raisedFormatted = ethers.formatEther(campaign.raisedAmount); // Convert raised amount to ETH
+
+    // Update campaign details
+    document.getElementById("campaignRecipient").innerText = campaign.recipient;
+    document.getElementById("campaignGoal").innerText = goalFormatted;
+    document.getElementById("campaignRaised").innerText = raisedFormatted;
+    document.getElementById("campaignTimeLeft").innerText = timeLeft;
+
+    // Calculate progress percentage safely
+    const goalBigInt = BigInt(campaign.goal.toString()); // Ensure goal is BigInt
+    const raisedBigInt = BigInt(campaign.raisedAmount.toString()); // Ensure raised amount is BigInt
+    const progressPercent = Number((raisedBigInt * 100n) / goalBigInt); // Explicit conversion to Number
+
+    // Update progress bar
+    document.getElementById("progressBarFill").style.width = `${Math.min(progressPercent, 100)}%`;
+
+    // Show campaign details and donation section
+    document.getElementById("campaignDetails").style.display = "block";
+    document.getElementById("donateSection").style.display = "block";
+  } catch (error) {
+    console.error(`Error loading campaign ${selectedTokenId}:`, error);
+    alert("Failed to load campaign. Please check the Campaign ID.");
+  }
+});
+    // document.getElementById("selectCampaignForm").addEventListener("submit", async (e) => {
+    //   e.preventDefault();
+
+    //   selectedTokenId = document.getElementById("tokenId").value;
+
+    //   try {
+    //     const campaign = await contract.campaigns(selectedTokenId);
+    //     const timeLeft = await contract.timeLeft(selectedTokenId);
+
+    //     document.getElementById("campaignRecipient").innerText = campaign.recipient;
+    //     document.getElementById("campaignGoal").innerText = ethers.formatEther(campaign.goal);
+    //     document.getElementById("campaignRaised").innerText = ethers.formatEther(campaign.raisedAmount);
+    //     document.getElementById("campaignTimeLeft").innerText = timeLeft;
+
+    //     // Update progress bar
+    //     const progressPercent = (campaign.raisedAmount / campaign.goal) * 100;
+    //     document.getElementById("progressBarFill").style.width = `${Math.min(progressPercent, 100)}%`;
+
+    //     // Show campaign details and donation section
+    //     document.getElementById("campaignDetails").style.display = "block";
+    //     document.getElementById("donateSection").style.display = "block";
+    //   } catch (error) {
+    //     console.error(`Error loading campaign ${selectedTokenId}:`, error);
+    //     alert("Failed to load campaign. Please check the Campaign ID.");
+    //   }
+    // });
+
+    document.getElementById("donateForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const amount = ethers.parseEther(document.getElementById("amount").value);
+      const pseudonym = document.getElementById("pseudonym").value || "Anonymous";
+
+      try {
+        const tx = await contract.contribute(selectedTokenId, pseudonym, { value: amount });
+        await tx.wait();
+        alert("Donation successful!");
+
+        // Reload campaign details after donation
+        document.getElementById("selectCampaignForm").dispatchEvent(new Event("submit"));
+      } catch (error) {
+        console.error("Error donating:", error);
+        alert("Failed to donate. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

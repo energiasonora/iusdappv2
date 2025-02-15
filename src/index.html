@@ -231,7 +231,7 @@
 		<!-- ADD PUBLIC DOCUMENTS -->
 		<div class="bottom-nav">
 			<nav class="codrops-demos">
-				<span>v5.18</span>
+				<span>v5.20</span>
 			</nav>
 		</div>
 
@@ -340,7 +340,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="didManagerModalLabel">User Information</h5>
+					<h5 class="modal-title" id="didManagerModalLabel" data-translate="userinfo" >User Information</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -350,7 +350,7 @@
 							<img src="https://via.placeholder.com/150" id="aliasAvatar" alt="Avatar"
 								class="img-thumbnail">
 							<div class="mt-2">
-								<button class="btn btn-secondary btn-sm" id="changeAvatar">Change Avatar</button>
+								<button class="btn btn-secondary btn-sm" id="changeAvatar" data-translate="changeavatar">Change Avatar</button>
 							</div>
 						</div>
 					</div>
@@ -359,11 +359,11 @@
 
 					<div class="row mb-3">
 						<div class="col-12">
-							<label for="aliasName" class="form-label">Alias Name</label>
+							<label for="aliasName" class="form-label" data-translate="aliasname">Alias Name</label>
 							<div class="input-group">
-								<input type="text" class="form-control" id="aliasName" placeholder="Enter alias name"
-									readonly>
-								<button type="button" id="editAlias" class="btn btn-secondary">Edit</button>
+								<input type="text" class="form-control" id="aliasName"  placeholder="Enter alias name" readonly>
+								<!-- <input type="text" class="form-control" id="aliasName" data-translate="enteraliasname"  placeholder="Enter alias name" readonly> -->
+								<button type="button" id="editAlias" class="btn btn-secondary"  data-translate="edit">Edit</button>
 							</div>
 						</div>
 					</div>
@@ -458,7 +458,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" data-translate="unlockWallet"  >VIEW MNEMONIC PHRASE</h5>
+					<h5 class="modal-title" data-translate="viewmnemonic"  >VIEW MNEMONIC PHRASE</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="backedWalletMnemonic">
@@ -595,7 +595,7 @@
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="settingsModalLabel">SETTINGS </h5>
+					<h5 class="modal-title" id="settingsModalLabel" data-translate="settings" >SETTINGS </h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 
@@ -604,27 +604,27 @@
 
 
 
-					<h4>Keys management</h4>
+					<h4 data-translate="keysmanagement" class="capital">Keys management</h4>
 
 					<button type="button"   class="btn btn-primary" onclick="event.stopPropagation(); backup()">
 						<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
 							<path fill="currentColor"
 								d="M512 32c0 113.6-84.6 207.5-194.2 222c-7.1-53.4-30.6-101.6-65.3-139.3C290.8 46.3 364 0 448 0h32c17.7 0 32 14.3 32 32zM0 96C0 78.3 14.3 64 32 64H64c123.7 0 224 100.3 224 224v32V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V320C100.3 320 0 219.7 0 96z" />
-						</svg> Backup </button>
+						</svg> <span data-translate="backup">Backup</span> </button>
 
 					<button type="button"   class="btn btn-primary"
 						onclick="event.stopPropagation(); restoreWallet()"> <svg xmlns="http://www.w3.org/2000/svg"
 							height="16" width="16" viewBox="0 0 512 512">
 							<path fill="currentColor"
 								d="M174.7 45.1C192.2 17 223 0 256 0s63.8 17 81.3 45.1l38.6 61.7 27-15.6c8.4-4.9 18.9-4.2 26.6 1.7s11.1 15.9 8.6 25.3l-23.4 87.4c-3.4 12.8-16.6 20.4-29.4 17l-87.4-23.4c-9.4-2.5-16.3-10.4-17.6-20s3.4-19.1 11.8-23.9l28.4-16.4L283 79c-5.8-9.3-16-15-27-15s-21.2 5.7-27 15l-17.5 28c-9.2 14.8-28.6 19.5-43.6 10.5c-15.3-9.2-20.2-29.2-10.7-44.4l17.5-28zM429.5 251.9c15-9 34.4-4.3 43.6 10.5l24.4 39.1c9.4 15.1 14.4 32.4 14.6 50.2c.3 53.1-42.7 96.4-95.8 96.4L320 448v32c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-64-64c-9.4-9.4-9.4-24.6 0-33.9l64-64c6.9-6.9 17.2-8.9 26.2-5.2s14.8 12.5 14.8 22.2v32l96.2 0c17.6 0 31.9-14.4 31.8-32c0-5.9-1.7-11.7-4.8-16.7l-24.4-39.1c-9.5-15.2-4.7-35.2 10.7-44.4zm-364.6-31L36 204.2c-8.4-4.9-13.1-14.3-11.8-23.9s8.2-17.5 17.6-20l87.4-23.4c12.8-3.4 26 4.2 29.4 17L182 241.2c2.5 9.4-.9 19.3-8.6 25.3s-18.2 6.6-26.6 1.7l-26.5-15.3L68.8 335.3c-3.1 5-4.8 10.8-4.8 16.7c-.1 17.6 14.2 32 31.8 32l32.2 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32.2 0C42.7 448-.3 404.8 0 351.6c.1-17.8 5.1-35.1 14.6-50.2l50.3-80.5z" />
-						</svg> Restore </button>
+						</svg> <span data-translate="restore">Restore</span>  </button>
 
 					<br>
 					<br>
 					<hr>
 
 					<!-- -------------------------- -->
-					<h4>TOKEN</h4>
+					<h4 data-translate="token" class="capital">TOKEN</h4>
 
 					<!-- Radio Buttons -->
 
@@ -644,7 +644,7 @@
 					<div id="erc20Options" class="mt-3" >
 						<!-- <select class="form-select mb-3 token-selector" id="erc20Selector"> </select> -->
 						<select class="form-select mb-3 token-selector"  id="erc20Selector" disabled>
-							<option class="loading-option">Loading tokens</option>
+							<option class="loading-option" data-translate="loadingtokens">Loading tokens</option>
 						  </select>
 
 						  
@@ -685,7 +685,7 @@
 
 
 
-					<h4>WALLET</h4>
+					<h4 data-translate="wallet" class="capital">WALLET</h4>
 			 
 
 					<div class="form-check">
@@ -707,19 +707,19 @@
 
 
 
-					<h4>NOTIFICATIONS</h4>
+					<h4 class="capital" data-translate="notifications">NOTIFICATIONS</h4>
 
 					<div class="container mt-5">
-						<h2>Notification Settings</h2>
+						<!-- <h2>Notification Settings</h2> -->
 
 						<!-- Toggle Input -->
 						<div class="form-check form-switch mt-3">
 							<input class="form-check-input" type="checkbox" id="notificationToggle">
-							<label class="form-check-label" for="notificationToggle">Enable Notifications</label>
+							<label class="form-check-label" for="notificationToggle" data-translate="enablenotifications">Enable Notifications</label>
 						</div>
 
 						<!-- Notification Message -->
-						<div id="notificationMessage" class="alert alert-success">
+						<div id="notificationMessage" class="alert alert-success" data-translate="enabled">
 							Notifications are now enabled.
 						</div>
 
@@ -730,7 +730,7 @@
 					<hr>
 
 					<!-- ----------------------------- -->
-					<h4>Language</h4>
+					<h4 class="capital"  data-translate="language">Language</h4>
 
 					<div class="options">
 
@@ -744,12 +744,12 @@
 						<hr>
 
 
-						<h4>Contacts</h4>
+						<h4 class="capital" data-translate="contacts">Contacts</h4>
 						<button class="btn btn-primary" onclick="event.stopPropagation();saveContacts()"><svg
 								xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
 								<path fill="currentColor"
 									d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-242.7c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32L64 32zm0 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32l0 64c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-64zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-							</svg> Save</button>
+							</svg> <span data-translate="save">Save</span>  </button>
 
 
 						<button class="btn btn-primary" onclick="event.stopPropagation();importContacts()">
@@ -757,7 +757,7 @@
 								<path fill="currentColor"
 									d="M128 64c0-35.3 28.7-64 64-64L352 0l0 128c0 17.7 14.3 32 32 32l128 0 0 288c0 35.3-28.7 64-64 64l-256 0c-35.3 0-64-28.7-64-64l0-112 174.1 0-39 39c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l39 39L128 288l0-224zm0 224l0 48L24 336c-13.3 0-24-10.7-24-24s10.7-24 24-24l104 0zM512 128l-128 0L384 0 512 128z" />
 							</svg>
-							Import</button>
+							<span data-translate="import">Import</span> </button>
 						<input type="file" id="fileInput" accept=".json" style="display: none;">
 
 
@@ -791,7 +791,7 @@
 					<hr>
 
 
-					<h4>Chats</h4>
+					<h4 class="capital"  data-translate="chats">Chats</h4>
 
 					<button type="button"   class="btn btn-primary"
 						onclick="event.stopPropagation(); createGroupChat()" disabled>
@@ -800,8 +800,8 @@
 							<path fill="currentColor"
 								d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z" />
 						</svg>
-
-						CREATE MULTISIG GRUPAL CHAT</button>
+						<span data-translate="createmultisigchat">CREATE MULTISIG GRUPAL CHAT</span> 
+						</button>
 					<!-- scan this qr to be added to this group -->
 
 
@@ -812,8 +812,9 @@
 							<path fill="currentColor"
 								d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3V245.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5V416c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V389.2C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112h32c24 0 46.2 7.5 64.4 20.3zM448 416V394.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176h32c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2V416c0 17.7-14.3 32-32 32H480c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3V261.7c-10 11.3-16 26.1-16 42.3zm144-42.3v84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2V448c0 17.7-14.3 32-32 32H288c-17.7 0-32-14.3-32-32V405.2c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112h32c61.9 0 112 50.1 112 112z" />
 						</svg>
+						<span data-translate="joingroupethroughqr">JOIN GROUPE TRHOUGH QR</span> 
 
-						JOIN GROUPE TRHOUGH QR</button>
+						</button>
 
 				</div>
 
@@ -824,7 +825,10 @@
 							xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="18" height="16">
 							<path fill="currentColor"
 								d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z" />
-						</svg>LOCK</button>
+						</svg>
+						<span data-translate="lock">LOCK</span> 
+						
+					</button>
 				</div>
 
 			</div>
@@ -860,7 +864,7 @@
 							<!-- <select class="form-select token-selector"  > </select> -->
 
 							<select class="token-selector" disabled>
-								<option class="loading-option">Loading tokens</option>
+								<option class="loading-option" data-translate="loadingtokens">Loading tokens</option>
 							  </select>
 
 							<span  style="display: none;"> </span>
@@ -961,7 +965,7 @@
 								<div class="input-group mb-3">
 									<span class="input-group-text iusbutton">Token</span>
 									<select class="form-select token-selector"  id="tokenType" disabled>
-										<option class="loading-option">Loading tokens</option>
+										<option class="loading-option" data-translate="loadingtokens">Loading tokens</option>
 									  </select>
 
 									<span id="fixedtokenType" style="display: none;"> </span>
@@ -1219,28 +1223,16 @@
 					</section>
 					<h4>TOKEN</h4>
 
-					<!-- <select class="form-select mb-3 token-selector"  id="erc20Selectorbis"> </select> -->
-
 					<select class="form-select mb-3 token-selector"  id="" disabled>
-						<option class="loading-option">Loading tokens</option>
+						<option class="loading-option" data-translate="loadingtokens">Loading tokens</option>
 					  </select>
 
 
-					<!-- <select class="form-select mb-3" id="erc20Selector"> </select> -->
-					<!-- <button type="button" class="btn btn-primary mt-2"   onclick="addToken()">+ Add</button>
-					<button type="button" class="btn btn-danger mt-2" id="removeErc20Address">Remove</button>
-					<button type="button" class="btn btn-info mt-2" id="infoErc20Address">Info</button> -->
 					<br>
 					<br>
 					<hr>
 					<!-- -------------------------- -->
 					<h4>PUBLIC TXs</h4>
-					<!-- <p>Public transactions will display here...</p> -->
-
-					<!-- <p class="amount">3.493 <span class="secondary currency-name">ETH</span> <span
-							class="tertiary">(arb)</span> </p>
-					<p class="coin-value">0.0432 <span class="secondary  currency-name">BTC</span> </p> -->
-
 
 					<div class="container mt-4">
 						<div   id="loadingSpinner" class="loader-banner">
@@ -1286,17 +1278,9 @@
 					<br>
 					<br>
 					<hr>
-
 					<!-- ----------------------------- -->
 
-
-
-
-
-
 				</div>
-
-
 
 				<div class="modal-footer d-flex justify-content-center">
 					<button type="button" class="btn btn-primary btn-lg" onclick="lock()"><svg
@@ -1312,6 +1296,26 @@
 	<!-- fin WALLET BALANCES MODAL  -->
 
 
+
+	<!-- PAY/SIGN WITH QR MODAL  -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="paymentModalLabel">Scan QR Code to Pay/Sign</h5>
+			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body text-center">
+			  <div id="qrCodeContainer"></div>
+			  <p id="countdown" class="mt-3 fs-5">Expires in: 15:00</p>
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	<!-- fin PAY/SIGN WITH QR MODAL  -->
 
 	<!-- /*********************************************************************************************
   .) FIN MODALS
@@ -1587,12 +1591,13 @@
 			// ----------------------------------------------------------------------------------
 			// ONLINE OFFLINE
 			// ----------------------------------------------------------------------------------
+			reloadTranslations(); //load globallang before checking status
 			updateStatus();
 			// Listen for online and offline events
 			window.addEventListener('online', updateStatus);
 			window.addEventListener('offline', updateStatus);
 			
-			reloadTranslations()
+			// reloadTranslations()
 			
 			 
 
@@ -2241,6 +2246,19 @@ function playtxReceived() {
 		/*********************************************************************************************
 		.)  COPYFadd 
 		**********************************************************************************************/
+      
+		function showSuccessIcon(element) {
+                        const svgElement = element.closest("svg");
+            if (!svgElement) return;
+
+            
+            svgElement.innerHTML = `
+                <path fill="green" d="M504 75c-9.4-9.4-24.6-9.4-33.9 0L184.4 360.7l-112-112c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l128 128c9.4 9.4 24.6 9.4 33.9 0l304-304c9.3-9.4 9.3-24.6-.1-33.9z"></path>
+            `;
+            setTimeout(() => {
+                svgElement.innerHTML = `<path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path>`
+            }, 1500);
+        }
 
 		function copy2clipboard(text) {
 			// let text = `${ipfsGateway}${cid}`;
@@ -2641,9 +2659,8 @@ function playtxReceived() {
 
 
 			// WRITE YOUR MNEMONIC PHRASE
-			displayMnemonic.innerHTML = ` <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor"> <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>Write down your mnemonic phrase to access your wallet in the future! :</h3> <div class="alert alert-warning alert-dismissible fade show"  > <strong translate="no">${mnemonic}</strong> </div> `
-
-
+			// displayMnemonic.innerHTML = ` <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor"> <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>Write down your mnemonic phrase to access your wallet in the future! :</h3> <div class="alert alert-warning alert-dismissible fade show"  > <strong translate="no">${mnemonic}</strong> </div> `
+			displayMnemonic.innerHTML = ` <h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor"> <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>${dictionary[globalLang]["writedown"]} :</h3> <div class="alert alert-warning alert-dismissible fade show"  > <strong translate="no">${mnemonic}</strong> </div> `
 			// CREATING ENCRYPTED LOCAL WALLET
 			displayMnemonic.innerHTML += ` <div  id="loaderCW"  > <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> creating encrypted wallet ... </div> `
 
@@ -2810,16 +2827,15 @@ Wallet encrypted and saved into localstorage
 			var preElement = document.getElementById('yourAddress');
 			preElement.setAttribute('address', userAddress);
 
-			yourAddress.innerHTML = `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${userAddress}')" xmlns="http://www.w3.org/2000/svg" 
-			height="1em" 
-			viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> 			<svg id='shareAddress' onclick="event.stopPropagation();copy2clipboard('${url}')" xmlns="http://www.w3.org/2000/svg" 
-			height="1em" 
-			viewBox="0 0 448 512"><path fill='currentColor'  d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>			<svg id='simplesend' onclick="event.stopPropagation();simpleSend()" xmlns="http://www.w3.org/2000/svg" 
-			height="1em" viewBox="0 0 448 512"> <defs > <clipPath clipPathUnits="userSpaceOnUse" >
-				 <rect width="106.35429" height="78.068573" x="9.0514288" y="187.25142" /> </clipPath> 
-				 </defs> <g transform="matrix(1.0583559,0,0,1.0583559,678.18141,477.32181)"> 
-					<path fill="currentColor" d="M 122.34961 22.404297 C 102.90845 22.541942 83.4884 23.208407 64.123047 25.130859 C 32.005914 32.74301 13.633824 64.1977 0.21875 91.888672 C 0.59031759 190.50417 -1.4164071 289.14446 1.4707031 387.73828 C -3.2139611 442.01413 47.311879 490.4789 100.67578 488.32227 C 204.56767 490.26899 308.49622 489.76604 412.37695 487.41016 C 455.00842 491.66379 499.19766 461.88412 507.98047 419.36328 C 511.41267 368.1022 508.76569 316.55734 508.78125 265.18555 C 507.78692 215.81739 510.67596 166.53718 511.68359 117.21094 C 515.55612 76.22511 486.62687 34.631163 445.61328 27.0625 C 370.4731 21.75639 294.91505 23.445051 219.58984 22.759766 C 187.21286 23.414564 154.75154 22.174889 122.34961 22.404297 z M 201.33008 50.462891 C 212.79999 49.869523 223.82167 54.325756 218.06445 67.503906 C 209.21938 71.892696 199.05142 70.553919 189.57227 69.984375 C 171.09491 60.335654 186.58305 51.225791 201.33008 50.462891 z M 378.60742 50.566406 C 390.32146 49.91717 401.56028 54.29308 395.27734 67.503906 C 386.45439 71.191451 376.63239 70.842293 367.3125 69.888672 C 347.70261 60.542435 363.54651 51.401138 378.60742 50.566406 z M 322.3125 50.871094 C 331.96784 50.788552 340.38367 54.86352 337.62695 66.570312 C 330.16888 73.751755 318.8153 69.887874 309.69727 69.847656 C 286.68559 62.694044 306.22027 51.008663 322.3125 50.871094 z M 264.42578 50.941406 C 274.04887 51.473285 281.70092 56.245902 276.58398 68.197266 C 268.02568 71.247765 258.77202 70.661056 249.875 70.027344 C 226.87374 60.949739 248.38729 50.054941 264.42578 50.941406 z M 142.29883 51.388672 C 153.70762 50.793577 164.46957 55.141948 159.0625 68.197266 C 148.96874 70.847251 138.41711 70.813462 128.07422 70.197266 C 111.89302 61.089951 127.63038 52.153794 142.29883 51.388672 z M 77.707031 52.076172 C 92.665231 51.670858 108.69779 64.278245 87.421875 71.65625 C 80.094115 76.927688 59.493487 74.453071 61.580078 62.40625 C 64.330772 55.131697 70.90785 52.260405 77.707031 52.076172 z M 437.95117 52.96875 C 446.58069 53.499952 453.61391 57.964614 448.89453 69.212891 C 443.09003 74.370841 435.13393 71.031306 428.54102 69.896484 C 404.75443 62.12546 423.56864 52.083413 437.95117 52.96875 z M 467.25 80.292969 C 476.05807 81.586828 488.63451 99.731074 478.24023 109.76172 C 466.60642 116.16445 463.30811 98.48209 460.08594 91.316406 C 460.02046 82.597419 463.24633 79.704851 467.25 80.292969 z M 46.603516 86.378906 C 55.239528 88.381655 54.94777 115.64672 45.767578 124.4668 C 27.678762 132.02244 32.290326 103.51577 34.990234 94.416016 C 39.854266 87.850904 43.724845 85.711323 46.603516 86.378906 z M 475.48633 127.70508 C 482.88498 128.68897 484.4465 151.48356 480.40625 160.5957 C 466.82241 175.97111 460.27278 144.01616 466.13281 135.30664 C 469.90454 129.47352 473.02011 127.37711 475.48633 127.70508 z M 40.814453 145.95508 C 49.217435 147.73322 53.436635 176.59025 44.138672 185.625 C 25.792326 195.14735 31.36027 164.06133 31.361328 154.93945 C 34.746186 147.77739 38.013459 145.36236 40.814453 145.95508 z M 40.980469 208.54102 C 52.108736 209.14498 50.554573 235.88456 45.646484 247.69336 C 23.833505 257.07186 35.227386 222.776 31.134766 212.80273 C 35.168308 209.6538 38.412407 208.40164 40.980469 208.54102 z M 39.839844 272.02734 C 47.059432 271.21967 54.10366 277.1786 48.970703 290.89062 C 53.446289 317.27501 29.027322 321.93058 29.65625 293.76172 C 25.225649 280.40896 32.620256 272.83501 39.839844 272.02734 z M 41.21875 334.38086 C 52.218054 336.41594 49.773587 364.74996 44.185547 374.0332 C 22.790671 382.03895 32.805162 348.13594 31.330078 337.73047 C 35.426918 334.84191 38.680449 333.91123 41.21875 334.38086 z M 471.94531 344.46094 C 478.73409 344.06655 486.56003 350.35745 480.28711 360.78516 C 480.87081 383.10497 465.25145 377.82384 465.10938 358.71484 C 462.01336 349.11908 466.66515 344.76768 471.94531 344.46094 z M 470.67188 395.33984 C 478.65718 394.06626 486.55386 416.73373 475.44727 424.66406 C 464.24942 442.94477 451.89416 417.35385 463.35742 406.02734 C 465.33878 398.85039 468.01011 395.76437 470.67188 395.33984 z M 39.148438 396.43164 C 47.847352 396.03896 61.578726 413.3123 53.775391 426.22266 C 43.216724 433.89031 34.462757 418.70246 32.900391 409.98633 C 32.280075 400.43953 35.194385 396.61013 39.148438 396.43164 z M 434.27539 440.71289 C 446.12895 441.04492 455.68569 447.75243 440.74805 457.34375 C 433.99085 464.01104 415.7483 463.43418 412.89062 453.14844 C 414.44671 444.05227 425.05595 440.45464 434.27539 440.71289 z M 81.375 441.21289 C 91.803448 441.12577 102.40272 445.68911 97.503906 458.07031 C 90.667329 462.10042 82.378987 460.01552 75.302734 457.87891 C 54.842676 449.12311 67.966996 441.32491 81.375 441.21289 z M 198.75195 442.04102 C 213.4483 442.93836 227.47155 463.64651 203.53711 462.19922 C 187.4029 470.94821 164.91368 452.25832 188.92773 445.10156 C 191.93254 442.68284 195.36049 441.83394 198.75195 442.04102 z M 141.35742 442.52539 C 154.60522 442.21689 166.14334 462.95414 145.95898 462.19336 C 121.76352 471.47841 104.66936 448.36725 135.66211 444.07031 C 137.537 443.04316 139.46488 442.56946 141.35742 442.52539 z M 263.73242 443.12109 C 277.19347 442.15213 282.34051 468.51692 262.22656 462.17383 L 261.14258 462.19141 C 238.2028 472.70994 231.45057 437.16585 257.50391 445.38477 C 259.71688 443.95564 261.80941 443.25952 263.73242 443.12109 z M 379.1582 443.6582 C 388.70431 443.42939 397.27041 447.13603 395.02344 458.26562 C 386.99499 462.49158 377.5563 462.2952 368.7793 461.44922 C 344.61406 455.35156 363.24802 444.03956 379.1582 443.6582 z M 319.95703 443.70898 C 329.25388 443.54534 337.67159 447.22686 336.33203 457.82812 C 328.18613 464.52763 316.89905 461.83691 307.25195 462.34961 C 286.52546 454.93748 304.46229 443.98172 319.95703 443.70898 z " transform="matrix(0.94486174,0,0,0.94486174,-640.78767,-451.00312)" /> <ellipse cx="-202.56619" cy="-210.81996" rx="27.581959" ry="26.432711" /> <path d="m -273.24879,-343.55709 c 13.57934,10.94417 4.11256,28.6271 3.41272,42.97431 -10.35834,67.32918 -20.71667,134.65835 -31.07501,201.987523 -3.43922,19.509709 -24.89016,15.261767 -37.40273,7.947861 -17.40404,-7.232275 -34.80807,-14.464554 -52.21211,-21.696824 -14.03121,14.463338 -26.74618,30.398355 -41.64405,43.894173 -18.22479,9.955603 -29.72162,-11.436298 -26.27918,-27.030747 0.34571,-12.376906 -0.72391,-24.885926 0.5957,-37.171936 27.04118,-31.56409 56.15653,-61.55691 84.00114,-92.51238 11.76322,-6.14486 16.85643,-30.97909 -2.7603,-22.80647 -37.13867,32.99389 -74.27734,65.98779 -111.41601,98.98168 -17.34792,-9.11662 -35.49459,-16.87377 -52.30927,-26.89798 -15.32278,-14.96944 2.6642,-30.2801 16.70772,-36.00336 77.25242,-44.14424 154.50483,-88.28848 231.75725,-132.43272 5.69186,-3.32683 13.22323,-3.00646 18.62413,0.76687 z" /> </g> </svg>
+			yourAddress.innerHTML = `${shortAddr} <svg id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${userAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg> 			
+		
+			<svg id='shareAddress' onclick="event.stopPropagation();copy2clipboard('${url}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path fill='currentColor'  d="M352 224c53 0 96-43 96-96s-43-96-96-96s-96 43-96 96c0 4 .2 8 .7 11.9l-94.1 47C145.4 170.2 121.9 160 96 160c-53 0-96 43-96 96s43 96 96 96c25.9 0 49.4-10.2 66.6-26.9l94.1 47c-.5 3.9-.7 7.8-.7 11.9c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-25.9 0-49.4 10.2-66.6 26.9l-94.1-47c.5-3.9 .7-7.8 .7-11.9s-.2-8-.7-11.9l94.1-47C302.6 213.8 326.1 224 352 224z"/></svg>			
+			
+			<svg id='simplesend' onclick="event.stopPropagation();simpleSend()" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <defs > <clipPath clipPathUnits="userSpaceOnUse" > <rect width="106.35429" height="78.068573" x="9.0514288" y="187.25142" /> </clipPath> </defs> <g transform="matrix(1.0583559,0,0,1.0583559,678.18141,477.32181)"> <path fill="currentColor" d="M 122.34961 22.404297 C 102.90845 22.541942 83.4884 23.208407 64.123047 25.130859 C 32.005914 32.74301 13.633824 64.1977 0.21875 91.888672 C 0.59031759 190.50417 -1.4164071 289.14446 1.4707031 387.73828 C -3.2139611 442.01413 47.311879 490.4789 100.67578 488.32227 C 204.56767 490.26899 308.49622 489.76604 412.37695 487.41016 C 455.00842 491.66379 499.19766 461.88412 507.98047 419.36328 C 511.41267 368.1022 508.76569 316.55734 508.78125 265.18555 C 507.78692 215.81739 510.67596 166.53718 511.68359 117.21094 C 515.55612 76.22511 486.62687 34.631163 445.61328 27.0625 C 370.4731 21.75639 294.91505 23.445051 219.58984 22.759766 C 187.21286 23.414564 154.75154 22.174889 122.34961 22.404297 z M 201.33008 50.462891 C 212.79999 49.869523 223.82167 54.325756 218.06445 67.503906 C 209.21938 71.892696 199.05142 70.553919 189.57227 69.984375 C 171.09491 60.335654 186.58305 51.225791 201.33008 50.462891 z M 378.60742 50.566406 C 390.32146 49.91717 401.56028 54.29308 395.27734 67.503906 C 386.45439 71.191451 376.63239 70.842293 367.3125 69.888672 C 347.70261 60.542435 363.54651 51.401138 378.60742 50.566406 z M 322.3125 50.871094 C 331.96784 50.788552 340.38367 54.86352 337.62695 66.570312 C 330.16888 73.751755 318.8153 69.887874 309.69727 69.847656 C 286.68559 62.694044 306.22027 51.008663 322.3125 50.871094 z M 264.42578 50.941406 C 274.04887 51.473285 281.70092 56.245902 276.58398 68.197266 C 268.02568 71.247765 258.77202 70.661056 249.875 70.027344 C 226.87374 60.949739 248.38729 50.054941 264.42578 50.941406 z M 142.29883 51.388672 C 153.70762 50.793577 164.46957 55.141948 159.0625 68.197266 C 148.96874 70.847251 138.41711 70.813462 128.07422 70.197266 C 111.89302 61.089951 127.63038 52.153794 142.29883 51.388672 z M 77.707031 52.076172 C 92.665231 51.670858 108.69779 64.278245 87.421875 71.65625 C 80.094115 76.927688 59.493487 74.453071 61.580078 62.40625 C 64.330772 55.131697 70.90785 52.260405 77.707031 52.076172 z M 437.95117 52.96875 C 446.58069 53.499952 453.61391 57.964614 448.89453 69.212891 C 443.09003 74.370841 435.13393 71.031306 428.54102 69.896484 C 404.75443 62.12546 423.56864 52.083413 437.95117 52.96875 z M 467.25 80.292969 C 476.05807 81.586828 488.63451 99.731074 478.24023 109.76172 C 466.60642 116.16445 463.30811 98.48209 460.08594 91.316406 C 460.02046 82.597419 463.24633 79.704851 467.25 80.292969 z M 46.603516 86.378906 C 55.239528 88.381655 54.94777 115.64672 45.767578 124.4668 C 27.678762 132.02244 32.290326 103.51577 34.990234 94.416016 C 39.854266 87.850904 43.724845 85.711323 46.603516 86.378906 z M 475.48633 127.70508 C 482.88498 128.68897 484.4465 151.48356 480.40625 160.5957 C 466.82241 175.97111 460.27278 144.01616 466.13281 135.30664 C 469.90454 129.47352 473.02011 127.37711 475.48633 127.70508 z M 40.814453 145.95508 C 49.217435 147.73322 53.436635 176.59025 44.138672 185.625 C 25.792326 195.14735 31.36027 164.06133 31.361328 154.93945 C 34.746186 147.77739 38.013459 145.36236 40.814453 145.95508 z M 40.980469 208.54102 C 52.108736 209.14498 50.554573 235.88456 45.646484 247.69336 C 23.833505 257.07186 35.227386 222.776 31.134766 212.80273 C 35.168308 209.6538 38.412407 208.40164 40.980469 208.54102 z M 39.839844 272.02734 C 47.059432 271.21967 54.10366 277.1786 48.970703 290.89062 C 53.446289 317.27501 29.027322 321.93058 29.65625 293.76172 C 25.225649 280.40896 32.620256 272.83501 39.839844 272.02734 z M 41.21875 334.38086 C 52.218054 336.41594 49.773587 364.74996 44.185547 374.0332 C 22.790671 382.03895 32.805162 348.13594 31.330078 337.73047 C 35.426918 334.84191 38.680449 333.91123 41.21875 334.38086 z M 471.94531 344.46094 C 478.73409 344.06655 486.56003 350.35745 480.28711 360.78516 C 480.87081 383.10497 465.25145 377.82384 465.10938 358.71484 C 462.01336 349.11908 466.66515 344.76768 471.94531 344.46094 z M 470.67188 395.33984 C 478.65718 394.06626 486.55386 416.73373 475.44727 424.66406 C 464.24942 442.94477 451.89416 417.35385 463.35742 406.02734 C 465.33878 398.85039 468.01011 395.76437 470.67188 395.33984 z M 39.148438 396.43164 C 47.847352 396.03896 61.578726 413.3123 53.775391 426.22266 C 43.216724 433.89031 34.462757 418.70246 32.900391 409.98633 C 32.280075 400.43953 35.194385 396.61013 39.148438 396.43164 z M 434.27539 440.71289 C 446.12895 441.04492 455.68569 447.75243 440.74805 457.34375 C 433.99085 464.01104 415.7483 463.43418 412.89062 453.14844 C 414.44671 444.05227 425.05595 440.45464 434.27539 440.71289 z M 81.375 441.21289 C 91.803448 441.12577 102.40272 445.68911 97.503906 458.07031 C 90.667329 462.10042 82.378987 460.01552 75.302734 457.87891 C 54.842676 449.12311 67.966996 441.32491 81.375 441.21289 z M 198.75195 442.04102 C 213.4483 442.93836 227.47155 463.64651 203.53711 462.19922 C 187.4029 470.94821 164.91368 452.25832 188.92773 445.10156 C 191.93254 442.68284 195.36049 441.83394 198.75195 442.04102 z M 141.35742 442.52539 C 154.60522 442.21689 166.14334 462.95414 145.95898 462.19336 C 121.76352 471.47841 104.66936 448.36725 135.66211 444.07031 C 137.537 443.04316 139.46488 442.56946 141.35742 442.52539 z M 263.73242 443.12109 C 277.19347 442.15213 282.34051 468.51692 262.22656 462.17383 L 261.14258 462.19141 C 238.2028 472.70994 231.45057 437.16585 257.50391 445.38477 C 259.71688 443.95564 261.80941 443.25952 263.73242 443.12109 z M 379.1582 443.6582 C 388.70431 443.42939 397.27041 447.13603 395.02344 458.26562 C 386.99499 462.49158 377.5563 462.2952 368.7793 461.44922 C 344.61406 455.35156 363.24802 444.03956 379.1582 443.6582 z M 319.95703 443.70898 C 329.25388 443.54534 337.67159 447.22686 336.33203 457.82812 C 328.18613 464.52763 316.89905 461.83691 307.25195 462.34961 C 286.52546 454.93748 304.46229 443.98172 319.95703 443.70898 z " transform="matrix(0.94486174,0,0,0.94486174,-640.78767,-451.00312)" /> <ellipse cx="-202.56619" cy="-210.81996" rx="27.581959" ry="26.432711" /> <path d="m -273.24879,-343.55709 c 13.57934,10.94417 4.11256,28.6271 3.41272,42.97431 -10.35834,67.32918 -20.71667,134.65835 -31.07501,201.987523 -3.43922,19.509709 -24.89016,15.261767 -37.40273,7.947861 -17.40404,-7.232275 -34.80807,-14.464554 -52.21211,-21.696824 -14.03121,14.463338 -26.74618,30.398355 -41.64405,43.894173 -18.22479,9.955603 -29.72162,-11.436298 -26.27918,-27.030747 0.34571,-12.376906 -0.72391,-24.885926 0.5957,-37.171936 27.04118,-31.56409 56.15653,-61.55691 84.00114,-92.51238 11.76322,-6.14486 16.85643,-30.97909 -2.7603,-22.80647 -37.13867,32.99389 -74.27734,65.98779 -111.41601,98.98168 -17.34792,-9.11662 -35.49459,-16.87377 -52.30927,-26.89798 -15.32278,-14.96944 2.6642,-30.2801 16.70772,-36.00336 77.25242,-44.14424 154.50483,-88.28848 231.75725,-132.43272 5.69186,-3.32683 13.22323,-3.00646 18.62413,0.76687 z" /> </g> </svg>
 
+
+<svg id="scan-icon" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48L0 80zM64 96l0 64 64 0 0-64L64 96zM0 336c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM304 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm80 64l-64 0 0 64 64 0 0-64zM256 304c0-8.8 7.2-16 16-16l64 0c8.8 0 16 7.2 16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16l0 96c0 8.8-7.2 16-16 16l-64 0c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-160zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z"/></svg>
+			
 			`;
 			console.log(`Your address: ${userAddress} `)
 			console.log(`Your did: ${did} `)
@@ -3761,7 +3777,10 @@ async function backupContactsToPolybase() {
 			if (cwContacts) {
 				console.warn('🏄‍♀️🏄‍♀️🏄‍♀️ YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContactsFromLocalstorage()')
 
-
+				cw=cwContacts;
+				// contactname // username
+				// contactname: set by user in their own agenda
+				// username: set by owner in their own DID
 				const promises = [];
 				cwContacts.forEach((el, index) => {
 
@@ -4597,6 +4616,7 @@ return
 		}
 
 
+
 		async function buildAllMiniAvatars(DIDsArray) {
 			console.log('buildAllMiniAvatars()');
 			
@@ -5021,49 +5041,7 @@ initChatClient()
 
 
 
-
-		// ------------------------
-		// NEW
-		// 1111111111111111
-		// Set to store addresses of active conversations
-		// const activeChats = new Set();
-		// aconv = activeChats
-
-		// Handle incoming messages
-		// async function handleIncomingMessage(message) {
-		//     const senderAddress = message.senderAddress;
-
-		//     // Skip if the message is from yourself
-		//     if (senderAddress === iusnaturalisxmtp.address) {
-		//         console.log('📛 Skipping message from yourself.');
-		//         return;
-		//     }
-
-		//     // Check if the chat is already being listened to
-		//     if (activeConversations.has(senderAddress)) {
-		//         console.log(`📣 Already listening to conversation with ${senderAddress}`);
-		//         return;
-		//     }
-
-		//     // Start listening to the conversation
-		//     activeConversations.add(senderAddress);
-		//     console.log(`Started new conversation with ${senderAddress}`);
-
-		//     // Display notification and badge
-		//     document.getElementById('chatBadge').style.display = 'inline';
-		//     document.getElementById('chatBadge').innerText = '!';
-
-		//     console.log(`New message from ${senderAddress}: ${message.content}`);
-		//     fixedToast.fire({ icon: 'info', title: `New message from ${senderAddress}`, text: message.content });
-
-		//     await playButtonClickSound();
-		//     await handleChatCodes(message);
-		//     await updateContacts(message);
-		//     updateBadge();
-		// }
-
-
-
+ 
 		/*********************************************************************************************
 		.)  HANDLERS
 		**********************************************************************************************/
@@ -5088,14 +5066,10 @@ initChatClient()
 				// Handle "addToken" event
 				function handleAddToken(message) {
 			console.log("You will add this token: ", message.token);
-			// const txLinkMatch = message.content.match(/txLink="([^"]+)"/);
-			// let txLink = txLinkMatch ? txLinkMatch[1] : null;
-			// console.log("Transaction Link:", txLink || "txLink not found.");
 
 			Swal.fire({
 				icon: "success",
 				title: "token added!🎉🎉🎉",
-				// html: `<span class ="tx"> Here is the tx <a href="${txLink}" target="_blank">Link</a> ✨✨✨</span>`
 			});
 		}
 
@@ -5173,6 +5147,22 @@ initChatClient()
 
 
 
+		async function createAlias(addr) {
+			// const formattedAddress = ethers.utils.getAddress(addr);
+			console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
+			// console.log('CREATE AN ALIAS FOR THIS ADDRESS',formattedAddress)
+
+			// TEST
+			// await iusnaturalisxmtp.registerCodec(new ContentTypeMultiplyNumberCodec());
+
+			// const numbersToMultiply = { a: 3, b: 7 };
+
+			// await conversation.send(numbersToMultiply, {
+			// contentType: ContentTypeMultiplyNumbers,
+			// });
+
+		}
+
 
 
 
@@ -5235,22 +5225,6 @@ initChatClient()
 
 
 
-
-		async function createAlias(addr) {
-			// const formattedAddress = ethers.utils.getAddress(addr);
-			console.log('CREATE AN ALIAS FOR THIS ADDRESS', addr)
-			// console.log('CREATE AN ALIAS FOR THIS ADDRESS',formattedAddress)
-
-			// TEST
-			// await iusnaturalisxmtp.registerCodec(new ContentTypeMultiplyNumberCodec());
-
-			// const numbersToMultiply = { a: 3, b: 7 };
-
-			// await conversation.send(numbersToMultiply, {
-			// contentType: ContentTypeMultiplyNumbers,
-			// });
-
-		}
 
 
 		// ----------------------------------
@@ -5682,7 +5656,7 @@ initChatClient()
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor">
                         <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
                     </svg>
-                    Write down your mnemonic phrase to access your wallet in the future!
+					${dictionary[globalLang]["writedown"]}
                 </h3>
                 <div class="alert alert-warning alert-dismissible fade show">
                     <strong>${mnemonicPhrase}</strong>
@@ -6001,7 +5975,7 @@ initChatClient()
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height='40px' width='40px' fill="currentColor">
 											<path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
 										</svg>
-										Write down your mnemonic phrase to access your wallet in the future!
+										${dictionary[globalLang]["writedown"]}
 									</h3>
 									<div class="alert alert-warning alert-dismissible fade show">
 										<strong>${wallet.mnemonic.phrase}</strong>
@@ -6257,6 +6231,9 @@ function loadDecryptedContacts(contacts){
 
 					// NAME
 					// username or contactname?
+						// contactname // username
+				// contactname: set by user in their own agenda
+				// username: set by owner in their own DID
 					if (el.contactname) {
 						// If contactname exists, use it
 						contactInfo = `<span>${el.contactname} <span>`;
@@ -6297,18 +6274,6 @@ function loadDecryptedContacts(contacts){
 										</li>`;
 
 						})
-					// );
-
-					// contct.innerHTML += `<li data-address="${el.address}" id="${el.address}" class=''> 
-					// 		<a onclick="event.stopPropagation();selectChat((this.parentElement))">  
-					// 			<img id ="${did}" src="./anonym.jpg" alt="Avatar" class="rounded-circle"> 
-					// 				<span >${contactInfo}</span>
-					// 				<svg onclick="event.stopPropagation();editContact('${el.address}')" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="20" height="25" class='right'>
-					// 					<path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z"/>
-					// 					</svg>
-					// 					</a> 
-					// 					</li>`;
-					// });
 
 
 					}
@@ -6327,31 +6292,31 @@ function loadDecryptedContacts(contacts){
 		// publicKey: PublicKey;
 		async function loadDID(signer) {
 			console.warn(' 💒💒💒💒 loadDID()',signer)
-    let did = `did:ius:${signer.address}`;
-
-    // IF. READ DID 
-    console.log('💬💬💬 READ YOUR DID:', did);
-    let rdid = await readDIDRecord(did);
-    rd = rdid;
-
-    if (rdid.data == null) {
-        console.warn('DID NULL, create ONE');
-        let avatar = '';
-        let alias = signer.address;
-        let privData = '';
-        let cid = '';
-        try {
-            const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
-            if (result) {
-                console.log('The DID record was created successfully.');
-            } else {
-                console.warn('Failed to create the DID record.');
-            }
-        } catch (error) {
-            console.error('An error occurred while creating the DID record:', error);
-        }
-    } else {
-        console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
+			let did = `did:ius:${signer.address}`;
+		
+			// IF. READ DID 
+			console.log('💬💬💬 READ YOUR DID:', did);
+			let rdid = await readDIDRecord(did);
+			rd = rdid;
+		
+			if (rdid.data == null) {
+				console.warn('DID NULL, create ONE');
+				let avatar = '';
+				let alias = signer.address;
+				let privData = '';
+				let cid = '';
+				try {
+					const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
+					if (result) {
+						console.log('The DID record was created successfully.');
+					} else {
+						console.warn('Failed to create the DID record.');
+					}
+				} catch (error) {
+					console.error('An error occurred while creating the DID record:', error);
+				}
+			} else {
+				console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
 
         // Avatar logic only if not already loaded
         // if (!document.getElementById('avatarIMG').src || document.getElementById('avatarIMG').src.endsWith('default.png')) {
@@ -6375,37 +6340,11 @@ function loadDecryptedContacts(contacts){
 			
         }
 
-       // CHECK if avatar
-	//    let avtr = rdid.data.avatar;
-    //             if (avtr) {
-    //                 let avatar = JSON.parse(avtr);
-    //                 document.getElementById('avatarIMG').src = avatar;
-    //                 document.getElementById('aliasAvatar').src = avatar;
-    //             } else {
-    //                 console.log('Avatar data is empty');
-    //             }
-
-
-
-
-
-
-// 		// CHECK if avatar
-		// 		let avtr = rdid.data.avatar;
-		// 		if (avtr) {
-		// 			let avatar = JSON.parse(avtr);
-		// 			document.getElementById('avatarIMG').src = avatar;
-		// 			document.getElementById('aliasAvatar').src = avatar;
-		// 		} else {
-		// 			console.log('Avatar data is empty');
-		// 		}		// 			
- 
-
-
-
-
 
         // localAlias or userName?
+			// contactname // username
+				// contactname: set by user in their own agenda
+				// username: set by owner in their own DID
         let alias = rdid.data.alias;
         if (alias) {
             document.getElementById('aliasName').value = alias;
@@ -6772,9 +6711,6 @@ function loadDecryptedContacts(contacts){
 
 		async function loadCroppedImg() {
 			console.log('loadCroppedImg()');
-
-			// openModalId('#createDIDModal')
-			// fileCreateItemFile => avatarIMGfile 
 
 			await avatarIMGfile.click();
 			let previewsrc;
@@ -9254,7 +9190,8 @@ let preferredToken
     // Reset token selector
     const tokenType = document.getElementById('tokenType');
     if (tokenType) {
-        tokenType.innerHTML = '<option class="loading-option">Loading tokens</option>';
+        // tokenType.innerHTML = '<option class="loading-option">Loading tokens</option>';
+        tokenType.innerHTML = `<option class="loading-option">${dictionary[globalLang]["loadingtokens"]}</option>`;
         tokenType.disabled = true;
     }
 
@@ -10300,7 +10237,8 @@ async function handleTransactionHistory(address) {
       const statusMessage = document.getElementById('headerNotes');
 
       if (navigator.onLine) {
-        statusMessage.textContent = 'You are back online!';
+        // statusMessage.textContent = 'You are back online!';
+        statusMessage.textContent = dictionary[globalLang]["youarebackonline"];
         statusMessage.className = 'online';
         statusMessage.style.display = 'flex';
         setTimeout(() =>
@@ -10308,13 +10246,16 @@ async function handleTransactionHistory(address) {
 		//  statusMessage.style.display = 'none!important'
 		 , 3000);
       } else {
-        statusMessage.textContent = 'You are offline. Please check your connection.';
+        // statusMessage.textContent = 'You are offline. Please check your connection.';
+        statusMessage.textContent = dictionary[globalLang]["youareoffline"];
         statusMessage.className = 'offline';
         statusMessage.style.display = 'flex';
       }
     }
 
 		  
+
+	
 	</script>
 
 	<!-- <script type="module" src="js/demo1.js"></script> -->

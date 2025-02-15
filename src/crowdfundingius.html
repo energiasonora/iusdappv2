@@ -1499,7 +1499,6 @@ document.getElementById('disconnection').style.display = 'none'
             // Global State to Track Conversations
             const activeChats = new Map(); // Tracks open chat streams
             let messageStore = {}; // Stores all messages grouped by address
-
             let abortController;
 
 
@@ -1731,17 +1730,24 @@ for await (const message of await iusnaturalisxmtp.conversations.streamAllMessag
 // ---------------------------------------------
             // Conversation List UI Updates
             // Maintain a list of conversations with their last message and timestamps:
-        async function updateConversationList(address, lastMessage,messageInput) {
-            console.log(`🙆‍♂️ 🙆‍♂️ 🙆‍♂️Updated conversation with ${address}: ${lastMessage}`);
+        async function updateConversationList(address, signature,messageInput) {
+            console.log(`🙆‍♂️ 🙆‍♂️ 🙆‍♂️Updated conversation with ${address}: ${signature}`);
             // Update the UI or state with the latest conversation data
 
-            let signature = lastMessage;
-            sig = lastMessage;
-                let recoveredAddress = ethers.verifyMessage(messageInput, signature);
+            // let signature = lastMessage;
+            sig = signature;
+            msg = messageInput;
+                let recoveredAddress = ethers.verifyMessage(JSON.stringify(messageInput), signature);
                 // let recoveredAddress = ethers.verifyMessage(messageInput);
                 rx = recoveredAddress
                 console.warn(`Logged in as: ${recoveredAddress}`);
                 alert(`Logged in as: ${recoveredAddress}`);
+
+
+                // const signature = "0x13a9c371bcfe8cb6e48a4d7f14973a2546949c078b7c108e83fa3a105a498ce86e1e6947a774b6c3cd2ad39d6544ee6a7eccd9545902e167cae80acc27b0623d1c";
+                // // Recover the signer's address
+                // const signerAddress = ethers.recoverAddress(messageHash, signature);
+                // console.log("Signer Address:", signerAddress);
 
                 return
                 // document.getElementById("signInButton").innerText = 'Disconnect';
@@ -2075,9 +2081,6 @@ for await (const message of await iusnaturalisxmtp.conversations.streamAllMessag
         async function connection() {
             console.log('connection()')
             document.getElementById('walletModal').showModal();
-
-
-
         }
 
         // DISCONNECT

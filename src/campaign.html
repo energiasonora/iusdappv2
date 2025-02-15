@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowdfunding NFT</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Crowdfunding NFT</h1>
+
+        <!-- Connect Wallet -->
+        <section>
+            <h2>Connect Wallet</h2>
+            <button id="connectWalletBtn" onclick="connectWallet()">Connect Wallet</button>
+            <p id="walletStatus">Not connected</p>
+        </section>
+
+        <!-- Create Campaign -->
+        <section>
+            <h2>Create a New Campaign</h2>
+            <form id="createCampaignForm">
+                <label for="recipient">Recipient Address:</label>
+                <input type="text" id="recipient" placeholder="Recipient Address" required>
+
+                <label for="publicKey">Recipient Public Key:</label>
+                <input type="text" id="publicKey" placeholder="Recipient Public Key" required>
+
+                <label for="goal">Goal (in ETH):</label>
+                <input type="number" id="goal" step="0.01" placeholder="Goal in ETH" required>
+
+                <label for="duration">Duration (in Days):</label>
+                <input type="number" id="duration" placeholder="Duration in Days" required>
+
+                <button type="submit">Create Campaign</button>
+            </form>
+        </section>
+
+        <!-- View Campaigns -->
+        <section>
+            <h2>Active Campaigns</h2>
+            <div id="campaignList"></div>
+        </section>
+
+        <!-- Donate to Campaign -->
+        <section>
+            <h2>Donate to a Campaign</h2>
+            <form id="donateForm">
+                <label for="tokenId">Campaign ID:</label>
+                <input type="number" id="tokenId" placeholder="Campaign ID" required>
+
+                <label for="amount">Amount (in ETH):</label>
+                <input type="number" id="amount" step="0.01" placeholder="Amount in ETH" required>
+
+                <button type="submit">Donate</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.ethers.io/lib/ethers-6.7.0.umd.min.js" type="application/javascript"></script>
+    <script>
+        // Replace with your contract ABI and address
+        const CONTRACT_ABI = [ /* Paste your ABI here */];
+        const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS";
+
+        let provider, signer, contract;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = await provider.getSigner();
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+                document.getElementById("walletStatus").innerText = `Connected: ${await signer.getAddress()}`;
+            } else {
+                alert("Please install MetaMask or another Ethereum wallet.");
+            }
+        }
+
+        async function loadCampaigns() {
+            const campaignList = document.getElementById("campaignList");
+            campaignList.innerHTML = "";
+
+            const nextTokenId = await contract.nextTokenId();
+            for (let i = 0; i < nextTokenId; i++) {
+                try {
+                    const campaign = await contract.campaigns(i);
+                    const timeLeft = await contract.timeLeft(i);
+
+                    const campaignCard = `
+            <article>
+              <h3>Campaign ID: ${i}</h3>
+              <p>Recipient: ${campaign.recipient}</p>
+              <p>Goal: ${ethers.formatEther(campaign.goal)} ETH</p>
+              <p>Raised: ${ethers.formatEther(campaign.raisedAmount)} ETH</p>
+              <p>Time Left: ${timeLeft} seconds</p>
+            </article>
+          `;
+                    campaignList.innerHTML += campaignCard;
+                } catch (error) {
+                    console.error(`Error loading campaign ${i}:`, error);
+                }
+            }
+        }
+
+        document.getElementById("createCampaignForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const recipient = document.getElementById("recipient").value;
+            const publicKey = document.getElementById("publicKey").value;
+            const goal = ethers.parseEther(document.getElementById("goal").value);
+            const duration = document.getElementById("duration").value;
+
+            try {
+                const tx = await contract.createCampaign(recipient, publicKey, goal, duration, {
+                    value: ethers.parseEther("0.01"), // Optional fee for creating a campaign
+                });
+                await tx.wait();
+                alert("Campaign created successfully!");
+                loadCampaigns();
+            } catch (error) {
+                console.error("Error creating campaign:", error);
+                alert("Failed to create campaign.");
+            }
+        });
+
+        document.getElementById("donateForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const tokenId = document.getElementById("tokenId").value;
+            const amount = ethers.parseEther(document.getElementById("amount").value);
+
+            try {
+                const tx = await contract.contribute(tokenId, "Anonymous", { value: amount });
+                await tx.wait();
+                alert("Donation successful!");
+                loadCampaigns();
+            } catch (error) {
+                console.error("Error donating:", error);
+                alert("Failed to donate.");
+            }
+        });
+
+        // Load campaigns on page load
+        window.onload = () => {
+            loadCampaigns();
+        };
+    </script>
+</body>
+
+</html>

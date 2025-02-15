@@ -1,0 +1,111 @@
+:root {
+
+  --activeIcon: #a16d12;
+  --delay: 0s;
+  /* --background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%); */
+  --body-bg-color: radial-gradient(circle, #1a2049 0%, #13162f 100%);
+  --svg-color: #fff;
+  --popup-bg-color: #ffa51e;
+  --popup-title-color: #192cb7;
+
+    --navItem:  rgb(161, 18, 18);
+    --c0: #f8f8f8;
+    /* --c1: pink; */
+    --c1: #4255d4;
+    --c1:#a544ad;
+    --c2: #29abe2;
+    --c3: #050507;
+    --c4: #6665c9;
+	--color-text: #fff;
+	--color-bg: #fff;
+	--color-link: #000;
+	--color-info: #000;
+	--color-link-hover: var(--c1);
+  
+  
+  --svg-color: #fff;
+  --popup-bg-color: #e2e8f0;
+  --popup-bg-border: #192cb7;
+  --popup-title-color: #192cb7;
+  --box-bg-color: #81ac00;
+  --box-bg-color: #b5b7ba;
+
+  --bckmodal:#262626;
+  --border: #ff006c;
+
+  --card-bg-color:  radial-gradient(circle, #1a2049 0%, #13162f 100%);
+  --header-bg-color: radial-gradient(circle, #141834 0%, #13162f 100%);
+  --box-shadow-bg-color:  #0e0e23;
+  --theme-bg-color: #27292d;
+  --border-color: #323336;
+  --body-color: #9b9ca7;
+  --active-conversation-bg: linear-gradient( to right, rgba(47, 50, 56, 0.54), rgba(238, 242, 244, 0) 100% );
+  --msg-hover-bg: rgba(47, 50, 56, 0.5);
+  --btn-disabled:rgb(5, 82, 121);
+  --chat-text-bg: #383b40;
+  --chat-text-color: #b5b7ba;
+  --msg-date: #626466;
+  --msg-message: var(--msg-date);
+  --overlay-bg: linear-gradient( to bottom, rgba(0, 0, 0, 0) 0%, #27292d 65%, #27292d 100% );
+  --input-bg: #2f3236;
+  --chat-header-bg: linear-gradient( to bottom, #27292d 0%, #27292d 78%, rgba(255, 255, 255, 0) 100% );
+  --settings-icon-color: #7c7e80;
+  --developer-color: var(--border-color);
+  --button-bg-color: #393b40;
+  --button-color: var(--body-color);
+  --input-chat-color: #6f7073;
+  --detail-font-color: var(--input-chat-color);
+
+  
+  
+   /* Default light theme */
+   /* :root { */
+
+    /* --background: #ffffff; */
+    /* --background-color: #ffffff; */
+    /* Light background */
+    --text-color: #000000;
+    /* Dark text */
+    --button-bg-color: #3b82f6;
+    /* Blue button */
+    --button-text-color: #ffffff;
+    /* White text on button */
+    /* --bk: linear-gradient(var(--background-color), var(--button-text-color)); */
+    --modal-bg-color: #ffffff;
+    /* Modal background */
+    --modal-text-color: #000000;
+    /* Text in modal */
+    --icon-success-color: #10B981;
+    /* Success icon color */
+    --icon-error-color: #EF4444;
+    /* Error icon color */
+    --close-button-bg: #f87171;
+    /* Close button color */
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --c0: #ffaaff;
+    --c1: #fff;
+
+    /* --background-color: #121212; */
+    /* Dark background */
+    --text-color: #E0E0E0;
+
+
+    --button-bg-color: #3b82f6;
+    /* Blue button */
+    --button-text-color: #ffffff;
+    /* White text */
+    /* --bk: linear-gradient(var(--c1), var(--c0)); */
+    --modal-bg-color: #1E1E1E;
+    /* Dark modal background */
+    --modal-text-color: #E0E0E0;
+    /* Light text in modal */
+    --icon-success-color: #10B981;
+    /* Green success icon */
+    --icon-error-color: #EF4444;
+    /* Red error icon */
+    --close-button-bg: #f87171;
+    /* Close button color */
+}

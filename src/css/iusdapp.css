@@ -2058,3 +2058,14 @@ margin: .44em;
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   } */
+
+
+  .offline{
+	color:red
+  }
+  .online{
+	color: green;
+  }
+  .capital{
+	font-variant-caps: all-petite-caps;
+}

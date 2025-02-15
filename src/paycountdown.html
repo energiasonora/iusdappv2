@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Modal with Countdown</title>
+  <!-- Pico.css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <!-- Ethers.js v6 -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6"></script>
+  <!-- QR Code Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+  <main class="container">
+    <h1>Transaction Payment</h1>
+    <button id="openModalBtn" class="secondary">Open Payment Modal</button>
+
+    <!--PAYMENT/SIGN Modal -->
+    <dialog id="paymentModal" class="modal">
+      <article>
+        <header>
+          <h2>Scan QR Code to Pay/Sign</h2>
+        </header>
+        <div id="qrCodeContainer" style="text-align: center;"></div>
+        <p id="countdown" style="font-size: 1.2rem; margin-top: 1rem;">Expires in: 15:00</p>
+        <footer>
+          <button id="closeModalBtn" class="outline">Close</button>
+        </footer>
+      </article>
+    </dialog>
+    <!--fin PAYMENT/SIGN Modal -->
+
+
+  </main>
+
+  <script>
+    // Select DOM elements
+const openModalBtn = document.getElementById("openModalBtn");
+const paymentModal = document.getElementById("paymentModal");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const qrCodeContainer = document.getElementById("qrCodeContainer");
+const countdownElement = document.getElementById("countdown");
+
+let countdownInterval;
+let remainingTime = 15 * 60; // 15 minutes in seconds
+
+// Function to open the modal and generate QR code
+function openModal() {
+  // Simulate generating a transaction request or payment link
+  const txRequest = "ethereum:0xYourContractAddress?value=10000000000000000"; // Example Ethereum URI
+
+  // Generate QR Code
+  QRCode.toCanvas(txRequest, { width: 256 }, (error, canvas) => {
+    if (error) {
+      console.error("Error generating QR code:", error);
+      return;
+    }
+    qrCodeContainer.innerHTML = ""; // Clear previous QR code
+    qrCodeContainer.appendChild(canvas); // Append new QR code
+  });
+
+  // Reset countdown
+  remainingTime = 15 * 60;
+  updateCountdown();
+
+  // Show modal
+  paymentModal.showModal();
+
+  // Start countdown
+  startCountdown();
+}
+
+// Function to close the modal
+function closeModal() {
+  clearInterval(countdownInterval); // Stop countdown
+  paymentModal.close(); // Close modal
+}
+
+// Function to start the countdown
+function startCountdown() {
+  countdownInterval = setInterval(() => {
+    remainingTime--;
+    if (remainingTime <= 0) {
+      clearInterval(countdownInterval);
+      closeModal();
+    }
+    updateCountdown();
+  }, 1000);
+}
+
+// Function to update the countdown display
+function updateCountdown() {
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+  countdownElement.textContent = `Expires in: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
+// Event listeners
+openModalBtn.addEventListener("click", openModal);
+closeModalBtn.addEventListener("click", closeModal);
+
+// Close modal when clicking outside of it
+paymentModal.addEventListener("click", (event) => {
+  if (event.target === paymentModal) {
+    closeModal();
+  }
+});
+  </script>
+  <!-- <script src="app.js"></script> -->
+</body>
+</html>
