@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Campaign</title>
+    <!-- Pico CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <!-- Ethers.js -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Create a Campaign</h1>
+        <form id="campaignForm">
+            <label for="publicKey">Recipient Public Key</label>
+            <input type="text" id="publicKey" placeholder="Enter your public key" required>
+
+            <label for="goal">Goal Amount (ETH)</label>
+            <input type="number" id="goal" step="0.01" placeholder="e.g., 1.5" required>
+
+            <label for="duration">Duration (Days)</label>
+            <input type="number" id="duration" placeholder="e.g., 7" required>
+
+            <button type="submit" class="contrast">Create Campaign</button>
+        </form>
+
+        <div id="status" class="hidden">
+            <p><strong>Status:</strong> <span id="statusMessage"></span></p>
+        </div>
+    </main>
+
+    <script>
+        // Connect to Ethereum provider (MetaMask)
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer;
+        let contract;
+
+        // Replace with your contract ABI and address
+        const contractABI = [ /* ABI of your contract */];
+        const contractAddress = "0xYourContractAddressHere";
+
+        // Initialize the contract and signer
+        async function init() {
+            if (window.ethereum) {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                signer = provider.getSigner();
+                contract = new ethers.Contract(contractAddress, contractABI, signer);
+            } else {
+                alert("Please install MetaMask or use an Ethereum-enabled browser.");
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('campaignForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Get form values
+            const publicKey = document.getElementById('publicKey').value;
+            const goal = ethers.utils.parseEther(document.getElementById('goal').value);
+            const duration = parseInt(document.getElementById('duration').value);
+
+            // Validate inputs
+            if (!publicKey || !goal || !duration) {
+                setStatus("Please fill in all fields.", "error");
+                return;
+            }
+
+            try {
+                // Call the createCampaign function
+                setStatus("Creating campaign...", "info");
+
+                const tx = await contract.createCampaign(
+                    publicKey,
+                    goal,
+                    duration,
+                    { gasLimit: 300000 } // Adjust gas limit as needed
+                );
+
+                // Wait for the transaction to be mined
+                await tx.wait();
+
+                setStatus("Campaign created successfully!", "success");
+            } catch (error) {
+                console.error(error);
+                setStatus("Error creating campaign: " + error.message, "error");
+            }
+        });
+
+        // Update status message
+        function setStatus(message, type = "info") {
+            const statusDiv = document.getElementById('status');
+            const statusMessage = document.getElementById('statusMessage');
+
+            statusMessage.textContent = message;
+            statusDiv.className = `box ${type}`;
+            statusDiv.classList.remove('hidden');
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+
+</html>

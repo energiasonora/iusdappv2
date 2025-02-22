@@ -566,7 +566,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" data-translate="scanqr"  >Scan QR</h5>
+					<h5 class="modal-title" data-translate="scanqr">Scan QR</h5>
 				</div>
 
 				<div class="modal-body"  >
@@ -1316,6 +1316,46 @@
 		</div>
 	  </div>
 	<!-- fin PAY/SIGN WITH QR MODAL  -->
+	 
+
+	<!--  PAY/SIGN WITH QR MODAL v2  -->
+	<!-- Modal -->
+<div class="modal fade" id="scansignModal" tabindex="-1" aria-labelledby="scansignModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Sign <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" height="30px">
+				<!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+				<path fill="currentColor" d="M192 128c0-17.7 14.3-32 32-32s32 14.3 32 32l0 7.8c0 27.7-2.4 55.3-7.1 82.5l-84.4 25.3c-40.6 12.2-68.4 49.6-68.4 92l0 71.9c0 40 32.5 72.5 72.5 72.5c26 0 50-13.9 62.9-36.5l13.9-24.3c26.8-47 46.5-97.7 58.4-150.5l94.4-28.3-12.5 37.5c-3.3 9.8-1.6 20.5 4.4 28.8s15.7 13.3 26 13.3l128 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-83.6 0 18-53.9c3.8-11.3 .9-23.8-7.4-32.4s-20.7-11.8-32.2-8.4L316.4 198.1c2.4-20.7 3.6-41.4 3.6-62.3l0-7.8c0-53-43-96-96-96s-96 43-96 96l0 32c0 17.7 14.3 32 32 32s32-14.3 32-32l0-32zm-9.2 177l49-14.7c-10.4 33.8-24.5 66.4-42.1 97.2l-13.9 24.3c-1.5 2.6-4.3 4.3-7.4 4.3c-4.7 0-8.5-3.8-8.5-8.5l0-71.9c0-14.1 9.3-26.6 22.8-30.7zM24 368c-13.3 0-24 10.7-24 24s10.7 24 24 24l40.3 0c-.2-2.8-.3-5.6-.3-8.5L64 368l-40 0zm592 48c13.3 0 24-10.7 24-24s-10.7-24-24-24l-310.1 0c-6.7 16.3-14.2 32.3-22.3 48L616 416z"/></svg>
+
+		  </h5>
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<div class="modal-body">
+		  <!-- Buttons -->
+		  <div class="d-grid gap-2">
+			<button type="button" class="btn btn-secondary">Escanear código QR</button>
+			<button type="button" class="btn btn-secondary" id="pasteAndSignBtn">Paste and Sign</button>
+		  </div>
+  
+		  <!-- Input Field (Initially Hidden) -->
+		  <div id="pasteField" style="display: none; margin-top: 15px;">
+			<!-- <label for="pastedCommand" class="form-label">Pasted Command:</label>
+			<input type="text" class="form-control" id="pastedCommand" placeholder="Paste your command here"> -->
+
+			<div id="pastedTxToSign"></div>
+
+		  </div>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+	<!-- fin PAY/SIGN WITH QR MODAL  v2-->
+
 
 	<!-- /*********************************************************************************************
   .) FIN MODALS
@@ -1448,25 +1488,7 @@
 
 
 		// UX LOAD IMPROVERS
-
-		// function saveLastUXInfo(data) {
-		// 	const { chainName, chainId, tokenName, explorer, addr, gasBalance, formatedBalance, contractAddr } = data;
-
-		// 	// Create the object to store in localStorage
-		// 	const lastUXInfo = {
-		// 		chainName,
-		// 		chainId,
-		// 		tokenName,
-		// 		explorer,
-		// 		addr,
-		// 		gasBalance,
-		// 		formatedBalance: formatedBalance || null, // Include only if provided
-		// 		contractAddr: contractAddr || null,       // Include only if provided
-		// 	};
-
-		// 	// Save to localStorage as a JSON string
-		// 	localStorage.setItem("lastUXInfo", JSON.stringify(lastUXInfo));
-		// 	}
+ 
 		function saveLastUXInfo(data) {
   const {
     chainName,
@@ -1799,6 +1821,7 @@
 			//  FIN CHECK IF USER COMES FROM A LINK
 			// ----------------------------------------------------------------------------------
 
+			startBalanceListener();
 
 			// ----------------------------------------------------------------------------------
 			// SET PREFERED CHAIN OPTION
@@ -1816,49 +1839,83 @@
 			// -----------------------------------------
 			// para que lo uso?, historial?
 			await getChatAddresses()
-
-			// recien aca carga los contactos!
-			// await loadContacts()
-			// await loadContacts(signer.address)
-
-
-			// if token is set
-			// startBalanceListener();
-			// setInterval(reloadBalance(), 15000);
-			// setInterval(loadToken, 15000);
-
-
 			await listenAllNewAddresses()
-
-
 
 		}
 		init()
 
 		// ----------------------
 		// Start the balance listener
+// Function to check balance
+// async function checkBalance() {
+//     console.log('⏰ BALANCE CHECKED!');
+//     try {
+//         // const balance = await tokenContract.balanceOf(walletAddress);
+//         reloadBalance();
+//         console.log(`Current balance: ${ethers.formatUnits(balance, 18)} tokens`);
+//     } catch (error) {
+//         console.error('Error fetching balance:', error);
+//     }
+// }
 
-		// Function to check balance
-		async function checkBalance() {
-			console.log('⏰ BALANCE CHECKED! ')
-			try {
-				// const balance = await tokenContract.balanceOf(walletAddress);
-				reloadBalance()
+// Set interval to check balance every 15 seconds
+const interval = 15000; // 15 seconds
 
-				console.log(`Current balance: ${ethers.formatUnits(balance, 18)} tokens`);
-			} catch (error) {
-				console.error('Error fetching balance:', error);
-			}
-		}
+let balanceCheckInterval;
 
-		// Set interval to check balance every 15 seconds
-		const interval = 15000; // 15 seconds
+// Function to start the balance listener
+function startBalanceListener() {
+    console.log('Starting balance listener...');
+	
+    // Start the interval only if the page is visible
+    if (document.visibilityState === 'visible') {
+		console.warn('STARTING reloadBalances');
+        balanceCheckInterval = setInterval(reloadBalances, interval);
+    }
 
-		// Start the balance listener
-		function startBalanceListener() {
-			console.log('Starting balance listener...');
-			setInterval(checkBalance, interval);
-		}
+    // Listen for visibility changes
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+}
+
+// Function to handle visibility changes
+function handleVisibilityChange() {
+    if (document.visibilityState === 'visible') {
+        console.log('Tab is visible, starting balance checks...');
+        // Restart the interval if the tab becomes visible
+        if (!balanceCheckInterval) {
+            balanceCheckInterval = setInterval(reloadBalances, interval);
+        }
+    } else {
+        console.log('Tab is hidden, stopping balance checks...');
+        // Clear the interval if the tab becomes hidden
+        clearInterval(balanceCheckInterval);
+        balanceCheckInterval = null;
+    }
+}
+
+// Start the balance listener
+// startBalanceListener();
+		// // Function to check balance
+		// async function checkBalance() {
+		// 	console.log('⏰ BALANCE CHECKED! ')
+		// 	try {
+		// 		// const balance = await tokenContract.balanceOf(walletAddress);
+		// 		reloadBalance()
+
+		// 		console.log(`Current balance: ${ethers.formatUnits(balance, 18)} tokens`);
+		// 	} catch (error) {
+		// 		console.error('Error fetching balance:', error);
+		// 	}
+		// }
+
+		// // Set interval to check balance every 15 seconds
+		// const interval = 15000; // 15 seconds
+
+		// // Start the balance listener
+		// function startBalanceListener() {
+		// 	console.log('Starting balance listener...');
+		// 	setInterval(checkBalance, interval);
+		// }
 
 
 		// ------------------------------------------------------
@@ -1919,6 +1976,9 @@
 				isFullscreen = false;
 			}
 		}
+
+
+		
 
 
 
@@ -2093,6 +2153,28 @@ function playtxReceived() {
 			synth.triggerAttackRelease("C7", "8n");
 		}
 
+		 // Create a function to play the bubble pop sound
+		 function playBubblePop() {
+      // Create a synth with a custom envelope and filter
+      const bubbleSynth = new Tone.Synth({
+        oscillator: {
+          type: 'sine', // Sine wave for a smooth, round sound
+        },
+        envelope: {
+          attack: 0.01,  // Very fast attack
+          decay: 0.3,    // Medium decay to fade out quickly
+          sustain: 0,    // No sustain (short sound)
+          release: 0.1   // Short release
+        }
+      }).toDestination();
+
+      // Add a lowpass filter to soften the sound
+      const filter = new Tone.Filter(800, 'lowpass').toDestination();
+      bubbleSynth.connect(filter);
+
+      // Trigger the note (C5 is a good starting pitch for a bubble-like sound)
+      bubbleSynth.triggerAttackRelease('C5', '8n'); // Play the note for an 8th note duration
+    }
 		/*********************************************************************************************
 		.) MANAGE MODALS
 		**********************************************************************************************/
@@ -2260,35 +2342,102 @@ function playtxReceived() {
             }, 1500);
         }
 
-		function copy2clipboard(text) {
-			// let text = `${ipfsGateway}${cid}`;
-			console.log('COPIED!', text)
-			let textLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${text}">${text}</a>`;
+		// ----------------------------------------------------------------------
+		// ----------------------------------------------------------------------
+		  /*********************************************************************************************
+        .)  COPYFadd 
+        **********************************************************************************************/
+        function copy2clipboard(text) {
+            let thisEl= event.target;
+ 
+            try {
+              // Check if Clipboard API is supported
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                  console.log('Copied to clipboard:', text);
+                  showSuccessIcon(thisEl); // Use event.target to get the clicked element
 
-			if (window.clipboardData && window.clipboardData.setData) {
-				ToastTop.fire('Copied to Clipboard', textLink, "success");
-				return window.clipboardData.setData("Text", text);
-			}
-			else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-				var textarea = document.createElement("textarea");
-				textarea.textContent = text;
-				textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
-				document.body.appendChild(textarea);
-				textarea.select();
-				try {
-					ToastTop.fire('Copied to Clipboard!', textLink, "success");
-					return document.execCommand("copy");  // Security exception may be thrown by some browsers.
-				}
-				catch (ex) {
-					console.warn("Copy to clipboard failed.", ex);
-					return prompt("Copy to clipboard: Ctrl+C, Enter", text);
-				}
-				finally {
-					document.body.removeChild(textarea);
-				}
-			}
-		}
+                }).catch(err => {
+                  console.error('Failed to copy using Clipboard API:', err);
+                  fallbackCopy(text); // Fallback to execCommand if API fails
+                  showSuccessIcon(thisEl); // Use event.target to get the clicked element
 
+                });
+              } else {
+                  fallbackCopy(text); // Fallback for older browsers
+                  showSuccessIcon(thisEl); // Use event.target to get the clicked element
+
+              }
+            } catch (err) {
+              console.error('Copy failed:', err);
+            }
+          }
+          
+          function fallbackCopy(text) {
+            // Create a temporary, invisible textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed'; // Prevent scrolling issues
+            textarea.style.opacity = '0'; // Invisible
+            textarea.style.zIndex = '-1'; // Avoid modal interference
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              document.execCommand('copy');
+              console.log('Copied to clipboard (fallback):', text);
+            } catch (err) {
+              console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+          }
+            
+          function showSuccessIcon(element) {
+                        const svgElement = element.closest("svg");
+            if (!svgElement) return;
+
+            
+            svgElement.innerHTML = `
+                <path fill="green" d="M504 75c-9.4-9.4-24.6-9.4-33.9 0L184.4 360.7l-112-112c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l128 128c9.4 9.4 24.6 9.4 33.9 0l304-304c9.3-9.4 9.3-24.6-.1-33.9z"></path>
+            `;
+            setTimeout(() => {
+                svgElement.innerHTML = `<path fill="currentColor" d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"></path>`
+            }, 1500);
+        }
+
+
+		// --------------
+		// function copy2clipboard(text) {
+		// 	console.log('COPIED!', text)
+		// 	let textLink = `<a target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${text}">${text}</a>`;
+
+		// 	if (window.clipboardData && window.clipboardData.setData) {
+		// 		ToastTop.fire('Copied to Clipboard', textLink, "success");
+		// 		return window.clipboardData.setData("Text", text);
+		// 	}
+		// 	else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+		// 		var textarea = document.createElement("textarea");
+		// 		textarea.textContent = text;
+		// 		textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+		// 		document.body.appendChild(textarea);
+		// 		textarea.select();
+		// 		try {
+		// 			ToastTop.fire('Copied to Clipboard!', textLink, "success");
+		// 			return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+		// 		}
+		// 		catch (ex) {
+		// 			console.warn("Copy to clipboard failed.", ex);
+		// 			return prompt("Copy to clipboard: Ctrl+C, Enter", text);
+		// 		}
+		// 		finally {
+		// 			document.body.removeChild(textarea);
+		// 		}
+		// 	}
+		// }
+
+
+		// ----------------------------------------------------------------------
+		// ----------------------------------------------------------------------
+		// ----------------------------------------------------------------------
 		function shortAddressETH(address) {
 			if (typeof address !== 'string' || address.length < 42) {
 				throw new Error('Invalid Ethereum address');
@@ -2302,36 +2451,6 @@ function playtxReceived() {
 			}
 			return address.substring(0, 6) + "..." + address.substring(address.length - 4);
 		}
-
-		async function reloadBalance() {
-			console.log('⏰ ⏰ ⏰reloadBalance()')
-			console.log('⏰ ⏰ REHACER ESTA FUNCION')
-
-			return
-			let network = await checkNetwork();
-			console.log('network:', network)
-
-			if (network == false) {
-				console.log('network FALSE:', network)
-				headerNotes.innerHTML = `  <div class="alert alert-danger alert-dismissible fade show headerNotes"> <button type="button" class="btn-close" data-bs-dismiss="alert"></button> <strong>Danger!</strong> Error de red. </div>`
-
-				return
-			}
-			else if (network == true) {
-				console.log('network TRUE:', network)
-			}
-
-			let addr = document.getElementById('yourAddress').getAttribute('address');
-			let balance = await checkERC20Balance(addr)
-			let gasBalance = await checkGasBalance(addr)
-			userData.innerHTML = `			
-			<a   target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS}">Balance: ${balance}</a>
-			<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
-			<br>
-		<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
-			`;
-		}
-
 
 
 
@@ -2834,13 +2953,16 @@ Wallet encrypted and saved into localstorage
 			<svg id='simplesend' onclick="event.stopPropagation();simpleSend()" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <defs > <clipPath clipPathUnits="userSpaceOnUse" > <rect width="106.35429" height="78.068573" x="9.0514288" y="187.25142" /> </clipPath> </defs> <g transform="matrix(1.0583559,0,0,1.0583559,678.18141,477.32181)"> <path fill="currentColor" d="M 122.34961 22.404297 C 102.90845 22.541942 83.4884 23.208407 64.123047 25.130859 C 32.005914 32.74301 13.633824 64.1977 0.21875 91.888672 C 0.59031759 190.50417 -1.4164071 289.14446 1.4707031 387.73828 C -3.2139611 442.01413 47.311879 490.4789 100.67578 488.32227 C 204.56767 490.26899 308.49622 489.76604 412.37695 487.41016 C 455.00842 491.66379 499.19766 461.88412 507.98047 419.36328 C 511.41267 368.1022 508.76569 316.55734 508.78125 265.18555 C 507.78692 215.81739 510.67596 166.53718 511.68359 117.21094 C 515.55612 76.22511 486.62687 34.631163 445.61328 27.0625 C 370.4731 21.75639 294.91505 23.445051 219.58984 22.759766 C 187.21286 23.414564 154.75154 22.174889 122.34961 22.404297 z M 201.33008 50.462891 C 212.79999 49.869523 223.82167 54.325756 218.06445 67.503906 C 209.21938 71.892696 199.05142 70.553919 189.57227 69.984375 C 171.09491 60.335654 186.58305 51.225791 201.33008 50.462891 z M 378.60742 50.566406 C 390.32146 49.91717 401.56028 54.29308 395.27734 67.503906 C 386.45439 71.191451 376.63239 70.842293 367.3125 69.888672 C 347.70261 60.542435 363.54651 51.401138 378.60742 50.566406 z M 322.3125 50.871094 C 331.96784 50.788552 340.38367 54.86352 337.62695 66.570312 C 330.16888 73.751755 318.8153 69.887874 309.69727 69.847656 C 286.68559 62.694044 306.22027 51.008663 322.3125 50.871094 z M 264.42578 50.941406 C 274.04887 51.473285 281.70092 56.245902 276.58398 68.197266 C 268.02568 71.247765 258.77202 70.661056 249.875 70.027344 C 226.87374 60.949739 248.38729 50.054941 264.42578 50.941406 z M 142.29883 51.388672 C 153.70762 50.793577 164.46957 55.141948 159.0625 68.197266 C 148.96874 70.847251 138.41711 70.813462 128.07422 70.197266 C 111.89302 61.089951 127.63038 52.153794 142.29883 51.388672 z M 77.707031 52.076172 C 92.665231 51.670858 108.69779 64.278245 87.421875 71.65625 C 80.094115 76.927688 59.493487 74.453071 61.580078 62.40625 C 64.330772 55.131697 70.90785 52.260405 77.707031 52.076172 z M 437.95117 52.96875 C 446.58069 53.499952 453.61391 57.964614 448.89453 69.212891 C 443.09003 74.370841 435.13393 71.031306 428.54102 69.896484 C 404.75443 62.12546 423.56864 52.083413 437.95117 52.96875 z M 467.25 80.292969 C 476.05807 81.586828 488.63451 99.731074 478.24023 109.76172 C 466.60642 116.16445 463.30811 98.48209 460.08594 91.316406 C 460.02046 82.597419 463.24633 79.704851 467.25 80.292969 z M 46.603516 86.378906 C 55.239528 88.381655 54.94777 115.64672 45.767578 124.4668 C 27.678762 132.02244 32.290326 103.51577 34.990234 94.416016 C 39.854266 87.850904 43.724845 85.711323 46.603516 86.378906 z M 475.48633 127.70508 C 482.88498 128.68897 484.4465 151.48356 480.40625 160.5957 C 466.82241 175.97111 460.27278 144.01616 466.13281 135.30664 C 469.90454 129.47352 473.02011 127.37711 475.48633 127.70508 z M 40.814453 145.95508 C 49.217435 147.73322 53.436635 176.59025 44.138672 185.625 C 25.792326 195.14735 31.36027 164.06133 31.361328 154.93945 C 34.746186 147.77739 38.013459 145.36236 40.814453 145.95508 z M 40.980469 208.54102 C 52.108736 209.14498 50.554573 235.88456 45.646484 247.69336 C 23.833505 257.07186 35.227386 222.776 31.134766 212.80273 C 35.168308 209.6538 38.412407 208.40164 40.980469 208.54102 z M 39.839844 272.02734 C 47.059432 271.21967 54.10366 277.1786 48.970703 290.89062 C 53.446289 317.27501 29.027322 321.93058 29.65625 293.76172 C 25.225649 280.40896 32.620256 272.83501 39.839844 272.02734 z M 41.21875 334.38086 C 52.218054 336.41594 49.773587 364.74996 44.185547 374.0332 C 22.790671 382.03895 32.805162 348.13594 31.330078 337.73047 C 35.426918 334.84191 38.680449 333.91123 41.21875 334.38086 z M 471.94531 344.46094 C 478.73409 344.06655 486.56003 350.35745 480.28711 360.78516 C 480.87081 383.10497 465.25145 377.82384 465.10938 358.71484 C 462.01336 349.11908 466.66515 344.76768 471.94531 344.46094 z M 470.67188 395.33984 C 478.65718 394.06626 486.55386 416.73373 475.44727 424.66406 C 464.24942 442.94477 451.89416 417.35385 463.35742 406.02734 C 465.33878 398.85039 468.01011 395.76437 470.67188 395.33984 z M 39.148438 396.43164 C 47.847352 396.03896 61.578726 413.3123 53.775391 426.22266 C 43.216724 433.89031 34.462757 418.70246 32.900391 409.98633 C 32.280075 400.43953 35.194385 396.61013 39.148438 396.43164 z M 434.27539 440.71289 C 446.12895 441.04492 455.68569 447.75243 440.74805 457.34375 C 433.99085 464.01104 415.7483 463.43418 412.89062 453.14844 C 414.44671 444.05227 425.05595 440.45464 434.27539 440.71289 z M 81.375 441.21289 C 91.803448 441.12577 102.40272 445.68911 97.503906 458.07031 C 90.667329 462.10042 82.378987 460.01552 75.302734 457.87891 C 54.842676 449.12311 67.966996 441.32491 81.375 441.21289 z M 198.75195 442.04102 C 213.4483 442.93836 227.47155 463.64651 203.53711 462.19922 C 187.4029 470.94821 164.91368 452.25832 188.92773 445.10156 C 191.93254 442.68284 195.36049 441.83394 198.75195 442.04102 z M 141.35742 442.52539 C 154.60522 442.21689 166.14334 462.95414 145.95898 462.19336 C 121.76352 471.47841 104.66936 448.36725 135.66211 444.07031 C 137.537 443.04316 139.46488 442.56946 141.35742 442.52539 z M 263.73242 443.12109 C 277.19347 442.15213 282.34051 468.51692 262.22656 462.17383 L 261.14258 462.19141 C 238.2028 472.70994 231.45057 437.16585 257.50391 445.38477 C 259.71688 443.95564 261.80941 443.25952 263.73242 443.12109 z M 379.1582 443.6582 C 388.70431 443.42939 397.27041 447.13603 395.02344 458.26562 C 386.99499 462.49158 377.5563 462.2952 368.7793 461.44922 C 344.61406 455.35156 363.24802 444.03956 379.1582 443.6582 z M 319.95703 443.70898 C 329.25388 443.54534 337.67159 447.22686 336.33203 457.82812 C 328.18613 464.52763 316.89905 461.83691 307.25195 462.34961 C 286.52546 454.93748 304.46229 443.98172 319.95703 443.70898 z " transform="matrix(0.94486174,0,0,0.94486174,-640.78767,-451.00312)" /> <ellipse cx="-202.56619" cy="-210.81996" rx="27.581959" ry="26.432711" /> <path d="m -273.24879,-343.55709 c 13.57934,10.94417 4.11256,28.6271 3.41272,42.97431 -10.35834,67.32918 -20.71667,134.65835 -31.07501,201.987523 -3.43922,19.509709 -24.89016,15.261767 -37.40273,7.947861 -17.40404,-7.232275 -34.80807,-14.464554 -52.21211,-21.696824 -14.03121,14.463338 -26.74618,30.398355 -41.64405,43.894173 -18.22479,9.955603 -29.72162,-11.436298 -26.27918,-27.030747 0.34571,-12.376906 -0.72391,-24.885926 0.5957,-37.171936 27.04118,-31.56409 56.15653,-61.55691 84.00114,-92.51238 11.76322,-6.14486 16.85643,-30.97909 -2.7603,-22.80647 -37.13867,32.99389 -74.27734,65.98779 -111.41601,98.98168 -17.34792,-9.11662 -35.49459,-16.87377 -52.30927,-26.89798 -15.32278,-14.96944 2.6642,-30.2801 16.70772,-36.00336 77.25242,-44.14424 154.50483,-88.28848 231.75725,-132.43272 5.69186,-3.32683 13.22323,-3.00646 18.62413,0.76687 z" /> </g> </svg>
 
 
-<svg id="scan-icon" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48L0 80zM64 96l0 64 64 0 0-64L64 96zM0 336c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM304 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm80 64l-64 0 0 64 64 0 0-64zM256 304c0-8.8 7.2-16 16-16l64 0c8.8 0 16 7.2 16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16l0 96c0 8.8-7.2 16-16 16l-64 0c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-160zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z"/></svg>
+<svg id="scan-icon" onclick="event.stopPropagation();scanAndSign()"  xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48L0 80zM64 96l0 64 64 0 0-64L64 96zM0 336c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM304 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm80 64l-64 0 0 64 64 0 0-64zM256 304c0-8.8 7.2-16 16-16l64 0c8.8 0 16 7.2 16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16l0 96c0 8.8-7.2 16-16 16l-64 0c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-160zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z"/></svg>
 			
-			`;
-			console.log(`Your address: ${userAddress} `)
-			console.log(`Your did: ${did} `)
-		}
+<svg  onclick="event.stopPropagation();scanAndSign()"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"  height="1em" > <path fill="currentColor"d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-19.3c-2.7 1.1-5.4 2-8.2 2.7l-60.1 15c-3 .7-6 1.2-9 1.4c-.9 .1-1.8 .2-2.7 .2l-64 0c-6.1 0-11.6-3.4-14.3-8.8l-8.8-17.7c-1.7-3.4-5.1-5.5-8.8-5.5s-7.2 2.1-8.8 5.5l-8.8 17.7c-2.9 5.9-9.2 9.4-15.7 8.8s-12.1-5.1-13.9-11.3L144 381l-9.8 32.8c-6.1 20.3-24.8 34.2-46 34.2L80 448c-8.8 0-16-7.2-16-16s7.2-16 16-16l8.2 0c7.1 0 13.3-4.6 15.3-11.4l14.9-49.5c3.4-11.3 13.8-19.1 25.6-19.1s22.2 7.8 25.6 19.1l11.6 38.6c7.4-6.2 16.8-9.7 26.8-9.7c15.9 0 30.4 9 37.5 23.2l4.4 8.8 8.9 0c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7L384 203.6l0-43.6-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM549.8 139.7c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM311.9 321c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L512.1 262.7l-71-71L311.9 321z"/></svg>
 
+`;
+console.log(`Your address: ${userAddress} `)
+console.log(`Your did: ${did} `)
+}
+
+// <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path fill="currentColor"  d="M192 128c0-17.7 14.3-32 32-32s32 14.3 32 32l0 7.8c0 27.7-2.4 55.3-7.1 82.5l-84.4 25.3c-40.6 12.2-68.4 49.6-68.4 92l0 71.9c0 40 32.5 72.5 72.5 72.5c26 0 50-13.9 62.9-36.5l13.9-24.3c26.8-47 46.5-97.7 58.4-150.5l94.4-28.3-12.5 37.5c-3.3 9.8-1.6 20.5 4.4 28.8s15.7 13.3 26 13.3l128 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-83.6 0 18-53.9c3.8-11.3 .9-23.8-7.4-32.4s-20.7-11.8-32.2-8.4L316.4 198.1c2.4-20.7 3.6-41.4 3.6-62.3l0-7.8c0-53-43-96-96-96s-96 43-96 96l0 32c0 17.7 14.3 32 32 32s32-14.3 32-32l0-32zm-9.2 177l49-14.7c-10.4 33.8-24.5 66.4-42.1 97.2l-13.9 24.3c-1.5 2.6-4.3 4.3-7.4 4.3c-4.7 0-8.5-3.8-8.5-8.5l0-71.9c0-14.1 9.3-26.6 22.8-30.7zM24 368c-13.3 0-24 10.7-24 24s10.7 24 24 24l40.3 0c-.2-2.8-.3-5.6-.3-8.5L64 368l-40 0zm592 48c13.3 0 24-10.7 24-24s-10.7-24-24-24l-310.1 0c-6.7 16.3-14.2 32.3-22.3 48L616 416z"/></svg>
 
 		/*********************************************************************************************
 		.)  URL
@@ -6963,35 +7085,6 @@ function loadDecryptedContacts(contacts){
 		.)  BALANCE
 		**********************************************************************************************/
 
-		// async function syncBalance() {
-		// 	console.log('syncBalance()')
-		// 	let addr = document.getElementById('yourAddress').getAttribute('address');
-		// 	let balance = await checkERC20Balance(addr)
-		// 	let gasBalance = await checkGasBalance(addr)
-		// 	userData.innerHTML = `			
-		// 	<a   target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS}">Balance: ${balance}</a>
-		// 	<svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> 
-		// 	<br>
-		// 	<a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a>
-		// 	`;
-
-		// }
-
-
-
-		// async function syncTokenBalance() {
-		// 	console.log('syncTokenBalance()')
-
-		// 	let explorer = preferredToken.explorers[0].url
-		// 	let tokenAddress = preferredToken.contractAddr
-		// 	let userAddress = addr
-
-
-		// 	userData.innerHTML = ` <svg  class="rounded rounded-circle " width="40px"  height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" onclick="event.stopPropagation();openModalId('#defaultTokenModal')" style=" position: absolute; left: 0; "> <path fill='#d17c78' d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg> <a   target="_blank" rel="noopener noreferrer" href="${explorer}/address/${tokenAddress}">Balance: ${balance} </a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalance()"> <path  fill='#d17c78' d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <div id="miniversion"> <a  target="_blank" rel="noopener noreferrer" href="${explorer}/address/${userAddress}">gas: ${gasBalance} </a> </div> `;
-
-		// }
-
-
 		async function getRandomProvider() {
 			// console.log('getRandomProvider(#5879)')
 			let isCurrentProvider = localStorage.getItem('currentProvider');
@@ -7039,42 +7132,82 @@ function loadDecryptedContacts(contacts){
 			sessionStorage.removeItem('password')
 		}
 
+		/*********************************************************************************************
+	  .) GET PROVIDERS BY CHAIN ID FUNCTION
+	  **********************************************************************************************/
+
+		async function getRpcListByChainId(chainId) {
+    try {
+        // Step 1: Fetch the JSON data
+        const response = await fetch("chainsv1.json");
+        
+        // Step 2: Parse the JSON data into a JavaScript object
+        const chains = await response.json();
+        
+        // Step 3: Find the chain with the matching chainId
+        const chain = chains.find(chain => chain.chainId === chainId);
+        
+        // Step 4: Return the RPC list if the chain is found
+        if (chain) {
+            return chain.rpc;
+        } else {
+            throw new Error(`No chain found with chainId: ${chainId}`);
+        }
+    } catch (error) {
+        console.error("Error fetching or processing data:", error);
+        return null;
+    }
+}
+
+// Example usage:
+// (async () => {
+//     const chainId = 1; // Ethereum Mainnet
+//     const rpcList = await getRpcListByChainId(chainId);
+    
+//     if (rpcList) {
+//         console.log(`RPC List for chainId ${chainId}:`, rpcList);
+//     } else {
+//         console.log(`No RPC list found for chainId ${chainId}`);
+//     }
+// })();
 
 		/*********************************************************************************************
 	  .) BALANCES
 	  **********************************************************************************************/
 		async function reloadBalances(){
-    console.warn('reloadBalances()')
+			console.warn('reloadBalances()')
 
 			let addr = document.getElementById('yourAddress').getAttribute('address');
 			let balance = await checkERC20Balance(addr)
 			let gasBalance = await checkGasBalance(addr)
-
-
-			// userData.innerHTML = ` <a   target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${optionsList[0].ERC20_TOKEN_ADDRESS}">Balance: ${balance}</a> <svg class='hoverIcon' xmlns="http://www.w3.org/2000/svg"  width="18" height="16" viewBox="0 0 512 512" id='reloadBalance'  onclick="event.stopPropagation();reloadBalances()"> <path fill="currentColor" d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg> <br> <a id="miniversion" target="_blank" rel="noopener noreferrer" href="${optionsList[0].EXPLORER}/address/${addr}">gas: ${gasBalance}</a> `;
-
-
-			
             let storedTokenType = localStorage.getItem('selectedTokenType');
-
-
-		/*********************************************************************************************
-		.)  NATIVE 
-		**********************************************************************************************/
-		if (storedTokenType === 'native') {
-			console.warn('💛💛💛 RE-LOADING NATIVE  ')
-			populateBalances(gasBalance)
-
+			// -------------------------
+			// .)  NATIVE 
+			// -------------------------
+			if (storedTokenType === 'native') {
+				console.warn('💛💛💛 RE-LOADING NATIVE  ')
+				populateBalances(gasBalance)
+			}
+			// -------------------------
+			// .)  ERC20 
+			// -------------------------
+			if (storedTokenType === 'erc20') {
+				console.warn('💚💚💚 RE-LOADING ERC20')
+				const lastUXInfo = getLastUXInfo();
+				
+				if (lastUXInfo) {
+				  console.log("⏱️Preloaded data:", lastUXInfo);
+						setAddress(lastUXInfo.addr)
+						populateBalances(lastUXInfo.chainName,lastUXInfo.chainId, lastUXInfo.tokenName, lastUXInfo.explorer, lastUXInfo.addr, gasBalance, balance, lastUXInfo.contractAddr) 
+				}
+				// populateBalances(gasBalance,balance)
+	
+			}
+	
+	return
+			
+			
 		}
-		if (storedTokenType === 'erc20') {
-			console.warn('💚💚💚 RE-LOADING ERC20')
-			populateBalances(gasBalance,balance)
-
-		}
-		return
-
-
-}
 
 
 
@@ -7101,36 +7234,66 @@ function loadDecryptedContacts(contacts){
 
 
 		async function checkERC20Balance(userAddress) {
-			console.log('checkERC20Balance() of ', userAddress)
+			console.log('💛💛💛💛 checkERC20Balance() of ', userAddress)
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			// REARMAR , primero llamar de localstorage al PREFERED_TOKEN
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			let pt = localStorage.getItem('PREFERRED_TOKEN')
 
+			// Split the string by the '-' delimiter
+			const parts = pt.split('-');
+
+			// Extract the two parts
+			const chainId = parts[0]; // '421614'
+			const contractAddr = parts[1]; // '0xFb1cb5a6dADDcE008d86f72057265A3afC82d539'
+
+
+			const rpcList = await getRpcListByChainId(Number(chainId));
+			console.log('rpcList:', rpcList)
+			// const length = rpcList.length;
+			// const randomnumber = Math.floor(Math.random() * length);
+			// // const selectedProvider = rpcList[randomnumber];
+			let selectedProvider = await selectRandomProvider(rpcList)
+
+			// write selectef provider to localstorage (then use localstorage first)
+			// alert(selectedProvider)
+
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			// BORRADO POR DESUSO?(CONFIRMAR)
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			// Retrieve selector index  from localStorage
-			let preferredIndex = localStorage.getItem('preferredTokenIndex');
-			if (preferredIndex === null) {
-				preferredIndex = 0;
-			} else {
-				preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
-			}
+			// let preferredIndex = localStorage.getItem('preferredTokenIndex');
+			// if (preferredIndex === null) {
+			// 	preferredIndex = 0;
+			// } else {
+			// 	preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
+			// }
 
-			// Retrieve the stored data from localStorage
-			let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
+			// // // Retrieve the stored data from localStorage
+			// let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
 
-			// If the preferred index is within the range of stored tokens, return the corresponding token details
-			if (storedData[preferredIndex]) {
-				preferredToken = storedData[preferredIndex];
-				pref = preferredToken
-			} else {
-				console.log('some problem in checkERC20Balance')
-				return
-			}
+			// // // If the preferred index is within the range of stored tokens, return the corresponding token details
+			// if (storedData[preferredIndex]) {
+			// 	preferredToken = storedData[preferredIndex];
+			// 	pref = preferredToken
+			// } else {
+			// 	console.log('some problem in checkERC20Balance')
+			// 	return
+			// }
 
-			const length = preferredToken.rpcs.length;
-			const randomnumber = Math.floor(Math.random() * length);
-			const selectedProvider = preferredToken.rpcs[randomnumber];
-			console.log('selectedProvider:', selectedProvider);
+			// const length = preferredToken.rpcs.length;
+			// const randomnumber = Math.floor(Math.random() * length);
+			// const selectedProvider = preferredToken.rpcs[randomnumber];
+			// console.log('selectedProvider:', selectedProvider);
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
 			let provider;
 			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
 			catch (error) { console.warn('error creating provider', error) }
-			let contractAddr = preferredToken.contractAddr
+			// let contractAddr = preferredToken.contractAddr
 			const tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
 			t = tokenContract;
 			const formattedAddress = ethers.getAddress(userAddress);
@@ -7195,13 +7358,14 @@ function loadDecryptedContacts(contacts){
 		}
 		  
 async function selectRandomProvider(rpcs) {
-  console.log('selectRandomProvider');
+  console.log('selectRandomProvider', rpcs);
   
   while (rpcs.length > 0) {
     // Select a random provider
     const randomIndex = Math.floor(Math.random() * rpcs.length);
     let selectedProvider = rpcs[randomIndex];
     console.log('👁️‍🗨️ Selected Provider 👁️‍🗨️:', selectedProvider);
+    // alert('👁️‍🗨️ Selected Provider 👁️‍🗨️:'+ selectedProvider);
 
     // Replace placeholders with actual API keys if necessary
     if (selectedProvider.includes("INFURA_API_KEY")) {
@@ -7220,14 +7384,16 @@ async function selectRandomProvider(rpcs) {
     let provider = await providerChecker(selectedProvider);
 
     if (provider) {
-      console.log('✅ Successfully connected to provider:',provider);
+      console.log('✅ Connected to provider');
+    //   console.log('✅ Successfully connected to provider:',provider);
     //   return provider; // Exit and return the working provider
       return selectedProvider; // Exit and return the working provider
 
     } else {
-      console.log('❌ Failed to connect. Removing provider from the list and retrying...');
+      console.log('❌ Failed to connect to provider. Removing provider from the list and retrying...');
       rpcs.splice(randomIndex, 1); // Remove the failed provider from the list
     }
+
   }
 
   console.error('⚠️ All providers failed to connect!');
@@ -7335,8 +7501,10 @@ async function loadToken(addr) {
 
     let token = await getPreferredToken()
 	te = token
+
     let selectedProvider = await selectRandomProvider(token.rpcs)
 	selp= selectedProvider;
+
     let provider;
     try { provider = await new ethers.JsonRpcProvider(selectedProvider); } 
     catch (error) { 
@@ -7386,38 +7554,18 @@ async function loadToken(addr) {
 		// console.log("ERC20 Balance gotten successfully:", erc20balance);
 		console.log('populateBalances(💛💛💛💛 ERC20):',chainName,chainId, tokenName, explorer, addr, gasBalance, erc20balance, contractAddr) 
 		populateBalances(chainName,chainId, tokenName, explorer, addr, gasBalance, formatedBalance, contractAddr) 
-		saveLastUXInfo({
-  chainName: chainName,
-  chainId: chainId,
-  tokenName: tokenName,
-  explorer: explorer,
-  addr:addr,
-  gasBalance: gasBalance,
-  formatedBalance: formatedBalance,
-  contractAddr: contractAddr
-});
+		saveLastUXInfo({ chainName: chainName, chainId: chainId, tokenName: tokenName, explorer: explorer, addr:addr, gasBalance: gasBalance, formatedBalance: formatedBalance, contractAddr: contractAddr });
 
 	}
 
 
     }
-	// <span class="bal" > <a class="miniversion" target="_blank" rel="noopener noreferrer" href="${link}">gas: ${gasBal}</a> </span>
 
-
-	// <section id="bigBalanceWalletmodal" class="tokenBalance">
-	// 					<span class="top"> Arbitrum Sepolia(461614):</span>
-	// 					<span class="bal">-999.9999</span>
-	// 					<span class="eth">ETH</span>
-	// 					<span class="bottom">
-	// 						<a class="miniversion" target="_blank" rel="noopener noreferrer" href="">gas: 0.0002</a>
-	// 					</span>
-	// 				</section>
+	
     function populateBalances(chainName,chainId, tokenName, explorer, address,  gasBal, tokenBal, contractAddr) {
 		console.warn(chainName,chainId, tokenName, explorer, address,  gasBal, tokenBal, contractAddr) 
 
-    // if(!tokenBal){
 		if (tokenBal === undefined) {
-
         console.log('means its a native token', gasBal,tokenBal)
 
 		// round balance for ui
@@ -7949,6 +8097,8 @@ async function loadToken(addr) {
 			console.log('setDefaultTokens()')
 			localStorage.removeItem('EVM_TOKENS')
 			localStorage.removeItem('PREFERRED_TOKEN')
+			localStorage.removeItem('lastUXInfo')
+			
 			// let storedTokens = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
 			let storedTokens =[];
 
@@ -7977,45 +8127,26 @@ async function loadToken(addr) {
                 populateTokenSelector()
 				return storedTokens
 		}
+		
+		
+		
+		
 		async  function getPreferredToken() {
           console.log('getPreferredToken()')
 
+		//   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+		//   SIMPLIFICAR
+		//   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-// 1- GET TOKENS
+		// 1- GET TOKENS
 		  let storedTokens = JSON.parse(localStorage.getItem('EVM_TOKENS')) || [];
 		  strotok= storedTokens
             if (storedTokens.length === 0) {
-                console.log('🤷🤷 There are no tokens (EVM_TOKENS)  in localstorage we  add USDC(arbitrum sepolia) as default ')
-				//  storedTokens = setDefaultTokens ()
+                console.log('🤷🤷 There are no tokens (EVM_TOKENS) in localstorage. Adding DEFAULT USDC(arbitrum sepolia)  ')
 				 setDefaultTokens ()
 
-                // const defaultToken = {
-                //     tokenName: "USDC",
-                //     chainName: "Arbitrum Sepolia",
-                //     chainId: 421614,
-                //     contractAddr: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",  // Example contract address
-                //     rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   // Example RPC endpoint
-                //     explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
-                // };
-                // storedTokens.push(defaultToken);
-
-                //   const defaultTokenB = {
-                //     tokenName: "ETH(arb)",
-                //     chainName: "Arbitrum Sepolia",
-                //     chainId: 421614,
-                //     contractAddr: "nativeToken",  // Example contract address
-                //     rpcs: ["https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a","https://arb-sepolia.g.alchemy.com/v2/X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I"],   // Example RPC endpoint
-                //     explorers: [{ "name": "Arbitrum Sepolia Arbiscan Testnet Explorer", "url": "https://sepolia.arbiscan.io", "standard": "EIP3091" }] // Example explorer
-                // };
-                // storedTokens.push(defaultTokenB);
-
-
-                // localStorage.setItem('EVM_TOKENS', JSON.stringify(storedTokens));
-                // populateTokenSelector()
-                
-                // return 
             } else {
-                console.log('💁‍♂️💁‍♂️ YES There are EVM_TOKENS in localstorage', storedTokens)
+                console.log('💁‍♂️💁‍♂️ YES EVM_TOKENS in localstorage', storedTokens)
 
             }
 
@@ -8026,7 +8157,6 @@ async function loadToken(addr) {
 			if (preferredTokenKey !== null) {
 				console.log('PREFERRED_TOKEN exists in localStorage:', preferredTokenKey);
 				// sanitize format (chainId-contractAddr)
-
 
 				} else {
 				console.log('PREFERRED_TOKEN does not exist in localStorage');
@@ -8054,14 +8184,11 @@ async function loadToken(addr) {
         function setPreferredToken(chainId, contractAddr) {
             console.warn('🤠 🤠 🤠prefered token CHANGED!')
             const preferredTokenKey = `${chainId}-${contractAddr}`;
+            // localStorage.setItem('PREFERRED_TOKEN', preferredTokenKey);
+			localStorage.removeItem('lastUXInfo')
             localStorage.setItem('PREFERRED_TOKEN', preferredTokenKey);
 
-			// if (contractAddr === 'nativeToken') {
-            //         localStorage.setItem('selectedTokenType', 'native');
-
-            //     } else {
-            //         localStorage.setItem('selectedTokenType', 'erc20');
-            //     }
+		 
 
         }
 
@@ -8118,19 +8245,10 @@ async function loadToken(addr) {
                     s=selectedValue;
 
 
-// ---
-const selectElements = document.querySelectorAll('.tokenBalance');
-        selectElements.forEach(balanceDisplayer => {
-             balanceDisplayer.innerHTML =    `
-			<span class="top">Loading Balance</span>
-            <span class="bal">
-           <span class="dot">.</span> 
-           <span class="dot">.</span> 
-           <span class="dot">.</span> 
-</span>
-			`
-        })
-// ---
+					const selectElements = document.querySelectorAll('.tokenBalance');
+					selectElements.forEach(balanceDisplayer => {
+						balanceDisplayer.innerHTML = ` <span class="top">Loading Balance</span> <span class="bal"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </span> `
+						})
 
 
 
@@ -8141,16 +8259,6 @@ const selectElements = document.querySelectorAll('.tokenBalance');
 					// Synchronize all selectors with the new preferred token
 					populateTokenSelector();
 					await loadToken(userAddress)
-
-
-                // console.log('contractAddr:', contractAddr)
-                // if (contractAddr === 'nativeToken') {
-                //     localStorage.setItem('selectedTokenType', 'native');
-
-                // } else {
-                //     localStorage.setItem('selectedTokenType', 'erc20');
-                // }
-
 
                 });
             });
@@ -8434,7 +8542,7 @@ const selectElements = document.querySelectorAll('.tokenBalance');
 				// PRIVKEY
 				// ---------
 				let signer = await getSigner()
-				let alicePrivateKey = signer.privateKey
+				let alicePrivateKey = signer.privateKey;//
 				let stealthAddress = await generateStealthAddress(alicePrivateKey, compressedPublicKey)
 				console.log(`<br>👩👻Stealth address generated by YOU (A) to pay your PEER(B): ${stealthAddress.stealthAddress} <br>👫sharedSecret: ${stealthAddress.sharedSecret}`)
 				document.getElementById('sarecipientAddress').innerHTML = stealthAddress.stealthAddress
@@ -8480,6 +8588,153 @@ const selectElements = document.querySelectorAll('.tokenBalance');
 }
 
 
+async function scanAndSign(){
+	console.warn('scanAndSign')
+	// openModalId('#scanModal')
+	openModalId('#scansignModal')
+
+	// document.getElementById('scanResult').innerHTML = ''
+	// 		setTimeout(() => {
+	// 			var videoElem = document.getElementById("qrScanVideo");
+	// 			window.qrScanner = new QrScanner(videoElem, result => qrscanned(result), {
+	// 				highlightScanRegion: true,
+	// 				highlightCodeOutline: true,
+	// 			});
+
+	// 			qrScanner.setInversionMode('both');
+	// 			qrScanner.start();
+	// 		}, 1000);
+
+}
+
+  // Show input field when "Paste and Sign" button is clicked
+  document.getElementById('pasteAndSignBtn').addEventListener('click', function() {
+    document.getElementById('pasteField').style.display = 'block';
+	playBoing()
+	pasteAndSign()
+  });
+
+
+
+        
+  async function pasteAndSign() {
+            console.log('PASTING TO SIGN')
+            // try {
+              // Check if the Clipboard API is supported
+              if (navigator.clipboard && navigator.clipboard.readText) {
+                let clipboardText = await navigator.clipboard.readText();
+                // ANALIZE TEXT
+
+                // Step 1: Check if it's already a JSON string
+                let payload
+                let cleanedJson
+                if (clipboardText.startsWith('"') && clipboardText.endsWith('"')) {
+                    // Remove outer quotes
+                     cleanedJson = clipboardText.slice(1, -1).replace(/\\"/g, '"');
+                    console.log('Remove outer quotes', cleanedJson);
+                    document.getElementById('pastedTxToSign').innerHTML = cleanedJson;
+                
+                    // Step 2: Parse into an object
+                    payload = JSON.parse(cleanedJson);
+                    console.log(payload);
+                    document.getElementById('pastedTxToSign').innerHTML = cleanedJson;
+
+                } else {
+                    // Directly parse
+                    payload = JSON.parse(clipboardText);
+                    console.log('Directly parse', payload);
+                }
+
+                p = payload;
+
+                if (payload.action === "eth_requestAccounts") {
+                    console.warn("Received eth_requestAccounts request:", payload);
+                    
+                    // Process the request
+                    Swal.fire({
+                        title: 'Sign this request to connect with the site:',
+                        html: `<pre class='codeToSign'>${cleanedJson}</pre>`, // Display the rest of the message
+                        // text: cleanedJson, // Display the rest of the message
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sign ',
+                        cancelButtonText: 'Refuse',
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            console.log("User chose to sign the message.");
+
+
+                            // -----------------
+                            // GET SIGNER's ADDRESS
+                            // -----------------
+							let presigner = await getSigner()
+							let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+							let signer = presigner.connect(provider);
+
+                            // let alicewallet = await aliceWallet();
+                            // let signer = await new ethers.Wallet(alicewallet.privateKey)
+                            console.log('signer:', signer)
+
+                            let address  = payload.requester;
+                            // -----------------
+                            // SIGN TX
+                            // -----------------
+                            const signature = await signer.signMessage(cleanedJson);
+                            console.log('signature:', signature)
+                            // document.getElementById('result').innerHTML = ``
+                            document.getElementById('pastedTxToSign').innerHTML =`✅ signed!
+                                <br><span class='sig'> ${signature}</span>`;
+                            // -----------------
+                            // TRANSMIT SIGNATURE THROUGH XMTP
+                            // -----------------    
+							// let signatureAndProvider = 
+                            // await sendSignedMessage(iusnaturalisxmtp, address, signatureAndProvider)
+                            console.log('sendSignedMessage: ',iusnaturalisxmtp, address, signature)
+                            await sendSignedMessage(iusnaturalisxmtp, address, signature)
+
+
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            console.log("User refused.");
+                        }
+                    });
+                } 
+
+                return
+ 
+          }
+        }
+
+
+
+        async function sendSignedMessage(xmtpClient, address, messageContent) {
+            try {
+                // Open the chat and get the conversation
+                // const conversation = await openChat(xmtpClient, address);
+// 
+                // console.log('sendSignedMessage(conversation):', conversation)
+   
+				let conversation = await iusnaturalisxmtp.conversations.newConversation(address);
+	
+				// Send the message
+                await conversation.send(messageContent);
+                console.log(`Message sent to ${address}: ${messageContent}`);
+
+                // Optionally, add the sent message to the message store
+                if (!messageStore[address]) {
+                messageStore[address] = [];
+                }
+                messageStore[address].push({
+                content: messageContent,
+                timestamp: new Date(),
+                sender: 'self', // Mark it as sent by the user
+                });
+
+                // Update the chat window
+                // updateChatWindow(address, messageContent);
+            } catch (err) {
+                console.error(`Failed to send message to ${address}:`, err);
+            }
+        }
 
 
 
@@ -8688,7 +8943,7 @@ let preferredToken
 
 			// is EVM TOKEN (hay que cambiar erc20 a EVM para hacerlo menos confuso)
 			if (storedTokenType === 'evm') {
-				alert(' IS ERC20 / EVM OTKEN')
+				console.warn(' IS ERC20 / EVM OTKEN')
 				// console.log(' IS ERC20 / EVM OTKEN')
 			}
 
@@ -10256,6 +10511,13 @@ async function handleTransactionHistory(address) {
 		  
 
 	
+// 	document.addEventListener('visibilitychange', () => {
+//   if (document.visibilityState === 'visible') {
+//     alert('The web app is visible to the user.');
+//   } else {
+//     console.log('The web app is not visible to the user.');
+//   }
+// });
 	</script>
 
 	<!-- <script type="module" src="js/demo1.js"></script> -->

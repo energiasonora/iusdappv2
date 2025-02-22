@@ -360,7 +360,7 @@ a,
 
 	.alert{
 		width: 100%;
-		background-color: red;
+		/* background-color: red; */
 	}
 	.codrops-demos {
 		text-align: center;
@@ -2068,4 +2068,11 @@ margin: .44em;
   }
   .capital{
 	font-variant-caps: all-petite-caps;
+}
+
+.codeToSign, .sig{
+    word-break: break-word;
+    white-space: break-spaces;
+    padding: 1em;
+    text-align: left;
 }

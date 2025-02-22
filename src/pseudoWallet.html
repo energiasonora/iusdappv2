@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Message from Other dApp</title>
+    <title>PSEUDO WALLET</title>
     <link rel="stylesheet" href="css/pico.min.css" />
     <script src="js/sweetalert2.all.min.js"></script>
     <script src="js/ethers-6.13.2.umd.min.js"></script>
@@ -107,6 +107,7 @@
     
     <h1>PSEUDO WALLET</h1>
     <h2>log and Sign a Tx (xmtp)</h2>
+    <!-- Sign Message from Other dApp -->
     <div class="settings-icon" onclick="openSettings()"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="3"></circle> <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 .92 1.65 1.65 0 0 1-3 0 1.65 1.65 0 0 0-1-.92 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-.92-1 1.65 1.65 0 0 1 0-3 1.65 1.65 0 0 0 .92-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-.92 1.65 1.65 0 0 1 3 0 1.65 1.65 0 0 0 1 .92h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 .92 1 1.65 1.65 0 0 1 0 3 1.65 1.65 0 0 0-.92 1z"> </path> </svg> </div>
     <br>
     <div class="mini">your address: <span id="yourAddress"></span></div> 
@@ -162,6 +163,9 @@
         // XMTP
         import { Client } from '@xmtp/xmtp-js'
         window.Client = Client;
+
+        // import { JsonRpcProvider, BrowserProvider } from 'ethers';
+
 
         import QrScanner from "qr-scanner/qr-scanner.min.js";
         window.QrScanner = QrScanner; //make global
@@ -991,6 +995,9 @@ messageStore = new Proxy(messageStore, {
 
 
         async function init() {
+            // Initialize the JsonRpcProvider
+            const rpcUrl = optionsList[0].API; // Replace with your RPC URL
+            const jsonRpcProvider = new ethers.JsonRpcProvider(rpcUrl);
 
             // if localTest wallet
             let alicewallet = await aliceWallet()
@@ -1003,7 +1010,33 @@ messageStore = new Proxy(messageStore, {
             </svg> 
             `;
 
+// 000000---------
 
+// let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
+
+// Initialize the wallet
+// const wallet = await aliceWallet();
+
+const walletWithProvider = alicewallet.connect(jsonRpcProvider);
+// Create the custom Ethereum provider
+const customProvider = new CustomEthereumProvider(walletWithProvider, jsonRpcProvider);
+
+// Assign the custom provider to window.ethereum (optional)
+if (!window.ethereum) {
+    window.ethereum = customProvider;
+} else {
+    console.warn('window.ethereum already exists. Overwriting it may cause issues.');
+    window.ethereum = customProvider;
+}
+
+// Use the custom provider with BrowserProvider
+// const browserProvider = new ethers.BrowserProvider(customProvider);
+
+// const provider = new ethers.BrowserProvider(window.ethereum);
+const browserProvider = new ethers.BrowserProvider(window.ethereum);
+signer = await browserProvider.getSigner();
+
+// --------00000000
 
 
 
@@ -1016,24 +1049,10 @@ messageStore = new Proxy(messageStore, {
             iusnaturalisxmtp = await Client.create(alicewallet)
             console.warn(' 🟢🟢🟢XMTP STARTED🟢🟢🟢🔴🟠🟡🔵⚫ ')
             console.warn(' Alice address:  ', alicewallet.address)
-
-
-            // Register the custom codec
-            // iusnaturalisxmtp.registerCodec({
-            //     contentType: ContentTypeTxRequest,
-            //     codec: TxRequestCodec,
-            // });
-            // console.warn(' 🟠🟠🟠CODEC REGISTERED🟠🟠🟠 ')
-
-
-            
+ 
             // get smart contract to which i signed
             listenToAllowedPeers()
-
-            // openchat with connected smart contract/
-            // await openChat(iusnaturalisxmtp, address) 
-
-            
+ 
 
 
         }
@@ -1064,67 +1083,7 @@ messageStore = new Proxy(messageStore, {
             return aliceWall
         }
 
-
-
-    
-
-
-        // const signCustomMessage = async () => {
-        //     try {
-        //         // -----------------
-        //         // create TX
-        //         // -----------------
-        //         // Get the user-provided message
-        //         const messageInput = document.getElementById("messageInput").value.trim();
-        //         if (!messageInput) {
-        //             alert("Please paste a message to sign.");
-        //             return;
-        //         }
-
-
-        //         // ------------
-        //         // localTest
-        //         let alicewallet = await aliceWallet();
-        //         let signer = await new ethers.Wallet(alicewallet.privateKey)
-
-        //         // -----------------
-        //         // SIGN TX
-        //         // -----------------
-        //         const signature = await signer.signMessage(messageInput);
-        //         console.log('signature:', signature)
-        //         // result.innerHTML = `<span id='sig'>${signature}</span>`
-        //         result.innerText = signature
-
-
-
-        //         // Display the signature to the user
-        //         console.log("Message:", messageInput);
-        //         console.log("Signature:", signature);
-        //         alert("Message signed successfully!\n\n" +
-        //             `Message: ${messageInput}\n` +
-        //             `Signature: ${signature}`);
-
-
-
-
-        //         // ------------
-        //         // Recover the address of the signer
-        //         let recoveredAddress = ethers.verifyMessage(messageInput, signature);
-        //         r= recoveredAddress
-        //         // Store the address in localStorage
-        //         // localStorage.setItem("IusNaturalisAddress", recoveredAddress);
-
-        //         alert(`Logged in as: ${recoveredAddress}`);
-
-
-        //     } catch (error) {
-        //         console.error("Error signing message:", error);
-        //         alert("An error occurred while signing the message. Please try again.");
-        //     }
-        // };
-
-      
-
+ 
         
         function copy2clipboard(text) {
             // let text = `${ipfsGateway}${cid}`;
@@ -1156,6 +1115,80 @@ messageStore = new Proxy(messageStore, {
         }
 
 
+
+        // ---------
+
+        optionsList = [
+            {
+                "CHAIN_NAME": 'Arbitrum sepolia',
+                "CHAINID": '421614',
+                "EXPLORER": 'https://sepolia.arbiscan.io/',
+                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+                "ALCHEMY_KEY": 'X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I'
+            }
+        ]
+        // ---------
+// const rpcUrl = optionsList[0].CHAINID; // Replace with your RPC URL
+ 
+
+class CustomEthereumProvider {
+    constructor(wallet, jsonRpcProvider) {
+        this.wallet = wallet; // The wallet instance (e.g., ethers.Wallet)
+        // this.wallet.provider = jsonRpcProvider; // Your JsonRpcProvider instance
+        this.jsonRpcProvider = jsonRpcProvider; // Your JsonRpcProvider instance
+        this.chainId = optionsList[0].CHAINID; // Default chain ID (Mainnet)
+        this.listeners = {};
+    }
+
+    
+
+    // Request method (handles RPC calls)
+    async request({ method, params }) {
+        switch (method) {
+            case 'eth_requestAccounts':
+                return [this.wallet.address]; // Return the wallet's address
+
+            case 'eth_accounts':
+                return [this.wallet.address]; // Return the wallet's address
+
+            case 'eth_chainId':
+                return this.chainId; // Return the current chain ID
+
+            case 'eth_sendTransaction':
+                const { to, value, data } = params[0];
+                const tx = await this.wallet.sendTransaction({ to, value, data });
+                return tx.hash; // Return the transaction hash
+
+            default:
+                throw new Error(`Unsupported method: ${method}`);
+        }
+    }
+
+
+    
+
+    // Add event listener
+    on(event, listener) {
+        if (!this.listeners[event]) {
+            this.listeners[event] = [];
+        }
+        this.listeners[event].push(listener);
+    }
+
+    // Remove event listener
+    removeListener(event, listener) {
+        if (this.listeners[event]) {
+            this.listeners[event] = this.listeners[event].filter((l) => l !== listener);
+        }
+    }
+
+    // Emit events
+    emit(event, ...args) {
+        if (this.listeners[event]) {
+            this.listeners[event].forEach((listener) => listener(...args));
+        }
+    }
+}
         
     </script>
 </body>
