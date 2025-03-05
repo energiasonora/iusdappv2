@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
   <style>
      :root {
-            --font: green;
+            --font: white;
             --bk: linear-gradient(var(--c0), var(--c0b));
             --bckmodal: #262626;
             --mainBk: #41307c;
@@ -15,9 +15,13 @@
         }
 
         body {
-            color: var(--font);
+            color: var(--font)!important;
             background-image: radial-gradient(circle, #5c0067 0%, var(--bckmodal) 100%);
-            background-image: radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%);
+            /* background-image: radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%); */
+        }
+        h1,h2,h3,h4,p{
+            color: var(--font)!important;
+
         }
     /* Custom Progress Bar */
     .progress-bar {
@@ -1231,6 +1235,43 @@ async function broadcastTransaction(signedTx) {
 }
 
 
+
+
+    // -----------------------------------------
+            // NEW STEALTH ADDRESS FUNCTIONS
+            // -----------------------------------------
+            async function generateStealthAddress(privateKey, publicKey) {
+                // privkey sender, pubkey recipient
+                console.warn('🏰 generateStealthAddress()', privateKey, publicKey)
+                const privateKeyHex = `0x${toHexString(privateKey)}`;
+                a = privateKeyHex
+                b = publicKey
+                c = privateKey
+                const pubPoint = secp.ProjectivePoint.fromHex(publicKey);
+                ppoint = pubPoint
+                const sharedSecret = pubPoint.multiply(BigInt(privateKeyHex)).toHex();
+                console.log('👫sharedSecret( at generateStealthAddress):', sharedSecret);
+                const hashedSecret = ethers.keccak256('0x' + sharedSecret).slice(0, 42);
+    
+                // 1.Multiply hs by the curve generator point (G): You can use the secp256k1 generator point (which is a constant) to compute the point hs * G.
+                const G = secp.ProjectivePoint.BASE;  // Generator point G
+                const hsBigInt = BigInt(hashedSecret);  // hs should already be in hex or BigInt format
+                const hsPoint = G.multiply(hsBigInt);  // hs * G
+                hsp = hsPoint
+    
+                // 2.Add Bob’s public key: You now add Bob’s public key as an elliptic curve point to hs * G. Ensure Bob's public key is in the correct format for the addition.
+                const point = secp.ProjectivePoint.fromHex(publicKey);  // Bob's public key point
+                const stealthPubPoint = hsPoint.add(point);  // hs * G + Bob's public key
+                p1 = point
+                p2 = stealthPubPoint
+    
+                // 3.Convert the resulting point to an Ethereum address: Finally, you convert the resulting elliptic curve point to an Ethereum address. This is typically done by compressing the point to its x-coordinate, hashing it, and then converting it to an Ethereum address.
+                const stealthPubKey = stealthPubPoint.toHex();  // Convert to hex
+                const stealthAddress = ethers.computeAddress('0x' + stealthPubKey);  // Convert to Ethereum address
+                console.log('👻Stealth Address:', stealthAddress);
+                return { stealthAddress, sharedSecret }
+            }
+    
   </script>
 </body>
 </html>

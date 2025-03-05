@@ -1,6 +1,8 @@
 # IUS DAPP
 
-Ius Naturalis is a project centered on digital sovereignty, addressing key areas such as value creation and transfer, communication, document management, and the resolution of public and private disputes—all approached from a sovereign perspective under natural law jurisdiction.
+Ius Naturalis is a project centered on digital sovereignty, addressing key areas such as vsudo apt install code
+alue creation and transfer, communication, document management, and the resolution of public and private disputes—all approached frsudo apt install code
+om a sovereign perspective under natural law jurisdiction.
 We are developing a self-custodial wallet that integrates chat and public document management capabilities, including attestation and dispute resolution mechanisms.
 Our goal is to foster a web3 culture rooted in sovereignty, promoting the adoption of customary practices for managing public goods and embracing decentralized solutions in governance.
 
@@ -51,7 +53,8 @@ yarn parcel src/index.html  --port 4343 --https
 <!-- 
 yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html --port 4343 --https
   -->
-  <!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/loginxmtp.html src/signxmtp.html  src/crowdfundingius.html src/logandsignxmtp.html src/stealthdonations4.html --port 4343 --https -->
+  <!-- yarn parcel src/indsudo apt install code
+ex.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/loginxmtp.html src/signxmtp.html  src/crowdfundingius.html src/logandsignxmtp.html src/stealthdonations4.html --port 4343 --https -->
 
 <!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html   src/crowdfundingius.html src/pseudoWallet.html  src/stealthdonations4.html src/stealthdonations5.html src/ius.html --port 4343 --https -->
 <!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html   src/crowdfundingius.html src/pseudoWallet.html  src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html --port 4343 --https -->
@@ -65,6 +68,10 @@ yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html
 <!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html  src/crowdfundingius.html src/pseudoWallet.html src/don2.html src/paycountdown.html --port 4343 --https -->
 
 yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html  src/crowdfundingius.html src/pseudoWallet.html src/don2.html src/paycountdown.html src/createCampaign.html --port 4343 --https
+
+
+yarn parcel src/index.html   src/don2.html src/createCampaign.html --port 4343 --https
+
 
 # deploy to firebase
 

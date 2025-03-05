@@ -1043,7 +1043,7 @@ signer = await browserProvider.getSigner();
             // balance
             let provider = new ethers.JsonRpcProvider(`https://arb-sepolia.g.alchemy.com/v2/${alchemyKey}`); // Replace with your RPC URL
             const gasBalance = await provider.getBalance(alicewallet.address);
-            let balance = ethers.formatEther(gasBalance));
+            let balance = ethers.formatEther(gasBalance);
             document.getElementById('yourAddress').innerHTML += ` <br>Your balance: ${balance}`
 
             iusnaturalisxmtp = await Client.create(alicewallet)

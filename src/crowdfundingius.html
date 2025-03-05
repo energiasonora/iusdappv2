@@ -2358,31 +2358,54 @@ for await (const message of await iusnaturalisxmtp.conversations.streamAllMessag
 
         async function contribute(amount, contributor) {
             console.log('contribute')
-
             Swal.fire({
-                // icon: "warning",
-                title: "Make the transaction...",
-                html: `
-                <div class="loader-container">
-                <div class="loader"></div>
-                </div>
-                `,
-                showDenyButton: false,
-                showCancelButton: false,
-                showConfirmButton: false,
-                allowOutsideClick: () => {
-                    const popup = Swal.getPopup() as HTMLElement
-                    popup.classList.remove('swal2-show')
-                    setTimeout(() => {
-                        popup.classList.add('animate__animated', 'animate__headShake')
-                    })
-                    setTimeout(() => {
-                        popup.classList.remove('animate__animated', 'animate__headShake')
-                    }, 500)
-                    return false
-                },
-                footer: `<p>don't close this window</p>`
-            });
+    // icon: "warning",
+    title: "Make the transaction...",
+    html: `
+        <div class="loader-container">
+            <div class="loader"></div>
+        </div>
+    `,
+    showDenyButton: false,
+    showCancelButton: false,
+    showConfirmButton: false,
+    allowOutsideClick: () => {
+        const popup = Swal.getPopup(); // No need for 'as HTMLElement'
+        popup.classList.remove('swal2-show');
+        setTimeout(() => {
+            popup.classList.add('animate__animated', 'animate__headShake');
+        });
+        setTimeout(() => {
+            popup.classList.remove('animate__animated', 'animate__headShake');
+        }, 500);
+        return false;
+    },
+    footer: `<p>don't close this window</p>`
+});
+            // Swal.fire({
+            //     // icon: "warning",
+            //     title: "Make the transaction...",
+            //     html: `
+            //     <div class="loader-container">
+            //     <div class="loader"></div>
+            //     </div>
+            //     `,
+            //     showDenyButton: false,
+            //     showCancelButton: false,
+            //     showConfirmButton: false,
+            //     allowOutsideClick: () => {
+            //         const popup = Swal.getPopup() as HTMLElement
+            //         popup.classList.remove('swal2-show')
+            //         setTimeout(() => {
+            //             popup.classList.add('animate__animated', 'animate__headShake')
+            //         })
+            //         setTimeout(() => {
+            //             popup.classList.remove('animate__animated', 'animate__headShake')
+            //         }, 500)
+            //         return false
+            //     },
+            //     footer: `<p>don't close this window</p>`
+            // });
 
 
 

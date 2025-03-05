@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>sign</h1>
+
+
+<script type="module">
+    
+    
+        // 1 gen sig offchain
+        import { Wallet, keccak256, arrayify, solidityPackedKeccak256 } from "ethers";
+
+// Create a wallet (replace with the user's private key)
+const wallet = new Wallet("PRIVATE_KEY");
+
+// Compute the message hash
+const userAddress = wallet.address;
+const messageHash = solidityPackedKeccak256(
+    ["string", "address"],
+    ["\x19Ethereum Signed Message:\n32", userAddress]
+);
+
+// Sign the message
+const signature = await wallet.signMessage(arrayify(messageHash));
+
+console.log("Signature:", signature);
+
+//         const messageHash = ethers.utils.solidityKeccak256(
+//     ["string", "address"],
+//     ["\x19Ethereum Signed Message:\n32", userAddress]
+// );
+// const signature = await wallet.signMessage(ethers.utils.arrayify(messageHash));
+
+
+
+// 2 pass the funtion 
+// const tx = await contract.registerPublicKey(signature);
+// await tx.wait();
+
+
+// 3 Verify the Registration :
+// Check the publicKeyMap or listen for the PublicKeyRegistered event to confirm that the public key was registered successfully.
+
+
+// 2 call the Call the registerPublicKey Function
+import { JsonRpcProvider, Contract } from "ethers";
+
+// Connect to the provider (replace with your RPC URL)
+const provider = new JsonRpcProvider("RPC_URL"); // e.g., "https://mainnet.infura.io/v3/YOUR_PROJECT_ID"
+
+// Connect the wallet to the provider
+const signer = wallet.connect(provider);
+
+// Define the contract ABI and address
+const abi = [
+    "function registerPublicKey(bytes memory _signature)",
+    "event PublicKeyRegistered(address indexed user, bytes publicKey)"
+];
+const contractAddress = "CONTRACT_ADDRESS"; // Replace with your deployed contract address
+
+// Create the contract instance
+const contract = new Contract(contractAddress, abi, signer);
+
+// Call the registerPublicKey function
+const tx = await contract.registerPublicKey(signature);
+await tx.wait();
+
+console.log("Public key registered successfully!");
+
+// 3 verify pubky reg 
+// Fetch the registered public key
+const publicKey = await contract.publicKeyMap(wallet.address);
+console.log("Registered Public Key:", publicKey);
+
+
+// Listen for the PublicKeyRegistered event
+contract.on("PublicKeyRegistered", (user, publicKey) => {
+    console.log("Public key registered for user:", user);
+    console.log("Public key:", publicKey);
+});
+
+
+
+// what should be signed
+// "\x19Ethereum Signed Message:\n32" + keccak256(abi.encodePacked(userAddress))
+
+    </script>
+</body>
+</html>
