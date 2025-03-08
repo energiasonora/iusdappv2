@@ -9,13 +9,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 
     <style>
-        /* body {
-            background-color: rgb(7, 42, 60);
-            color: green;
-        } */
+        body {
+            font-size: x-small!important;
+            /* background-color: rgb(7, 42, 60); */
+            /* color: green; */
+        }
 
         #result {
             word-wrap: break-word;
+            /* font: x-small!important; */
 
         }
     </style>
@@ -35,6 +37,7 @@
     <button id="updatePrivDataDIDtest">UPDATE DID: PRIVDATA </button>
     <button id="deleteDIDtest">DELETE DID</button>
     <button id="decryptPrivDatatest">DECRYPT PRIV DATA</button>
+    <button id="getDIDPublicKey">GET PUBLIC KEY</button>
 
     <!-- <button id="writeDIDtest" onclick="event.stopPropagation();writeDIDtest()">WRITE DID</button> -->
 
@@ -44,9 +47,20 @@
 
     <script src="js/ethers-6.12.1.umd.min.js" type="application/javascript"></script>
 
+    <script src="js/sweetalert2.all.min.js"></script>
 
 
     <script type="module">
+
+// import { Point } from '@noble/secp256k1';
+// window.Point = Point;
+
+import { getPublicKey, utils } from '@noble/secp256k1';
+            window.getPublicKey = getPublicKey;
+            window.utils = utils;
+            import * as secp from '@noble/secp256k1';
+            window.secp = secp;
+
 
         import EthCrypto from 'eth-crypto';
         window.EthCrypto = EthCrypto;
@@ -62,25 +76,35 @@
         window.Polybase = Polybase; //make global
 
 
+        // Function to derive an address on demand
+        async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+
+
+        async function aliceWallet() {
+            let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+            if (!aliceMnemonic) {
+                console.error('NO aliceMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                aliceMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('aliceMnemonic', aliceMnemonic);
+
+            } else {
+                console.log('aliceMnemonic is in localStorage!');
+
+            }
+            let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+            return aliceWall
+        }
+
         async function init() {
 
             console.log(`
-
-██╗██╗   ██╗███████╗
-██║██║   ██║██╔════╝
-██║██║   ██║███████╗
-██║██║   ██║╚════██║
-██║╚██████╔╝███████║
-╚═╝ ╚═════╝ ╚══════╝
-                    
-
-███╗   ██╗ █████╗ ████████╗██╗   ██╗██████╗  █████╗ ██╗     ██╗███████╗
-████╗  ██║██╔══██╗╚══██╔══╝██║   ██║██╔══██╗██╔══██╗██║     ██║██╔════╝
-██╔██╗ ██║███████║   ██║   ██║   ██║██████╔╝███████║██║     ██║███████╗
-██║╚██╗██║██╔══██║   ██║   ██║   ██║██╔══██╗██╔══██║██║     ██║╚════██║
-██║ ╚████║██║  ██║   ██║   ╚██████╔╝██║  ██║██║  ██║███████╗██║███████║
-╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝╚══════╝
-                                                                       
 
 ██████╗  █████╗ ██████╗ ██████╗ 
 ██╔══██╗██╔══██╗██╔══██╗██╔══██╗
@@ -88,30 +112,16 @@
 ██║  ██║██╔══██║██╔═══╝ ██╔═══╝ 
 ██████╔╝██║  ██║██║     ██║     
 ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝     
-                                                                              
-
                                                     
 `);
             // ------------------------------------------
             //GENERATE ETHEREUM KEYPAIR WITH ETHERS
-            let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
-            if (!chatWalletPrivKey) {
-                const ethWallet = ethers.Wallet.createRandom();
-                chatWalletPrivKey = ethWallet.privateKey;
-                console.log('New chatwallet private key', chatWalletPrivKey);
-                localStorage.setItem('chatETHPrivKey', chatWalletPrivKey);
-                console.log('chatWalletPrivKey SAVED INTO LOCALSTORAGE');
-            } else {
-                console.log('chatWalletPrivKey already exists in localStorage:', chatWalletPrivKey);
-            }
-
+      
+            wallet = await aliceWallet()
             result.innerHTML += '<strong> ETH KEYPAIR :</strong> ';
-            result.innerHTML += '<br><strong> PRIVATE KEY :</strong> ' + chatWalletPrivKey;
-            try { wallet = await new ethers.Wallet(chatWalletPrivKey) }
-            catch (error) { console.log(error.message); }
-
             result.innerHTML += '<br><strong> ETH Address:</strong> ' + wallet.address;
 
+            modifiedHexString = wallet.address;
 
             // ------------------------------------------
             // GENERATE STARKNET KEYPAIR WITH STARKNETJS
@@ -150,13 +160,9 @@
         writeDIDtest.onclick = async function (e) {
             console.log('writeDIDtest')
 
-            let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-            try { signer = await new ethers.Wallet(chatETHPrivKey) }
+            try { signer = await new ethers.Wallet(wallet.privateKey) }
             catch (error) { console.log(error.message); }
-            modifiedHexString
-            let did = `did:starkid:${modifiedHexString}`
-            // let did = `did:starkid:0x14c74ee7e2f33f94369c22587d65af3a4216e6627928b4c9cf1995623fdfb80`
+            let did = `${wallet.address}`
             let avatar = '';
             let alias = '';
             let privData = '';
@@ -169,15 +175,9 @@
 
         deleteDIDtest.onclick = async function (e) {
             console.log('deleteDIDtest')
-            let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-            try { signer = await new ethers.Wallet(chatETHPrivKey) }
+            try { signer = await new ethers.Wallet(wallet.privateKey) }
             catch (error) { console.log(error.message); }
-            // let did = `did:starkid:${signer.address}`
-            let did = `did:starkid:${modifiedHexString}`
-
-            // let did = `did:starkid:0x14c74ee7e2f33f94369c22587d65af3a4216e6627928b4c9cf1995623fdfb80`
-
+            let did = `${wallet.address}`
             deleteDID(did, signer)
         }
 
@@ -223,22 +223,104 @@
 
 
 
+        getDIDPublicKey.onclick = async function (e) {
+            console.log('getDIDPublicKey')
+            let did = `${wallet.address}`
+            console.log('getDIDPublicKey:', did)
+            result.innerHTML = 'Getting  DID public key: ' + did;
+
+            let  x = await readDIDRecord(did)
+            console.log('DID read result: ', x.data)
+            let  jwk = x.data.publicKey
+            let pubkey =  formatPublicKey(jwk)
+            result.innerHTML += `<br><br>RESULT: 
+            <br>DID: ${x.data.id}
+            <br>public key: ${pubkey}
+            `
+            // return
+            // import { Point } from '@noble/secp256k1';
+
+// JWK data
+// const jwk = {
+//   alg: "ES256K",
+//   crv: "secp256k1",
+//   kty: "EC",
+//   use: "sig",
+//   x: "OaUU8sqvn--OOL4YrHOQGmLco6U9XXY4Ay_m-rQMXko=",
+//   y: "F5fE-EpKO5pwqS6IYcd5FwnalQoDldgAyFY4100TNDk="
+// };
+
+
+// Decode base64url-encoded x and y coordinates
+// const x = Buffer.from(jwk.x, 'base64url');
+// const y = Buffer.from(jwk.y, 'base64url');
+
+// // Combine x and y into an uncompressed public key (0x04 prefix)
+// const uncompressedPublicKey = Uint8Array.from([0x04, ...x, ...y]);
+
+// // Optionally, convert to compressed format
+// const compressedPublicKey = utils.bytesToHex(utils.compressPublicKey(uncompressedPublicKey));
+
+// console.log("Uncompressed Public Key:", utils.bytesToHex(uncompressedPublicKey));
+// console.log("Compressed Public Key:", compressedPublicKey);
+
+
+}
+
+
+// Convert base64url to base64
+// function base64urlToBase64(input) {
+//   return input
+//     .replace(/-/g, '+')
+//     .replace(/_/g, '/')
+//     .padEnd(input.length + ((4 - (input.length % 4)) % 4, '=');
+// }
+
+// Convert base64url to base64
+function base64urlToBase64(input) {
+  return input
+    .replace(/-/g, '+')
+    .replace(/_/g, '/')
+    .padEnd(input.length + ((4 - (input.length % 4)) % 4), '=');
+}
+
+function formatPublicKey(jwk){
+
+// Decode base64url-encoded x and y coordinates
+ const x = Buffer.from(base64urlToBase64(jwk.x), 'base64');
+ const y = Buffer.from(base64urlToBase64(jwk.y), 'base64');
+
+// Combine x and y into an uncompressed public key (0x04 prefix)
+const uncompressedPublicKey = `0x04${x.toString('hex')}${y.toString('hex')}`;
+
+// Optionally, convert to an Ethereum address
+const address = ethers.computeAddress(uncompressedPublicKey);
+
+console.log("Uncompressed Public Key:", uncompressedPublicKey);
+// console.log("Ethereum Address:", address);
+
+
+// Check if the y-coordinate is even or odd
+const isYEven = y[y.length - 1] % 2 === 0;
+
+// Compress the public key
+const compressedPublicKey = ethers.toQuantity(
+  Uint8Array.from([
+    isYEven ? 0x02 : 0x03, // Prefix (0x02 for even, 0x03 for odd)
+    ...x // x-coordinate
+  ])
+);
+
+console.log("Compressed Public Key (no 0x prefix):", compressedPublicKey);
+return compressedPublicKey
+
+}
+
+
         readDIDtest.onclick = async function (e) {
             console.log('readDIDtest')
-            let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-            try { wallet = await new ethers.Wallet(chatETHPrivKey) }
-            catch (error) { console.log(error.message); }
-
-            let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
-            signer = wallet.connect(provider);
-            let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
-
-            let newavatar = 'new avatar fake contnet';
-            // let did = `did:starkid:${signer.address}`
-            let did = `did:starkid:${modifiedHexString}`
-
-            console.log('DID:', did)
+            let did = `${wallet.address}`
+            console.log('READ DID:', did)
             result.innerHTML = 'Reading DID: ' + did;
 
             x = await readDIDRecord(did)
@@ -271,27 +353,70 @@
         window.readDIDRecord = readDIDRecord;
 
 
+        async function getPK(id) {
+            const db = new Polybase({
+                defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+            });
 
+            const collectionReference = db.collection("STARKID");
+            const record = await collectionReference.record(id).get();
+            const { data } = record; // or const data = record.data
+            const resultRecord = await record.get();
+            // r= resultRecord;
+            // console.log('resultRecord:', resultRecord)
+            // return resultRecord
+            let  jwk = resultRecord.data.publicKey
+            // ppkk=jwk
+            let pubkey =  formatPublicKey(jwk)
+            // console.log('pubkey:',pubkey)
+            return pubkey
+
+        }
+        window.getPK = getPK;
 
         updateAliasDIDtest.onclick = async function (e) {
             console.log('updateAliasDIDtest')
 
-            let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-            try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+            // let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            // console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+            try { wallet = await new ethers.Wallet(wallet.privateKey) }
             catch (error) { console.log(error.message); }
 
             let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
             signer = wallet.connect(provider);
-            let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
+            // let chatWalletPrivKey = localStorage.getItem('chatETHPrivKey');
 
             // let newdata = "juanca";
-            let newdata = wallet.address;// eth address used to chat wit xmtp
-            // let did = `did:starkid:${signer.address}`
-            let did = `did:starkid:${modifiedHexString}`
+            // let newdata = wallet.address;// eth address used to chat wit xmtp
+            let newdata;
+            // let newdata = "juanca";
 
-            console.log('DID:', did)
-            updateAliasDID(did, newdata, signer);
+        Swal.fire({
+            title: 'Enter your data',
+            input: 'text',
+            inputValue: newdata,
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            cancelButtonText: 'Cancel',
+            preConfirm: (inputValue) => {
+                if (!inputValue) {
+                    Swal.showValidationMessage('Please enter something');
+                }
+                return inputValue;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                newdata = result.value;
+                console.log('New data:', newdata);
+                // You can now use the newdata variable as needed
+                let did = `${wallet.address}`
+        
+                console.log('DID:', did)
+                // console.warn(did, newdata, signer);
+                // return
+                updateAliasDID(did, newdata, signer);
+            }
+        });
 
         };
 
@@ -302,8 +427,6 @@
             const db = new Polybase({
                 defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
             });
-
-            // const newdatab = [did, newdata];
 
             db.signer(async (newdata) => {
                 console.log('data:', newdata)
@@ -329,8 +452,8 @@
 
         // --------------------------------------
         //    ENCRYPT FUNCITON
-        async function encryptPrivkey(privkey, pubkey, toEncrypt) {
-            console.log('encryptPrivkey()', toEncrypt)
+        async function encryptWithPrivkey(privkey, pubkey, toEncrypt) {
+            console.log('encryptWithPrivkey()', toEncrypt)
             // 0. coniverte en estring la eth priv key
             const secretMessage = EthCrypto.cipher.stringify(toEncrypt);
             console.log('ethPrivKeyString: ', secretMessage)
@@ -367,27 +490,53 @@
         updatePrivDataDIDtest.onclick = async function (e) {
             console.log('updatePrivDataDIDtest')
 
-            let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-            try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+            // let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            // console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+            try { wallet = await new ethers.Wallet(wallet.privateKey) }
             catch (error) { console.log(error.message); }
 
             let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
             let signer = wallet.connect(provider);
 
             // ---
-            let ethPrivKey = localStorage.getItem('chatETHPrivKey');
+            let ethPrivKey = wallet.privateKey;
+            // let ethPrivKey = localStorage.getItem('chatETHPrivKey');
             let ethPublicKey = ethers.getBytes(wallet.signingKey.publicKey);
-            let starknetPrivKeytoEncrypt = localStorage.getItem('starknetPrivKey');
+            // let encryptedContent = localStorage.getItem('starknetPrivKey');
 
+            let encryptedContent;
+
+Swal.fire({
+    title: 'Enter your data',
+    input: 'text',
+    inputValue: encryptedContent,
+    showCancelButton: true,
+    confirmButtonText: 'Submit',
+    cancelButtonText: 'Cancel',
+    preConfirm: (inputValue) => {
+        if (!inputValue) {
+            Swal.showValidationMessage('Encrypt something');
+        }
+        return inputValue;
+    }
+}).then(async(result)  => {
+    if (result.isConfirmed) {
+        encryptedContent = result.value;
+        console.log('Encrypting :', encryptedContent);
+        // You can now use the newdata variable as needed
+        let encryptedWithPrivkey = await encryptWithPrivkey(ethPrivKey, ethPublicKey, encryptedContent)
+        console.log('encryptedWithPrivkey:✅ ', encryptedWithPrivkey)
+        // let newdata = encryptedWithPrivkey;
+        
+        let did = `${wallet.address}`
+        console.log('DID:', did)
+        updatePrivDataDID(did, encryptedWithPrivkey, signer);
+
+
+    }
+});
             // ---
 
-            let encryptedPrivkey = await encryptPrivkey(ethPrivKey, ethPublicKey, starknetPrivKeytoEncrypt)
-            console.log('✅encryptedPrivkey:✅ ', encryptedPrivkey)
-            let newdata = encryptedPrivkey;
-            let did = `did:starkid:${modifiedHexString}`
-            console.log('DID:', did)
-            updatePrivDataDID(did, newdata, signer);
 
         };
 
@@ -425,17 +574,18 @@
 
         decryptPrivDatatest.onclick = async function (e) {
             console.log('decryptPrivDatatest')
-            let did = `did:starkid:${modifiedHexString}`
+            let did = `${wallet.address}`
             result.innerHTML = 'Reading DID: ' + did;
-            let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
-            console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
-            try { wallet = await new ethers.Wallet(chatETHPrivKey) }
+            // let chatETHPrivKey = localStorage.getItem('chatETHPrivKey');
+            // console.log('chatETHPrivKey already exists in localStorage:', chatETHPrivKey);
+            try { wallet = await new ethers.Wallet(wallet.privateKey) }
             catch (error) { console.log(error.message); }
 
             let provider = new ethers.JsonRpcProvider('https://ethereum-sepolia.publicnode.com'); //v5
             let signer = wallet.connect(provider);
 
-            let ethPrivKey = localStorage.getItem('chatETHPrivKey');
+            let ethPrivKey = wallet.privateKey;
+            // let ethPrivKey = localStorage.getItem('chatETHPrivKey');
             let ethPublicKey = ethers.getBytes(wallet.signingKey.publicKey);
             let x = await readDIDRecord(did)
             console.log('did read result: ', x.data.privData)
@@ -453,7 +603,7 @@
 
 
         async function decryptPrivData(privkey, pubkey, toDecrypt) {
-            console.log('encryptPrivkey()', toDecrypt)
+            console.log('decryptPrivData()', toDecrypt)
 
             // ---------------
             // DECRYPTING

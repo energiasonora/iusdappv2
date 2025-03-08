@@ -67,10 +67,16 @@ ex.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html sr
 
 <!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html  src/crowdfundingius.html src/pseudoWallet.html src/don2.html src/paycountdown.html --port 4343 --https -->
 
-yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html  src/crowdfundingius.html src/pseudoWallet.html src/don2.html src/paycountdown.html src/createCampaign.html --port 4343 --https
+<!-- yarn parcel src/index.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html src/permitEthers5.html src/utils.html src/crowdfunding.html src/tokenCreator.html src/stealthdonations4.html src/stealthdonations5.html src/ius.html src/donate.html src/campaign.html src/donateDeepLink.html  src/crowdfundingius.html src/pseudoWallet.html src/don2.html src/paycountdown.html src/createCampaign.html --port 4343 --https -->
 
 
-yarn parcel src/index.html   src/don2.html src/createCampaign.html --port 4343 --https
+<!-- yarn parcel src/index.html   src/don3.html src/createCampaign.html --port 4343 --https -->
+
+<!-- yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/stealthG.html --port 4343 --https      -->
+
+<!-- yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  --port 4343 --https -->
+
+yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  src/polybase.html --port 4343 --https
 
 
 # deploy to firebase

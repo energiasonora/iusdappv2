@@ -211,6 +211,23 @@
             return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
         };
 
+           // -----------------------------------------
+        // SWEETALERT
+        // -----------------------------------------
+
+        const newMessageToast = swal.mixin({
+			toast: true,
+			position: "bottom-left",
+			showConfirmButton: false,
+			showDenyButton: false,
+			showCancelButton: false,
+			timer: 7000,
+
+			// iconColor: "white",
+			customClass: {
+				popup: "supercolored-toast",
+			},
+		});
         // -----------------------------------------
         // WALLET FUNCTIONS
         // -----------------------------------------
@@ -329,6 +346,9 @@
                     console.log( 'Got message from ' + senderAddress + ': ' + decryptedPayload.message );
                     document.getElementById('chatBox').innerHTML += `<div><strong class='who notyou'>${shortTo}:</strong> ${decryptedPayload.message}<span class="timestamp">  ${timestamp} &check; </span></div>`;
 
+                    newMessageToast.fire({ icon: 'info', title: `${message.senderAddress} says:`, text: decryptedPayload.message });
+
+                    
                     }
                     console.log(`[${message.senderAddress}]: ${message.content}`)
                     chatBox.scrollTop = chatBox.scrollHeight;

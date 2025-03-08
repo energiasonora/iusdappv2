@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P ALICE</title>
+    <title>ENCRYPTET P2P CHAT (ALICE)</title>
 
     <style>
         body {
@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
     <script src="js/sweetalert2.all.min.js"></script>
+    
 
     <style>
          @media only screen and (prefers-color-scheme: dark) {
@@ -246,11 +247,29 @@
             return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
         };
 
+
+        // -----------------------------------------
+        // SWEETALERT
+        // -----------------------------------------
+
+        const newMessageToast = swal.mixin({
+			toast: true,
+			position: "bottom-left",
+			showConfirmButton: false,
+			showDenyButton: false,
+			showCancelButton: false,
+			timer: 7000,
+
+			// iconColor: "white",
+			customClass: {
+				popup: "supercolored-toast",
+			},
+		});
         // -----------------------------------------
         // WALLET FUNCTIONS
         // -----------------------------------------
 
-
+        
         // Function to derive an address on demand
         async function deriveAddressWallet(mnemonic, index) {
             const basePath = "m/44'/60'/0'/0/";
@@ -366,6 +385,8 @@
                     const senderAddress = EthCrypto.recover( decryptedPayload.signature, EthCrypto.hash.keccak256(decryptedPayload.message) );
                     console.log( 'Got message from ' + senderAddress + ': ' + decryptedPayload.message );
                     document.getElementById('chatBox').innerHTML += `<div><strong class='who notyou'>${shortTo}:</strong> ${decryptedPayload.message}<span class="timestamp">  ${timestamp} &check; </span></div>`;
+
+                    newMessageToast.fire({ icon: 'info', title: `${message.senderAddress} says:`, text: decryptedPayload.message });
 
                     }
                     console.log(`[${message.senderAddress}]: ${message.content}`)

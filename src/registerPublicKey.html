@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registerPublicKey.html</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+
+    <style>
+        #result{
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>registerPublicKey</h1>
+    
+        <div id="result"></div>
+        
+    </div>
+    <script src="js/ethers-6.13.2.umd.min.js"></script>
+
+    <script>
+
+        // -----------------------------------------
+        //  ONLOAD
+        // -----------------------------------------
+        optionsList = [
+            {
+                "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
+                "TOKEN_CHAINID": '421614',
+                "EXPLORER": 'https://sepolia.arbiscan.io/',
+                "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
+                "CONTRACT_ADDRESS": "0x258bC4Fa35270A869164EcE89F4c65cF16D4D3e0"//v3c
+
+            }
+        ]
+        // "CONTRACT_ADDRESS": "0x5981BA886D3C2D297b560f9546393aD5C8271209"//v3b
+
+        // Load messages on page load
+        window.addEventListener("load", init);
+
+
+        // Function to derive an address on demand
+        async function deriveAddressWallet(mnemonic, index) {
+            const basePath = "m/44'/60'/0'/0/";
+            const path = `${basePath}${index}`;
+            const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+            return derivedNode
+        }
+
+        async function aliceWallet() {
+            let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+            if (!aliceMnemonic) {
+                console.error('NO aliceMnemonic  in localStorage!');
+
+                const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                aliceMnemonic = randmnemonic.mnemonic.phrase;
+                localStorage.setItem('aliceMnemonic', aliceMnemonic);
+
+            } else {
+                console.log('aliceMnemonic is in localStorage!');
+
+            }
+            let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+            return aliceWall
+        }
+
+        async function init() {
+
+            // if localTest wallet
+            wallet = await aliceWallet()
+            
+            // let alicewallet = await aliceWallet();
+                let signer = await new ethers.Wallet(wallet.privateKey)
+
+            //  ---
+
+            // Compute the message hash (address + prefix)
+            //   const messageHash = ethers.solidityPackedKeccak256( ["string", "address"], ["\x19Ethereum Signed Message:\n32", wallet.address] );
+            const messageHash = ethers.keccak256(wallet.address); // Hash the address directly
+            console.log("messageHash:", messageHash);
+            mh =messageHash;
+            
+            // Sign the message (ethers.js automatically adds the prefix)
+            // const signature = await wallet.signMessage(wallet.address);
+            // const signature = await wallet.signMessage(messageHash);
+            const signature = await signer.signMessage(ethers.getBytes(messageHash));
+            sig = signature;
+            // const signature = await wallet.signMessage(arrayify(messageHash));
+
+            console.log("Signature:", signature);
+            document.getElementById('result').innerHTML =  `
+            ADDRESS: ${wallet.address}<br>
+            PUBLIC KEY: ${wallet.publicKey}<br>
+            SIGNATURE: ${signature}`
+
+
+            // -----------------------------------------------
+            // TEST
+            const recoveredAddress = ethers.verifyMessage(ethers.getBytes(messageHash), signature);
+            console.warn("RECOVEDER ADDRESS:", recoveredAddress)
+
+
+            // Initialize the JsonRpcProvider
+            const rpcUrl = optionsList[0].API; // Replace with your RPC URL
+            const provider = new ethers.JsonRpcProvider(rpcUrl);
+
+
+            // Connect the wallet to the provider
+            const signerprov = wallet.connect(provider);
+            s = signerprov;
+            // Define the contract ABI and address
+            // const abi = [
+            //     "function registerPublicKey(bytes memory _signature)",
+            //     "function recoverPublicKey(bytes memory _signature)",
+            //     "event PublicKeyRegistered(address indexed user, bytes publicKey)"
+            // ];
+            
+            // 0xf03E648fF7972eC21036ea46ccb9E7c70226b0f8 //v3
+            const abi = [ { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC721IncorrectOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ERC721InsufficientApproval", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "approver", "type": "address" } ], "name": "ERC721InvalidApprover", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" } ], "name": "ERC721InvalidOperator", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "ERC721InvalidOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "receiver", "type": "address" } ], "name": "ERC721InvalidReceiver", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "sender", "type": "address" } ], "name": "ERC721InvalidSender", "type": "error" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ERC721NonexistentToken", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "OwnableInvalidOwner", "type": "error" }, { "inputs": [ { "internalType": "address", "name": "account", "type": "address" } ], "name": "OwnableUnauthorizedAccount", "type": "error" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "approved", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "ApprovalForAll", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "goal", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "deadline", "type": "uint256" } ], "name": "CampaignCreated", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newGoal", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "newDeadline", "type": "uint256" } ], "name": "CampaignRenewed", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "contributor", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }, { "indexed": false, "internalType": "bool", "name": "useStealthAddress", "type": "bool" } ], "name": "ContributionMade", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "recipient", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" } ], "name": "FundsWithdrawn", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": false, "internalType": "bytes", "name": "publicKey", "type": "bytes" } ], "name": "PublicKeyRegistered", "type": "event" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "Transfer", "type": "event" }, { "inputs": [ { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" } ], "name": "balanceOf", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "campaigns", "outputs": [ { "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "bytes", "name": "recipientPublicKey", "type": "bytes" }, { "internalType": "uint256", "name": "goal", "type": "uint256" }, { "internalType": "uint256", "name": "deadline", "type": "uint256" }, { "internalType": "uint256", "name": "raisedAmount", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "string", "name": "_pseudonym", "type": "string" }, { "internalType": "bool", "name": "_useStealthAddress", "type": "bool" } ], "name": "contribute", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_goal", "type": "uint256" }, { "internalType": "uint256", "name": "_durationInDays", "type": "uint256" } ], "name": "createCampaign", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "getApproved", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "index", "type": "uint256" } ], "name": "getContributorByIndex", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "address", "name": "contributor", "type": "address" } ], "name": "getContributorPseudonym", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "getContributorsCount", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "hasGoalReached", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "operator", "type": "address" } ], "name": "isApprovedForAll", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "nextTokenId", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "ownerOf", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "publicKeyMap", "outputs": [ { "internalType": "bytes", "name": "", "type": "bytes" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes", "name": "_signature", "type": "bytes" } ], "name": "recoverPublicKey", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "bytes", "name": "_signature", "type": "bytes" } ], "name": "registerPublicKey", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "_newDurationInDays", "type": "uint256" }, { "internalType": "uint256", "name": "_newGoal", "type": "uint256" } ], "name": "renewCampaign", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "bytes", "name": "data", "type": "bytes" } ], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "bool", "name": "approved", "type": "bool" } ], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" } ], "name": "supportsInterface", "outputs": [ { "internalType": "bool", "name": "", "type": "bool" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "_address", "type": "address" }, { "internalType": "bytes", "name": "_signature", "type": "bytes" } ], "name": "testSignatureRecovery", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "pure", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "timeLeft", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "tokenURI", "outputs": [ { "internalType": "string", "name": "", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" } ], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "newOwner", "type": "address" } ], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" } ], "name": "withdrawAllFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "_tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "_amount", "type": "uint256" } ], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" } ]
+            const contractAddress = optionsList[0].CONTRACT_ADDRESS; // Replace with your deployed contract address
+
+            // Create the contract instance
+            const contract = new ethers.Contract(contractAddress, abi, signerprov);
+            c = contract;
+            
+            // Call the registerPublicKey function
+            // console.log(await contract.interface.getFunction("recoverPublicKey"));
+
+            const testsigrecov = await contract.testSignatureRecovery(wallet.address, signature);
+            console.log("Sig recov onchain:", testsigrecov);
+            
+// return 
+
+            const recoveredAddressOnchain = await contract.recoverPublicKey(signature);
+            console.log("Recovered Address from onchain:", recoveredAddressOnchain);
+            
+
+            // CHECK GAS AND BALANCE BEFORE MAKIGN THE TX
+            const pretx = await contract.registerPublicKey.estimateGas(signature);
+            console.log("pretx GAS: ",pretx);
+            const gasCost = ethers.formatEther(pretx);
+			console.log(`GAS cost: ${gasCost} `);
+
+        
+
+			let balance
+			try { balance = await provider.getBalance(wallet.address); } 
+			catch (error) { console.error('Error checking balance:', error.reason); return null; }
+            const gasBalance = ethers.formatEther(balance);
+			console.log(`GAS Balance: ${gasBalance} `);
+            
+
+         
+            if (gasCost > gasBalance) {
+    console.log('NOPE, we do NOT have enough gas to pay the tx');
+    document.getElementById('result').innerHTML += `<br>❌ NOT  enough gas to pay the tx  (${gasBalance})`
+    return
+} else {
+    console.log('YES, we DO have enough gas to pay the tx');
+    document.getElementById('result').innerHTML += `<br>✅ enough gas to pay the tx (${gasBalance})`
+
+    const tx = await contract.registerPublicKey(signature);
+    await tx.wait();
+    console.log("Public key registered successfully!", tx.hash);
+    document.getElementById('result').innerHTML += `<br>✅ Public key registered successfully (${tx.hash})`
+
+
+}
+
+            return
+
+
+
+            // 3 verify pubky reg 
+            // Fetch the registered public key
+            const publicKey = await contract.publicKeyMap(wallet.address);
+            console.log("Registered Public Key:", publicKey);
+
+
+            // Listen for the PublicKeyRegistered event
+            contract.on("PublicKeyRegistered", (user, publicKey) => {
+                console.log("Public key registered for user:", user);
+                console.log("Public key:", publicKey);
+            });
+
+        }
+
+
+		async function checkGasBalance(address) {
+			console.warn('💐💐💐checkGasBalance()')
+			// let token = await getPreferredToken()
+			// let selectedProvider = await selectRandomProvider(token.rpcs)
+			let provider
+			try {
+				provider = await new ethers.JsonRpcProvider(selectedProvider);
+				console.log("🤓Provider initialized successfully:", provider);
+			} catch (error) { console.warn("🤬Failed to initialize provider:", error.message || error); }
+			
+			// let balance = await provider.getBalance(address);
+
+			let balance
+			try { balance = await provider.getBalance(address); } 
+			catch (error) { console.error('Error checking balance:', error.reason); return null; }
+			const gasBalance = ethers.formatEther(balance);
+			console.log(`GAS Balance: ${gasBalance} `);
+			return gasBalance
+
+		}
+
+
+
+        // what should be signed
+        // "\x19Ethereum Signed Message:\n32" + keccak256(abi.encodePacked(userAddress))
+
+    </script>
+</body>
+
+</html>

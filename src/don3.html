@@ -15,7 +15,7 @@
         }
 
         body {
-            color: var(--font)!important;
+            /* color: var(--font)!important; */
             background-image: radial-gradient(circle, #5c0067 0%, var(--bckmodal) 100%);
             /* background-image: radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%); */
         }
@@ -147,7 +147,7 @@
     <!-- Connect Wallet Button (Top-Right) -->
     <div class="connect-wallet-container">
       <button id="connectWalletBtn" class="connect-wallet-btn" onclick="openWalletModal()">Connect Wallet</button>
-      <p id="walletStatus">Not connected</p>
+      <!-- <p id="walletStatus">Not connected</p> -->
     </div>
 
     <h1>Donate to Campaign</h1>
@@ -165,6 +165,7 @@
     <!-- Campaign Details -->
     <section id="campaignDetails" style="display: none;">
       <h2>Campaign Details</h2>
+      <p><strong>User:</strong> <span id="campaignDonor">Not connected</span></p>
       <p><strong>Recipient:</strong> <span id="campaignRecipient"></span></p>
       <p><strong>Goal:</strong> <span id="campaignGoal"></span> ETH</p>
       <p><strong>Raised:</strong> <span id="campaignRaised"></span> ETH</p>
@@ -481,7 +482,8 @@ async function connectWallet(walletType) {
     signer = await provider.getSigner();
     contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-    document.getElementById("walletStatus").innerText = `Connected: ${await signer.getAddress()}`;
+    // document.getElementById("walletStatus").innerText = `Connected: ${await signer.getAddress()}`;
+    document.getElementById("campaignDonor").innerText = `Connected: ${await signer.getAddress()}`;
     closeWalletModal();
     updateDonateButtonState(); // Update the donate button state
 
@@ -927,7 +929,8 @@ await listenToAllMessages(iusnaturalisxmtp, qrCodeData)
             //  signer = await provider.getSigner(recoveredAddress);
             // const signer = await provider.getSigner(recoveredAddress);
 
-            document.getElementById("walletStatus").innerText = `Connected: ${recoveredAddress}`;
+            // document.getElementById("walletStatus").innerText = `Connected: ${recoveredAddress}`;
+            document.getElementById("campaignDonor").innerText = `Connected: ${recoveredAddress}`;
             successMessage.innerText = `Conneted as: ${recoveredAddress}`
           document.getElementById('paymentModalTitle').innerText='Perfect!'
 
