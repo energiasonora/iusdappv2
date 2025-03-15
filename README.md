@@ -89,6 +89,12 @@ yarn parcel src/index.html src/crowdfundingius.html src/crowdfunding.html  --dis
 firebase deploy --only hosting:iusnaturalis
 ```
 
+#  chatCodeHandlers 
+  paymentSign0x22: handleSignPayment,
+  paymentReceived0x21: handlePaymentReceived,
+  peerGasPaymentAccepted0x21: handleGasPaymentAccepted,
+  peerGasPaymentRequest0x20: handleGasPaymentRequest,
+  addToken0x19: handleAddToken,
 
 # CONTRACTS
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->

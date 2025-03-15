@@ -140,6 +140,9 @@
       font-size: small;
       text-align: center;
     }
+    .copy2clipboard{
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -279,6 +282,10 @@
   <!-- JavaScript -->
 	<script src="js/ethers-6.13.2.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+	<script src="js/sweetalert2.all.min.js"></script>
+  <script src="js/tsparticles.confetti.bundle.min.js"></script>
+	<script src="js/Tone.min.js"></script> 
+
 
 
   <script type="module">
@@ -288,18 +295,89 @@
 </script>
     
   <script>
+	/*********************************************************************************************
+		.) SOUNDS
+		**********************************************************************************************/
+
+	
+
+		// Initialize Tone.js
+		Tone.start();
+		console.log("tone started");
+        
+       function playtxReceived() {
+         const synth = new Tone.Synth({
+           oscillator: { type: "triangle" },
+           envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 }
+         }).toDestination();
+       
+         const now = Tone.now();
+         const notes = ["C4", "D4", "E4", "G4", "A4", "B4", "C5", "E5"]; // Ascending scale
+         notes.forEach((note, index) => {
+           synth.triggerAttackRelease(note, "16n", now + index * 0.05); // Faster timing
+         });
+       
+         synth.triggerAttackRelease("G5", "8n", now + notes.length * 0.05); // After the arpeggio
+       }
+       const defaults = {
+            spread: 360,
+            ticks: 100,
+            gravity: 0,
+            decay: 0.94,
+            startVelocity: 30,
+        };
+
+        function shoot() {
+            confetti({
+                ...defaults,
+                particleCount: 30,
+                scalar: 1.2,
+                shapes: ["circle", "square"],
+                colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
+            });
+
+            confetti({
+                ...defaults,
+                particleCount: 20,
+                scalar: 2,
+                shapes: ["emoji"],
+                shapeOptions: {
+                    emoji: {
+                        value: ["🦄", "🌈"],
+                    },
+                },
+            });
+        }
+
+function donationReceived(){
+     // LAUNCH FANCY CONFETTI
+     setTimeout(shoot, 0);
+            setTimeout(shoot, 100);
+            setTimeout(shoot, 200);
+
+            playtxReceived()
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Donation received",
+              showConfirmButton: false,
+              timer: 1500
+            });
+}
+
+
 
 const paymentModal = document.getElementById("paymentModal");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const qrCodeContainer = document.getElementById("qrCodeContainer");
 const countdownElement = document.getElementById("countdown");
 
-
         optionsList = [
             {
               "CONTRACT_ADDRESS": "0x23f15345392Fd2caCCaC1CE2361eA28669E8326C",
                 "TOKEN_CHAIN_NAME": 'Arbitrum sepolia',
-                "TOKEN_CHAINID": '421614',
+                "CHAIN_ID": '421614',
+                // "TOKEN_CHAINID": '421614',
                 "EXPLORER": 'https://sepolia.arbiscan.io/',
                 "API": 'https://arbitrum-sepolia.infura.io/v3/9219faae2bac4d24b95c2d967b22005a',
                 "ALCHEMY_KEY": 'X048z0PxuDPd5vbTiKLbWJgogG9Tvd2I'
@@ -446,9 +524,15 @@ async function connectWallet(walletType) {
 
       case "iusnaturalis":
         // alert("Connecting to iusNaturalis...");
-        await connectToIusNaturalis();
+        await iusConnectModal()
+        ethereumProvider = window.iusNaturalis;
+        window.iusNaturalis = new IusNaturalisProvider(recoveredAddress);
+        provider = new ethers.BrowserProvider(window.iusNaturalis);
+        // window.iusNaturalis = new IusNaturalisProvider(recoveredAddress);
+
+        // await connectToIusNaturalis();
         
-        return
+        // return
 
         const rpcUrl = optionsList[0].API; // Replace with your RPC URL
             const jsonRpcProvider = new ethers.JsonRpcProvider(rpcUrl);
@@ -647,7 +731,7 @@ function startCountdownTimer(timeLeftInSeconds) {
 }
  
     // Handle donation form submission
-    document.getElementById("donateForm").addEventListener("submit", async (e) => {
+document.getElementById("donateForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
   // Check if the wallet is connected
@@ -661,6 +745,73 @@ function startCountdownTimer(timeLeftInSeconds) {
       const amount = ethers.parseEther(document.getElementById("amount").value);
       const pseudonym = document.getElementById("pseudonym").value || "Anonymous";
 
+// Create the contract instance with the signer
+// console.warn()
+console.warn('INFO DEL CONTRACT:', CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+cx =contract
+
+// UNSINGNED TX
+    const tokenId = getQueryParams().tokenId; // Retrieve tokenId from query params
+  
+    // Encode the function call using the contract ABI
+  const iface = new ethers.Interface(CONTRACT_ABI);
+  const data = iface.encodeFunctionData("contribute", [tokenId, pseudonym]);
+console.warn('DATA:', data)
+
+  // Create the unsigned transaction object
+  unsignedTx = {
+    to: CONTRACT_ADDRESS,
+    value: amount.toString(),
+    data: data,
+    gasLimit: 100000, // Adjust gas limit as needed
+    chainId: optionsList[0].CHAIN_ID, // Replace with the appropriate chain ID (e.g., 1 for Ethereum Mainnet)
+  };
+
+  console.log(unsignedTx);
+
+  let stringedMessage = JSON.stringify(unsignedTx)
+  console.log("stringedMessage: ",stringedMessage); // Check the output
+// SEND MESSAGE
+  // Define the code for the message type
+            const chatCode = "paymentSign0x22"; // Example: Replace with the appropriate code
+            
+            // // Format the message by prepending the code
+            const formattedMessage = `${chatCode} ${stringedMessage}`;
+            
+            // // Create a new conversation
+            let conversation = await iusnaturalisxmtp.conversations.newConversation(peerVerifiedAddress);
+            conv = conversation
+            // // Send the formatted message
+            await conversation.send(formattedMessage);
+
+            return
+
+
+ 
+  return
+
+//     console.log("Gas Estimation Successful:", estimatedGas);
+//   } catch (error) {
+//     console.error("Simulation Failed:", error);
+//   }
+// return
+// make the tx
+      try {
+  // Call the `contribute` function
+  // const tx = await contract.contribute(tokenId, pseudonym, { value: amount });
+  const tx = await contract.contribute(getQueryParams().tokenId, pseudonym, { value: amount });
+
+  console.log("Transaction Sent:", tx.hash);
+
+  // Wait for the transaction to be mined
+  const receipt = await tx.wait();
+  console.log("Transaction Confirmed:", receipt);
+} catch (error) {
+  console.error("Error Sending Transaction:", error);
+}
+
+      return 
       try {
         const tx = await contract.contribute(getQueryParams().tokenId, pseudonym, { value: amount });
         await tx.wait();
@@ -672,6 +823,10 @@ function startCountdownTimer(timeLeftInSeconds) {
         console.error("Error donating:", error);
         alert("Failed to donate. Please try again.");
       }
+
+
+
+
     });
 
     // Automatically load campaign if tokenId is present in the URL
@@ -769,6 +924,11 @@ async function contractWallet() {
 
     // Function to open the modal and generate QR code
 async function iusConnectModal() {
+  console.warn('iusConnectModal()')
+  // closeWalletModal();
+
+// let countdownInterval;
+// let remainingTime = 15 * 60; // 15 minutes in seconds
   
 const successSection = document.getElementById("successSection");
 
@@ -857,6 +1017,7 @@ console.log('isNOTConnected!')
 
   // Show modal
   paymentModal.showModal();
+  closeWalletModal();
 
   // Start countdown
   startCountdown();
@@ -900,7 +1061,8 @@ await listenToAllMessages(iusnaturalisxmtp, qrCodeData)
 
 
              if (message.senderAddress === smartcontractAddr) {
-                 console.log(`📣 conversation from yourself`, smartcontractAddr, message.content);
+                 console.log(`📣 conversation from yourself`);
+                //  console.log(`📣 conversation from yourself`, smartcontractAddr, message.content);
 
                  continue;
              }
@@ -908,6 +1070,7 @@ await listenToAllMessages(iusnaturalisxmtp, qrCodeData)
 
              console.log(`🎃 New message from [${message.senderAddress}]: ${message.content}`);
 
+             peerAddress= message.senderAddress;
              // Add message to the global message store
              if (!messageStore[message.senderAddress]) {
                  messageStore[message.senderAddress] = [];
@@ -925,15 +1088,21 @@ await listenToAllMessages(iusnaturalisxmtp, qrCodeData)
             let recoveredAddress = ethers.verifyMessage(JSON.stringify(messageInput), message.content);
             console.warn(`Logged in as: ${recoveredAddress}`);
 
+            peerVerifiedAddress= recoveredAddress;
              
-            //  signer = await provider.getSigner(recoveredAddress);
             // const signer = await provider.getSigner(recoveredAddress);
-
+            
             // document.getElementById("walletStatus").innerText = `Connected: ${recoveredAddress}`;
             document.getElementById("campaignDonor").innerText = `Connected: ${recoveredAddress}`;
             successMessage.innerText = `Conneted as: ${recoveredAddress}`
-          document.getElementById('paymentModalTitle').innerText='Perfect!'
+            document.getElementById('paymentModalTitle').innerText='Perfect!'
+            
+            window.iusNaturalis = new IusNaturalisProvider(recoveredAddress);
+            provider = new ethers.BrowserProvider(window.iusNaturalis);
+            //  signer = await provider.getSigner(recoveredAddress);
+             signer = await provider.getSigner();
 
+             
             showSuccessAnimation()
             document.getElementById('connectWalletBtn').style.display ='none'
 
@@ -953,7 +1122,128 @@ await listenToAllMessages(iusnaturalisxmtp, qrCodeData)
 
 
 
+  // ---------------------------------------------
+ // INJECT PROVIDER
+ // ---------------------------------------------
+//  import { ethers } from "ethers";
 
+class IusNaturalisSigner extends ethers.AbstractSigner {
+    // Remove type annotations and private keyword (not valid in JS)
+    constructor(provider, address) {
+        super(provider);
+        this.provider = provider;
+        this._address = ethers.getAddress(address); // Validate and format the address
+    }
+
+    async getAddress() {
+      alert('is naturalis getAddress')
+        return this._address;
+    }
+
+    async signMessage(message) {
+        const messageBytes = typeof message === 'string' 
+            ? ethers.toUtf8Bytes(message) 
+            : message;
+        return this.provider.send('personal_sign', [
+            ethers.hexlify(messageBytes), 
+            this._address
+        ]);
+    }
+
+    async signTransaction(transaction) {
+        const tx = await ethers.resolveProperties(transaction);
+        return this.provider.send('eth_signTransaction', [tx]);
+    }
+
+    async sendTransaction(transaction) {
+        const tx = await ethers.resolveProperties(transaction);
+        const hash = await this.provider.send('eth_sendTransaction', [tx]);
+        return this.provider.getTransaction(hash);
+    }
+}
+
+class IusNaturalisProvider {
+  constructor(address) {
+    this.isIusNaturalis = true;
+    this._events = {};
+    this._address = ethers.getAddress(address); // Validate and format the address
+  }
+
+  // Core method for handling JSON-RPC requests
+  async request({ method, params }) {
+    // alert('_sendToWalletBackend')
+    const response = await this._sendToWalletBackend(method, params);
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    return response.result;
+  }
+
+  // ... (keep existing on/removeListener methods)
+
+  async _sendToWalletBackend(method, params) {
+    return {
+      jsonrpc: "2.0",
+      id: 1,
+      result: await this._handleMethod(method, params),
+    };
+  }
+  async _handleMethod(method, params) {
+  switch (method) {
+    case "net_version":
+      // Return the chain ID as a string (e.g., "1" for Ethereum Mainnet)
+      return "1"; // Replace with the actual chain ID of your network
+
+    case "eth_chainId":
+      // alert('get eth_chainId');
+      // Return the chain ID as a hex string (e.g., "0x1" for Ethereum Mainnet)
+      return optionsList[0].TOKEN_CHAINID; // Replace with the actual chain ID in hex format
+      
+      // return "0x1"; // Replace with the actual chain ID in hex format
+
+    case "eth_requestAccounts":
+      return [this._address];
+
+    case "eth_accounts":
+      return [this._address];
+
+    case "personal_sign":
+      if (params[1].toLowerCase() !== this._address.toLowerCase()) {
+        throw new Error("Invalid address");
+      }
+      return "0x_signed_message_hash";
+
+    case "eth_sendTransaction":
+      alert('sendign transaction!')
+      params[0].from = this._address;
+      return "0x_transaction_hash";
+
+      case "eth_blockNumber":
+      // Return the current block number as a hex string
+      // return "0x" + (await ethers._getBlockNumber()).toString(16);
+      return "0x" + (await this._getBlockNumber()).toString(16);
+
+
+    default:
+      throw new Error(`Method ${method} not supported`);
+  }
+}
+
+  // Helper method to fetch or mock the block number
+  async _getBlockNumber() {
+    // Option 1: Fetch the block number from a real Ethereum node
+    console.warn('using helper method for geblocknumber')
+    const fallbackProvider = new ethers.JsonRpcProvider(optionsList[0].API);
+    return await fallbackProvider.getBlockNumber();
+
+    // Option 2: Mock the block number for testing
+    // return 18_000_000; // Replace with a mock block number
+  }
+ 
+}
+ 
  // ---------------------------------------------
  // UPDATE CONVERSATIONS
  // ---------------------------------------------
@@ -973,33 +1263,9 @@ await listenToAllMessages(iusnaturalisxmtp, qrCodeData)
      alert(`Logged in as: ${recoveredAddress}`);
 
 
-     // const signature = "0x13a9c371bcfe8cb6e48a4d7f14973a2546949c078b7c108e83fa3a105a498ce86e1e6947a774b6c3cd2ad39d6544ee6a7eccd9545902e167cae80acc27b0623d1c";
-     // // Recover the signer's address
-     // const signerAddress = ethers.recoverAddress(messageHash, signature);
-     // console.log("Signer Address:", signerAddress);
-
+    
      return
-    //  // document.getElementById("signInButton").innerText = 'Disconnect';
-    //  document.getElementById('result').innerHTML = `✅ SIGNED: ${recoveredAddress} `
-    //  document.getElementById("canvas").innerText = '';
-
-    //  document.getElementById('connection').style.display = 'none'
-    //  document.getElementById('disconnection').style.display = 'block'
-
-    //  // save address in localstorage
-    //  localStorage.setItem('recoveredAddress', recoveredAddress)
-
-    //  let signerAddresslink = ` <a href="${optionsList[0].EXPLORER}/address/${recoveredAddress}" target="_blank">${recoveredAddress}</a>`
-    //  document.getElementById('info').innerHTML = `<br>ADDRESS: ${signerAddresslink} <svg class='copy2clipboard' id='copyAddress' onclick="event.stopPropagation();copy2clipboard('${recoveredAddress}')" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path  fill='currentColor' d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/> </svg> `;
-
-    //  // 3. stopListeningToAllMessages(), then start streaming messages for that particular conversation using conversation.streamMessages().
-    //  console.log('stopListeningToAllMessages')
-    //  await stopListeningToAllMessages(recoveredAddress)
-
-    //  // SEND TX TO SIGN
-    //  await sendMessage(iusnaturalisxmtp, recoveredAddress, '1: CONNECT!')
-
-
+ 
  }
 
 
@@ -1225,6 +1491,8 @@ async function signTransaction(serializedTx, privateKey) {
 // BROADCASTEADO AUTOMATICAMENTE POR EL CLIENTE
 // SI EL CLIENTE NO TINEE INTERNET, LO PASA POR QR AL EMISO
 async function broadcastTransaction(signedTx) {
+
+  
     try {
         const txResponse = await provider.broadcastTransaction(signedTx);
         console.log("Transaction broadcasted! Tx hash:", txResponse.hash);
@@ -1239,7 +1507,31 @@ async function broadcastTransaction(signedTx) {
 
 
 
+async function sendSignedMessage(xmtpClient, address, messageContent) {
+            try {
+   
+				let conversation = await iusnaturalisxmtp.conversations.newConversation(address);
+	
+				// Send the message
+                await conversation.send(messageContent);
+                console.log(`Message sent to ${address}: ${messageContent}`);
 
+                // Optionally, add the sent message to the message store
+                if (!messageStore[address]) {
+                messageStore[address] = [];
+                }
+                messageStore[address].push({
+                content: messageContent,
+                timestamp: new Date(),
+                sender: 'self', // Mark it as sent by the user
+                });
+
+                // Update the chat window
+                // updateChatWindow(address, messageContent);
+            } catch (err) {
+                console.error(`Failed to send message to ${address}:`, err);
+            }
+        }
     // -----------------------------------------
             // NEW STEALTH ADDRESS FUNCTIONS
             // -----------------------------------------
@@ -1275,6 +1567,80 @@ async function broadcastTransaction(signedTx) {
                 return { stealthAddress, sharedSecret }
             }
     
+
+
+
+            // ##################################
+            // CHATCODES
+          
+            
+            // Declare all chatCodes here
+const chatCodeHandlers = {
+  paymentSign0x22: handleSignPayment,
+  paymentReceived0x21: handlePaymentReceived,
+  peerGasPaymentAccepted0x21: handleGasPaymentAccepted,
+  peerGasPaymentRequest0x20: handleGasPaymentRequest,
+  addToken0x19: handleAddToken,
+};
+
+async function handleChatCodes(message) {
+  const content = message.content.trim(); // Trim whitespace for consistency
+
+  // Extract the code from the beginning of the message
+  const codeEndIndex = content.indexOf(" ");
+  const code = codeEndIndex === -1 ? content : content.slice(0, codeEndIndex);
+
+  // Check if the code exists in the handlers map
+  if (chatCodeHandlers[code]) {
+    // Extract the rest of the message (if any) after the code
+    const remainingMessage = codeEndIndex === -1 ? "" : content.slice(codeEndIndex + 1).trim();
+
+    // Call the corresponding handler with the full message and remaining content
+    await chatCodeHandlers[code]({ ...message, content: remainingMessage });
+  } else {
+    console.warn(`Unknown chat code: ${code}`);
+  }
+}
+
+// Example handler functions
+async function handleSignPayment(message) {
+  console.log("Handling SIGN PAUMENT:", message);
+
+}
+
+async function handlePaymentReceived(message) {
+  console.log("Handling payment received:", message);
+}
+
+async function handleGasPaymentAccepted() {
+  console.log("Handling gas payment accepted");
+}
+
+async function handleGasPaymentRequest(message) {
+  console.log("Handling gas payment request:", message);
+}
+
+async function handleAddToken(message) {
+  console.log("Handling add token:", message);
+}
+
+// USAGE
+  // Define the code for the message type
+            // const chatCode = "paymentReceived0x21"; // Example: Replace with the appropriate code
+            
+            // // Original message content
+            // const originalMessage = "Transaction successful";
+            
+            // // Format the message by prepending the code
+            // const formattedMessage = `${chatCode} ${originalMessage}`;
+            
+            // // Create a new conversation
+            // let conversation = await iusnaturalisxmtp.conversations.newConversation(addr);
+            
+            // // Send the formatted message
+            // await conversation.send(formattedMessage);
+
+
   </script>
 </body>
 </html>

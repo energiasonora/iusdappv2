@@ -1662,6 +1662,18 @@
 
 			await createXMPTchat(signer);
 
+			 // ##################################
+            // CHATCODES
+            // Declare all chatCodes here
+			chatCodeHandlers = {
+			paymentSign0x22: handleSignPayment,
+			 paymentReceived0x21: handlePaymentReceived,
+			 peerGasPaymentAccepted0x21: handleGasPaymentAccepted,
+			 peerGasPaymentRequest0x20: handleGasPaymentRequest,
+			 addToken0x19: handleAddToken
+		   };
+			
+            
 			// --------------
 			// LOAD DEFAULT TOKENS
 			// - USDC(erc20/ arbitrum sepolia) ==> FAUCET: 
@@ -4551,7 +4563,7 @@ return
 
 			if (!isDuplicate) {
 				console.warn('CONTACT IS NOT IN YOUR CONTACTS');
-				alert('CONTACT IS NOT IN YOUR CONTACTS');
+				// alert('CONTACT IS NOT IN YOUR CONTACTS');
 				a.push(contact);
 
 				// Save the updated contacts list to localStorage
@@ -5071,6 +5083,8 @@ initChatClient()
 				showNotification(message.senderAddress, message.content)
 				showNotification('new message:', ' check the dapp!')
 
+				handleChatCodes(message) 
+
 				try {
 					await playButtonClickSound()
 					// addToAgenda()
@@ -5083,65 +5097,120 @@ initChatClient()
 				// ########################
 				// CHAT CODES
 				// ########################
-				if (message.content.includes("paymentReceived0x21")) {
-					console.log("You received a payment from: ", message.senderAddress);
-					m = message
-					const txLinkMatch = message.content.match(/txLink="([^"]+)"/);
-					let txLink;
-					if (txLinkMatch && txLinkMatch[1]) {
-						txLink = txLinkMatch[1];
-						console.log("Transaction Link:", txLink);
-					}
-					else { console.log("txLink not found."); }
-					Swal.fire({ icon: "success", title: `Received!🤑`, html: `<span class ="tx"> Here is the tx  <a href="${txLink}" target="_blank">Link</a> ✨✨✨</span>` });
-				}
 
-				if (message.content.includes("peerGasPaymentAccepted0x21")) {
-					Swal.fire({ title: "Your gas is being payed by your peer!", width: 600, padding: "3em", background: "lightgreen ", backdrop: ` rgba(0,123,123,0.4) url("./nyan-cat.gif") left top no-repeat ` });
 
-					setTimeout(() => {
-						Swal.fire("Done!", "", "success");
-						closeModalId('#walletSend')
-					}, 3000);
-				}
+//             // ##################################
+//             // CHATCODES
+          
+            
+//             // Declare all chatCodes here
+//  chatCodeHandlers = {
+//   signPayment0x22: handleSignPayment,
+//   paymentReceived0x21: handlePaymentReceived,
+//   peerGasPaymentAccepted0x21: handleGasPaymentAccepted,
+//   peerGasPaymentRequest0x20: handleGasPaymentRequest,
+//   addToken0x19: handleAddToken,
+// };
+// async function handleChatCodes(message) {
+// 			const content = message.content;
 
-				if (message.content.includes("peerGasPaymentReques0x20")) {
-					console.log("You received a peerGasPamentRequest from: ", message.senderAddress);
-					conversation = await iusnaturalisxmtp.conversations.newConversation(message.senderAddress)
-					Swal.fire({
-						title: "Do you have some gas?",
-						text: "your peer is asking you to pay for the gas",
-						icon: "question",
-						showDenyButton: true,
-						showCancelButton: true,
-						confirmButtonText: ` <i class="fa fa-thumbs-up"></i> Yes! `,
-						denyButtonText: ` <i class="fa fa-thumbs-down"></i>  Decline`,
-						cancelButtonText: `  Ignore`
-					}).then(async (result) => {
-						if (result.isConfirmed) {
-							Swal.fire({ title: `You are paying for the gas for ${message.senderAddress} (it is being automaticalle discounted from your gas balance)!`, width: 600, padding: "3em", color: "#716add", background: "#fff ", backdrop: ` rgba(0,0,123,0.4) url("./nyan-cat.gif") left top no-repeat ` });
-							await conversation.send(`user accepted to pay for the gas! <pre style="display: none;">peerGasPaymentAccepted0x21</pre>`);// Send a message
-							setTimeout(() => {
-								Swal.fire("Gas payed!(FAKE...)", "", "success");
-							}, 5000);
-						} else if (result.isDenied) {
-							Swal.fire("You decline to pay for the gas", "", "info");
-						}
-					});
-				}
+// 			if (content.includes("paymentReceived0x21")) {
+// 				handlePaymentReceived(message);
+// 			} else if (content.includes("peerGasPaymentAccepted0x21")) {
+// 				handleGasPaymentAccepted();
+// 			} else if (content.includes("peerGasPaymentReques0x20")) {
+// 				await handleGasPaymentRequest(message);
+// 			} else if (content.includes("addToken0x19")) {
+// 				await handleGasPaymentRequest(message);
+// 			}
+// 		}
+async function handleChatCodes(message) {
+	console.log("MESSAGE:", message)
+  const content = message.content.trim(); // Trim whitespace for consistency
+
+  // Extract the code from the beginning of the message
+  const codeEndIndex = content.indexOf(" ");
+  const code = codeEndIndex === -1 ? content : content.slice(0, codeEndIndex);
+
+  // Check if the code exists in the handlers map
+  if (chatCodeHandlers[code]) {
+    // Extract the rest of the message (if any) after the code
+    const remainingMessage = codeEndIndex === -1 ? "" : content.slice(codeEndIndex + 1).trim();
+
+    // Call the corresponding handler with the full message and remaining content
+    await chatCodeHandlers[code]({ ...message, content: remainingMessage });
+  } else {
+    console.warn(`Unknown chat code: ${code}`);
+  }
+}
+
+    
+
+				// if (message.content.includes("paymentReceived0x21")) {
+				// 	console.log("You received a payment from: ", message.senderAddress);
+				// 	m = message
+				// 	const txLinkMatch = message.content.match(/txLink="([^"]+)"/);
+				// 	let txLink;
+				// 	if (txLinkMatch && txLinkMatch[1]) {
+				// 		txLink = txLinkMatch[1];
+				// 		console.log("Transaction Link:", txLink);
+				// 	}
+				// 	else { console.log("txLink not found."); }
+				// 	Swal.fire({ icon: "success", title: `Received!🤑`, html: `<span class ="tx"> Here is the tx  <a href="${txLink}" target="_blank">Link</a> ✨✨✨</span>` });
+				// }
+
+				// if (message.content.includes("peerGasPaymentAccepted0x21")) {
+				// 	Swal.fire({ title: "Your gas is being payed by your peer!", width: 600, padding: "3em", background: "lightgreen ", backdrop: ` rgba(0,123,123,0.4) url("./nyan-cat.gif") left top no-repeat ` });
+
+				// 	setTimeout(() => {
+				// 		Swal.fire("Done!", "", "success");
+				// 		closeModalId('#walletSend')
+				// 	}, 3000);
+				// }
+
+				// if (message.content.includes("peerGasPaymentReques0x20")) {
+				// 	console.log("You received a peerGasPamentRequest from: ", message.senderAddress);
+				// 	conversation = await iusnaturalisxmtp.conversations.newConversation(message.senderAddress)
+				// 	Swal.fire({
+				// 		title: "Do you have some gas?",
+				// 		text: "your peer is asking you to pay for the gas",
+				// 		icon: "question",
+				// 		showDenyButton: true,
+				// 		showCancelButton: true,
+				// 		confirmButtonText: ` <i class="fa fa-thumbs-up"></i> Yes! `,
+				// 		denyButtonText: ` <i class="fa fa-thumbs-down"></i>  Decline`,
+				// 		cancelButtonText: `  Ignore`
+				// 	}).then(async (result) => {
+				// 		if (result.isConfirmed) {
+				// 			Swal.fire({ title: `You are paying for the gas for ${message.senderAddress} (it is being automaticalle discounted from your gas balance)!`, width: 600, padding: "3em", color: "#716add", background: "#fff ", backdrop: ` rgba(0,0,123,0.4) url("./nyan-cat.gif") left top no-repeat ` });
+				// 			await conversation.send(`user accepted to pay for the gas! <pre style="display: none;">peerGasPaymentAccepted0x21</pre>`);// Send a message
+				// 			setTimeout(() => {
+				// 				Swal.fire("Gas payed!(FAKE...)", "", "success");
+				// 			}, 5000);
+				// 		} else if (result.isDenied) {
+				// 			Swal.fire("You decline to pay for the gas", "", "info");
+				// 		}
+				// 	});
+				// }
 				
-				if (message.content.includes("addToken0x19")) {
-					Swal.fire({ title: "Do you want to add this token?",
-					width: 600, padding: "3em", background: "lightgreen ", 
-					backdrop: ` rgba(0,123,123,0.4) url("./nyan-cat.gif") left top no-repeat ` });
+				// if (message.content.includes("addToken0x19")) {
+				// 	Swal.fire({ title: "Do you want to add this token?",
+				// 	width: 600, padding: "3em", background: "lightgreen ", 
+				// 	backdrop: ` rgba(0,123,123,0.4) url("./nyan-cat.gif") left top no-repeat ` });
 
-					// setTimeout(() => {
-					// 	Swal.fire("Done!", "", "success");
-					// 	closeModalId('#walletSend')
-					// }, 3000);
-				}
+				// 	// setTimeout(() => {
+				// 	// 	Swal.fire("Done!", "", "success");
+				// 	// 	closeModalId('#walletSend')
+				// 	// }, 3000);
+				// }
 
-				else { console.log("(DIRTYFIX)The message does not contain the text: 'can you pay for the gas?'"); }
+				// else { console.log("(DIRTYFIX)The message does not contain the text: 'can you pay for the gas?'"); }
+
+
+
+// --------------------------------
+
+
 				var storedContacts = [];
 				let storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
 				var index = storedContacts.findIndex(existingContact => existingContact.address === message.senderAddress);
@@ -5171,22 +5240,219 @@ initChatClient()
 		// ..................................................................
 		// Handle different chat codes
 		//declar all chatCodes here
-		async function handleChatCodes(message) {
-			const content = message.content;
+		// async function handleChatCodes(message) {
+		// 	const content = message.content;
 
-			if (content.includes("paymentReceived0x21")) {
-				handlePaymentReceived(message);
-			} else if (content.includes("peerGasPaymentAccepted0x21")) {
-				handleGasPaymentAccepted();
-			} else if (content.includes("peerGasPaymentReques0x20")) {
-				await handleGasPaymentRequest(message);
-			} else if (content.includes("addToken0x19")) {
-				await handleGasPaymentRequest(message);
-			}
-		}
+		// 	if (content.includes("paymentReceived0x21")) {
+		// 		handlePaymentReceived(message);
+		// 	} else if (content.includes("peerGasPaymentAccepted0x21")) {
+		// 		handleGasPaymentAccepted();
+		// 	} else if (content.includes("peerGasPaymentReques0x20")) {
+		// 		await handleGasPaymentRequest(message);
+		// 	} else if (content.includes("addToken0x19")) {
+		// 		await handleGasPaymentRequest(message);
+		// 	}
+		// }
 		// ..................................................................
-				// Handle "addToken" event
-				function handleAddToken(message) {
+			
+		  // ##################################
+            // CHATCODES HANDLERS
+          
+			function validateGasFees(maxFeePerGas, maxPriorityFeePerGas) {
+				if (maxPriorityFeePerGas > maxFeePerGas) {
+					throw new Error(
+						`Invalid gas fees: maxPriorityFeePerGas (${maxPriorityFeePerGas}) cannot exceed maxFeePerGas (${maxFeePerGas})`
+					);
+				}
+			}
+				
+
+
+// Example handler functions
+async function handleSignPayment(message) {
+	// alert('handleSignPayment');
+  console.warn("Handling SIGN PAUMENT:", message);
+
+  lastm = message;
+  
+  
+  //   STOP ATUOMATIC BALANCE CHECKS
+	clearInterval(balanceCheckInterval);
+	balanceCheckInterval = null;
+	
+	
+	  let parsedMessage = JSON.parse(message.content);
+	//   let parsedMessage = JSON.parse(lastm.content);
+	
+	  let amount =  ethers.formatEther(parsedMessage.value)
+	  let chainId =  parsedMessage.chainId
+	  let to =  parsedMessage.to
+	  let gasLimit = parsedMessage.gasLimit
+	  let data =  parsedMessage.data
+	
+	let composeMessage = `
+	You are sending:
+	Amount: ${amount}
+	To: ${to} 
+	Chain Id: ${chainId} 
+	gasLimit ⛽: ${gasLimit} 
+	Data 🛢️: ${data} 
+	
+	`
+	
+	// Convert the value field back to BigInt
+	let bigIntAmount =  BigInt(parsedMessage.value)
+	console.log("Deserialized bigIntAmount:", bigIntAmount);
+	
+	
+
+
+
+    // Process the request
+	Swal.fire({
+		title: '💸 Sign this request to make this TX:',
+		html: `<pre class='codeToSign'>${composeMessage}</pre>`, // Display the rest of the message
+		// text: cleanedJson, // Display the rest of the message
+		icon: 'question',
+		showCancelButton: true,
+		confirmButtonText: 'Sign ',
+		cancelButtonText: 'Refuse',
+	}).then(async (result) => {
+		if (result.isConfirmed) {
+			console.log("User chose to sign the message.");
+
+			// -----------------
+			// GET PROVIDER
+			// -----------------
+			console.warn('CREATING PROVIDER FOR CHAIN ID:', chainId)
+			const rpcs = await getRPCsByChainId(Number(chainId));
+			const selProv = await simpleRandomProvider(rpcs);
+			const provider = await new ethers.JsonRpcProvider(selProv);
+				pv = provider;
+			if (!selProv) {
+				throw new Error('No working RPC provider found');
+			}
+		
+			console.log('Selected RPC URL:', selProv);
+
+			// -----------------
+			// GET SIGNER's ADDRESS
+			// -----------------
+			let presigner = await getSigner()
+			// let provider = new ethers.JsonRpcProvider(`${optionsList[0].API}`); //v5
+			let signer = presigner.connect(provider);
+			console.log('signer!:', signer)
+
+			// let address  = lastm.senderAddress;
+
+			// // -----------------
+			// // CHECK GAS FEES
+			// // -----------------   
+			
+			let unsignedTx = {
+				from: userAddress,
+				to: to,
+				value: bigIntAmount,
+				data: data,
+				chainId: chainId, // Replace with the appropriate chain ID (e.g., 1 for Ethereum Mainnet)
+			  };
+				  
+			  utx=unsignedTx;
+			
+           		// check the sender's balance
+		const balance = await provider.getBalance(userAddress);
+		console.log("Sender balance:", ethers.formatEther(balance), "ETH");
+
+
+		const gasDetails = await prepareGasDetails(provider, unsignedTx);
+
+		// Fetch the Latest Nonce
+		const nonce = await provider.getTransactionCount(userAddress, "latest");
+		console.log("Current nonce:", nonce);
+		console.log("DATA:", data);
+
+		
+          // Step 2: Add gas details to the unsigned transaction
+		  const finalUnsignedTx = {
+            ...unsignedTx,
+			gasLimit: gasDetails.gasLimit,
+			maxFeePerGas: gasDetails.maxFeePerGas || ethers.parseUnits("100", "gwei"), // Default if not available
+			maxPriorityFeePerGas: gasDetails.maxPriorityFeePerGas || ethers.parseUnits("5", "gwei"), // Default if not available
+			nonce, // Use the fetched nonce
+        };
+
+        console.log("finalUnsignedTx:", finalUnsignedTx);
+
+
+		 // Step 6: Simulate the transaction
+		 try {
+			const result = await provider.call({
+                finalUnsignedTx
+            });
+         
+            console.log("Transaction simulation succeeded:", result);
+        } catch (error) {
+            console.error("Transaction reverted during simulation:", error.message || error);
+            throw error;
+        }
+
+		
+        // Step 3: Sign the transaction
+        // const signedTx = await signer.sendTransaction(finalUnsignedTx);
+        const signedTx = await signer.signTransaction(finalUnsignedTx);
+        console.log("Signed transaction:", signedTx);
+		stx=signedTx;
+
+        // const receipt = await signedTx.wait();
+        // console.log("receipt:", receipt);
+
+// return
+		document.getElementById('pastedTxToSign').innerHTML =`✅ TRANSACTION SIGNED !
+			<br><span class='sig'> ${signedTx}</span>`;
+
+		document.getElementById('pastedTxToSign').innerHTML +=`<br><br> 📡 BROADCASTING  <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span>  `
+
+		try {
+        // Step 4: Broadcast the transaction
+        const txResponse = await provider.broadcastTransaction(signedTx);
+        console.log("Transaction broadcasted! Tx hash:", txResponse.hash);
+
+
+        const receipt = await txResponse.wait();
+        console.log(`Transaction mined in block ${receipt.blockNumber}`);
+
+		document.getElementById('pastedTxToSign').innerHTML =`✅ TX BROADCASTED! 📡📡📡 
+		<br> Mined at blocknumner ${receipt.blockNumber}
+		<br> Tx hash: ${txResponse.hash} `
+
+    } catch (error) {
+        console.error("Transaction failed:", error.message);
+		document.getElementById('pastedTxToSign').innerHTML =`❌ SOMETHING WENT WRONG! `
+    }
+					 
+
+	// -----------------
+	// TRANSMIT SIGNATURE THROUGH XMTP
+	// -----------------    
+	console.log('sendSignedMessage: ',iusnaturalisxmtp, userAddress, signedTx)
+	// await sendSignedMessage(iusnaturalisxmtp, address, signature)
+
+	// -----------------
+	// iF OFFLINE MODE TRANSMIT THROUGH QR 
+	// -----------------   
+
+
+	} else if (result.dismiss === Swal.DismissReason.cancel) {
+	console.log("User refused.");
+	}
+	});
+
+}
+ 
+
+// Handle "addToken" event
+
+		function handleAddToken(message) {
 			console.log("You will add this token: ", message.token);
 
 			Swal.fire({
@@ -5249,6 +5515,8 @@ initChatClient()
 			});
 		}
 
+
+		// -------------------------------------
 		// Update contacts and handle new unknown contacts
 		async function updateContacts(message) {
 			console.warn('updateCOntacts:', message)
@@ -7210,6 +7478,151 @@ function loadDecryptedContacts(contacts){
 		}
 
 
+ 
+
+
+		async function broadcastTransaction(chainId, signedTx, provider) {
+			console.log('Broadcasting transaction:', { chainId, signedTx });
+			stx=signedTx;
+		
+			// Validate signedTx
+			if (!signedTx || typeof signedTx !== 'string') {
+				throw new Error('Invalid signed transaction');
+			}
+		 
+		
+    // Decode the signed transaction to validate chain ID and gas fees
+    const decodedTx = ethers.Transaction.from(signedTx);
+
+    console.log(decodedTx.chainId, chainId)
+    if (Number(decodedTx.chainId) !== Number(chainId)) {
+        throw new Error(
+            `Chain ID mismatch: signed transaction has chainId ${decodedTx.chainId}, but expected ${chainId}`
+        );
+    }
+	// ----------
+	// ADD FEES AND GAS LIMIT
+
+	// -----------------
+	// CHECK GAS FEES
+	// -----------------   
+ 
+// Prepare gas details
+const { gasLimit, maxFeePerGas, maxPriorityFeePerGas, gasPrice } = await prepareGasDetails(provider, decodedTx);
+
+// Update the transaction with gas details
+const finalTx = {
+	...decodedTx,
+	gasLimit,
+	maxFeePerGas,
+	maxPriorityFeePerGas,
+};
+
+try {
+
+// Broadcast the transaction
+const txResponse = await provider.broadcastTransaction(ethers.Transaction.from(finalTx).serialized);
+console.log("Transaction broadcasted! Tx hash:", txResponse.hash);
+
+// Wait for the transaction to be mined
+const receipt = await txResponse.wait();
+console.log(`Transaction mined in block ${receipt.blockNumber}`);
+} catch (error) {
+console.error("Transaction failed:", error.message);
+}
+
+
+	// 0------------
+    // if (
+    //     decodedTx.maxFeePerGas &&
+    //     decodedTx.maxPriorityFeePerGas &&
+    //     decodedTx.maxPriorityFeePerGas > decodedTx.maxFeePerGas
+    // ) {
+    //     throw new Error(
+    //         `Invalid gas fees: maxPriorityFeePerGas (${decodedTx.maxPriorityFeePerGas.toString()}) cannot exceed maxFeePerGas (${decodedTx.maxFeePerGas.toString()})`
+    //     );
+    // }
+
+
+
+			// try {
+			// 	//  broadcast transaction
+			// 	const txResponse = await provider.broadcastTransaction(signedTx);
+			// 	console.log("Transaction broadcasted! Tx hash:", txResponse.hash);
+		
+			// 	// Wait for the transaction to be mined
+			// 	const receipt = await txResponse.wait();
+			// 	console.log(`Transaction mined in block ${receipt.blockNumber}`);
+			// 	return txResponse;
+			// } catch (error) {
+			// 	console.error("Error broadcasting transaction:", error.message || error);
+			// 	throw error; // Rethrow the error for further handling if needed
+			// }
+		}
+
+ 
+  // Step 3: Estimate gas details
+  async function prepareGasDetails(provider, unsignedTx) {
+  
+// // Fetch the Latest Nonce
+// const nonce = await provider.getTransactionCount(userAddress, "latest");
+// console.log("Current nonce:", nonce);
+
+        // Estimate gas limit
+		 const gasLimit = await provider.estimateGas(unsignedTx);
+            console.log("Estimated gas:", gasLimit.toString());
+
+			// Fetch current gas fees
+            const feeData = await provider.getFeeData();
+            console.log("Current gas fees:", {
+                maxFeePerGas: feeData.maxFeePerGas?.toString(),
+                maxPriorityFeePerGas: feeData.maxPriorityFeePerGas?.toString(),
+            });
+
+            // Set fallback values if getFeeData() returns null
+            const maxFeePerGas = feeData.maxFeePerGas || ethers.parseUnits("20", "gwei");
+            const maxPriorityFeePerGas = feeData.maxPriorityFeePerGas || ethers.parseUnits("2", "gwei");
+
+            // Ensure maxPriorityFeePerGas <= maxFeePerGas
+            if (maxPriorityFeePerGas > maxFeePerGas) {
+                console.warn("Adjusting maxPriorityFeePerGas to match maxFeePerGas");
+                return { gasLimit, maxFeePerGas, maxPriorityFeePerGas: maxFeePerGas };
+            }
+
+            return { gasLimit, maxFeePerGas, maxPriorityFeePerGas };
+        }
+ 
+
+		/**
+ * Function to fetch the list of RPCs for a given chainId.
+ *
+ * @param {number} chainId - The chainId to search for.
+ * @returns {Promise<Array<string>>} - A promise that resolves to an array of RPC URLs.
+ */
+async function getRPCsByChainId(chainId) {
+	console.warn('getRPCsByChainId:', chainId)
+    try {
+        // Fetch the data from the JSON file
+        const source = await fetch("chainsv1.json");
+        const data = await source.json();
+
+        // Find the entry with the matching chainId
+        const chain = data.find(entry => entry.chainId === chainId);
+
+		ch = chain
+        // If a matching chain is found, return its RPCs; otherwise, return an empty array
+        if (chain && Array.isArray(chain.rpc)) {
+            return chain.rpc;
+        } else {
+            console.warn(`No RPCs found for chainId: ${chainId}`);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching RPCs:", error);
+        return []; // Return an empty array in case of an error
+    }
+}
+
 
 		async function checkGasBalance(address) {
 			console.warn('💐💐💐checkGasBalance()')
@@ -7345,17 +7758,105 @@ function loadDecryptedContacts(contacts){
 		/*********************************************************************************************
 	  .) TOKEN
 	  **********************************************************************************************/
-	  async function providerChecker(providerurl) {
-		  const provider = new ethers.JsonRpcProvider(providerurl);
-		  try {
-			const blockNumber = await provider.getBlockNumber();
-			console.log('🥶🥶🥶Connected successfully. Current block number:', blockNumber);
-			return provider; // Successfully connected provider
-		  } catch (error) {
-			console.error('Failed to connect:', error.message);
-			return null; // Indicate failure to connect
-		  }
-		}
+	//   async function providerChecker(providerurl) {
+	// 	  const provider = new ethers.JsonRpcProvider(providerurl);
+	// 	  try {
+	// 		const blockNumber = await provider.getBlockNumber();
+	// 		console.log('🥶🥶🥶Connected successfully. Current block number:', blockNumber);
+	// 		return provider; // Successfully connected provider
+	// 	  } catch (error) {
+	// 		console.error('Failed to connect:', error.message);
+	// 		return null; // Indicate failure to connect
+	// 	  }
+	// 	}
+	async function providerChecker(providerUrl, maxAttempts = 3, delayMs = 1000) {
+  let attempts = 0;
+
+  while (attempts < maxAttempts) {
+    try {
+      const provider = new ethers.JsonRpcProvider(providerUrl);
+      // Attempt to fetch the current block number to verify connectivity
+      const blockNumber = await provider.getBlockNumber();
+      console.log(`Connected successfully to ${providerUrl}. Current block number:`, blockNumber);
+      return provider; // Successfully connected provider
+    } catch (error) {
+      attempts++;
+      console.error(
+        `Attempt ${attempts} failed for provider ${providerUrl}:`,
+        error.message || error
+      );
+      if (attempts >= maxAttempts) {
+        console.error(`Failed to connect to ${providerUrl} after ${maxAttempts} attempts.`);
+        return null; // Indicate failure to connect
+      }
+      // Wait before retrying
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+}
+
+async function simpleRandomProvider(rpcs, options = {}) {
+  console.log('simpleRandomProvider', rpcs);
+
+  // Validate input
+  if (!Array.isArray(rpcs) || rpcs.length === 0) {
+    console.error('⚠️ No providers available!');
+    return null;
+  }
+
+  // Shuffle the list once to avoid repeated random selection
+  const shuffledProviders = [...rpcs].sort(() => Math.random() - 0.5);
+
+  for (const providerUrl of shuffledProviders) {
+    try {
+      let selectedProvider = providerUrl;
+
+      console.log('👁️‍🗨️ Selected Provider 👁️‍🗨️:', selectedProvider);
+	  function replaceApiKeyPlaceholder(selectedProvider, options, globalOptionsList) {
+  // Define a mapping of placeholders to their respective API keys
+  const apiKeyPlaceholders = {
+    INFURA_API_KEY: globalOptionsList[0].INFURA_API_KEY,
+    ALCHEMY_API_KEY: globalOptionsList[0].ALCHEMY_API_KEY
+  };
+
+  // Iterate over the placeholders to check if the selectedProvider contains any of them
+  for (const [placeholder, apiKeyName] of Object.entries(apiKeyPlaceholders)) {
+    if (selectedProvider.includes(placeholder)) {
+      // Retrieve the API key from options or globalOptionsList
+      const apiKey = options[apiKeyName] || globalOptionsList?.[0]?.[apiKeyName];
+      if (!apiKey) throw new Error(`${apiKeyName} is missing!`);
+
+      // Replace the placeholder with the actual API key
+      selectedProvider = selectedProvider.replace(placeholder, apiKey);
+      console.log(`${apiKeyName} URL:`, selectedProvider);
+      return selectedProvider; // Exit early after replacing the placeholder
+    }
+  }
+
+  // If no placeholder is found, log that the URL is already valid
+  console.log("OK! URL does not contain any API key placeholder.");
+  return selectedProvider;
+}
+ 
+
+      // Try to connect to the selected provider with retries
+      const provider = await providerChecker(selectedProvider);
+
+      if (provider) {
+        console.log('✅✅✅ Connected to provider:', selectedProvider);
+        return selectedProvider; // Exit and return the working provider
+      } else {
+        console.log('❌ Failed to connect to provider:', selectedProvider);
+      }
+    } catch (error) {
+      console.error(`❌ Error with provider ${providerUrl}:`, error.message);
+    }
+  }
+
+  console.error('⚠️ All providers failed to connect!');
+  return null; // No working provider found
+}
+ 
 		  
 async function selectRandomProvider(rpcs) {
   console.log('selectRandomProvider', rpcs);
@@ -7384,7 +7885,7 @@ async function selectRandomProvider(rpcs) {
     let provider = await providerChecker(selectedProvider);
 
     if (provider) {
-      console.log('✅ Connected to provider');
+      console.log('✅✅✅ Connected to provider');
     //   console.log('✅ Successfully connected to provider:',provider);
     //   return provider; // Exit and return the working provider
       return selectedProvider; // Exit and return the working provider
@@ -8720,14 +9221,14 @@ async function scanAndSign(){
                 console.log(`Message sent to ${address}: ${messageContent}`);
 
                 // Optionally, add the sent message to the message store
-                if (!messageStore[address]) {
-                messageStore[address] = [];
-                }
-                messageStore[address].push({
-                content: messageContent,
-                timestamp: new Date(),
-                sender: 'self', // Mark it as sent by the user
-                });
+                // if (!messageStore[address]) {
+                // messageStore[address] = [];
+                // }
+                // messageStore[address].push({
+                // content: messageContent,
+                // timestamp: new Date(),
+                // sender: 'self', // Mark it as sent by the user
+                // });
 
                 // Update the chat window
                 // updateChatWindow(address, messageContent);
@@ -10509,7 +11010,6 @@ async function handleTransactionHistory(address) {
     }
 
 		  
-
 	
 // 	document.addEventListener('visibilitychange', () => {
 //   if (document.visibilityState === 'visible') {
