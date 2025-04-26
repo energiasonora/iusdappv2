@@ -247,9 +247,9 @@ async function deriveAddressWallet(mnemonic, index) {
                 // Display the signature to the user
                 console.log("Message:", messageInput);
                 console.log("Signature:", signature);
-                alert("Message signed successfully!\n\n" + 
-                      `Message: ${messageInput}\n` + 
-                      `Signature: ${signature}`);
+                // alert("Message signed successfully!\n\n" + 
+                //       `Message: ${messageInput}\n` + 
+                //       `Signature: ${signature}`);
 
 
                        
@@ -261,7 +261,8 @@ async function deriveAddressWallet(mnemonic, index) {
 // Store the address in localStorage
 // localStorage.setItem("IusNaturalisAddress", recoveredAddress);
 
-alert(`Logged in as: ${recoveredAddress}`);
+// alert(`Logged in as: ${recoveredAddress}`);
+result.innerHTML += `<br><br>✅ Logged in as: ${recoveredAddress}`
 
 
             } catch (error) {

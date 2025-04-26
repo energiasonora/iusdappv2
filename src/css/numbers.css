@@ -204,3 +204,12 @@
 .transaction-link:hover {
   text-decoration: underline;
 }
+
+
+#pastedTxToSign{
+  word-wrap: break-word
+}
+
+.modal-content{
+  background-color: #1f0226f2!important;
+}

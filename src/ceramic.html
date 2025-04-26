@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceramic Test</title>
+  <link rel="stylesheet" href="css/pico.min.css" />
+  <script src="js/sweetalert2.all.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ceramic DID Information Test</h1>
+
+  <button id="createWallet">Create New Wallet</button>
+  <div id="walletStatus">No Wallet Created</div>
+  <pre id="walletDetails"></pre>
+
+  <h2>Write Data</h2>
+  <!-- <textarea id="writeData" placeholder="Enter your DID info (e.g., { avatar: 'URL', links: ['link1', 'link2'] })"></textarea> -->
+  
+  <textarea id="writeData" placeholder="Enter your DID info">
+    {
+      "avatar": "https://example.com/avatar.png",
+      "links": ["https://twitter.com", "https://github.com"]
+    }
+    </textarea>
+
+  <button id="writeButton">Write to Ceramic</button>
+
+  <h2>Read Data</h2>
+  <button id="readButton">Read from Ceramic</button>
+  <pre id="readData"></pre>
+
+  
+  <script src="js/ethers-6.13.2.umd.min.js"></script>
+
+  <script type="module">
+    // import { Wallet, ethers } from 'ethers';
+// import { CeramicClient } from '@ceramicnetwork/http-client';
+// window.CeramicClient = CeramicClient;
+
+// import { IDX } from '@ceramicstudio/idx';
+// window.IDX = IDX;
+
+// import { EthereumAuthProvider } from '@ceramicnetwork/blockchain-utils-linking';
+// window.EthereumAuthProvider = EthereumAuthProvider;
+
+
+
+
+// import { DID } from 'dids';
+// window.DID = DID;
+
+// import { getResolver as getKeyResolver } from 'key-did-resolver';
+// window.getKeyResolver = getKeyResolver;
+
+// import { getResolver as get3IDResolver } from '@ceramicnetwork/3id-did-resolver';
+// window.get3IDResolver = get3IDResolver;
+
+
+// import { DIDSession } from 'did-session'
+// import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum'
+// window.EthereumWebAuth = EthereumWebAuth;
+// window.getAccountId = getAccountId;
+
+import { ComposeClient }from '@composedb/client'
+window.ComposeClient = ComposeClient;
+
+import { DIDSession } from 'did-session';
+window.DIDSession = DIDSession;
+
+import { EthereumWebAuth, getAccountId } from '@didtools/pkh-ethereum';
+window.EthereumWebAuth = EthereumWebAuth;
+window.getAccountId = getAccountId;
+
+
+// Load the runtime definition
+// import runtimeDefinition from './runtime.json'; // Adjust the path if needed
+// window.runtimeDefinition = runtimeDefinition;
+
+
+  </script>
+  <script >
+
+// Initialize Ceramic client
+// const API_URL = 'https://ceramic-clay.3boxlabs.com'; // Clay Testnet
+// const ceramic = new CeramicClient(API_URL);
+// Initialize Ceramic client
+const API_URL = 'https://ceramic-clay.3boxlabs.com'; // Clay Testnet
+const compose = new ComposeClient({ ceramic: API_URL });
+// const compose = new ComposeClient({
+//   ceramic: API_URL,
+//   definition: runtimeDefinition // Pass the runtime definition here
+// });
+
+
+
+
+// Initialize IDX
+const idx = new IDX({
+  ceramic,
+  aliases: {
+    basicProfile: 'ceramic://k2...basicProfileSchema' // Replace with actual schema ID if needed
+  }
+});
+
+let wallet;
+
+// Create Wallet
+document.getElementById('createWallet').addEventListener('click', async () => {
+  try {
+    // Generate a new random wallet
+    // wallet = ethers.Wallet.createRandom();
+    wallet = await aliceWallet()
+
+    const walletDetails = {
+      address: wallet.address,
+      privateKey: wallet.privateKey
+    };
+
+    // Display wallet details
+    document.getElementById('walletStatus').innerText = 'Wallet Created';
+    document.getElementById('walletDetails').innerText = JSON.stringify(walletDetails, null, 2);
+
+    // Save wallet details to local storage (optional)
+    localStorage.setItem('userWallet', JSON.stringify(walletDetails));
+  } catch (error) {
+    console.error('Error creating wallet:', error);
+    alert('Failed to create wallet.');
+  }
+});
+
+
+// let isAuthenticated = false;
+
+// // Authenticate Wallet with Ceramic
+// async function authenticateWithCeramic(privateKey) {
+//   try {
+//     // Create a provider using ethers.JsonRpcProvider
+//     // const provider = new JsonRpcProvider(); // No need for a real provider here
+
+//     // Create a signer using the wallet's private key
+//     const signer = new ethers.Wallet(privateKey);
+//     // const signer = new Wallet(privateKey, provider);
+
+//     // Create EthereumAuthProvider for Ceramic
+//     const authProvider = new EthereumAuthProvider(
+//       signer.provider,
+//       signer.address
+//     );
+
+//     // const accountId = await getAccountId(ethProvider, addresses[0])
+//     const authMethod = await EthereumWebAuth.getAuthMethod(ethprovider, accountId)
+//     const compose = new ComposeClient()
+
+// const session = await DIDSession.get(accountId, authMethod, { resources: compose.resources})
+// compose.setDID(session.did)
+
+// return
+
+//     // Set DID provider for Ceramic
+//     await ceramic.setDIDProvider(authProvider);
+//     isAuthenticated = true; // Mark as authenticated
+//     console.log('Authenticated with Ceramic');
+
+
+
+//   } catch (error) {
+//     console.error('Error authenticating with Ceramic:', error);
+//     alert('Failed to authenticate with Ceramic.');
+//   }
+// }
+
+
+// Authenticate Wallet with Ceramic
+async function authenticateWithCeramic(privateKey) {
+  try {
+    // Create a provider using ethers.JsonRpcProvider
+    const provider = new JsonRpcProvider(); // No need for a real provider here
+
+    // Create a signer using the wallet's private key
+    const signer = new ethers.Wallet(privateKey, provider);
+    console.log('signer:', signer)
+
+    // Simulate an Ethereum provider (for compatibility with did-session)
+    const ethProvider = {
+      request: async ({ method }) => {
+        if (method === 'eth_requestAccounts') {
+          return [signer.address];
+        }
+        throw new Error(`Unsupported method: ${method}`);
+      }
+    };
+
+    // Get account ID
+    const addresses = await ethProvider.request({ method: 'eth_requestAccounts' });
+    console.log('addresses:', addresses)
+    const accountId = await getAccountId(ethProvider, addresses[0]);
+    console.log('accountId:', accountId)
+
+    // Get auth method
+    const authMethod = await EthereumWebAuth.getAuthMethod(ethProvider, accountId);
+
+    // Create a DID session
+    session = await DIDSession.authorize(authMethod, {
+      resources: ['ceramic://*'] // Grant access to all Ceramic streams
+    });
+
+    // Set the authenticated DID on the ComposeClient
+    compose.setDID(session.did);
+
+    console.log('Authenticated with Ceramic');
+  } catch (error) {
+    console.error('Error authenticating with Ceramic:', error);
+    alert('Failed to authenticate with Ceramic.');
+  }
+}
+
+
+
+// Write Data
+document.getElementById('writeButton').addEventListener('click', async () => {
+  try {
+    const rawData = document.getElementById('writeData').value;
+
+    // Validate JSON input
+    let data;
+    try {
+      data = JSON.parse(rawData);
+    } catch (parseError) {
+      console.error('Invalid JSON:', parseError);
+      alert('Please enter valid JSON. Example:\n{\n  "avatar": "URL",\n  "links": ["link1", "link2"]\n}');
+      return;
+    }
+
+    // Ensure wallet is authenticated
+    if (!wallet) {
+      alert('Please create a wallet first.');
+      return;
+    }
+
+    // Authenticate with Ceramic if not already done
+    if (!isAuthenticated) {
+      await authenticateWithCeramic(wallet.privateKey);
+    }
+
+    // Write data to IDX
+    await idx.set('basicProfile', data); // Use 'basicProfile' alias or your custom schema
+    alert('Data written successfully!');
+  } catch (error) {
+    console.error('Error writing data:', error);
+    alert('Failed to write data.');
+  }
+});
+
+// Read Data
+document.getElementById('readButton').addEventListener('click', async () => {
+  try {
+    // Ensure wallet is authenticated
+    if (!wallet) {
+      alert('Please create a wallet first.');
+      return;
+    }
+
+    // Authenticate with Ceramic if not already done
+    if (!isAuthenticated) {
+      await authenticateWithCeramic(wallet.privateKey);
+    }
+
+    // Read data from IDX
+    const data = await idx.get('basicProfile'); // Use 'basicProfile' alias or your custom schema
+    document.getElementById('readData').innerText = JSON.stringify(data, null, 2);
+  } catch (error) {
+    console.error('Error reading data:', error);
+    alert('Failed to read data.');
+  }
+});
+
+  // -----------------------------------------
+            // WALLET FUNCTIONS
+            // -----------------------------------------
+    
+    
+            // Function to derive an address on demand
+            async function deriveAddressWallet(mnemonic, index) {
+                const basePath = "m/44'/60'/0'/0/";
+                const path = `${basePath}${index}`;
+                const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+                return derivedNode
+            }
+    
+            async function aliceWallet() {
+                let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+                if (!aliceMnemonic) {
+                    console.error('NO aliceMnemonic  in localStorage!');
+    
+                    const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                    aliceMnemonic = randmnemonic.mnemonic.phrase;
+                    localStorage.setItem('aliceMnemonic', aliceMnemonic);
+    
+                } else {
+                    console.log('aliceMnemonic is in localStorage!');
+    
+                }
+                let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+                return aliceWall
+            }
+    
+            // 1- GET  PRIV KEY(IF not CREATE IT)
+            async function bobWallet() {
+                let bobMnemonic = localStorage.getItem('bobMnemonic');
+                if (!bobMnemonic) {
+                    console.error('NO bobMnemonic  in localStorage!');
+    
+                    const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                    bobMnemonic = randmnemonic.mnemonic.phrase;
+                    console.log(bobMnemonic)
+                    localStorage.setItem('bobMnemonic', bobMnemonic);
+    
+                } else {
+                    console.log('bobMnemonic is in localStorage!');
+    
+                }
+    
+                let bobWall = deriveAddressWallet(bobMnemonic, 0)
+                return bobWall
+    
+            }
+    
+    
+
+  </script>
+  <!-- <script src="app.js"></script> -->
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Message and Get Public Key</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #output {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sign Message and Get Public Key</h1>
+  <button id="signButton">Sign Message</button>
+  <button id="extractPubKeyButton" disabled>Extract Public Key</button>
+  <div id="output"></div>
+ 
+	<script src="js/ethers-6.13.2.umd.min.js"></script>
+
+    
+    <script>
+        // Wait for the DOM to load
+document.addEventListener("DOMContentLoaded", () => {
+  const signButton = document.getElementById("signButton");
+  const extractPubKeyButton = document.getElementById("extractPubKeyButton");
+  const outputDiv = document.getElementById("output");
+
+  let signature; // To store the signature globally
+  let message;   // To store the signed message globally
+
+  // Function to handle signing the message
+  async function signMessage() {
+    try {
+      // Check if MetaMask or another Ethereum provider is available
+    //   if (!window.ethereum) {
+    //     throw new Error("No Ethereum provider found. Please install MetaMask or use an Ethereum-enabled browser.");
+    //   }
+
+      // Request account access
+    //   const provider = new ethers.BrowserProvider(window.ethereum);
+    //   await provider.send("eth_requestAccounts", []);
+    //   const signer = await provider.getSigner();
+
+    //   // Get the signer's address
+    //   const address = await signer.getAddress();
+    //   outputDiv.innerHTML += `Connected to wallet: ${address}\n`;
+
+    const rpcs = await getRPCsByChainId(Number(421614));
+      const selProv = await simpleRandomProvider(rpcs);
+      const provider = await new ethers.JsonRpcProvider(selProv)
+         alicewallet = await aliceWallet();
+        let signer = await new ethers.Wallet(alicewallet.privateKey)
+        console.log('signer:', signer)
+
+
+      // Define the message to sign
+      message = "Sign this message to verify your identity.";
+
+      // Sign the message
+      signature = await signer.signMessage(message);
+      outputDiv.innerHTML += `Message Signed!\nSignature: ${signature}\n`;
+
+      // Enable the "Extract Public Key" button
+      extractPubKeyButton.disabled = false;
+    } catch (error) {
+      outputDiv.innerHTML += `Error during signing: ${error.message}\n`;
+    }
+  }
+
+  // Function to extract the public key from the signature
+  function extractPublicKey() {
+    try {
+      if (!signature || !message) {
+        throw new Error("No signature or message available. Please sign a message first.");
+      }
+
+      // Extract the public key from the signed message
+      const publicKey = ethers.verifyMessage(message, signature);
+      outputDiv.innerHTML += `Public Key: ${publicKey}\n`;
+    } catch (error) {
+      outputDiv.innerHTML += `Error during public key extraction: ${error.message}\n`;
+    }
+  }
+
+  // Attach event listeners to the buttons
+  signButton.addEventListener("click", signMessage);
+  extractPubKeyButton.addEventListener("click", extractPublicKey);
+});
+// return
+            // Function to derive an address on demand
+            async function deriveAddressWallet(mnemonic, index) {
+                const basePath = "m/44'/60'/0'/0/";
+                const path = `${basePath}${index}`;
+                const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+                return derivedNode
+            }
+    
+            async function aliceWallet() {
+                let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+                if (!aliceMnemonic) {
+                    console.error('NO aliceMnemonic  in localStorage!');
+    
+                    const randmnemonic = await ethers.HDNodeWallet.createRandom()
+                    aliceMnemonic = randmnemonic.mnemonic.phrase;
+                    localStorage.setItem('aliceMnemonic', aliceMnemonic);
+    
+                } else {
+                    console.log('aliceMnemonic is in localStorage!');
+    
+                }
+                let aliceWall = deriveAddressWallet(aliceMnemonic, 0)
+                return aliceWall
+            }
+    
+
+	/**
+ * Function to fetch the list of RPCs for a given chainId.
+ *
+ * @param {number} chainId - The chainId to search for.
+ * @returns {Promise<Array<string>>} - A promise that resolves to an array of RPC URLs.
+ */
+ async function getRPCsByChainId(chainId) {
+	console.warn('getRPCsByChainId:', chainId)
+    try {
+        // Fetch the data from the JSON file
+        const source = await fetch("chainsv1.json");
+        const data = await source.json();
+
+        // Find the entry with the matching chainId
+        const chain = data.find(entry => entry.chainId === chainId);
+
+		ch = chain
+        // If a matching chain is found, return its RPCs; otherwise, return an empty array
+        if (chain && Array.isArray(chain.rpc)) {
+            return chain.rpc;
+        } else {
+            console.warn(`No RPCs found for chainId: ${chainId}`);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching RPCs:", error);
+        return []; // Return an empty array in case of an error
+    }
+}
+ 
+
+
+async function simpleRandomProvider(rpcs, options = {}) {
+  console.log('simpleRandomProvider', rpcs);
+
+  // Validate input
+  if (!Array.isArray(rpcs) || rpcs.length === 0) {
+    console.error('⚠️ No providers available!');
+    return null;
+  }
+
+  // Shuffle the list once to avoid repeated random selection
+  const shuffledProviders = [...rpcs].sort(() => Math.random() - 0.5);
+
+  for (const providerUrl of shuffledProviders) {
+    try {
+      let selectedProvider = providerUrl;
+
+    //   console.log('👁️‍🗨️ Selected Provider 👁️‍🗨️👁️‍🗨️:', selectedProvider);
+ 
+	  let replacedProv =  replaceApiKeyPlaceholder(selectedProvider)
+	  console.log('TRY WITH PROVIDER =', replacedProv)
+	  
+	  
+	  // ---
+      // Try to connect to the selected provider with retries
+      const provider = await providerChecker(replacedProv);
+      if (provider) {
+		  console.log('✅✅✅ Connected to provider:', replacedProv);
+		  return replacedProv; // Exit and return the working provider
+		} else {
+			console.log('❌ Failed to connect to provider:', replacedProv);
+		}
+    } catch (error) {
+		console.warn(`❌ Error with provider ${providerUrl}:`, error.message);
+    }
+	//   ---
+
+
+  }
+
+  console.error('⚠️ All providers failed to connect!');
+  return null; // No working provider found
+}
+ 
+		  
+
+ 
+    </script>
+</body>
+</html>

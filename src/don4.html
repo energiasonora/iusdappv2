@@ -578,7 +578,8 @@ async function connectWallet(walletType) {
 
   } catch (error) {
     console.error("Error connecting wallet:", error);
-    alert("Failed to connect wallet.");
+    console.warn("Error connecting wallet:", error);
+    // alert("Failed to connect wallet.");
   }
 }
 
@@ -617,89 +618,212 @@ let remainingTime = 15 * 60; // 15 minutes in seconds
       return params;
     }
 // Function to load campaign details
-// Function to load campaign details
 async function loadCampaign(tokenId) {
   try {
-    const campaign = await contract.campaigns(tokenId);
+    // Show a loading state while fetching data
+    toggleLoadingState(true);
 
-    // Check if the campaign has ended by calling `timeLeft`
-    let timeLeftInSeconds;
-    try {
-      timeLeftInSeconds = Number(await contract.timeLeft(tokenId)); // Explicitly convert BigInt to Number
-    } catch (error) {
-      if (error.message.includes("Crowdfunding period has ended")) {
-        // Campaign has ended, set timeLeft to 0
-        timeLeftInSeconds = 0;
-      } else {
-        throw error; // Re-throw unexpected errors
-      }
-    }
+    const campaign = await fetchCampaignDetails(tokenId);
+    const timeLeftInSeconds = await calculateTimeLeft(tokenId);
 
-    // Format goal and raised amount for display
-    const goalFormatted = ethers.formatEther(campaign.goal); // Convert goal to ETH
-    const raisedFormatted = ethers.formatEther(campaign.raisedAmount); // Convert raised amount to ETH
+    // Format and display campaign details
+    updateCampaignDetails(campaign, timeLeftInSeconds);
 
-    // Update campaign details
-    document.getElementById("campaignRecipient").innerText = campaign.recipient;
-    document.getElementById("campaignGoal").innerText = goalFormatted;
-    document.getElementById("campaignRaised").innerText = raisedFormatted;
+    // Update progress bar and banners
+    updateProgressBarAndBanners(campaign, timeLeftInSeconds);
 
-    // Show a banner if the campaign has ended
-    const campaignEndedBanner = document.getElementById("campaignEndedBanner");
-    if (timeLeftInSeconds === 0) {
-      campaignEndedBanner.style.display = "block"; // Show the banner
-    } else {
-      campaignEndedBanner.style.display = "none"; // Hide the banner
-    }
+    // Load and display donor list
+    await loadDonorList(tokenId);
 
-    // Calculate progress percentage safely
-    const goalBigInt = BigInt(campaign.goal.toString()); // Ensure goal is BigInt
-    const raisedBigInt = BigInt(campaign.raisedAmount.toString()); // Ensure raised amount is BigInt
-    const progressPercent = Number((raisedBigInt * 100n) / goalBigInt); // Explicit conversion to Number
-
-    // Update progress bar
-    const progressBarFill = document.getElementById("progressBarFill");
-    progressBarFill.style.width = `${Math.min(progressPercent, 100)}%`;
-
-    // Show a success banner if the goal is fully raised
-    const campaignSuccessBanner = document.getElementById("campaignSuccessBanner");
-    if (raisedBigInt >= goalBigInt) {
-      campaignSuccessBanner.style.display = "block"; // Show the success banner
-      progressBarFill.style.backgroundColor = "#4caf50"; // Green progress bar for success
-    } else {
-      campaignSuccessBanner.style.display = "none"; // Hide the success banner
-      progressBarFill.style.backgroundColor = "#4caf50"; // Default progress bar color
-    }
-
-    // Show campaign details and donation section
-    document.getElementById("campaignDetails").style.display = "block";
-    document.getElementById("donateSection").style.display =
-      timeLeftInSeconds > 0 && raisedBigInt < goalBigInt ? "block" : "none"; // Hide donation section if the campaign has ended or is fully funded
-
-    // Start the countdown timer
+    // Start countdown timer
     startCountdownTimer(timeLeftInSeconds);
-
-    // Load and display the list of donors
-    const donorListElement = document.getElementById("donorList");
-    donorListElement.innerHTML = ""; // Clear previous donor list
-
-    const contributorCount = await contract.getContributorsCount(tokenId);
-    for (let i = 0; i < contributorCount; i++) {
-      const contributorAddress = await contract.getContributorByIndex(tokenId, i);
-      const pseudonym = await contract.getContributorPseudonym(tokenId, contributorAddress);
-
-      const listItem = document.createElement("li");
-      listItem.textContent = `${pseudonym || "Anonymous"} (${contributorAddress})`;
-      donorListElement.appendChild(listItem);
-    }
-
-    // Show the donor list section
-    document.getElementById("donorListSection").style.display = "block";
   } catch (error) {
+    console.error(`Error loading campaign ${tokenId}:`, error);
     console.warn(`Error loading campaign ${tokenId}:`, error);
-    // alert("Failed to load campaign. Please check the Campaign ID.");
+    // alert("Failed to load campaign. Please check the Campaign ID or try again later.");
+  } finally {
+    // Hide loading state after completion
+    toggleLoadingState(false);
   }
 }
+
+// Helper: Fetch campaign details from the contract
+async function fetchCampaignDetails(tokenId) {
+  const campaign = await contract.campaigns(tokenId);
+  return {
+    recipient: campaign.recipient,
+    goal: campaign.goal,
+    raisedAmount: campaign.raisedAmount,
+  };
+}
+
+// Helper: Calculate time left for the campaign
+async function calculateTimeLeft(tokenId) {
+  try {
+    return Number(await contract.timeLeft(tokenId)); // Convert BigInt to Number
+  } catch (error) {
+    if (error.message.includes("Crowdfunding period has ended")) {
+      return 0; // Campaign has ended
+    }
+    throw error; // Re-throw unexpected errors
+  }
+}
+
+// Helper: Update campaign details in the UI
+function updateCampaignDetails(campaign, timeLeftInSeconds) {
+  const goalFormatted = ethers.formatEther(campaign.goal); // Convert goal to ETH
+  const raisedFormatted = ethers.formatEther(campaign.raisedAmount); // Convert raised amount to ETH
+
+  // Cache DOM elements
+  const campaignRecipient = document.getElementById("campaignRecipient");
+  const campaignGoal = document.getElementById("campaignGoal");
+  const campaignRaised = document.getElementById("campaignRaised");
+  const campaignEndedBanner = document.getElementById("campaignEndedBanner");
+
+  campaignRecipient.innerText = campaign.recipient;
+  campaignGoal.innerText = goalFormatted;
+  campaignRaised.innerText = raisedFormatted;
+
+  // Show/hide campaign ended banner
+  campaignEndedBanner.style.display = timeLeftInSeconds === 0 ? "block" : "none";
+
+  // Show campaign details section
+  document.getElementById("campaignDetails").style.display = "block";
+}
+
+// Helper: Update progress bar and success/failure banners
+function updateProgressBarAndBanners(campaign, timeLeftInSeconds) {
+  const goalBigInt = BigInt(campaign.goal.toString());
+  const raisedBigInt = BigInt(campaign.raisedAmount.toString());
+
+  const progressBarFill = document.getElementById("progressBarFill");
+  const campaignSuccessBanner = document.getElementById("campaignSuccessBanner");
+  const donateSection = document.getElementById("donateSection");
+
+  // Calculate progress percentage
+  const progressPercent = Number((raisedBigInt * 100n) / goalBigInt);
+
+  // Update progress bar
+  progressBarFill.style.width = `${Math.min(progressPercent, 100)}%`;
+  progressBarFill.style.backgroundColor = raisedBigInt >= goalBigInt ? "#4caf50" : "#4caf50";
+
+  // Show/hide success banner
+  campaignSuccessBanner.style.display = raisedBigInt >= goalBigInt ? "block" : "none";
+
+  // Show/hide donation section
+  donateSection.style.display =
+    timeLeftInSeconds > 0 && raisedBigInt < goalBigInt ? "block" : "none";
+}
+
+// Helper: Load and display donor list
+async function loadDonorList(tokenId) {
+  const donorListElement = document.getElementById("donorList");
+  donorListElement.innerHTML = ""; // Clear previous donor list
+
+  const contributorCount = await contract.getContributorsCount(tokenId);
+  for (let i = 0; i < contributorCount; i++) {
+    const contributorAddress = await contract.getContributorByIndex(tokenId, i);
+    const pseudonym = await contract.getContributorPseudonym(tokenId, contributorAddress);
+
+    const listItem = document.createElement("li");
+    listItem.textContent = `${pseudonym || "Anonymous"} (${contributorAddress})`;
+    donorListElement.appendChild(listItem);
+  }
+
+  // Show donor list section
+  document.getElementById("donorListSection").style.display = "block";
+}
+
+// Helper: Toggle loading state
+function toggleLoadingState(isLoading) {
+  console.log('toggleLoadingState:',isLoading)
+  const loadingIndicator = document.getElementById("loadingIndicator");
+  if (loadingIndicator) {
+    loadingIndicator.style.display = isLoading ? "block" : "none";
+  }
+}
+// async function loadCampaign(tokenId) {
+//   try {
+//     const campaign = await contract.campaigns(tokenId);
+
+//     // Check if the campaign has ended by calling `timeLeft`
+//     let timeLeftInSeconds;
+//     try {
+//       timeLeftInSeconds = Number(await contract.timeLeft(tokenId)); // Explicitly convert BigInt to Number
+//     } catch (error) {
+//       if (error.message.includes("Crowdfunding period has ended")) {
+//         // Campaign has ended, set timeLeft to 0
+//         timeLeftInSeconds = 0;
+//       } else {
+//         throw error; // Re-throw unexpected errors
+//       }
+//     }
+
+//     // Format goal and raised amount for display
+//     const goalFormatted = ethers.formatEther(campaign.goal); // Convert goal to ETH
+//     const raisedFormatted = ethers.formatEther(campaign.raisedAmount); // Convert raised amount to ETH
+
+//     // Update campaign details
+//     document.getElementById("campaignRecipient").innerText = campaign.recipient;
+//     document.getElementById("campaignGoal").innerText = goalFormatted;
+//     document.getElementById("campaignRaised").innerText = raisedFormatted;
+
+//     // Show a banner if the campaign has ended
+//     const campaignEndedBanner = document.getElementById("campaignEndedBanner");
+//     if (timeLeftInSeconds === 0) {
+//       campaignEndedBanner.style.display = "block"; // Show the banner
+//     } else {
+//       campaignEndedBanner.style.display = "none"; // Hide the banner
+//     }
+
+//     // Calculate progress percentage safely
+//     const goalBigInt = BigInt(campaign.goal.toString()); // Ensure goal is BigInt
+//     const raisedBigInt = BigInt(campaign.raisedAmount.toString()); // Ensure raised amount is BigInt
+//     const progressPercent = Number((raisedBigInt * 100n) / goalBigInt); // Explicit conversion to Number
+
+//     // Update progress bar
+//     const progressBarFill = document.getElementById("progressBarFill");
+//     progressBarFill.style.width = `${Math.min(progressPercent, 100)}%`;
+
+//     // Show a success banner if the goal is fully raised
+//     const campaignSuccessBanner = document.getElementById("campaignSuccessBanner");
+//     if (raisedBigInt >= goalBigInt) {
+//       campaignSuccessBanner.style.display = "block"; // Show the success banner
+//       progressBarFill.style.backgroundColor = "#4caf50"; // Green progress bar for success
+//     } else {
+//       campaignSuccessBanner.style.display = "none"; // Hide the success banner
+//       progressBarFill.style.backgroundColor = "#4caf50"; // Default progress bar color
+//     }
+
+//     // Show campaign details and donation section
+//     document.getElementById("campaignDetails").style.display = "block";
+//     document.getElementById("donateSection").style.display =
+//       timeLeftInSeconds > 0 && raisedBigInt < goalBigInt ? "block" : "none"; // Hide donation section if the campaign has ended or is fully funded
+
+//     // Start the countdown timer
+//     startCountdownTimer(timeLeftInSeconds);
+
+//     // Load and display the list of donors
+//     const donorListElement = document.getElementById("donorList");
+//     donorListElement.innerHTML = ""; // Clear previous donor list
+
+//     const contributorCount = await contract.getContributorsCount(tokenId);
+//     for (let i = 0; i < contributorCount; i++) {
+//       const contributorAddress = await contract.getContributorByIndex(tokenId, i);
+//       const pseudonym = await contract.getContributorPseudonym(tokenId, contributorAddress);
+
+//       const listItem = document.createElement("li");
+//       listItem.textContent = `${pseudonym || "Anonymous"} (${contributorAddress})`;
+//       donorListElement.appendChild(listItem);
+//     }
+
+//     // Show the donor list section
+//     document.getElementById("donorListSection").style.display = "block";
+//   } catch (error) {
+//     console.warn(`Error loading campaign ${tokenId}:`, error);
+//     // alert("Failed to load campaign. Please check the Campaign ID.");
+//   }
+// }
 
 // Function to start the countdown timer
 function startCountdownTimer(timeLeftInSeconds) {

@@ -76,8 +76,9 @@ ex.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html sr
 
 <!-- yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  --port 4343 --https -->
 
-yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  src/polybase.html --port 4343 --https
+<!-- yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  src/polybase.html --port 4343 --https -->
 
+yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  src/polybase.html src/don4.html src/signgetpk.html --port 4343 --https
 
 # deploy to firebase
 

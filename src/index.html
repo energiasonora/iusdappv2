@@ -27,6 +27,7 @@
 	<link rel="stylesheet" type="text/css" href="css/iusdapp.css" />
 	<link rel="stylesheet" type="text/css" href="css/buttons.css" />
 	<link rel="stylesheet" type="text/css" href="css/numbers.css" />
+	<link rel="stylesheet" type="text/css" href="css/topnotif.css" />
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.02.min.css"> -->
@@ -197,6 +198,16 @@
 					<span class="bal">
 				</span>
 					<span class="eth"> </span>
+
+					<!-- testing new manual refresh button  -->
+					<!-- <button id="refreshButton" style="background: none; border: none; cursor: pointer;">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						  <path d="M21 12a9 9 0 1 1-9-9c2.38 0 4.56.87 6.3 2.24l-3 3a9 9 0 0 1 3 7.76V16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v2z"></path>
+						</svg>
+					  </button> -->
+
+					  <!-- <svg id="refreshButton"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em"> <path fill="currentColor" d="M463.5 224l8.5 0c13.3 0 24-10.7 24-24l0-128c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8l119.5 0z"/></svg> -->
+
 					<!-- <button>Send</button> -->
 					<span class="bottom">Loading balance <div class="dots-container"> <span class="dot">.</span> <span class="dot">.</span> <span class="dot">.</span> </div>
 				</span>
@@ -964,6 +975,7 @@
 							<form id="transactionFormWalletSend">
 								<div class="input-group mb-3">
 									<span class="input-group-text iusbutton">Token</span>
+
 									<select class="form-select token-selector"  id="tokenType" disabled>
 										<option class="loading-option" data-translate="loadingtokens">Loading tokens</option>
 									  </select>
@@ -974,18 +986,18 @@
 								<div class="mb-3 fullwith">
 									<span class="input-group-text iusbutton" for="recipientAddress">Recipient
 										Address</span>
-									<input type="text" class="form-control" id="recipientAddress" placeholder="0x..."
-										required readonly>
-								</div>
+	
+									<div id="stealthSection" class=" mb-3 list-group-item list-group-item-warning">
+										<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
+										<label for="sarecipientAddress" class="form-label">🦹‍♂️ Stealth Address 🦹‍♀️ </label>
+											<div id="stealthInfo">
+	
+												<div id="sarecipientAddress" class="wwrap"></div>
+											</div>
+										<div id="staddrInfo" class=""></div>
+										<input type="text" class="form-control" id="recipientAddress" placeholder="0x..." required readonly>
+									</div>
 
-								<div id="stealthSection" class=" mb-3 list-group-item list-group-item-warning">
-									<input class="form-check-input" type="checkbox" id="stealthAddressCheckbox" name="stealthAddress">
-									<label for="sarecipientAddress" class="form-label">🦹‍♂️ Stealth Address 🦹‍♀️ </label>
-										<div id="stealthInfo">
-
-											<div id="sarecipientAddress" class="wwrap"></div>
-										</div>
-									<div id="staddrInfo" class=""></div>
 								</div>
 
 
@@ -1371,6 +1383,11 @@
 
 	<script type="module" src="js/demo1.js"></script>
 	<script src="js/dictionary.js"></script>
+
+
+	<script src="js/modernizr.custom.js"></script>
+	<script src="js/notificationFx.js"></script>
+
 	<script type="module">
 		// XMTP
 		import { Client } from '@xmtp/xmtp-js'
@@ -1639,12 +1656,12 @@
 			// ----------------------------------------------------------------------------------
 
 			if (typeof signer === 'undefined') {
-				console.warn('No signer passed at init()');
+				console.log('No signer passed at init()');
 
 				signer = await getSigner();
 				if (signer === false) { console.log("The function returned false."); return; }
 			} else {
-				console.warn("SIGNER:", signer);
+				console.log("SIGNER:", signer);
 			}
 
 
@@ -1652,7 +1669,7 @@
 			// ----------------------------------------------------------------------------------
 			// SET ADDRESS
 			// ----------------------------------------------------------------------------------
-			console.warn('EVM ADDRESS (getSigner): ', signer.address)
+			console.log('EVM ADDRESS (getSigner): ', signer.address)
 			setAddress(signer.address)
 			getPreferredToken()
 
@@ -1689,7 +1706,7 @@
 			// --------------
 			let currentTokenContract = await loadToken(signer.address)
 			console.log("currentTokenContract()", currentTokenContract)
-			console.warn('USER ADDRESS', signer.address)
+			console.log('USER ADDRESS', signer.address)
 
 		 
 
@@ -1698,9 +1715,10 @@
 			loadSettingsPreferences()// All options in settings MODAL UI-language-notif
 
 			// -----------
-
+			
 			// LOAD USER DID
 			await loadDID(signer)
+			return
 
 
 			// -----------------------------------------
@@ -1828,10 +1846,12 @@
 				}
 
 			} else {
-				console.warn('chat parameter not found in the URL');
+				console.log('chat parameter not found in the URL');
 			}
 			//  FIN CHECK IF USER COMES FROM A LINK
 			// ----------------------------------------------------------------------------------
+
+			// return
 
 			startBalanceListener();
 
@@ -1839,15 +1859,15 @@
 			// SET PREFERED CHAIN OPTION
 			// ----------------------------------------------------------------------------------
 
-			GLOBALCHAIN = localStorage.getItem("GLOBALCHAIN");
-			if (GLOBALCHAIN === null) {
-				console.log('GLOBALCHAIN is null');
-				localStorage.setItem("GLOBALCHAIN", 0);
-				GLOBALCHAIN = 0;
+			// GLOBALCHAIN = localStorage.getItem("GLOBALCHAIN");
+			// if (GLOBALCHAIN === null) {
+			// 	console.log('GLOBALCHAIN is null');
+			// 	localStorage.setItem("GLOBALCHAIN", 0);
+			// 	GLOBALCHAIN = 0;
 
-			} else {
-				console.log('GLOBALCHAIN :', GLOBALCHAIN);
-			}
+			// } else {
+			// 	console.log('GLOBALCHAIN :', GLOBALCHAIN);
+			// }
 			// -----------------------------------------
 			// para que lo uso?, historial?
 			await getChatAddresses()
@@ -1871,7 +1891,8 @@
 // }
 
 // Set interval to check balance every 15 seconds
-const interval = 15000; // 15 seconds
+const interval = 60000; // 60 seconds
+// const interval = 15000; // 15 seconds
 
 let balanceCheckInterval;
 
@@ -1881,7 +1902,7 @@ function startBalanceListener() {
 	
     // Start the interval only if the page is visible
     if (document.visibilityState === 'visible') {
-		console.warn('STARTING reloadBalances');
+		console.log('STARTING reloadBalances');
         balanceCheckInterval = setInterval(reloadBalances, interval);
     }
 
@@ -1889,10 +1910,17 @@ function startBalanceListener() {
     document.addEventListener('visibilitychange', handleVisibilityChange);
 }
 
+function stopBalanceListener() {
+    console.log('Stoping balance listener...');
+	clearInterval(balanceCheckInterval);
+	balanceCheckInterval = null;
+}
+
+
 // Function to handle visibility changes
 function handleVisibilityChange() {
     if (document.visibilityState === 'visible') {
-        console.log('Tab is visible, starting balance checks...');
+        console.log('🥷 Tab is visible, starting balance checks...');
         // Restart the interval if the tab becomes visible
         if (!balanceCheckInterval) {
             balanceCheckInterval = setInterval(reloadBalances, interval);
@@ -2609,7 +2637,7 @@ function playtxReceived() {
 		// ---------------------------------------------
 
 		async function getSigner() {
-			console.warn('*** getSigner() ***')
+			console.log('*** getSigner() ***')
 
 			let signer;
 			// 1- GET  PRIV KEY(IF not CREATE IT)
@@ -2717,7 +2745,7 @@ function playtxReceived() {
 			} // fin chatETHPrivKey
 			else {
 				// Handle chatETHPrivKey
-				console.warn('1- YES chatETHPrivKey', chatETHPrivKey)
+				console.log('1- YES chatETHPrivKey', chatETHPrivKey)
 				try {
 					signer = await new ethers.Wallet(chatETHPrivKey)
 
@@ -2967,9 +2995,9 @@ Wallet encrypted and saved into localstorage
 
 <svg id="scan-icon" onclick="event.stopPropagation();scanAndSign()"  xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"> <path fill="currentColor" d="M0 80C0 53.5 21.5 32 48 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48L0 80zM64 96l0 64 64 0 0-64L64 96zM0 336c0-26.5 21.5-48 48-48l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96zm64 16l0 64 64 0 0-64-64 0zM304 32l96 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-96 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm80 64l-64 0 0 64 64 0 0-64zM256 304c0-8.8 7.2-16 16-16l64 0c8.8 0 16 7.2 16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s7.2-16 16-16s16 7.2 16 16l0 96c0 8.8-7.2 16-16 16l-64 0c-8.8 0-16-7.2-16-16s-7.2-16-16-16s-16 7.2-16 16l0 64c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-160zM368 480a16 16 0 1 1 0-32 16 16 0 1 1 0 32zm64 0a16 16 0 1 1 0-32 16 16 0 1 1 0 32z"/></svg>
 			
-<svg  onclick="event.stopPropagation();scanAndSign()"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"  height="1em" > <path fill="currentColor"d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-19.3c-2.7 1.1-5.4 2-8.2 2.7l-60.1 15c-3 .7-6 1.2-9 1.4c-.9 .1-1.8 .2-2.7 .2l-64 0c-6.1 0-11.6-3.4-14.3-8.8l-8.8-17.7c-1.7-3.4-5.1-5.5-8.8-5.5s-7.2 2.1-8.8 5.5l-8.8 17.7c-2.9 5.9-9.2 9.4-15.7 8.8s-12.1-5.1-13.9-11.3L144 381l-9.8 32.8c-6.1 20.3-24.8 34.2-46 34.2L80 448c-8.8 0-16-7.2-16-16s7.2-16 16-16l8.2 0c7.1 0 13.3-4.6 15.3-11.4l14.9-49.5c3.4-11.3 13.8-19.1 25.6-19.1s22.2 7.8 25.6 19.1l11.6 38.6c7.4-6.2 16.8-9.7 26.8-9.7c15.9 0 30.4 9 37.5 23.2l4.4 8.8 8.9 0c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7L384 203.6l0-43.6-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM549.8 139.7c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM311.9 321c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L512.1 262.7l-71-71L311.9 321z"/></svg>
 
 `;
+// <svg  onclick="event.stopPropagation();scanAndSign()"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"  height="1em" > <path fill="currentColor"d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-19.3c-2.7 1.1-5.4 2-8.2 2.7l-60.1 15c-3 .7-6 1.2-9 1.4c-.9 .1-1.8 .2-2.7 .2l-64 0c-6.1 0-11.6-3.4-14.3-8.8l-8.8-17.7c-1.7-3.4-5.1-5.5-8.8-5.5s-7.2 2.1-8.8 5.5l-8.8 17.7c-2.9 5.9-9.2 9.4-15.7 8.8s-12.1-5.1-13.9-11.3L144 381l-9.8 32.8c-6.1 20.3-24.8 34.2-46 34.2L80 448c-8.8 0-16-7.2-16-16s7.2-16 16-16l8.2 0c7.1 0 13.3-4.6 15.3-11.4l14.9-49.5c3.4-11.3 13.8-19.1 25.6-19.1s22.2 7.8 25.6 19.1l11.6 38.6c7.4-6.2 16.8-9.7 26.8-9.7c15.9 0 30.4 9 37.5 23.2l4.4 8.8 8.9 0c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7L384 203.6l0-43.6-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM549.8 139.7c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM311.9 321c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L512.1 262.7l-71-71L311.9 321z"/></svg>
 console.log(`Your address: ${userAddress} `)
 console.log(`Your did: ${did} `)
 }
@@ -3185,7 +3213,7 @@ console.log(`Your did: ${did} `)
 
 		async function getChatAddresses() {
 			const allConversations = await iusnaturalisxmtp.conversations.list()
-			console.warn('🧸 🧸 🧸 YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP at getChatAddresses()")
+			console.log('🧸 🧸 🧸 YOU HAVE ', allConversations.length, "ADDRESSES AVAILABLE IN XMTP at getChatAddresses()")
 
 			const peerAddressesArray = [];
 
@@ -3905,11 +3933,11 @@ async function backupContactsToPolybase() {
 			let cwContacts = JSON.parse(window.localStorage.getItem('contacts'));
 			if (!cwContacts) {
 				console.log('YOU HAVE', 0, 'CONTACTS in LOCALSTORAGE at loadContactsFromLocalstorage()')
-				console.warn('CHECK DID???')
+				// console.warn('CHECK DID???')
 
 			}
 			if (cwContacts) {
-				console.warn('🏄‍♀️🏄‍♀️🏄‍♀️ YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContactsFromLocalstorage()')
+				console.log('🏄‍♀️🏄‍♀️🏄‍♀️ YOU HAVE', cwContacts.length, 'CONTACTS in LOCALSTORAGE at loadContactsFromLocalstorage()')
 
 				cw=cwContacts;
 				// contactname // username
@@ -4932,7 +4960,7 @@ function resizeBase64Image(base64Image, width, height) {
 			if (rdid.data == null) {
 				console.warn('DID NULL, create ONE');
 			} else {
-					console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
+					console.log(`DID EXISTENT!:  ${rdid.data.id}`);
 
 					// AVATAR if new resizes and stores in localstorage
 					if (rdid.data.avatar) {
@@ -5004,10 +5032,10 @@ function resizeBase64Image(base64Image, width, height) {
 
 		async function initChatClient(wallet) {
 			console.warn(`
-******************
-initChatClient()
-******************
-`)
+			******************
+			initChatClient()
+			******************
+			`)
 			// Create the client with your wallet. This will connect to the XMTP development network by default
 			// const xmtp = await Client.create(wallet)
 			const xmtp = await Client.create(wallet, { env: "dev", })
@@ -5016,7 +5044,7 @@ initChatClient()
 
 			// Support on-chain transaction references in your app built with XMTP
 			// https://xmtp.org/docs/build/messages/transaction
-			xmtp.registerCodec(new TransactionReferenceCodec());
+			// xmtp.registerCodec(new TransactionReferenceCodec());
 
 
 
@@ -5063,7 +5091,7 @@ initChatClient()
 
 				// // Check if the chat is already being listened to
 				// if (activeConversations.has(senderAddress)) {
-				//     console.log(`📣📣📣 Already listening to conversation with ${senderAddress}`);
+				    // console.log(`📣📣📣 Already listening to conversation with ${senderAddress}`);
 				//     continue;
 				// }
 
@@ -5280,26 +5308,23 @@ async function handleSignPayment(message) {
 	clearInterval(balanceCheckInterval);
 	balanceCheckInterval = null;
 	
-	
-	  let parsedMessage = JSON.parse(message.content);
-	//   let parsedMessage = JSON.parse(lastm.content);
-	
-	  let amount =  ethers.formatEther(parsedMessage.value)
-	  let chainId =  parsedMessage.chainId
-	  let to =  parsedMessage.to
-	  let gasLimit = parsedMessage.gasLimit
-	  let data =  parsedMessage.data
-	
+
+	let parsedMessage = JSON.parse(message.content);
+	let amount =  ethers.formatEther(parsedMessage.value)
+	let chainId =  parsedMessage.chainId
+	let to =  parsedMessage.to
+	let gasLimit = parsedMessage.gasLimit
+	let data =  parsedMessage.data
+
 	let composeMessage = `
-	You are sending:
+	You are sending 💸:
 	Amount: ${amount}
 	To: ${to} 
 	Chain Id: ${chainId} 
 	gasLimit ⛽: ${gasLimit} 
 	Data 🛢️: ${data} 
-	
 	`
-	
+
 	// Convert the value field back to BigInt
 	let bigIntAmount =  BigInt(parsedMessage.value)
 	console.log("Deserialized bigIntAmount:", bigIntAmount);
@@ -5328,7 +5353,7 @@ async function handleSignPayment(message) {
 			const rpcs = await getRPCsByChainId(Number(chainId));
 			const selProv = await simpleRandomProvider(rpcs);
 			const provider = await new ethers.JsonRpcProvider(selProv);
-				pv = provider;
+				// pv = provider;
 			if (!selProv) {
 				throw new Error('No working RPC provider found');
 			}
@@ -5365,7 +5390,15 @@ async function handleSignPayment(message) {
 
 
 		const gasDetails = await prepareGasDetails(provider, unsignedTx);
-
+			  console.log('⛽⛽⛽ GAS DETAILS: ', gasDetails)
+			  gd= gasDetails
+		// -----------------------------------------
+		const gasCost = gasDetails.gasLimit * (gasDetails.maxFeePerGas + gasDetails.maxPriorityFeePerGas);
+		const totalCost = bigIntAmount + BigInt(gasCost);
+			  console.log('💸💸💸 TOTAL COST: ', totalCost)
+		// return
+		// pastedTxToSign.innerHTML =  'checking everithing is ok to make the tx...'
+		// ---------a---------------------------------
 		// Fetch the Latest Nonce
 		const nonce = await provider.getTransactionCount(userAddress, "latest");
 		console.log("Current nonce:", nonce);
@@ -5425,6 +5458,14 @@ async function handleSignPayment(message) {
 		<br> Mined at blocknumner ${receipt.blockNumber}
 		<br> Tx hash: ${txResponse.hash} `
 
+	// -----------------
+	// TRANSMIT SUCCESS TX THROUGH XMTP
+	// -----------------    
+	console.log('tx successfull: ',iusnaturalisxmtp, message.senderAddress, txResponse.hash)
+	await sendSignedMessage(iusnaturalisxmtp, message.senderAddress, signature)
+
+		
+
     } catch (error) {
         console.error("Transaction failed:", error.message);
 		document.getElementById('pastedTxToSign').innerHTML =`❌ SOMETHING WENT WRONG! `
@@ -5434,12 +5475,22 @@ async function handleSignPayment(message) {
 	// -----------------
 	// TRANSMIT SIGNATURE THROUGH XMTP
 	// -----------------    
-	console.log('sendSignedMessage: ',iusnaturalisxmtp, userAddress, signedTx)
+	// console.log('sendSignedMessage: ',iusnaturalisxmtp, address, signedTx)
 	// await sendSignedMessage(iusnaturalisxmtp, address, signature)
+
+
+	// 	// -----------------
+	// // TRANSMIT SUCCESS TX THROUGH XMTP
+	// // -----------------    
+	// console.log('tx successfull: ',iusnaturalisxmtp, message.senderAddress, txResponse.hash)
+	// await sendSignedMessage(iusnaturalisxmtp, message.senderAddress, signature)
 
 	// -----------------
 	// iF OFFLINE MODE TRANSMIT THROUGH QR 
 	// -----------------   
+	// console.log('sendSignedMessage: ',iusnaturalisxmtp, address, signedTx)
+	// await sendSignedMessage(iusnaturalisxmtp, address, signature)
+
 
 
 	} else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -5663,7 +5714,7 @@ async function handleSignPayment(message) {
 
 			let cid = dictionary[globalLang]["addAddress"];
 
-			let addressToAdd = Swal.fire({
+			let addressToAdd = await Swal.fire({
 				title: dictionary[globalLang]["addAddress"],
 				footer: `
 				<button type="button"   class="btn btn-danger" onclick="event.stopPropagation(); scanAddress()">
@@ -6681,7 +6732,7 @@ function loadDecryptedContacts(contacts){
 		// cid: string; 
 		// publicKey: PublicKey;
 		async function loadDID(signer) {
-			console.warn(' 💒💒💒💒 loadDID()',signer)
+			console.log(' 💒💒💒💒 loadDID()',signer)
 			let did = `did:ius:${signer.address}`;
 		
 			// IF. READ DID 
@@ -6706,7 +6757,7 @@ function loadDecryptedContacts(contacts){
 					console.error('An error occurred while creating the DID record:', error);
 				}
 			} else {
-				console.warn(`DID EXISTENT!:  ${rdid.data.id}`);
+				console.log(`DID EXISTENT!:  ${rdid.data.id}`);
 
         // Avatar logic only if not already loaded
         // if (!document.getElementById('avatarIMG').src || document.getElementById('avatarIMG').src.endsWith('default.png')) {
@@ -7404,28 +7455,29 @@ function loadDecryptedContacts(contacts){
 	  .) GET PROVIDERS BY CHAIN ID FUNCTION
 	  **********************************************************************************************/
 
-		async function getRpcListByChainId(chainId) {
-    try {
-        // Step 1: Fetch the JSON data
-        const response = await fetch("chainsv1.json");
+	
+// 		async function getRpcListByChainId(chainId) {
+//     try {
+//         // Step 1: Fetch the JSON data
+//         const response = await fetch("chainsv1.json");
         
-        // Step 2: Parse the JSON data into a JavaScript object
-        const chains = await response.json();
+//         // Step 2: Parse the JSON data into a JavaScript object
+//         const chains = await response.json();
         
-        // Step 3: Find the chain with the matching chainId
-        const chain = chains.find(chain => chain.chainId === chainId);
+//         // Step 3: Find the chain with the matching chainId
+//         const chain = chains.find(chain => chain.chainId === chainId);
         
-        // Step 4: Return the RPC list if the chain is found
-        if (chain) {
-            return chain.rpc;
-        } else {
-            throw new Error(`No chain found with chainId: ${chainId}`);
-        }
-    } catch (error) {
-        console.error("Error fetching or processing data:", error);
-        return null;
-    }
-}
+//         // Step 4: Return the RPC list if the chain is found
+//         if (chain) {
+//             return chain.rpc;
+//         } else {
+//             throw new Error(`No chain found with chainId: ${chainId}`);
+//         }
+//     } catch (error) {
+//         console.error("Error fetching or processing data:", error);
+//         return null;
+//     }
+// }
 
 // Example usage:
 // (async () => {
@@ -7442,25 +7494,26 @@ function loadDecryptedContacts(contacts){
 		/*********************************************************************************************
 	  .) BALANCES
 	  **********************************************************************************************/
+
 		async function reloadBalances(){
-			console.warn('reloadBalances()')
+			console.warn('reloadBalances()🔏 🔎 ⛓️‍💥 ⚖️⚖️⚖️')
 
 			let addr = document.getElementById('yourAddress').getAttribute('address');
-			let balance = await checkERC20Balance(addr)
+			let balance = await checkCustomERC20Balance(addr)
 			let gasBalance = await checkGasBalance(addr)
             let storedTokenType = localStorage.getItem('selectedTokenType');
 			// -------------------------
 			// .)  NATIVE 
 			// -------------------------
 			if (storedTokenType === 'native') {
-				console.warn('💛💛💛 RE-LOADING NATIVE  ')
+				console.log('💛💛💛 RE-LOADING NATIVE  ')
 				populateBalances(gasBalance)
 			}
 			// -------------------------
 			// .)  ERC20 
 			// -------------------------
 			if (storedTokenType === 'erc20') {
-				console.warn('💚💚💚 RE-LOADING ERC20')
+				console.log('💚💚💚 RE-LOADING ERC20')
 				const lastUXInfo = getLastUXInfo();
 				
 				if (lastUXInfo) {
@@ -7472,8 +7525,16 @@ function loadDecryptedContacts(contacts){
 	
 			}
 	
+	document.getElementById('refreshButton').addEventListener('click', () => {
+		const button = document.getElementById('refreshButton');
+		button.classList.add('loading');
+		setTimeout(() => button.classList.remove('loading'), 1000);
+		console.warn('Refreshing balances...');
+      // Call your reloadBalances() function here
+
+    });
+
 	return
-			
 			
 		}
 
@@ -7645,76 +7706,161 @@ async function getRPCsByChainId(chainId) {
 
 		}
 
+		async function checkCustomERC20Balance(userAddress, contractAddress, chainId,  provider) {
+			try {
+				console.log('💛💛💚💛💛 checkCustomERC20Balance() at', contractAddress, chainId);
+		
+				// ERC-20 ABI for balanceOf function
+				// const erc20ABI = ["function balanceOf(address account) view returns (uint256)"];
+		
+				const erc20ABI = [
+					"function balanceOf(address owner) view returns (uint256)",
+					"function decimals() view returns (uint8)",
+					"function symbol() view returns (string)"
+				];
+				// Pre-check: If any required parameter is missing, use PREFERRED_TOKEN from localStorage
+				if (!provider || !contractAddress || !chainId) {
+					console.warn('🐲🐲🐲 Provider and/or contractAddress and/or chainId not passed. Using default PREFERRED_TOKEN.');
+		
+					// Retrieve PREFERRED_TOKEN from localStorage
+					const pt = localStorage.getItem('PREFERRED_TOKEN');
+					if (!pt) {
+						throw new Error('PREFERRED_TOKEN not found in localStorage.');
+					}
+		
+					// Parse PREFERRED_TOKEN into parts
+					const parts = pt.split('-');
+					if (parts.length < 2) {
+						throw new Error('Invalid format for PREFERRED_TOKEN. Expected format: "chainId-contractAddress".');
+					}
+		
+					// Extract chainId and contractAddress from PREFERRED_TOKEN
+					if (!chainId) {
+						chainId = parts[0]; // Assign directly to the function parameter
+						console.warn('Using chainId from PREFERRED_TOKEN:', chainId);
+		
+						// Validate the newly created chainId
+						if (!chainId || isNaN(Number(chainId))) {
+							throw new Error('Invalid chainId extracted from PREFERRED_TOKEN.');
+						}
+					}
+		
+					if (!contractAddress) {
+						contractAddress = parts[1]; // Assign directly to the function parameter
+						console.warn('Using contractAddress from PREFERRED_TOKEN:', contractAddress);
+						
+						// Validate the newly created contractAddress
+						if (!contractAddress || !ethers.isAddress(contractAddress)) {
+							throw new Error('Invalid contract address extracted from PREFERRED_TOKEN.');
+						}
+					}
+					
+				}
+				
+				// Validate or set default userAddress
+				if (!userAddress || !ethers.isAddress(userAddress)) {
+					console.warn('💚💛 (userAddress not passed or invalid) USING DEFAULT ...');
+					userAddress = window.userAddress; // Use the global default address
+				}
+				
+				// Handle provider (if not provided)
+				if (!provider) {
+					console.warn('💚💛 (provider not passed) CREATING PROVIDER FOR CHAIN ID:', chainId);
+					const rpcs = await getRPCsByChainId(Number(chainId));
+					if (!rpcs || rpcs.length === 0) {
+						throw new Error('No RPCs found for the given chainId');
+					}
+					
+					const selProv = await simpleRandomProvider(rpcs);
+					console.log('☎️ Selected RPC URL:', selProv);
+					provider = new ethers.JsonRpcProvider(selProv);
+					p1 =provider;
 
-		async function checkERC20Balance(userAddress) {
+					// console.log('PROVIDER:', provider);
+					
+					console.log('Using provider:', selProv); //da error
+					
+				}
+				
+				// Log the final values being used
+				console.log('Using userAddress:', userAddress);
+				console.log('Using chainId:', chainId);
+				console.log('Using contractAddress:', contractAddress);
+				if (!contractAddress || !ethers.isAddress(contractAddress)) {
+					throw new Error('Invalid contract address');
+				}
+				// Fetch the ERC-20 balance using the provider and contract address
+				console.log('CREATING ERC20 CONTRACT ',contractAddress, erc20ABI, provider);
+				const contract = new ethers.Contract(contractAddress, erc20ABI, provider);
+		// try { tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider); } 
+
+				c1= contract;
+				const balance = await contract.balanceOf(userAddress);
+				bal1= balance;
+				console.log(`Balance of ${userAddress}:`, ethers.formatUnits(balance, 18));
+		
+			} catch (error) {
+				console.error('Error in checkCustomERC20Balance:', error.message);
+				throw error; // Re-throw the error for further handling
+			}
+		}
+		
+
+		async function checkERC20Balance(userAddress, provider) {
 			console.log('💛💛💛💛 checkERC20Balance() of ', userAddress)
-			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-			// REARMAR , primero llamar de localstorage al PREFERED_TOKEN
-			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-			let pt = localStorage.getItem('PREFERRED_TOKEN')
 
+			// Validate userAddress (optional but recommended)
+			if (!userAddress || typeof userAddress !== 'string') {
+					throw new Error("Invalid or missing userAddress.");
+				}
+
+
+			let pt = localStorage.getItem('PREFERRED_TOKEN')
+			
 			// Split the string by the '-' delimiter
 			const parts = pt.split('-');
-
+			
 			// Extract the two parts
 			const chainId = parts[0]; // '421614'
 			const contractAddr = parts[1]; // '0xFb1cb5a6dADDcE008d86f72057265A3afC82d539'
 
-
-			const rpcList = await getRpcListByChainId(Number(chainId));
-			console.log('rpcList:', rpcList)
-			// const length = rpcList.length;
-			// const randomnumber = Math.floor(Math.random() * length);
-			// // const selectedProvider = rpcList[randomnumber];
-			let selectedProvider = await selectRandomProvider(rpcList)
-
-			// write selectef provider to localstorage (then use localstorage first)
-			// alert(selectedProvider)
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			// VALIDATION
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			    // Check if the provider is passed
+				if (!provider) {
+					// let provider;
+					console.warn("Provider is required but was not provided.");
+					// IF NOT PROVIDER IN ARGUMENT GET IT HERE
+					// -----------------
+					// GET PROVIDER
+					// -----------------
+					console.warn('CREATING PROVIDER FOR CHAIN ID:', chainId)
+					const rpcs = await getRPCsByChainId(Number(chainId));
+					const selProv = await simpleRandomProvider(rpcs);
+					providerForContract = await new ethers.JsonRpcProvider(selProv);
+					pv = providerForContract;
+					if (!selProv) {
+						throw new Error('No working RPC provider found');
+					}
+					console.log('Selected RPC URL:', selProv);
+				}
+			
+				// console.log("IS PROVIDER AVAILABLE?", provider)
 
 			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-			// BORRADO POR DESUSO?(CONFIRMAR)
+			// REARMAR , primero llamar de localstorage al PREFERED_TOKEN
 			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-			// Retrieve selector index  from localStorage
-			// let preferredIndex = localStorage.getItem('preferredTokenIndex');
-			// if (preferredIndex === null) {
-			// 	preferredIndex = 0;
-			// } else {
-			// 	preferredIndex = parseInt(preferredIndex, 10); // Convert the stored value to an integer
-			// }
-
-			// // // Retrieve the stored data from localStorage
-			// let storedData = JSON.parse(localStorage.getItem('ERC20_TOKENS')) || [];
-
-			// // // If the preferred index is within the range of stored tokens, return the corresponding token details
-			// if (storedData[preferredIndex]) {
-			// 	preferredToken = storedData[preferredIndex];
-			// 	pref = preferredToken
-			// } else {
-			// 	console.log('some problem in checkERC20Balance')
-			// 	return
-			// }
-
-			// const length = preferredToken.rpcs.length;
-			// const randomnumber = Math.floor(Math.random() * length);
-			// const selectedProvider = preferredToken.rpcs[randomnumber];
-			// console.log('selectedProvider:', selectedProvider);
-			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-			let provider;
-			try { provider = await new ethers.JsonRpcProvider(selectedProvider); }
-			catch (error) { console.warn('error creating provider', error) }
-			// let contractAddr = preferredToken.contractAddr
-			const tokenContract = await new ethers.Contract(contractAddr, erc20Abi, provider);
-			t = tokenContract;
+		
+			const tokenContract =  new ethers.Contract(contractAddr, erc20Abi, providerForContract);
+			tokc = tokenContract;
 			const formattedAddress = ethers.getAddress(userAddress);
+			fa= formattedAddress
 			let balance;
 			try { balance = await tokenContract.balanceOf(formattedAddress); }
 			catch (error) {
 				if (error.message.includes('Failed to fetch')) { console.warn('Error getting balance: Network or fetch issue. refetch?'); }
-				else { console.warn('Error getting balance:', error); }
+				else { console.warn('Error in getting balance:', error); }
 			}
 			b = balance
 			const decimals = await tokenContract.decimals();
@@ -7769,6 +7915,84 @@ async function getRPCsByChainId(chainId) {
 	// 		return null; // Indicate failure to connect
 	// 	  }
 	// 	}
+
+	function replaceApiKeyPlaceholder(selectedProvider) {
+    // console.log('replaceApiKeyPlaceholder 👁️‍🗨️👁️‍🗨️👁️‍🗨️, selectedProvider:',selectedProvider);
+
+    // Access global variables
+    const options = window.options || {};
+    const globalOptionsList = window.globalOptionsList || [];
+
+    // Ensure globalOptionsList has at least one object
+    if (!Array.isArray(globalOptionsList) || globalOptionsList.length === 0) {
+        throw new Error('globalOptionsList must be a non-empty array!');
+    }
+
+    // Define a mapping of placeholders to their respective API keys
+    const apiKeyPlaceholders = {
+        INFURA_API_KEY: 'INFURA_API_KEY',
+        ALCHEMY_API_KEY: 'ALCHEMY_API_KEY'
+    };
+
+    // Iterate over the placeholders to check if the selectedProvider contains any of them
+    for (const [placeholder, apiKeyName] of Object.entries(apiKeyPlaceholders)) {
+        if (selectedProvider.includes(`$\{${placeholder}\}`)) {
+			console.log('replaceApiKeyPlaceholder 👁️‍🗨️👁️‍🗨️👁️‍🗨️, changed: ',placeholder);
+
+            // Retrieve the API key from options or globalOptionsList
+            const apiKey = options[apiKeyName] || globalOptionsList[0][apiKeyName];
+
+            if (!apiKey) {
+                throw new Error(`${apiKeyName} is missing!`);
+            }
+
+            // Replace the placeholder with the actual API key
+            selectedProvider = selectedProvider.replace(`$\{${placeholder}\}`, apiKey);
+            console.log(`${apiKeyName} URL:`, selectedProvider);
+
+            return selectedProvider; // Exit early after replacing the placeholder
+        }
+    }
+
+	console.log('replaceApiKeyPlaceholder 👁️‍🗨️👁️‍🗨️👁️‍🗨️, NOT CHANGED. ');
+
+    // If no placeholder is found, return the original provider
+    return selectedProvider;
+}
+ 
+
+	/**
+	 * Function to fetch the list of RPCs for a given chainId.
+	 *
+	 * @param {number} chainId - The chainId to search for.
+	 * @returns {Promise<Array<string>>} - A promise that resolves to an array of RPC URLs.
+	 */
+ async function getRPCsByChainId(chainId) {
+	console.warn('getRPCsByChainId:', chainId)
+    try {
+        // Fetch the data from the JSON file
+        const source = await fetch("chainsv1.json");
+        const data = await source.json();
+
+        // Find the entry with the matching chainId
+        const chain = data.find(entry => entry.chainId === chainId);
+
+		ch = chain
+        // If a matching chain is found, return its RPCs; otherwise, return an empty array
+        if (chain && Array.isArray(chain.rpc)) {
+            return chain.rpc;
+        } else {
+            console.warn(`No RPCs found for chainId: ${chainId}`);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching RPCs:", error);
+        return []; // Return an empty array in case of an error
+    }
+}
+ 
+
+
 	async function providerChecker(providerUrl, maxAttempts = 3, delayMs = 1000) {
   let attempts = 0;
 
@@ -7781,7 +8005,7 @@ async function getRPCsByChainId(chainId) {
       return provider; // Successfully connected provider
     } catch (error) {
       attempts++;
-      console.error(
+      console.warn(
         `Attempt ${attempts} failed for provider ${providerUrl}:`,
         error.message || error
       );
@@ -7811,46 +8035,27 @@ async function simpleRandomProvider(rpcs, options = {}) {
     try {
       let selectedProvider = providerUrl;
 
-      console.log('👁️‍🗨️ Selected Provider 👁️‍🗨️:', selectedProvider);
-	  function replaceApiKeyPlaceholder(selectedProvider, options, globalOptionsList) {
-  // Define a mapping of placeholders to their respective API keys
-  const apiKeyPlaceholders = {
-    INFURA_API_KEY: globalOptionsList[0].INFURA_API_KEY,
-    ALCHEMY_API_KEY: globalOptionsList[0].ALCHEMY_API_KEY
-  };
-
-  // Iterate over the placeholders to check if the selectedProvider contains any of them
-  for (const [placeholder, apiKeyName] of Object.entries(apiKeyPlaceholders)) {
-    if (selectedProvider.includes(placeholder)) {
-      // Retrieve the API key from options or globalOptionsList
-      const apiKey = options[apiKeyName] || globalOptionsList?.[0]?.[apiKeyName];
-      if (!apiKey) throw new Error(`${apiKeyName} is missing!`);
-
-      // Replace the placeholder with the actual API key
-      selectedProvider = selectedProvider.replace(placeholder, apiKey);
-      console.log(`${apiKeyName} URL:`, selectedProvider);
-      return selectedProvider; // Exit early after replacing the placeholder
-    }
-  }
-
-  // If no placeholder is found, log that the URL is already valid
-  console.log("OK! URL does not contain any API key placeholder.");
-  return selectedProvider;
-}
+    //   console.log('👁️‍🗨️ Selected Provider 👁️‍🗨️👁️‍🗨️:', selectedProvider);
  
-
+	  let replacedProv =  replaceApiKeyPlaceholder(selectedProvider)
+	  console.log('TRYing WITH PROVIDER =', replacedProv)
+	  
+	  
+	  // ---
       // Try to connect to the selected provider with retries
-      const provider = await providerChecker(selectedProvider);
-
+      const provider = await providerChecker(replacedProv);
       if (provider) {
-        console.log('✅✅✅ Connected to provider:', selectedProvider);
-        return selectedProvider; // Exit and return the working provider
-      } else {
-        console.log('❌ Failed to connect to provider:', selectedProvider);
-      }
+		  console.log('✅✅✅ Connected to provider:', replacedProv);
+		  return replacedProv; // Exit and return the working provider
+		} else {
+			console.log('❌ Failed to connect to provider:', replacedProv);
+		}
     } catch (error) {
-      console.error(`❌ Error with provider ${providerUrl}:`, error.message);
+		console.warn(`❌ Error with provider ${providerUrl}:`, error.message);
     }
+	//   ---
+
+
   }
 
   console.error('⚠️ All providers failed to connect!');
@@ -7993,7 +8198,7 @@ async function updateBalance(addr) {
 
 
 async function loadToken(addr) {
-    console.warn('🏦loadToken()')
+    console.log('🏦loadToken()')
 
     if (!addr) { // Check if addr is undefined, null, or an empty value
         console.log('Address not provided');
@@ -8064,7 +8269,7 @@ async function loadToken(addr) {
 
 	
     function populateBalances(chainName,chainId, tokenName, explorer, address,  gasBal, tokenBal, contractAddr) {
-		console.warn(chainName,chainId, tokenName, explorer, address,  gasBal, tokenBal, contractAddr) 
+		console.log(chainName,chainId, tokenName, explorer, address,  gasBal, tokenBal, contractAddr) 
 
 		if (tokenBal === undefined) {
         console.log('means its a native token', gasBal,tokenBal)
@@ -8080,12 +8285,18 @@ async function loadToken(addr) {
 			console.log('FILLING BALANCE FOR NATIVE',chainName,chainId, tokenName ,gasBal, link)
 
 
-            balanceDisplayer.innerHTML =    `
+            // balanceDisplayer.innerHTML =    `
+			// <span class="top">${chainName} (${chainId})</span>
+			// <span class="bal" > ${rounded}</span>
+			// <span class="eth">${tokenName}</span>
+			// `
+			balanceDisplayer.innerHTML =    `
 			<span class="top">${chainName} (${chainId})</span>
 			<span class="bal" > ${rounded}</span>
 			<span class="eth">${tokenName}</span>
+			<svg id="refreshButton" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em"> <path fill="currentColor" d="M463.5 224l8.5 0c13.3 0 24-10.7 24-24l0-128c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8l119.5 0z"/></svg>
+
 			`
-		
 
 
         });
@@ -8104,13 +8315,20 @@ async function loadToken(addr) {
 
 // continuar esta idea de ponerlo encima de tokenBalances/
 			// <select class="tokenBalanceSelector top token-selector"  > </select>
-            balanceDisplayer.innerHTML =`
+            // balanceDisplayer.innerHTML =`
+			// <span class="top">${chainName} (${chainId})</span>
+			// <span class="bal" > ${tokenBal} </span>
+			// <span class="eth">${tokenName}</span> 
+			// <span class="bottom"> gas: ${gasBal} </span>
+			// `
+			balanceDisplayer.innerHTML =`
 			<span class="top">${chainName} (${chainId})</span>
 			<span class="bal" > ${tokenBal} </span>
 			<span class="eth">${tokenName}</span> 
+			<svg id="refreshButton" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em"> <path fill="currentColor" d="M463.5 224l8.5 0c13.3 0 24-10.7 24-24l0-128c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8l119.5 0z"/></svg>
+
 			<span class="bottom"> gas: ${gasBal} </span>
 			`
-
 			// CON LINKS
 			// `
 			// <span class="top">${chainName} (${chainId})</span>
@@ -8221,7 +8439,7 @@ async function loadToken(addr) {
 
 
 		autoCompleteJS.input.addEventListener("selection", function (event) {
-			console.warn('SELECT: ', event.detail.selection)
+			console.log('SELECT: ', event.detail.selection)
 			selectionResult.style.display = 'block'
 			const feedback = event.detail;
 			let resultado = event.detail.selection.value;
@@ -8264,9 +8482,9 @@ async function loadToken(addr) {
 			<br><strong>Native Currency:</strong> ${resultado.nativeCurrency.symbol}`;
 
 			autoCompleteJS.input.value = selection;
-			console.warn('selection REDULT: ', selection)
+			console.log('selection REDULT: ', selection)
 			console.log("feedback: ", feedback);
-			console.warn("resultado: ", resultado);
+			console.log("resultado: ", resultado);
 
 
 			erc20SetContract.style.display = 'inline'
@@ -10538,6 +10756,7 @@ let preferredToken
 		**********************************************************************************************/
 		async function showWallet() {
 			console.log('showWallet')
+			// alert('showWallet')
 
 			Swal.close(); // Close the modal
 			// open modal
@@ -10987,6 +11206,83 @@ async function handleTransactionHistory(address) {
 }
  
 
+
+// ----------------------------------------------
+// Helper function to save wallet history to local storage
+function saveWalletHistoryToLocalStorage(address, data) {
+    const key = `walletHist_${address}`;
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Helper function to retrieve wallet history from local storage
+function getWalletHistoryFromLocalStorage(address) {
+    const key = `walletHist_${address}`;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+}
+
+// call example
+// const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6ImQ2YTNiYzVmLTk1MmUtNDI0NC1iZGYwLWIzYTdmY2IxZjNmZCIsIm9yZ0lkIjoiMzQzIiwidXNlcklkIjoiNjQ4IiwidHlwZUlkIjoiNzUxNjA3OWEtNzcyMy00YmJjLWI3NDAtYjk4NDczN2VjOTRlIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODg3NDM2NjUsImV4cCI6NDg0NDUwMzY2NX0.awOmioK2Qa80oEt-S1UXKkJC_Qzf8FBsYNCZ0L1ebb4'; // Replace with your Moralis API key
+//     const walletAddress = '0x160BFF1547ac411756153232C7Fd0d0ceDF260C3'; // Replace with the wallet address
+//     const chain = 'ethereum'; // Replace with the desired chain (e.g., 'polygon')
+
+// let wh =await getWalletHistory(apiKey, walletAddress, chain);
+//         console.log('Wallet History:', wh);
+    
+
+async function getWalletHistory(apiKey, walletAddress, chain = 'ethereum') {
+// async function getWalletHistory(apiKey, walletAddress, chain ) {
+    // Validate the wallet address
+    if (!ethers.isAddress(walletAddress)) {
+        throw new Error('Invalid wallet address');
+    }
+
+	    // Check if the wallet history is already in local storage
+		const cachedData = getWalletHistoryFromLocalStorage(walletAddress);
+    if (cachedData) {
+        console.log('Retrieved wallet history from local storage.');
+        return cachedData;
+    }
+
+    // Moralis API endpoint
+    const url = `https://deep-index.moralis.io/api/v2/${walletAddress}`;
+
+    try {
+        // Make the GET request to Moralis API
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-API-Key': apiKey, // Your Moralis API key
+            },
+        });
+
+        // Check for HTTP errors
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Parse and return the JSON response
+        const data = await response.json();
+		     
+
+// Save the fetched data to local storage
+saveWalletHistoryToLocalStorage(walletAddress, data);
+
+
+
+
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching wallet history:', error.message);
+        throw error;
+    }
+}
+
+
+
+
+		// ---------------------------------------------
 		//   OFFLINE ONLINE MODES
 		 // Function to check and update online/offline status
 		 function updateStatus() {
@@ -11002,6 +11298,7 @@ async function handleTransactionHistory(address) {
 		//  statusMessage.style.display = 'none!important'
 		 , 3000);
       } else {
+		console.log('YOU ARE OFFLINE 📴')
         // statusMessage.textContent = 'You are offline. Please check your connection.';
         statusMessage.textContent = dictionary[globalLang]["youareoffline"];
         statusMessage.className = 'offline';
@@ -11018,6 +11315,26 @@ async function handleTransactionHistory(address) {
 //     console.log('The web app is not visible to the user.');
 //   }
 // });
+
+
+// NOTIFICATIONS FOR FUNDING
+function notify(){
+			// create the notification
+			var notification = new NotificationFx({
+							message : `<span class="icon icon-megaphone">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M480 32c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9L381.7 53c-48 48-113.1 75-181 75l-8.7 0-32 0-96 0c-35.3 0-64 28.7-64 64l0 96c0 35.3 28.7 64 64 64l0 128c0 17.7 14.3 32 32 32l64 0c17.7 0 32-14.3 32-32l0-128 8.7 0c67.9 0 133 27 181 75l43.6 43.6c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6l0-147.6c18.6-8.8 32-32.5 32-60.4s-13.4-51.6-32-60.4L480 32zm-64 76.7L416 240l0 131.3C357.2 317.8 280.5 288 200.7 288l-8.7 0 0-96 8.7 0c79.8 0 156.5-29.8 215.3-83.3z"/></svg>
+								</span><p>Support the development of this DApp. <a href="#">Check it out</a> now.</p>`,
+							layout : 'bar',
+							effect : 'slidetop',
+							type : 'notice', // notice, warning or error
+							onClose : function() {
+								bttn.disabled = false;
+							}
+						});
+
+						// show the notification
+						notification.show();
+}
 	</script>
 
 	<!-- <script type="module" src="js/demo1.js"></script> -->

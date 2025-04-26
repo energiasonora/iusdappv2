@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrbisDB Test</title>
+  <link rel="stylesheet" href="css/pico.min.css" />
+  <script src="js/sweetalert2.all.min.js"></script>
+  <script src="js/ethers-6.13.2.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .links-container {
+      margin-top: 10px;
+    }
+    .link-input {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>OrbisDB DID Information Test</h1>
+
+  <button id="createWallet">Create New Wallet</button>
+  <div id="walletStatus">No Wallet Created</div>
+  <pre id="walletDetails"></pre>
+
+
+  <h2>Connect to Orbis</h2>
+  <button id="connectButton">Connect Wallet to Orbis</button>
+  <div id="connectionStatus">Not Connected to Orbis</div>
+
+
+
+
+  <h2>Write Data</h2>
+  <div class="input-group">
+    <label for="avatarInput">Avatar URL:</label>
+    <input type="text" id="avatarInput" placeholder="Enter avatar URL (e.g., https://example.com/avatar.png)" />
+  </div>
+  <div class="input-group">
+    <label for="linksInput">Links:</label>
+    <div id="linksContainer">
+      <div class="link-input">
+        <input type="text" class="link" placeholder="Enter a link (e.g., https://example.com)" />
+      </div>
+    </div>
+    <button id="addLinkButton">Add Another Link</button>
+  </div>
+  <button id="writeButton">Write to OrbisDB</button>
+
+  <h2>Read Data</h2>
+  <button id="readButton">Read from OrbisDB</button>
+  <pre id="readData"></pre>
+
+  <script type="module">
+    import { OrbisDB } from "@useorbis/db-sdk";
+    window.OrbisDB = OrbisDB;
+
+    import { catchError } from "@useorbis/db-sdk/util"
+        window.catchError = catchError;
+
+        import { OrbisEVMAuth } from "@useorbis/db-sdk/auth"
+        window.OrbisEVMAuth = OrbisEVMAuth;
+
+        // import { OrbisKeyDidAuth } from "@useorbis/db-sdk/auth"
+        // window.OrbisKeyDidAuth = OrbisKeyDidAuth;
+
+  </script>
+
+  <script>
+    let wallet;
+    let orbisDB;
+
+    // -----------------------------------------
+    // WALLET FUNCTIONS
+    // -----------------------------------------
+
+    // https://ceramic-orbisdb-mainnet-direct.hirenodes.io/
+    window.optionsList = [
+			{
+        "CERAMIC_NODE": "https://ceramic-orbisdb-mainnet-direct.hirenodes.io/",
+        "ORBISDB_INSTANCE":"https://studio.useorbis.com",
+        "ENVIRONMENT_ID": "did:pkh:eip155:1:0x9d51a3e880fcb01e5b71658fb8f3cef8d32900eb",
+        // "CONTEXT_ID": "kjzl6kcym7w8y4z7iwiis59y4gnswd2jdrrh3jbcqbo4gsnzbcrbhx2w06ht3s3", //alicetest
+        // "CONTEXT_ID": "kjzl6kcym7w8yay7m28a4pozst6ht9awjydgx1plwh0hbdss1y0c0nd8mjxwzpa", //testbob (subcontext)
+        "CONTEXT_ID": "kjzl6kcym7w8y5zc1wauho6x0th8uqrjb8ou9bhg8m8ek09xynsk2h8dn0qa95s", //bob
+        "MODEL_ID": "kjzl6hvfrbw6c6wvut5ddk19147lvfqnvstxdg5egjm3unpv6p699yjcoj2blyi",// myCustomModel
+				"TOKEN_CHAIN_NAME": 'ARBITRUM(SEPOLIA)',
+				"TOKEN_NAME": "TROK",
+				"SYMBOL": "TROK",
+				"API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+				"TOKEN_CHAINID": '421614',
+				"EXPLORER": 'https://sepolia.arbiscan.io/',
+				'IPFS_GATEWAY': 'https://gateway.lighthouse.storage/ipfs/'
+      }
+    ]
+
+    async function deriveAddressWallet(mnemonic, index) {
+      const basePath = "m/44'/60'/0'/0/";
+      const path = `${basePath}${index}`;
+      const derivedNode = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+      return derivedNode;
+    }
+
+    async function aliceWallet() {
+      let aliceMnemonic = localStorage.getItem('aliceMnemonic');
+      if (!aliceMnemonic) {
+        console.error('NO aliceMnemonic in localStorage!');
+        const randmnemonic = await ethers.HDNodeWallet.createRandom();
+        aliceMnemonic = randmnemonic.mnemonic.phrase;
+        localStorage.setItem('aliceMnemonic', aliceMnemonic);
+      } else {
+        console.log('aliceMnemonic is in localStorage!');
+      }
+      let aliceWall = deriveAddressWallet(aliceMnemonic, 0);
+      return aliceWall;
+    }
+
+    // Initialize OrbisDB
+    window.onload = async () => {
+      orbisDB = new OrbisDB({
+        ceramic: {
+          gateway: optionsList[0].CERAMIC_NODE,
+        },
+        nodes: [
+          {
+            gateway: optionsList[0].ORBISDB_INSTANCE,
+            env: optionsList[0].ENVIRONMENT_ID,
+          },
+        ],
+      });
+
+// PREFILL
+ document.getElementById('avatarInput').value= 'https://euc.li/xunorus.eth'
+document.querySelectorAll('.link')[0].value='https;//xunorus.com'
+document.getElementById('createWallet').click()
+    };
+
+    // Create Wallet
+    document.getElementById('createWallet').addEventListener('click', async () => {
+      try {
+        wallet = await aliceWallet();
+        const walletDetails = {
+          address: wallet.address,
+          privateKey: wallet.privateKey,
+        };
+
+        // Display wallet details
+        document.getElementById('walletStatus').innerText = 'Wallet Created';
+        document.getElementById('walletDetails').innerText = JSON.stringify(walletDetails, null, 2);
+
+        // Save wallet details to local storage (optional)
+        localStorage.setItem('userWallet', JSON.stringify(walletDetails));
+      } catch (error) {
+        console.error('Error creating wallet:', error);
+        alert('Failed to create wallet.');
+      }
+    });
+
+    // Write Data
+    document.getElementById('writeButton').addEventListener('click', async () => {
+      try {
+        if (!wallet) {
+          alert('Please create a wallet first.');
+          return;
+        }
+
+        
+    const avatar = document.getElementById('avatarInput').value.trim();
+    const linksArray = Array.from(document.querySelectorAll('.link'))
+      .map((input) => input.value.trim())
+      .filter((link) => link !== '');
+
+    // Convert links array to a comma-separated string
+    const links = linksArray.length > 0 ? linksArray.join(",") : null;
+
+    if (!avatar && !links) {
+      alert('Please provide at least an avatar URL or one link.');
+      return;
+    }
+
+    // Ensure data matches the schema
+    const data = {
+      _id: wallet.address, // Required field
+      avatar: avatar || null,
+      links: links, // Links as a comma-separated string
+    };
+
+   // Insert data using the chainable API with context
+   const modelId = "kjzl6hvfrbw6c6wvut5ddk19147lvfqnvstxdg5egjm3unpv6p699yjcoj2blyi"; // myCustomModel
+   const insertStatement = orbisDB.insert(optionsList[0].MODEL_ID) // Use the model ID here
+   .value(data)
+   .context(optionsList[0].CONTEXT_ID)
+
+        // Validate the data against the model's schema
+        const validation = await insertStatement.validate();
+        if (!validation.valid) {
+          throw "Error during validation: " + validation.error;
+        }
+
+        // Execute the query
+        const [result, error] = await catchError(() => insertStatement.run());
+
+        if (error) {
+          console.error('Error writing data:', error);
+          alert('Failed to write data.');
+        } else {
+          console.log(insertStatement.runs)
+          alert('Data written successfully!');
+        }
+      } catch (error) {
+        console.error('Error writing data:', error);
+        alert('Failed to write data.');
+      }
+    });
+
+
+    // Read Data
+document.getElementById('readButton').addEventListener('click', async () => {
+  try {
+    if (!wallet) {
+      alert('Please create a wallet first.');
+      return;
+    }
+
+    // Query data using the chainable API with context
+    // const modelId = "kjzl6kcym7w8y4z7iwiis59y4gnswd2jdrrh3jbcqbo4gsnzbcrbhx2w06ht3s3"; // Replace with your actual model ID
+    // const contextId = "kjzl6kcym7w8y4z7iwiis59y4gnswd2jdrrh3jbcqbo4gsnzbcrbhx2w06ht3s3"; // Replace with your actual context ID
+    const query = { _id: wallet.address };
+    const res = await orbisDB.find(query)
+      .context(optionsList[0].CONTEXT_ID) // Scope the query to the specified context
+      .model(optionsList[0].MODEL_ID); // Specify the model ID
+
+    if (res.success && res.data.length > 0) {
+      const userData = res.data[0];
+      // Split the links string back into an array
+      if (userData.links) {
+        userData.links = userData.links.split(",");
+      }
+      document.getElementById('readData').innerText = JSON.stringify(userData, null, 2);
+    } else {
+      console.error('Error reading data:', res);
+      alert('No data found or failed to read data.');
+    }
+  } catch (error) {
+    console.error('Error reading data:', error);
+    alert('Failed to read data.');
+  }
+});
+    // Read Data
+    // document.getElementById('readButton').addEventListener('click', async () => {
+    //   try {
+    //     if (!wallet) {
+    //       alert('Please create a wallet first.');
+    //       return;
+    //     }
+
+    //     // Query data using the chainable API with context
+    //     const query = { _id: wallet.address };
+    //     const findStatement = orbisDB.find(query)
+    //       .context("alicetest"); // Scope the query to the specified context
+
+    //     // Execute the query
+    //     const [result, error] = await catchError(() => findStatement.run());
+
+    //     if (error) {
+    //       console.error('Error reading data:', error);
+    //       alert('Failed to read data.');
+    //     } else if (result.data.length > 0) {
+    //       document.getElementById('readData').innerText = JSON.stringify(result.data[0], null, 2);
+    //     } else {
+    //       alert('No data found.');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error reading data:', error);
+    //     alert('Failed to read data.');
+    //   }
+    // });
+
+    // Add Another Link Input
+    document.getElementById('addLinkButton').addEventListener('click', () => {
+      const container = document.getElementById('linksContainer');
+      const newInput = document.createElement('div');
+      newInput.classList.add('link-input');
+      newInput.innerHTML = `<input type="text" class="link" placeholder="Enter a link (e.g., https://example.com)" />`;
+      container.appendChild(newInput);
+    });
+
+    // Utility function to handle errors
+    async function catchError(fn) {
+      try {
+        const result = await fn();
+        return [result, null];
+      } catch (error) {
+        return [null, error];
+      }
+    }
+
+
+    document.getElementById('connectButton').addEventListener('click', async () => {
+            console.log('CONNECT TO ORBIS')
+            let connect = await connectToOrbis(wallet.privateKey)
+            console.log('connect:', connect)
+
+        });
+
+        // Connect Wallet to Orbis
+        async function connectToOrbis(privateKey) {
+            try {
+                const provider = new ethers.Wallet(privateKey)
+                const auth = new OrbisEVMAuth(provider)
+                let isConnected= await orbisDB.isUserConnected()
+                // await orbisDB.isUserConnected()
+                if (isConnected === true) {
+                    // did = res.did; // Store the DID for future use
+                    document.getElementById('connectionStatus').innerText = `Connected to Orbis`;
+
+                // Get the currently connected user
+const currentUser = await orbisDB.getConnectedUser()
+c=currentUser
+if(!currentUser){
+  // Notify the user or reconnect
+  throw "There is no active user session."
+}
+
+console.log({ currentUser })
+
+                    document.getElementById('connectionStatus').innerHTML += `<br>${currentUser.user.did}`;
+                    console.log('Connected to Orbis with DID:', auth);
+                    // console.log('Connected to Orbis with DID:', did);
+                } else {
+                    console.error('Error connecting to Orbis:');
+                    // console.error('Error connecting to Orbis:', res);
+                    alert('Failed to connect to Orbis.');
+                }
+
+                // return isConnected\\
+
+                return isConnected
+
+
+                // return await orbisDB.isUserConnected()
+
+                // Connect to Orbis using the wallet's private key
+                // const res = await orbisDB.connect_v2({
+                const res = await orbisDB.connectUser({
+                    provider: provider,
+                    signer: privateKey
+                });
+
+                if (res.status === 200) {
+                    did = res.did; // Store the DID for future use
+                    document.getElementById('walletStatus').innerText = 'Connected to Orbis';
+                    console.log('Connected to Orbis with DID:', did);
+                } else {
+                    console.error('Error connecting to Orbis:', res);
+                    alert('Failed to connect to Orbis.');
+                }
+            } catch (error) {
+                console.error('Error connecting to Orbis:', error);
+                alert('Failed to connect to Orbis.');
+            }
+        }
+
+        async function fakewrite(){
+          const insertStatement = await orbisDB
+              .insert("MODEL_ID" | "TABLE_NAME")
+              .value(
+                  {
+                      column: value,
+                      column2: value2,
+                  }
+              )
+              // optionally, you can scope this insert to a specific context
+              .context("CONTEXT_ID")
+
+          // Perform local JSON Schema validation before running the query
+          const validation = await insertStatement.validate()
+          if(!validation.valid){
+              throw "Error during validation: " + validation.error
+          }
+
+          const [result, error] = await catchError(() => insertStatement.run())
+
+          // All runs of a statement are stored within the statement, in case you want to reuse the same statmenet
+          console.log(insertStatement.runs)
+        }
+  </script>
+</body>
+</html>

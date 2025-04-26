@@ -287,3 +287,28 @@ span{
 /* #configButtons button{
 	width: 100%;
   } */
+
+  #refreshButton {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 20px;
+margin-bottom: 6px;
+  }
+
+  
+  #refreshButton:hover {
+    background-color: #a1a1a158;
+  }
+  
+  #refreshButton  {
+    /* height: 24px; */
+  }
+  /* You can change the color to match your theme */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  #refreshButton.loading  {
+    animation: spin 1s linear infinite;
+  }
