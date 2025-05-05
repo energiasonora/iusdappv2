@@ -1397,8 +1397,8 @@
 		window.QrScanner = QrScanner; //make global
 		QrScanner.hasCamera(); // test
 
-		import { Polybase } from "@polybase/client";
-		window.Polybase = Polybase; //make global
+		// import { Polybase } from "@polybase/client";
+		// window.Polybase = Polybase; //make global
 
 		import Cropper from 'cropperjs'
 		window.Cropper = Cropper; //make global
@@ -1417,6 +1417,15 @@
 		window.utils = utils;
 		window.secp = secp;
 
+
+		import { OrbisDB } from "@useorbis/db-sdk";
+    window.OrbisDB = OrbisDB;
+
+    import { catchError } from "@useorbis/db-sdk/util"
+        window.catchError = catchError;
+
+        import { OrbisEVMAuth } from "@useorbis/db-sdk/auth"
+        window.OrbisEVMAuth = OrbisEVMAuth;
 	</script>
 
 	<script>
@@ -1440,6 +1449,26 @@
 			},
         ]
 		window.optionsList = [
+		{
+			"ERC20_TOKEN_ADDRESS": "0x3723A0d04ABDFA902d47426973E0cb49C2fC3B86",//trok arb sepolia
+				"ERC20_TOKEN_ABI": 'troktoken',
+				"REGISTRY_CONTRACT_ADDRESS": "0xEeF51be62Cc32e2f7c0Bf490a7ED355A2e7a0a3A",
+				"TOKEN_CHAIN_NAME": 'ARBITRUM(SEPOLIA)',
+				"TOKEN_NAME": "TROK",
+				"SYMBOL": "TROK",
+				"API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+				"TOKEN_CHAINID": '421614',
+				"EXPLORER": 'https://sepolia.arbiscan.io/',
+				'IPFS_GATEWAY': 'https://gateway.lighthouse.storage/ipfs/',
+				"ZK_PUBKEY": "2F0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3",
+        "CERAMIC_NODE": "https://ceramic-orbisdb-mainnet-direct.hirenodes.io/",
+        "ORBISDB_INSTANCE":"https://studio.useorbis.com",
+        "ENVIRONMENT_ID": "did:pkh:eip155:1:0x9d51a3e880fcb01e5b71658fb8f3cef8d32900eb",
+        "CONTEXT_ID": "kjzl6kcym7w8y9gdito3zw5nxqg8l0pmqaerd8140igvcdjp37jhoei3ivl31i0", //iusNaturalis
+        // "CONTEXT_ID": "kjzl6kcym7w8y5zc1wauho6x0th8uqrjb8ou9bhg8m8ek09xynsk2h8dn0qa95s", //bob
+        "MODEL_ID": "kjzl6hvfrbw6c614eurxjvry1qoy3y66dohn1qzyu3t864tei8phirrsl3l9tfg"//  ius_naturalis_did_2
+        // "MODEL_ID": "kjzl6hvfrbw6c9dxln23cr5ngsl9xsps71b74zfcbarh93258aa02u8t3dce4jn"//  ius_naturalis_did
+      },
 			{
 				"ERC20_TOKEN_ADDRESS": "0x3723A0d04ABDFA902d47426973E0cb49C2fC3B86",//trok arb sepolia
 				"ERC20_TOKEN_ABI": 'troktoken',
@@ -1507,17 +1536,17 @@
 		// UX LOAD IMPROVERS
  
 		function saveLastUXInfo(data) {
-  const {
-    chainName,
-    chainId,
-    tokenName,
-    explorer,
-    addr,
-    gasBalance,
-    formatedBalance,
-    contractAddr,
-  } = data;
-
+			const {
+			  chainName,
+			  chainId,
+			  tokenName,
+			  explorer,
+			  addr,
+			  gasBalance,
+			  formatedBalance,
+			  contractAddr,
+			} = data;
+			
   // Create an object and only include keys with defined values
   const lastUXInfo = {
     chainName,
@@ -1696,9 +1725,6 @@
 			// - USDC(erc20/ arbitrum sepolia) ==> FAUCET: 
 			// - ETH( native token/ arbitrum sepolia) ==> FAUCET: 
 			// --------------
-			 
-
-
 
 
 			// --------------
@@ -1715,8 +1741,28 @@
 			loadSettingsPreferences()// All options in settings MODAL UI-language-notif
 
 			// -----------
-			
+			// INIT OrbisDB
+			// --------------
+
+			   orbisDB = new OrbisDB({
+				 ceramic: {
+				   gateway: optionsList[0].CERAMIC_NODE,
+				 },
+				 nodes: [
+				   {
+					 gateway: optionsList[0].ORBISDB_INSTANCE,
+					 env: optionsList[0].ENVIRONMENT_ID,
+				   },
+				 ],
+			   });
+
+			//    CONNECT TO ORBIS
+			await connectToOrbis(signer)
+
+			// -----------
 			// LOAD USER DID
+			// --------------
+
 			await loadDID(signer)
 			return
 
@@ -6732,32 +6778,32 @@ function loadDecryptedContacts(contacts){
 		// cid: string; 
 		// publicKey: PublicKey;
 		async function loadDID(signer) {
-			console.log(' 💒💒💒💒 loadDID()',signer)
-			let did = `did:ius:${signer.address}`;
-		
-			// IF. READ DID 
-			console.log('💬💬💬 READ YOUR DID:', did);
-			let rdid = await readDIDRecord(did);
+			console.log(' 💒💒💒💒 loadDID()',signer.address)
+			let rdid = await readDIDRecord(signer.address);
 			rd = rdid;
 		
-			if (rdid.data == null) {
+			// if (rdid.data == null) {
+				if (rdid == null) {
 				console.warn('DID NULL, create ONE');
+				let address = `${signer.address}`;
 				let avatar = '';
 				let alias = signer.address;
 				let privData = '';
-				let cid = '';
+				let links = '';
 				try {
-					const result = await createDIDRecord(did, avatar, alias, privData, cid, signer);
+					const result = await createDIDRecord(address, avatar, alias,links,  privData, signer);
 					if (result) {
 						console.log('The DID record was created successfully.');
 					} else {
 						console.warn('Failed to create the DID record.');
+						return
 					}
 				} catch (error) {
 					console.error('An error occurred while creating the DID record:', error);
 				}
 			} else {
-				console.log(`DID EXISTENT!:  ${rdid.data.id}`);
+				console.log(`DID EXISTENT!:  ${rdid.address}`);
+				// console.log(`DID EXISTENT!:  ${rdid.data.id}`);
 
         // Avatar logic only if not already loaded
         // if (!document.getElementById('avatarIMG').src || document.getElementById('avatarIMG').src.endsWith('default.png')) {
@@ -6782,11 +6828,8 @@ function loadDecryptedContacts(contacts){
         }
 
 
-        // localAlias or userName?
-			// contactname // username
-				// contactname: set by user in their own agenda
-				// username: set by owner in their own DID
-        let alias = rdid.data.alias;
+        // let alias = rdid.data.alias;
+        let alias = rdid.alias;
         if (alias) {
             document.getElementById('aliasName').value = alias;
             document.getElementById('userAlias').innerText = alias;
@@ -6840,31 +6883,165 @@ function loadDecryptedContacts(contacts){
 			}
 		}
 
-		async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
+		// async function createDIDRecord(did, avatar, alias, privData, cid, signer) {
+		// 	console.log('Now you have the signer, do whatever you need with it:', signer);
+		// 	const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
+		// 	const data = [did, avatar, alias, privData, cid];
+		// 	db.signer(async (data) => {
+		// 		const signature = await signer.signMessage(data);//FIXED!
+		// 		return { h: 'eth-personal-sign', sig: signature, };
+		// 	});
+
+		// 	const collectionReference = db.collection("STARKID");
+		// 	await collectionReference.create(data);
+
+		// }
+
+	// 	collection STARKID {
+    // id: string;
+    // avatar: string;
+    // alias: string;
+    // privData: string;
+    // cid: string; 
+    // publicKey: PublicKey;
+
+// 	const createModel = async () => {
+//   const modelDefinition = {
+//   "name": "ius_naturalis_did",
+//   "version": "2.0",
+//   "interface": false,
+//   "immutableFields": [],
+//   "implements": [],
+//   "accountRelation": {
+//     "type": "single"
+//   },
+//   "schema": {
+//     "type": "object",
+//     "$schema": "https://json-schema.org/draft/2020-12/schema",
+//     "properties": {
+//       "address": {
+//         "type": "string"
+//       },
+//       "avatar": {
+//         "type": "string"
+//       },
+//       "alias": {
+//         "type": "string"
+//       },
+//       "links": {
+//         "type": "string"
+//       },
+//       "private": {
+//         "type": "string"
+//       }
+//     },
+//     "additionalProperties": false
+//   }
+// };
+    
+//   let result = await orbisdb.ceramic.createModel(modelDefinition);
+// };
+// kjzl6hvfrbw6c614eurxjvry1qoy3y66dohn1qzyu3t864tei8phirrsl3l9tfg
+
+// const result = await createDIDRecord(address, avatar, alias,links,  privData, signer);
+async function createDIDRecord(address, avatar, alias,  links, privData, signer) {
 			console.log('Now you have the signer, do whatever you need with it:', signer);
-			const db = new Polybase({ defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID", });
-			const data = [did, avatar, alias, privData, cid];
-			db.signer(async (data) => {
-				const signature = await signer.signMessage(data);//FIXED!
-				return { h: 'eth-personal-sign', sig: signature, };
-			});
-
-			const collectionReference = db.collection("STARKID");
-			await collectionReference.create(data);
-
+		
+			
+			try {
+				
+				  const data = {
+					address: address, // Required field
+					avatar: avatar || "null",
+					alias :alias|| "null",
+					links: links || "null", // Links as a comma-separated string
+					private: privData || "null",
+				  };
+				 // Insert data using the chainable API with context
+				//  const modelId = "kjzl6hvfrbw6c6wvut5ddk19147lvfqnvstxdg5egjm3unpv6p699yjcoj2blyi"; // myCustomModel
+				console.log('trying to write DATA:', data)
+				 const insertStatement = orbisDB.insert(optionsList[0].MODEL_ID) // Use the model ID here
+				 .value(data)
+				 .context(optionsList[0].CONTEXT_ID)
+			  
+					  // Validate the data against the model's schema
+					  const validation = await insertStatement.validate();
+					  if (!validation.valid) {
+						throw "Error during validation: " + validation.error;
+					  }
+			  
+					  // Execute the query
+					  const [result, error] = await catchError(() => insertStatement.run());
+			  
+					  if (error) {
+						console.error('Error writing data:', error);
+						alert('Failed to write data.');
+					  } else {
+						console.log(insertStatement.runs)
+						console.log('Data written successfully!');
+						console.log('https://studio.useorbis.com/data')
+					  }
+					} catch (error) {
+					  console.error('Error writing data:', error);
+					  alert('Failed to write data.');
+					}
 		}
 
-		async function readDIDRecord(id) {
-			const db = new Polybase({
-				defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
-			});
+		// async function readDIDRecord(id) {
+		// 	const db = new Polybase({
+		// 		defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
+		// 	});
 
-			const collectionReference = db.collection("STARKID");
-			const record = await collectionReference.record(id).get();
-			const { data } = record; // or const data = record.data
-			const resultRecord = record.get();
-			// console.log('resultRecord:', resultRecord)
-			return resultRecord
+		// 	const collectionReference = db.collection("STARKID");
+		// 	const record = await collectionReference.record(id).get();
+		// 	const { data } = record; // or const data = record.data
+		// 	const resultRecord = record.get();
+		// 	// console.log('resultRecord:', resultRecord)
+		// 	return resultRecord
+		// }
+
+		async function readDIDRecord(address){
+			try {
+			
+				const selectStatement = await orbisDB
+				//   .select()
+				  .select("address", "alias","avatar", "links", "private","stream_id")
+				  .from(optionsList[0].MODEL_ID) // Use the model ID or table name here
+				  .where( { address: { $eq: address } } )
+				  .context(optionsList[0].CONTEXT_ID) // Scope the query to the specified context
+				  const query = selectStatement.build()
+				  console.log("Query that will be run", query)
+				  const [result, error] = await catchError(() => selectStatement.run())
+				if (error) {
+				  throw error
+				} else {
+				  const { columns, rows } = result;
+				  console.log("Columns:", columns);
+				  console.log("Rows:", rows);
+				  if (rows.length > 0) {
+					const userData = rows[0];
+					// Split the links string back into an array
+					if (userData.links) {
+					  userData.links = userData.links.split(",");
+					}
+					
+					console.log(JSON.stringify(userData, null, 2));
+					// document.getElementById('readData').innerText = JSON.stringify(userData, null, 2);
+
+					return result
+				  } else {
+					console.warn('No data found.');
+					return  null
+
+
+				  }
+				}
+
+			  } catch (error) {
+				console.error('Error reading data:', error);
+				// alert('Failed to read data.');
+			  }
+
 		}
 
 		async function deleteDID(did, signer) {
@@ -6932,7 +7109,6 @@ function loadDecryptedContacts(contacts){
 				defaultNamespace: "pk/0x97eab0841786aeae14135af5e26750626e46e2e15a412b6a319dd2ce7f323c805d67fcfb0f8ea1f27959e486e11e49926fbf4b1c2b9252daa20283e200e3b1b3/STARKID",
 			});
 
-			// const newdatab = [did, newdata];
 
 			db.signer(async (newdata) => {
 				console.log('data:', newdata)
@@ -6950,8 +7126,6 @@ function loadDecryptedContacts(contacts){
 			}
 			return true
 		}
-
-
 
 		async function updatePrivDataDID(did, newdata, signer) {
 			console.log('updateDID()')
@@ -6980,7 +7154,6 @@ function loadDecryptedContacts(contacts){
 
 
 		}
-
 
 		async function updateDIDdocs(id, newdocs) {
 			console.log('updateDIDdocs()')
@@ -7027,6 +7200,74 @@ function loadDecryptedContacts(contacts){
 
 
 
+		async function getStreamId(){
+      const selectStatement = await orbisDB
+      .select( "stream_id")
+      .from(optionsList[0].MODEL_ID) // Use the model ID or table name here
+      .where( { _id: { $eq: wallet.address } } )
+      .context(optionsList[0].CONTEXT_ID) // Scope the query to the specified context
+      const query = selectStatement.build()
+      console.log("Query that will be run", query)
+      const [result, error] = await catchError(() => selectStatement.run())
+      if(error){
+        throw error
+      }
+      return result.rows[0].stream_id
+    }
+
+
+
+
+        // Connect Wallet to Orbis
+        // async function connectToOrbis(privateKey) {
+			async function connectToOrbis(signer) {
+            try {
+                // const provider = new ethers.Wallet(privateKey)
+                // const auth = new OrbisEVMAuth(provider)
+                const auth = new OrbisEVMAuth(signer)
+                let isConnected= await orbisDB.isUserConnected()
+                // await orbisDB.isUserConnected()
+                if (isConnected === true) {
+                    // did = res.did; // Store the DID for future use
+                    // document.getElementById('connectionStatus').innerText = `Connected to Orbis`;
+                   console.log(`🙂‍↕️Connected to Orbis`);
+
+                    // Get the currently connected user
+                    const currentUser = await orbisDB.getConnectedUser()
+                    if(!currentUser){
+                      // Notify the user or reconnect
+                      throw "There is no active user session."
+                    }
+                    
+                    console.log({ currentUser })
+                    // document.getElementById('connectionStatus').innerHTML += `<br>${currentUser.user.did}`;
+                    // document.getElementById('connectionStatus').innerHTML += `<br>${currentUser.user.did}`;
+                    console.log('Connected to Orbis with DID:', auth);
+                    console.log('Orbis user DID:', currentUser.user.did);
+                    
+                } else if (isConnected === false){
+                  console.warn('user not yet connected to Orbis:');
+
+                  // Authenticate the user and persist the session in localStorage
+                  const authResult = await orbisDB.connectUser({ auth })
+                  console.log( authResult )
+                  await connectToOrbis(signer.privateKey)
+
+                }
+                else {
+                    console.error('Error connecting to Orbis:');
+                    alert('Failed to connect to Orbis.');
+                }
+
+
+                return isConnected
+
+
+            } catch (error) {
+                console.error('Error connecting to Orbis:', error);
+                alert('Failed to connect to Orbis.');
+            }
+        }
 		/*********************************************************************************************
 		.)   ENCRYPT FUNCITONS
 		**********************************************************************************************/

@@ -14,7 +14,6 @@
     "@github/mini-throttle": "^2.1.1",
     "@lighthouse-web3/sdk": "^0.3.7",
     "@noble/secp256k1": "^2.1.0",
-    "@polybase/client": "^0.6.6",
     "@useorbis/db-sdk": "^0.0.60-alpha",
     "@xmtp/content-type-primitives": "^1.0.3",
     "@xmtp/xmtp-js": "^13.0.4",

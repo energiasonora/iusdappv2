@@ -40,20 +40,70 @@
     .link-input {
       margin-bottom: 5px;
     }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 1rem;
+      display: block;
+    }
+
+    .profile {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .pseudoname {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <!-- ------------- -->
+  <!-- <main class="container">
+    <div class="profile">
+      <img src="https://i.pravatar.cc/100" alt="User Avatar" class="avatar" />
+      <h4>Pseudonym: ShadowStriker</h4>
+    </div>
+  </main> -->
+
+  <main class="container profile">
+    <!-- Avatar -->
+    <img src="https://i.pravatar.cc/100" alt="User Avatar" id="avatar" class="avatar" />
+    
+        <!-- Display Name -->
+        <div class="pseudoname" id="display-mononym"> ShadowStriker</div>
+
+    <!-- Form Inputs -->
+    <form id="profile-form" class="input-group">
+      <input type="file" id="avatar-upload" accept="image/*" />
+      <input type="text" id="mononym-input" placeholder="Enter pseudonym" value="ShadowStriker" />
+      <button type="submit">Update Profile</button>
+    </form>
+  </main>
+
+
+<!-- ------------------ -->
   <h1>OrbisDB DID Information Test</h1>
 
-  <button id="createWallet">Create New Wallet</button>
+  <!-- <button id="createWallet">Create New Wallet</button> -->
   <div id="walletStatus">No Wallet Created</div>
   <pre id="walletDetails"></pre>
 
 
-  <h2>Connect to Orbis</h2>
-  <button id="connectButton">Connect Wallet to Orbis</button>
+  <!-- <h2>Connect to Orbis</h2> -->
+  <!-- <button id="connectButton">Connect Wallet to Orbis</button> -->
   <div id="connectionStatus">Not Connected to Orbis</div>
-
 
 
 
@@ -62,15 +112,20 @@
     <label for="avatarInput">Avatar URL:</label>
     <input type="text" id="avatarInput" placeholder="Enter avatar URL (e.g., https://example.com/avatar.png)" />
   </div>
+
   <div class="input-group">
     <label for="linksInput">Links:</label>
+
     <div id="linksContainer">
       <div class="link-input">
         <input type="text" class="link" placeholder="Enter a link (e.g., https://example.com)" />
       </div>
     </div>
+
     <button id="addLinkButton">Add Another Link</button>
+
   </div>
+
   <button id="writeButton">Write to OrbisDB</button>
 
   <h2>Read Data</h2>
@@ -86,10 +141,7 @@
 
         import { OrbisEVMAuth } from "@useorbis/db-sdk/auth"
         window.OrbisEVMAuth = OrbisEVMAuth;
-
-        // import { OrbisKeyDidAuth } from "@useorbis/db-sdk/auth"
-        // window.OrbisKeyDidAuth = OrbisKeyDidAuth;
-
+ 
   </script>
 
   <script>
@@ -102,12 +154,24 @@
 
     // https://ceramic-orbisdb-mainnet-direct.hirenodes.io/
     window.optionsList = [
+		{
+        "CERAMIC_NODE": "https://ceramic-orbisdb-mainnet-direct.hirenodes.io/",
+        "ORBISDB_INSTANCE":"https://studio.useorbis.com",
+        "ENVIRONMENT_ID": "did:pkh:eip155:1:0x9d51a3e880fcb01e5b71658fb8f3cef8d32900eb",
+        "CONTEXT_ID": "kjzl6kcym7w8y5zc1wauho6x0th8uqrjb8ou9bhg8m8ek09xynsk2h8dn0qa95s", //bob
+        "MODEL_ID": "kjzl6hvfrbw6c9dxln23cr5ngsl9xsps71b74zfcbarh93258aa02u8t3dce4jn",// iusNaturalisDID ius_naturalis_did
+				"TOKEN_CHAIN_NAME": 'ARBITRUM(SEPOLIA)',
+				"TOKEN_NAME": "TROK",
+				"SYMBOL": "TROK",
+				"API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+				"TOKEN_CHAINID": '421614',
+				"EXPLORER": 'https://sepolia.arbiscan.io/',
+				'IPFS_GATEWAY': 'https://gateway.lighthouse.storage/ipfs/'
+      },
 			{
         "CERAMIC_NODE": "https://ceramic-orbisdb-mainnet-direct.hirenodes.io/",
         "ORBISDB_INSTANCE":"https://studio.useorbis.com",
         "ENVIRONMENT_ID": "did:pkh:eip155:1:0x9d51a3e880fcb01e5b71658fb8f3cef8d32900eb",
-        // "CONTEXT_ID": "kjzl6kcym7w8y4z7iwiis59y4gnswd2jdrrh3jbcqbo4gsnzbcrbhx2w06ht3s3", //alicetest
-        // "CONTEXT_ID": "kjzl6kcym7w8yay7m28a4pozst6ht9awjydgx1plwh0hbdss1y0c0nd8mjxwzpa", //testbob (subcontext)
         "CONTEXT_ID": "kjzl6kcym7w8y5zc1wauho6x0th8uqrjb8ou9bhg8m8ek09xynsk2h8dn0qa95s", //bob
         "MODEL_ID": "kjzl6hvfrbw6c6wvut5ddk19147lvfqnvstxdg5egjm3unpv6p699yjcoj2blyi",// myCustomModel
 				"TOKEN_CHAIN_NAME": 'ARBITRUM(SEPOLIA)',
@@ -156,13 +220,23 @@
       });
 
 // PREFILL
+// preloadData();
  document.getElementById('avatarInput').value= 'https://euc.li/xunorus.eth'
 document.querySelectorAll('.link')[0].value='https;//xunorus.com'
-document.getElementById('createWallet').click()
+// document.getElementById('createWallet').click()
+await createAutoWallet();
+await connectToOrbis(wallet.privateKey)
+
     };
 
+
+
+    async function preloadData(){
+
+    }
+
     // Create Wallet
-    document.getElementById('createWallet').addEventListener('click', async () => {
+      async function createAutoWallet(){
       try {
         wallet = await aliceWallet();
         const walletDetails = {
@@ -180,7 +254,11 @@ document.getElementById('createWallet').click()
         console.error('Error creating wallet:', error);
         alert('Failed to create wallet.');
       }
-    });
+
+    }
+    // });
+
+
 
     // Write Data
     document.getElementById('writeButton').addEventListener('click', async () => {
@@ -191,28 +269,37 @@ document.getElementById('createWallet').click()
         }
 
         
-    const avatar = document.getElementById('avatarInput').value.trim();
+    // const avatar = document.getElementById('avatarInput').value.trim();
+    const avatar = document.getElementById('avatar').src;
     const linksArray = Array.from(document.querySelectorAll('.link'))
       .map((input) => input.value.trim())
       .filter((link) => link !== '');
 
     // Convert links array to a comma-separated string
+    const privdata = "null";
     const links = linksArray.length > 0 ? linksArray.join(",") : null;
+    const mononym = document.getElementById('mononym-input').value.trim()
 
-    if (!avatar && !links) {
-      alert('Please provide at least an avatar URL or one link.');
+    if (!mononym ) {
+      alert('Please provide at least your mononym .');
       return;
     }
-
     // Ensure data matches the schema
-    const data = {
-      _id: wallet.address, // Required field
-      avatar: avatar || null,
-      links: links, // Links as a comma-separated string
-    };
+    // const data = {
+    //   _id: wallet.address, // Required field
+    //   avatar: avatar || null,
+    //   links: links, // Links as a comma-separated string
+    // };
 
+    const data = {
+      address: wallet.address, // Required field
+      avatar: avatar || null,
+      links: links || null, // Links as a comma-separated string
+      mononym: mononym || null,
+      private: privdata || null,
+    };
    // Insert data using the chainable API with context
-   const modelId = "kjzl6hvfrbw6c6wvut5ddk19147lvfqnvstxdg5egjm3unpv6p699yjcoj2blyi"; // myCustomModel
+  //  const modelId = "kjzl6hvfrbw6c6wvut5ddk19147lvfqnvstxdg5egjm3unpv6p699yjcoj2blyi"; // myCustomModel
    const insertStatement = orbisDB.insert(optionsList[0].MODEL_ID) // Use the model ID here
    .value(data)
    .context(optionsList[0].CONTEXT_ID)
@@ -231,7 +318,8 @@ document.getElementById('createWallet').click()
           alert('Failed to write data.');
         } else {
           console.log(insertStatement.runs)
-          alert('Data written successfully!');
+          console.log('Data written successfully!');
+          console.log('https://studio.useorbis.com/data')
         }
       } catch (error) {
         console.error('Error writing data:', error);
@@ -248,59 +336,38 @@ document.getElementById('readButton').addEventListener('click', async () => {
       return;
     }
 
-    // Query data using the chainable API with context
-    // const modelId = "kjzl6kcym7w8y4z7iwiis59y4gnswd2jdrrh3jbcqbo4gsnzbcrbhx2w06ht3s3"; // Replace with your actual model ID
-    // const contextId = "kjzl6kcym7w8y4z7iwiis59y4gnswd2jdrrh3jbcqbo4gsnzbcrbhx2w06ht3s3"; // Replace with your actual context ID
-    const query = { _id: wallet.address };
-    const res = await orbisDB.find(query)
+    const selectStatement = await orbisDB
+      .select("address", "mononym","avatar", "links","private","stream_id")
+      .from(optionsList[0].MODEL_ID) // Use the model ID or table name here
+      .where( { address: { $eq: wallet.address } } )
       .context(optionsList[0].CONTEXT_ID) // Scope the query to the specified context
-      .model(optionsList[0].MODEL_ID); // Specify the model ID
-
-    if (res.success && res.data.length > 0) {
-      const userData = res.data[0];
-      // Split the links string back into an array
-      if (userData.links) {
-        userData.links = userData.links.split(",");
-      }
-      document.getElementById('readData').innerText = JSON.stringify(userData, null, 2);
+      const query = selectStatement.build()
+      console.log("Query that will be run", query)
+      const [result, error] = await catchError(() => selectStatement.run())
+    if (error) {
+      throw error
     } else {
-      console.error('Error reading data:', res);
-      alert('No data found or failed to read data.');
+      const { columns, rows } = result;
+      // Log the columns and rows for debugging
+      console.log("Columns:", columns);
+      console.log("Rows:", rows);
+      if (rows.length > 0) {
+        const userData = rows[0];
+        // Split the links string back into an array
+        if (userData.links) {
+          userData.links = userData.links.split(",");
+        }
+        document.getElementById('readData').innerText = JSON.stringify(userData, null, 2);
+      } else {
+        alert('No data found.');
+      }
     }
   } catch (error) {
     console.error('Error reading data:', error);
     alert('Failed to read data.');
   }
 });
-    // Read Data
-    // document.getElementById('readButton').addEventListener('click', async () => {
-    //   try {
-    //     if (!wallet) {
-    //       alert('Please create a wallet first.');
-    //       return;
-    //     }
-
-    //     // Query data using the chainable API with context
-    //     const query = { _id: wallet.address };
-    //     const findStatement = orbisDB.find(query)
-    //       .context("alicetest"); // Scope the query to the specified context
-
-    //     // Execute the query
-    //     const [result, error] = await catchError(() => findStatement.run());
-
-    //     if (error) {
-    //       console.error('Error reading data:', error);
-    //       alert('Failed to read data.');
-    //     } else if (result.data.length > 0) {
-    //       document.getElementById('readData').innerText = JSON.stringify(result.data[0], null, 2);
-    //     } else {
-    //       alert('No data found.');
-    //     }
-    //   } catch (error) {
-    //     console.error('Error reading data:', error);
-    //     alert('Failed to read data.');
-    //   }
-    // });
+ 
 
     // Add Another Link Input
     document.getElementById('addLinkButton').addEventListener('click', () => {
@@ -310,6 +377,7 @@ document.getElementById('readButton').addEventListener('click', async () => {
       newInput.innerHTML = `<input type="text" class="link" placeholder="Enter a link (e.g., https://example.com)" />`;
       container.appendChild(newInput);
     });
+
 
     // Utility function to handle errors
     async function catchError(fn) {
@@ -322,12 +390,15 @@ document.getElementById('readButton').addEventListener('click', async () => {
     }
 
 
-    document.getElementById('connectButton').addEventListener('click', async () => {
-            console.log('CONNECT TO ORBIS')
-            let connect = await connectToOrbis(wallet.privateKey)
-            console.log('connect:', connect)
 
-        });
+    // document.getElementById('connectButton').addEventListener('click', async () => {
+    //         console.log('CONNECT TO ORBIS')
+    //         let connect = await connectToOrbis(wallet.privateKey)
+    //         console.log('connect:', connect)
+
+    //     });
+
+
 
         // Connect Wallet to Orbis
         async function connectToOrbis(privateKey) {
@@ -340,76 +411,155 @@ document.getElementById('readButton').addEventListener('click', async () => {
                     // did = res.did; // Store the DID for future use
                     document.getElementById('connectionStatus').innerText = `Connected to Orbis`;
 
-                // Get the currently connected user
-const currentUser = await orbisDB.getConnectedUser()
-c=currentUser
-if(!currentUser){
-  // Notify the user or reconnect
-  throw "There is no active user session."
-}
-
-console.log({ currentUser })
-
+                    // Get the currently connected user
+                    const currentUser = await orbisDB.getConnectedUser()
+                    if(!currentUser){
+                      // Notify the user or reconnect
+                      throw "There is no active user session."
+                    }
+                    
+                    console.log({ currentUser })
                     document.getElementById('connectionStatus').innerHTML += `<br>${currentUser.user.did}`;
                     console.log('Connected to Orbis with DID:', auth);
-                    // console.log('Connected to Orbis with DID:', did);
-                } else {
+                    
+                } else if (isConnected === false){
+                  console.warn('user not yet connected to Orbis:');
+
+                  // Authenticate the user and persist the session in localStorage
+                  const authResult = await orbisDB.connectUser({ auth })
+                  // Authenticate, but don't persist the session in localStorage
+                  // const authResult: OrbisConnectResult = await orbis.connectUser({ auth, saveSession: false })
+                  
+                  // Log the result
+                  console.log( authResult )
+                  await connectToOrbis(wallet.privateKey)
+
+                }
+                else {
                     console.error('Error connecting to Orbis:');
-                    // console.error('Error connecting to Orbis:', res);
                     alert('Failed to connect to Orbis.');
                 }
 
-                // return isConnected\\
 
                 return isConnected
 
 
-                // return await orbisDB.isUserConnected()
-
-                // Connect to Orbis using the wallet's private key
-                // const res = await orbisDB.connect_v2({
-                const res = await orbisDB.connectUser({
-                    provider: provider,
-                    signer: privateKey
-                });
-
-                if (res.status === 200) {
-                    did = res.did; // Store the DID for future use
-                    document.getElementById('walletStatus').innerText = 'Connected to Orbis';
-                    console.log('Connected to Orbis with DID:', did);
-                } else {
-                    console.error('Error connecting to Orbis:', res);
-                    alert('Failed to connect to Orbis.');
-                }
             } catch (error) {
                 console.error('Error connecting to Orbis:', error);
                 alert('Failed to connect to Orbis.');
             }
         }
 
-        async function fakewrite(){
-          const insertStatement = await orbisDB
-              .insert("MODEL_ID" | "TABLE_NAME")
-              .value(
-                  {
-                      column: value,
-                      column2: value2,
-                  }
-              )
-              // optionally, you can scope this insert to a specific context
-              .context("CONTEXT_ID")
 
-          // Perform local JSON Schema validation before running the query
-          const validation = await insertStatement.validate()
-          if(!validation.valid){
-              throw "Error during validation: " + validation.error
-          }
 
-          const [result, error] = await catchError(() => insertStatement.run())
+        // -----------------------------
+        // AVATAR AND PSEUDONYM
+        // -----------------------------
+        const avatarInput = document.getElementById('avatar-upload');
+    const avatarImg = document.getElementById('avatar');
+    const mononymInput = document.getElementById('mononym-input');
+    const displayMononym = document.getElementById('display-mononym');
 
-          // All runs of a statement are stored within the statement, in case you want to reuse the same statmenet
-          console.log(insertStatement.runs)
-        }
+    // Handle form submission
+    document.getElementById('profile-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      await updateMononym();
+    });
+
+    // Update avatar preview when file is selected
+    // document.getElementById('avatar').addEventListener('change', function () {
+    //   console.log('🃏 avatar changed!')
+
+    // })
+
+    // avatarInput.addEventListener('change', function () {
+      avatarInput.addEventListener('change', function () {
+      console.log('🃏🃏 avatarinput changed!')
+
+      const file = this.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          avatarImg.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // avatarInput.addEventListener('change', function () {
+    //         console.log('changed avatar!!!!!')
+    //         const file = this.files[0];
+    //         if (file && file.type.startsWith('image/')) {
+    //             const reader = new FileReader();
+    //             reader.onload = function (e) {
+    //                 avatarImg.src = e.target.result;
+    //             };
+    //             reader.readAsDataURL(file);
+    //         }
+    //     });
+
+async function updateAvatar (){
+  console.log('updateAvatar()')
+const avatarsrc = document.getElementById('avatar').src;
+let streamId = await getStreamId()
+console.log('Updating stream_id:', streamId)
+const updateStatement = await orbisDB
+.update(streamId)
+.set( { avatar: avatarsrc , } )
+const [result, error] = await catchError(() => updateStatement.run())
+console.log(updateStatement.runs)
+}
+
+
+    // Update pseudonym in DOM
+    async function updateMononym() {
+      console.log('updateMononym() ')
+      const newName = mononymInput.value.trim();
+      if (newName) {
+        displayMononym.textContent =  newName;
+        let streamId = await getStreamId()
+        console.log('Updating stream_id:', streamId)
+        const updateStatement = await orbisDB
+        .update(streamId)
+        .set( { mononym: newName , } )
+        const [result, error] = await catchError(() => updateStatement.run())
+        console.log(updateStatement.runs)
+      }
+    }
+
+
+    // async function selectQuery(){
+    //   const selectStatement = await orbisDB
+    //   .select("_id", "avatar", "links","stream_id")
+    //   .from(optionsList[0].MODEL_ID) // Use the model ID or table name here
+    //   .where( { _id: { $eq: wallet.address } } )
+    //   .context(optionsList[0].CONTEXT_ID) // Scope the query to the specified context
+    //   const query = selectStatement.build()
+    //   console.log("Query that will be run", query)
+    //   const [result, error] = await catchError(() => selectStatement.run())
+    //   if(error){
+    //     throw error
+    //   }
+    //   const { columns, rows } = result
+    //   console.log({ columns, rows })
+    //   return result
+    // }
+
+    async function getStreamId(){
+      const selectStatement = await orbisDB
+      .select( "stream_id")
+      .from(optionsList[0].MODEL_ID) // Use the model ID or table name here
+      .where( { _id: { $eq: wallet.address } } )
+      .context(optionsList[0].CONTEXT_ID) // Scope the query to the specified context
+      const query = selectStatement.build()
+      console.log("Query that will be run", query)
+      const [result, error] = await catchError(() => selectStatement.run())
+      if(error){
+        throw error
+      }
+      return result.rows[0].stream_id
+    }
+
   </script>
 </body>
 </html>
