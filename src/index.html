@@ -7735,6 +7735,7 @@ async function checkAndUpdateFromOrbis(address, cachedData) {
         // Connect Wallet to Orbis
         // async function connectToOrbis(privateKey) {
 			async function connectToOrbis(signer) {
+				console.warn('CONNECTING TO ORBIS: connectToOrbis()')
             try {
                 // const provider = new ethers.Wallet(privateKey)
                 // const auth = new OrbisEVMAuth(provider)
@@ -7754,8 +7755,6 @@ async function checkAndUpdateFromOrbis(address, cachedData) {
                     }
                     
                     console.log({ currentUser })
-                    // document.getElementById('connectionStatus').innerHTML += `<br>${currentUser.user.did}`;
-                    // document.getElementById('connectionStatus').innerHTML += `<br>${currentUser.user.did}`;
                     console.log('Connected to Orbis with DID:', auth);
                     console.log('Orbis user DID:', currentUser.user.did);
                     
@@ -7765,8 +7764,10 @@ async function checkAndUpdateFromOrbis(address, cachedData) {
                   // Authenticate the user and persist the session in localStorage
                   const authResult = await orbisDB.connectUser({ auth })
                   console.log( authResult )
-                  await connectToOrbis(signer.privateKey)
+                  await connectToOrbis(signer)
+                //   await connectToOrbis(signer.privateKey)
 				  let isConnected= await orbisDB.isUserConnected()
+                  console.log( isConnected )
 
                 }
                 else {
