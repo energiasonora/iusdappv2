@@ -2,7 +2,11 @@
 
 :root {
 	--background:#41307c;
-	--mainBk: #41307c;
+	--mainBk:#3a0092;
+	;
+	/* --mainBk: rgb(48, 57, 124); */
+	/* --mainBk: #5d7c30; */
+	/* --mainBk: #41307c; */
 	--bckmodal:#262626;
 
 	--background:radial-gradient(circle, var(--mainBk) 0%, var(--bckmodal) 100%);
@@ -744,8 +748,10 @@ z-index: -1;
     /* width: 85%!important; */
 	
 	/* position: initial !important; */
-    padding-top: 1.3em;
-    width: 95%!important;
+    padding-top: 2.2em;
+    /* padding-top: 1.3em; */
+    width: 89%!important;
+    /* width: 95%!important; */
     /* width: 100% !important; */
 
   }
@@ -1107,7 +1113,9 @@ z-index: -1;
 			height: 100vh;
 			overflow: auto;
 			border-left: 1px solid #595a5f; 
-			top: 81px;
+
+			/* modif v6.01 */
+			/* top: 81px; */
 			z-index: 99;
 		  }
 	
@@ -1256,9 +1264,12 @@ z-index: -1;
 	  background-image: linear-gradient(rgba(0, 0, 0, .3), #141414);
 	  position: fixed;
 	  width: 100vw;
-	  height: calc(100% - 81px);
+	  /* modif v6.01 */
+	  /* height: calc(100% - 81px); */
+	  height: 100vh;
+
 	  overflow-y: scroll;
-	  margin-top: 81px;
+	  /* margin-top: 81px; */
    
   }
   .overlayisOpen{
@@ -1322,7 +1333,8 @@ z-index: -1;
   .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
     width: 40px;
     height: 4px;
-    background-color: var(--c1);
+    /* background-color: var(--c1); */
+    background-color: var(--bs-body-bg);
     border-radius: 4px;
     position: absolute;
     transition-property: -webkit-transform;
@@ -1424,7 +1436,14 @@ z-index: -1;
   }
 
      /* FIXES 2 */
-	 .alert{ margin-bottom: 0!important; }
+	 .alert{ 
+		margin-bottom: 0!important;
+		width: 100%;
+		/* background: rgba(255, 255, 255, 0.2);  */
+		backdrop-filter: blur(10px);        
+		 /* blur effect */
+		/* -webkit-backdrop-filter: blur(10px);  */
+	}
 	 .modal-content{
 	   /* background-color: var(--bckmodal);
 	   box-shadow: 0 0 10px var(--modalborder);
@@ -1666,7 +1685,10 @@ body.swal2-height-auto {
 
 #mintOrUpdate,#updateOnchain{
 	position:absolute;
-	bottom:82px;	
+
+	/* modified v6.01 */
+	/* bottom:82px;	 */
+	bottom:0;	
 	z-index: 1;
 	background-color: #384b5e;
 	border-radius: initial;
@@ -2075,4 +2097,38 @@ margin: .44em;
     white-space: break-spaces;
     padding: 1em;
     text-align: left;
+}
+
+
+/* UPDATES 6.01 */
+#menuBurger{ z-index: 9999!important; }
+
+.icon-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+
+.icon-tooltip {
+  visibility: hidden;
+  width: 60px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position above icon */
+  left: 50%;
+  margin-left: -30px; /* Center tooltip */
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.icon-tooltip-wrapper:hover .icon-tooltip {
+  visibility: visible;
+  opacity: 1;
 }

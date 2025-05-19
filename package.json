@@ -17,6 +17,7 @@
     "@useorbis/db-sdk": "^0.0.60-alpha",
     "@xmtp/content-type-primitives": "^1.0.3",
     "@xmtp/xmtp-js": "^13.0.4",
+    "bs58": "^6.0.0",
     "cropperjs": "^1.6.1",
     "did-session": "^4.0.0",
     "elliptic": "^6.5.5",

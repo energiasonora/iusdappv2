@@ -80,7 +80,7 @@ ex.html  src/stealthG.html src/p2pAlice.html  src/p2pBob.html src/permit.html sr
 
 <!-- yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  src/polybase.html src/don4.html src/signgetpk.html --port 4343 --https -->
 
-yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  src/don4.html src/signgetpk.html --port 4343 --https
+yarn parcel src/index.html   src/don3.html src/createCampaign.html src/registerPublicKey.html src/sign.html src/stealthG.html  src/p2pAlice.html src/p2pBob.html  src/don4.html src/signgetpk.html  src/orbis.html  --port 4343 --https
 # deploy to firebase
 
 ```
@@ -102,7 +102,8 @@ firebase deploy --only hosting:iusnaturalis
 <!-- testnet v5 0x70F0B5fa20C296703fe101f294913cd1B6cCE053 -->
 
 # log
-
+- 6.01 update to orbisDB (ceramic). UX improvements.
+added model kjzl6hvfrbw6c83nhzgppa4tfyo3iln1d3y8iidvsgueviuwj0tl5b10q2gtjvm (ius_naturalis_did_v4)
 - 5.20 working on log with iusNaturalis into other sites (crowdfundingius /pseudoWallet), considering  EIP-1193 standard
 - 5.19 UI translation updates.
 - 5.18 automatic restoration of encrypted contacts with the wallet.

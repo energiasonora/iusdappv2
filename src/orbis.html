@@ -76,6 +76,7 @@
       <h4>Pseudonym: ShadowStriker</h4>
     </div>
   </main> -->
+  <h1>OrbisDB DID </h1>
 
   <main class="container profile">
     <!-- Avatar -->
@@ -154,6 +155,22 @@
 
     // https://ceramic-orbisdb-mainnet-direct.hirenodes.io/
     window.optionsList = [
+    {
+        "CERAMIC_NODE": "https://ceramic-orbisdb-mainnet-direct.hirenodes.io/",
+        "ORBISDB_INSTANCE":"https://studio.useorbis.com",
+        "ENVIRONMENT_ID": "did:pkh:eip155:1:0x9d51a3e880fcb01e5b71658fb8f3cef8d32900eb",
+        "CONTEXT_ID": "kjzl6kcym7w8y5zc1wauho6x0th8uqrjb8ou9bhg8m8ek09xynsk2h8dn0qa95s", //bob
+        // "MODEL_ID": "kjzl6hvfrbw6c614eurxjvry1qoy3y66dohn1qzyu3t864tei8phirrsl3l9tfg",// ius_naturalis_did_2
+        "MODEL_ID": "kjzl6hvfrbw6c9dxln23cr5ngsl9xsps71b74zfcbarh93258aa02u8t3dce4jn",//  ius_naturalis_did
+
+				"TOKEN_CHAIN_NAME": 'ARBITRUM(SEPOLIA)',
+				"TOKEN_NAME": "TROK",
+				"SYMBOL": "TROK",
+				"API": 'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+				"TOKEN_CHAINID": '421614',
+				"EXPLORER": 'https://sepolia.arbiscan.io/',
+				'IPFS_GATEWAY': 'https://gateway.lighthouse.storage/ipfs/'
+      },
 		{
         "CERAMIC_NODE": "https://ceramic-orbisdb-mainnet-direct.hirenodes.io/",
         "ORBISDB_INSTANCE":"https://studio.useorbis.com",
@@ -549,7 +566,8 @@ console.log(updateStatement.runs)
       const selectStatement = await orbisDB
       .select( "stream_id")
       .from(optionsList[0].MODEL_ID) // Use the model ID or table name here
-      .where( { _id: { $eq: wallet.address } } )
+      .where( { address: { $eq: wallet.address } } )
+      // .where( { _id: { $eq: wallet.address } } )
       .context(optionsList[0].CONTEXT_ID) // Scope the query to the specified context
       const query = selectStatement.build()
       console.log("Query that will be run", query)

@@ -1,0 +1,32 @@
+{
+    "name": "ius_naturalis_did",
+    "schema": {
+        "type": "object",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "properties": {
+            "alias": {
+                "type": "string"
+            },
+            "links": {
+                "type": "string"
+            },
+            "avatar": {
+                "type": "string"
+            },
+            "address": {
+                "type": "string"
+            },
+            "private": {
+                "type": "string"
+            }
+        },
+        "additionalProperties": false
+    },
+    "version": "2.0",
+    "interface": false,
+    "implements": [],
+    "accountRelation": {
+        "type": "single"
+    },
+    "immutableFields": []
+}

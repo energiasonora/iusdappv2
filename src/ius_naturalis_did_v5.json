@@ -1,0 +1,47 @@
+const createModel = async () => {
+  const modelDefinition = {
+  "name": "ius_naturalis_did_v5",
+  "version": "2.0",
+  "interface": false,
+  "immutableFields": [],
+  "implements": [],
+  "accountRelation": {
+    "type": "single"
+  },
+  "schema": {
+    "type": "object",
+    "$defs": {
+      "DateTime": {
+        "type": "string",
+        "title": "DateTime",
+        "format": "date-time",
+        "maxLength": 100
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+      "address": {
+        "type": "string"
+      },
+      "updated_at": {
+        "$ref": "#/$defs/DateTime"
+      },
+      "alias": {
+        "type": "string"
+      },
+      "avatar": {
+        "type": "string"
+      },
+      "links": {
+        "type": "string"
+      },
+      "private_data": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false
+  }
+};
+    
+  let result = await orbisdb.ceramic.createModel(modelDefinition);
+};
